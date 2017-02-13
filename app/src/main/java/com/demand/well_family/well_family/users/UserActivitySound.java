@@ -48,6 +48,8 @@ import com.demand.well_family.well_family.dto.LikeCount;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStory;
+import com.demand.well_family.well_family.dto.SongStoryEmotionData;
+import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
 import com.demand.well_family.well_family.dto.SongStoryInfo;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
@@ -120,6 +122,11 @@ public class UserActivitySound extends Activity {
     private Call<ArrayList<SongStory>> call_content;
     private Server_Connection server_connection_for_content;
 
+    // emotion
+    private RecyclerView rv_song_story_emotion;
+    private EmotionAdapter emotionAdapter;
+    private ArrayList<SongStoryEmotionData> emotionList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,11 +156,13 @@ public class UserActivitySound extends Activity {
         user_email = getIntent().getStringExtra("user_email");
         user_phone = getIntent().getStringExtra("user_phone");
         user_birth = getIntent().getStringExtra("user_birth");
+
+
     }
 
     // toolbar & menu
     public void setToolbar(View view, Context context, String title) {
-        Log.e("tttttt", user_avatar);
+
         NavigationView nv = (NavigationView) view.findViewById(R.id.nv);
         nv.setItemIconTintList(null);
         dl = (DrawerLayout) view.findViewById(R.id.dl);
@@ -650,6 +659,7 @@ public class UserActivitySound extends Activity {
         private CheckBox cb_item_sound_story_like;
         private LayoutInflater story_images_inflater;
         private ImageView iv_sound_story_record;
+        private RecyclerView rv_song_story_emotion;
 
         public ContentViewHolder(View itemView) {
             super(itemView);
@@ -1043,6 +1053,46 @@ public class UserActivitySound extends Activity {
 
             iv_main_story_content.setLayoutParams(new LinearLayout.LayoutParams((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics()),
                     LinearLayout.LayoutParams.MATCH_PARENT));
+        }
+    }
+
+    private class EmotionViewHolder extends RecyclerView.ViewHolder {
+        private TextView tv_emotion;
+        private ImageView iv_emotion;
+
+        public EmotionViewHolder(View itemView) {
+            super(itemView);
+            tv_emotion = (TextView) itemView.findViewById(R.id.tv_emotion);
+            iv_emotion = (ImageView) itemView.findViewById(R.id.iv_emotion);
+        }
+    }
+
+    private class EmotionAdapter extends RecyclerView.Adapter<EmotionViewHolder> {
+        private ArrayList<SongStoryEmotionInfo> emotionList;
+        private Context context;
+        private int layout;
+
+        public EmotionAdapter(ArrayList<SongStoryEmotionInfo> emotionList, Context context, int layout) {
+            this.emotionList = emotionList;
+            this.context = context;
+            this.layout = layout;
+        }
+
+        @Override
+        public int getItemCount() {
+            return emotionList.size();
+        }
+
+        @Override
+        public void onBindViewHolder(EmotionViewHolder holder, int position) {
+            holder.tv_emotion.setText(emotionList.get(position).getName());
+            Glide.with(context).load(getString(R.string.cloud_front_song_story_emotion) + emotionList.get(position).getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_emotion);
+        }
+
+        @Override
+        public EmotionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            EmotionViewHolder holder = new EmotionViewHolder((LayoutInflater.from(context).inflate(layout, parent, false)));
+            return holder;
         }
     }
 
