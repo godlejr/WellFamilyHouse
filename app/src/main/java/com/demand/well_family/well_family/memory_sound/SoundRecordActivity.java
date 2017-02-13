@@ -925,6 +925,26 @@ public class SoundRecordActivity extends Activity {
                                                 }
                                             });
                                         }
+
+                                        if(emotionList.size()!=0){
+                                            for(int i =0; i<emotionList.size();i++) {
+                                                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                                                HashMap<String, String> map = new HashMap<String, String>();
+                                                map.put("song_story_emotion_id", String.valueOf(emotionList.get(i).getId()));
+                                                Call<ResponseBody> call_insert_emotions = server_connection.insert_emotion_into_song_story(String.valueOf(response.body().get(0).getId()), map);
+                                                call_insert_emotions.enqueue(new Callback<ResponseBody>() {
+                                                    @Override
+                                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                        //scess
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                        Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                            }
+                                        }
                                     }
 
                                     @Override
