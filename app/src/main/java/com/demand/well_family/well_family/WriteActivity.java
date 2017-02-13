@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.drawable.ColorDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -46,6 +48,7 @@ import com.demand.well_family.well_family.dto.Story;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
+import com.demand.well_family.well_family.memory_sound.SoundRecordActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
@@ -109,6 +112,9 @@ public class WriteActivity extends Activity {
     //toolbar
     private DrawerLayout dl;
     private Server_Connection server_connection;
+
+    private int sleepTime;
+    private final int UPLOADONEPIC = 850;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -427,11 +433,23 @@ public class WriteActivity extends Activity {
             public void onClick(View v) {
                 if (photoList.size() != 0 || et_content.getText().toString().length() != 0) {
                     // 등록버튼
-                    progressDialog = new ProgressDialog(WriteActivity.this);
+                    /*progressDialog = new ProgressDialog(WriteActivity.this);
                     progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                     progressDialog.setMessage("uploading..");
                     progressDialog.setMax(photoList.size());
+                    progressDialog.show();*/
+
+                    progressDialog = new ProgressDialog(WriteActivity.this);
                     progressDialog.show();
+                    progressDialog.getWindow().setBackgroundDrawable(new
+                            ColorDrawable(Color.TRANSPARENT));
+                    progressDialog.setContentView(R.layout.progress_dialog);
+
+                    if(photoList.size() > 10) {
+                        sleepTime = UPLOADONEPIC * 10;
+                    } else {
+                        sleepTime = UPLOADONEPIC * photoList.size();
+                    }
 
                     new Thread(new Runnable() {
                         @Override
@@ -468,8 +486,8 @@ public class WriteActivity extends Activity {
 
                                     }
 
-                                    try {
-                                        Thread.sleep(850 * photoList.size());
+                                   try {
+                                        Thread.sleep(sleepTime);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
