@@ -16,6 +16,7 @@ import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStory;
 import com.demand.well_family.well_family.dto.SongStoryAvatar;
 import com.demand.well_family.well_family.dto.SongStoryComment;
+import com.demand.well_family.well_family.dto.SongStoryEmotionData;
 import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
 import com.demand.well_family.well_family.dto.Story;
 import com.demand.well_family.well_family.dto.StoryInfo;
@@ -219,5 +220,6 @@ public interface Server_Connection {
     @POST("{song_story_id}/insert_emotion_into_song_story")
     Call<ResponseBody> insert_emotion_into_song_story(@Path("song_story_id") String song_story_id,@QueryMap HashMap<String, String> map);
 
-
+    @GET("{song_story_id}/song_story_emotion_data_List")
+    Call<ArrayList<SongStoryEmotionData>> song_story_emotion_List(@Path("song_story_id") String song_story_id);
 }

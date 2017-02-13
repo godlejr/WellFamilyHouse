@@ -517,7 +517,6 @@ public class FamilyActivity extends Activity {
             contentAdapter.notifyItemInserted(0);
             try {
                 Thread.sleep(500);
-                contentAdapter.notifyItemChanged(0);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
