@@ -29,6 +29,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
@@ -42,7 +43,7 @@ public interface Server_Connection {
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    @POST("{family_id}/update_family_avatar")
+    @PUT("{family_id}/update_family_avatar")
     Call<ResponseBody> update_family_avatar(@Path("family_id") String family_id, @Body RequestBody base64);
 
     @POST("{user_id}/insert_family")
@@ -66,7 +67,7 @@ public interface Server_Connection {
     @POST("{story_id}/family_content_like_up")
     Call<ResponseBody> family_content_like_up(@Path("story_id") String story_id, @QueryMap HashMap<String, String> map);
 
-    @POST("{story_id}/family_content_like_down")
+    @DELETE("{story_id}/family_content_like_down")
     Call<ResponseBody> family_content_like_down(@Path("story_id") String story_id, @QueryMap HashMap<String, String> map);
 
     @POST("user_Info")
@@ -117,7 +118,7 @@ public interface Server_Connection {
     @POST("{song_story_id}/song_story_like_up")
     Call<ResponseBody> song_story_like_up(@Path("song_story_id") String song_story_id, @QueryMap HashMap<String, String> map);
 
-    @POST("{song_story_id}/song_story_like_down")
+    @DELETE("{song_story_id}/song_story_like_down")
     Call<ResponseBody> song_story_like_down(@Path("song_story_id") String song_story_id, @QueryMap HashMap<String, String> map);
 
     @GET("{story_user_id}/song_story_photo_List")
