@@ -2,58 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="horizontal" android:layout_width="match_parent"
     android:background="#fff"
     android:gravity="center"
-    android:layout_height="41dp">
+    android:id="@+id/ll_emotion_background"
+    android:layout_height="45dp">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:gravity="center"
-        android:id="@+id/ll_emotion_background"
-        android:layout_height="40dp">
 
-        <RelativeLayout
+    <RelativeLayout
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.7"
+        android:layout_marginRight="10dp">
+
+        <ImageView
+            android:id="@+id/iv_emotion"
+            android:button="@null"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:checked="true"
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="fitCenter"
+            android:layout_height="25dp"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="10dp" />
+    </RelativeLayout>
+
+    <TextView
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5">
-
-            <ImageView
-                android:id="@+id/iv_emotion"
-                android:button="@null"
-                android:gravity="center_vertical"
-                android:layout_gravity="center"
-                android:layout_marginRight="12dp"
-                android:layout_marginEnd="12dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:checked="true"
-                android:src="@mipmap/ic_launcher"
-                android:scaleType="fitCenter"
-                android:layout_width="28dp"
-                android:layout_height="28dp" />
-        </RelativeLayout>
-
-        <TextView
-            android:layout_width="1dp"
-            android:layout_height="wrap_content"
             android:text="ㅆㅆㅆ ㅆㅆㅆㅆ"
             android:id="@+id/tv_emotion"
             android:textColor="#542920"
-            android:layout_weight="1" />
-    </LinearLayout>
+        android:layout_marginRight="15dp"
+        android:gravity="center_vertical"
+        android:layout_weight="1" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="1dp">
-
-        <View
-            android:layout_width="match_parent"
-            android:background="#542920"
-            android:layout_height="1dp"></View>
-    </LinearLayout>
 
 </LinearLayout>

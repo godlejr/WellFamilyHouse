@@ -214,60 +214,71 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="1dp"
-                        android:layout_height="50dp"
-                        android:layout_weight="0.7"
-                        android:padding="12dp"
-                        android:src="@drawable/emotion" />
+                    android:layout_height="match_parent">
 
                     <LinearLayout
-                        android:layout_width="1dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_weight="1"
-                            android:gravity="bottom"
-                            android:text="추억 감정 기록"
-                            android:textColor="#424242"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_weight="1"
-                            android:gravity="top"
-                            android:text="추억에서 느끼는 감정은 무엇인가요?"
-                            android:textColor="#7e7e7e"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.7"
-                        android:orientation="horizontal"
-                        android:paddingRight="10dp">
-
-                        <Button
-                            android:id="@+id/btn_sound_record_select_emotion"
+                        <ImageView
                             android:layout_width="1dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
-                            android:background="#542920"
-                            android:text="선택"
-                            android:textColor="#fff" />
+                            android:layout_height="50dp"
+                            android:layout_weight="0.7"
+                            android:padding="12dp"
+                            android:src="@drawable/emotion" />
+
+                        <LinearLayout
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_weight="1"
+                                android:gravity="bottom"
+                                android:text="추억 감정 기록"
+                                android:textColor="#424242"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_weight="1"
+                                android:gravity="top"
+                                android:text="추억에서 느끼는 감정은 무엇인가요?"
+                                android:textColor="#7e7e7e"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.7"
+                            android:orientation="horizontal"
+                            android:paddingRight="10dp">
+
+                            <Button
+                                android:id="@+id/btn_sound_record_select_emotion"
+                                android:layout_width="1dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1"
+                                android:background="#542920"
+                                android:text="선택"
+                                android:textColor="#fff" />
+                        </LinearLayout>
+
                     </LinearLayout>
 
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_record_emotion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <View
