@@ -16,6 +16,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -55,6 +56,7 @@ import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -123,9 +125,8 @@ public class UserActivitySound extends Activity {
     private Server_Connection server_connection_for_content;
 
     // emotion
-    private RecyclerView rv_song_story_emotion;
+//    private RecyclerView rv_song_story_emotion;
     private EmotionAdapter emotionAdapter;
-    private ArrayList<SongStoryEmotionData> emotionList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -682,7 +683,7 @@ public class UserActivitySound extends Activity {
             cb_item_sound_story_like = (CheckBox) itemView.findViewById(R.id.cb_item_sound_story_like);
             story_images_inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
             iv_sound_story_record = (ImageView) itemView.findViewById(R.id.iv_sound_story_record);
-
+            rv_song_story_emotion = (RecyclerView) itemView.findViewById(R.id.rv_song_story_emotion);
 
             cb_item_sound_story_like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -809,8 +810,7 @@ public class UserActivitySound extends Activity {
             holder.tv_sound_story_date.setText(calculateTime(storyList.get(position).getCreated_at()));
 
             //location
-
-            if (storyList.get(position).getLocation()!=null && storyList.get(position).getLocation().length() != 0) {
+            if (storyList.get(position).getLocation() != null && storyList.get(position).getLocation().length() != 0) {
 
                 holder.ll_sound_story_location.setVisibility(View.VISIBLE);
 
@@ -820,11 +820,31 @@ public class UserActivitySound extends Activity {
             }
 
             //record
-            if (storyList.get(position).getRecord_file() !=null && storyList.get(position).getRecord_file().length() != 0) {
+            if (storyList.get(position).getRecord_file() != null && storyList.get(position).getRecord_file().length() != 0) {
                 holder.iv_sound_story_record.setVisibility(View.VISIBLE);
             } else {
                 holder.iv_sound_story_record.setVisibility(View.GONE);
             }
+
+            // emotion
+            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+            Call<ArrayList<SongStoryEmotionData>> call_emotion_data = server_connection.song_story_emotion_List(String.valueOf(storyList.get(position).getStory_id()));
+            call_emotion_data.enqueue(new Callback<ArrayList<SongStoryEmotionData>>() {
+                @Override
+                public void onResponse(Call<ArrayList<SongStoryEmotionData>> call, Response<ArrayList<SongStoryEmotionData>> response) {
+
+                    emotionAdapter = new EmotionAdapter(response.body(), UserActivitySound.this, R.layout.item_emotion);
+                    holder.rv_song_story_emotion.setAdapter(emotionAdapter);
+                    holder.rv_song_story_emotion.setLayoutManager(new GridLayoutManager(UserActivitySound.this, 2));
+
+                }
+
+                @Override
+                public void onFailure(Call<ArrayList<SongStoryEmotionData>> call, Throwable t) {
+                    Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                }
+            });
+
 
             //images
             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
@@ -838,7 +858,7 @@ public class UserActivitySound extends Activity {
                         holder.tv_sound_story_content.setMaxLines(15);
                     }
 
-                    if(photoList.size() == 1){
+                    if (photoList.size() == 1) {
                         holder.ll_sound_story_images_container.removeAllViews();
                         holder.ll_sound_story_images_container.setVisibility(View.VISIBLE);
                         holder.ll_sound_story_images_container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1200));
@@ -847,7 +867,7 @@ public class UserActivitySound extends Activity {
                         Glide.with(context).load(getString(R.string.cloud_front_song_stories_images) + photoList.get(0).getName() + "." + photoList.get(0).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image);
                     }
 
-                    if(photoList.size() == 2){
+                    if (photoList.size() == 2) {
                         holder.ll_sound_story_images_container.removeAllViews();
                         holder.ll_sound_story_images_container.setVisibility(View.VISIBLE);
 
@@ -858,7 +878,7 @@ public class UserActivitySound extends Activity {
                         Glide.with(context).load(getString(R.string.cloud_front_song_stories_images) + photoList.get(1).getName() + "." + photoList.get(1).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image_two2);
                     }
 
-                    if(photoList.size() > 2){
+                    if (photoList.size() > 2) {
                         holder.ll_sound_story_images_container.removeAllViews();
                         holder.ll_sound_story_images_container.setVisibility(View.VISIBLE);
                         holder.story_images_inflater.inflate(R.layout.item_main_story_image_list, holder.ll_sound_story_images_container, true);
@@ -885,6 +905,7 @@ public class UserActivitySound extends Activity {
                     int like_count = response.body().get(0).getLike_count();
                     holder.tv_sound_story_like.setText(String.valueOf(like_count));
                 }
+
                 @Override
                 public void onFailure(Call<ArrayList<LikeCount>> call, Throwable t) {
                     Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
@@ -899,6 +920,7 @@ public class UserActivitySound extends Activity {
                     int comment_count = response.body().get(0).getComment_count();
                     holder.tv_sound_story_comment.setText(String.valueOf(comment_count));
                 }
+
                 @Override
                 public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
                     Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
@@ -1064,15 +1086,16 @@ public class UserActivitySound extends Activity {
             super(itemView);
             tv_emotion = (TextView) itemView.findViewById(R.id.tv_emotion);
             iv_emotion = (ImageView) itemView.findViewById(R.id.iv_emotion);
+            tv_emotion.setTextSize(14);
         }
     }
 
     private class EmotionAdapter extends RecyclerView.Adapter<EmotionViewHolder> {
-        private ArrayList<SongStoryEmotionInfo> emotionList;
+        private ArrayList<SongStoryEmotionData> emotionList;
         private Context context;
         private int layout;
 
-        public EmotionAdapter(ArrayList<SongStoryEmotionInfo> emotionList, Context context, int layout) {
+        public EmotionAdapter(ArrayList<SongStoryEmotionData> emotionList, Context context, int layout) {
             this.emotionList = emotionList;
             this.context = context;
             this.layout = layout;

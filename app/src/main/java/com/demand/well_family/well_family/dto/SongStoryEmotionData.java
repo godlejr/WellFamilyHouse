@@ -1,10 +1,12 @@
 package com.demand.well_family.well_family.dto;
 
+import java.io.Serializable;
+
 /**
  * Created by Dev-0 on 2017-02-14.
  */
 
-public class SongStoryEmotionData {
+public class SongStoryEmotionData implements Serializable{
     private int id;
     private String name;
     private int emotion_category_id;

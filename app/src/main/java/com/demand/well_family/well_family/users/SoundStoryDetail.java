@@ -12,6 +12,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -46,6 +47,7 @@ import com.demand.well_family.well_family.dto.LikeCount;
 import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStoryAvatar;
 import com.demand.well_family.well_family.dto.SongStoryComment;
+import com.demand.well_family.well_family.dto.SongStoryEmotionData;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 
@@ -129,6 +131,10 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
     private ImageView iv_sound_detail_song_img;
     private Server_Connection server_connection;
 
+    //emotion
+    private RecyclerView rv_detail_emotion;
+    private EmotionAdapter emotionAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,11 +167,14 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         hits = getIntent().getIntExtra("hits", 0);
         like_checked = getIntent().getBooleanExtra("like_checked", false);
 
+
         init();
+
         getCommentCount();
         getContentData();
         getCommentData();
         setCommentData();
+        getEmotionData();
 
         setToolbar(this.getWindow().getDecorView(), this.getApplicationContext(), "추억 소리");
     }
@@ -421,7 +430,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         call_avatar.enqueue(new Callback<ArrayList<SongStoryAvatar>>() {
             @Override
             public void onResponse(Call<ArrayList<SongStoryAvatar>> call, Response<ArrayList<SongStoryAvatar>> response) {
-                String avatar =response.body().get(0).getAvatar();
+                String avatar = response.body().get(0).getAvatar();
                 Glide.with(SoundStoryDetail.this).load(getString(R.string.cloud_front_songs_avatar) + response.body().get(0).getAvatar())
                         .thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_detail_song_img);
             }
@@ -439,7 +448,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         tv_sound_story_detail_date.setText(calculateTime(created_at));
 
         // record
-        if (record_file !=null && record_file.length() != 0 ) {
+        if (record_file != null && record_file.length() != 0) {
             setPlayer();
         } else {
             ll_sound_story_detail_play.setVisibility(View.GONE);
@@ -651,8 +660,28 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                 Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
+
     }
 
+    private void getEmotionData(){
+        rv_detail_emotion = (RecyclerView)findViewById(R.id.rv_detail_emotion);
+
+        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+        Call<ArrayList<SongStoryEmotionData>> call_emotion_data = server_connection.song_story_emotion_List(String.valueOf(story_id));
+        call_emotion_data.enqueue(new Callback<ArrayList<SongStoryEmotionData>>() {
+            @Override
+            public void onResponse(Call<ArrayList<SongStoryEmotionData>> call, Response<ArrayList<SongStoryEmotionData>> response) {
+                //emotion
+                emotionAdapter = new EmotionAdapter(response.body(), SoundStoryDetail.this, R.layout.item_emotion);
+                rv_detail_emotion.setAdapter(emotionAdapter);
+                rv_detail_emotion.setLayoutManager(new GridLayoutManager(SoundStoryDetail.this, 2));
+            }
+            @Override
+            public void onFailure(Call<ArrayList<SongStoryEmotionData>> call, Throwable t) {
+                Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
     private class PhotoViewHolder extends RecyclerView.ViewHolder {
         private ImageView iv_item_detail_photo;
@@ -796,6 +825,47 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         @Override
         public int getItemCount() {
             return commentInfoList.size();
+        }
+    }
+
+    private class EmotionViewHolder extends RecyclerView.ViewHolder {
+        private TextView tv_emotion;
+        private ImageView iv_emotion;
+
+        public EmotionViewHolder(View itemView) {
+            super(itemView);
+            tv_emotion = (TextView) itemView.findViewById(R.id.tv_emotion);
+            iv_emotion = (ImageView) itemView.findViewById(R.id.iv_emotion);
+            tv_emotion.setTextSize(14);
+        }
+    }
+
+    private class EmotionAdapter extends RecyclerView.Adapter<EmotionViewHolder> {
+        private ArrayList<SongStoryEmotionData> emotionList;
+        private Context context;
+        private int layout;
+
+        public EmotionAdapter(ArrayList<SongStoryEmotionData> emotionList, Context context, int layout) {
+            this.emotionList = emotionList;
+            this.context = context;
+            this.layout = layout;
+        }
+
+        @Override
+        public int getItemCount() {
+            return emotionList.size();
+        }
+
+        @Override
+        public void onBindViewHolder(EmotionViewHolder holder, int position) {
+            holder.tv_emotion.setText(emotionList.get(position).getName());
+            Glide.with(context).load(getString(R.string.cloud_front_song_story_emotion) + emotionList.get(position).getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_emotion);
+        }
+
+        @Override
+        public EmotionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            EmotionViewHolder holder = new EmotionViewHolder((LayoutInflater.from(context).inflate(layout, parent, false)));
+            return holder;
         }
     }
 

@@ -18,7 +18,8 @@
                     android:icon="@drawable/search"
                     android:title="가족 찾기"
                     android:checked="false"
-                    android:checkable="true" />
+                    android:checkable="true"
+                    android:visible="false"/>
                 <item
                     android:id="@+id/menu_market"
                     android:icon="@drawable/market"
