@@ -2,10 +2,13 @@ package com.demand.well_family.well_family.create_family;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.drawable.ColorDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,6 +34,7 @@ import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.Identification;
 import com.demand.well_family.well_family.family.FamilyActivity;
+import com.demand.well_family.well_family.memory_sound.SoundRecordActivity;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
 import java.io.ByteArrayOutputStream;
@@ -66,6 +70,11 @@ public class CreateFamilyActivity extends Activity {
     private int user_level;
     private String user_avatar;
     private Server_Connection server_connection;
+    private ProgressDialog progressDialog;
+
+    private int sleepTime;
+    private final int UPLOADONEPIC = 850;
+
 
     private final int READ_EXTERNAL_STORAGE_PERMISSION = 10001;
 
@@ -141,6 +150,12 @@ public class CreateFamilyActivity extends Activity {
                     map.put("family_name", family_name);
                     map.put("family_content", family_introfuce);
 
+                    progressDialog = new ProgressDialog(CreateFamilyActivity.this);
+                    progressDialog.show();
+                    progressDialog.getWindow().setBackgroundDrawable(new
+                            ColorDrawable(Color.TRANSPARENT));
+                    progressDialog.setContentView(R.layout.progress_dialog);
+
 
                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                     Call<ArrayList<Identification>> call = server_connection.insert_family(String.valueOf(user_id), map);
@@ -182,7 +197,16 @@ public class CreateFamilyActivity extends Activity {
                                                 intent.putExtra("user_name", user_name);
                                                 intent.putExtra("user_level", user_level);
                                                 intent.putExtra("user_avatar", user_avatar);
+
+                                                try {
+                                                    Thread.sleep(sleepTime);
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
+                                                }
+
+                                                progressDialog.dismiss();
                                                 startActivity(intent);
+
                                                 finish();
                                             }
 
