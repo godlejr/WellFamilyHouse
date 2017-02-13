@@ -245,8 +245,9 @@ public class SearchUserActivity extends Activity {
             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
             HashMap<String, String> map = new HashMap<>();
             map.put("user_id", String.valueOf(user_id));
+            map.put("family_id",String.valueOf(family_id));
 
-            Call<ArrayList<Check>> call_family_check = server_connection.family_check(String.valueOf(userList.get(position).getId()), map);
+            Call<ArrayList<Check>> call_family_check = server_connection.family_user_check(String.valueOf(userList.get(position).getId()), map);
             call_family_check.enqueue(new Callback<ArrayList<Check>>() {
                 @Override
                 public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {

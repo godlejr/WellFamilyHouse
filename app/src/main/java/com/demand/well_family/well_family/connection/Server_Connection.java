@@ -222,4 +222,9 @@ public interface Server_Connection {
 
     @GET("{song_story_id}/song_story_emotion_data_List")
     Call<ArrayList<SongStoryEmotionData>> song_story_emotion_List(@Path("song_story_id") String song_story_id);
+
+    @POST("{other_user_id}/family_user_check")
+    Call<ArrayList<Check>> family_user_check(@Path("other_user_id") String other_user_id,@QueryMap HashMap<String, String> map);
+
+
 }

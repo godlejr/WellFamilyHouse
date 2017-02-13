@@ -510,7 +510,7 @@ public class FamilyActivity extends Activity {
         });
     }
 
-    class ContentHandler extends Handler {
+    class ContentAddHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -523,7 +523,7 @@ public class FamilyActivity extends Activity {
         }
     }
 
-    class ContentAddHandler extends Handler {
+    class ContentHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
