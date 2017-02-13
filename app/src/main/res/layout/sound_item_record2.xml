@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="270dp">
+
+    <ImageView
+        android:id="@+id/iv_sound_record_avatar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/camera" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:text="TITLE"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_record_song_title"
+            android:layout_weight="0.45"
+            android:gravity="bottom|center_horizontal"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:text="SINGER"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_record_song_singer"
+            android:layout_weight="0.2"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:gravity="center" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1.3"
+            android:orientation="vertical"
+            android:layout_height="1dp">
+            <SeekBar
+                android:id="@+id/sb_sound_record"
+                style="@style/SeekBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="0.6"
+                android:paddingEnd="0dp"
+                android:thumb="@null"
+                android:paddingStart="0dp" />
+
+            <TextView
+                android:id="@+id/tv_sound_record_complete"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:gravity="right"
+                android:text="0:00"
+                android:textColor="#fff"
+                android:layout_weight="1"
+                android:paddingRight="10dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="1dp"
+            android:layout_weight="1.5">
+
+
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iv_sound_record_complete_play"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1.5"
+                    android:src="@drawable/play" />
+
+                <TextView
+                    android:id="@+id/textView32"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:gravity="top|center"
+                    android:text="재생"
+                    android:textColor="#fff"
+                    android:textSize="18sp"
+                    android:paddingTop="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7" />
+
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iv_sound_record_complete_replay"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1.5"
+                    android:src="@drawable/replay" />
+
+                <TextView
+                    android:id="@+id/textView33"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:gravity="top|center"
+                    android:text="다시녹음"
+                    android:textColor="#fff"
+                    android:textSize="18sp"
+                    android:paddingTop="5dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

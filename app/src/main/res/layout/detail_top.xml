@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:paddingLeft="15dp"
+        android:background="#fff">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/main2"
+            android:id="@+id/iv_item_story_avatar"
+            android:layout_width="55dp"
+            android:layout_height="55dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:layout_marginLeft="10dp">
+
+
+            <TextView
+                android:text="NAME"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:id="@+id/tv_item_story_name"
+                android:layout_weight="1"
+                android:textColor="#000"
+                android:textStyle="bold"
+                android:gravity="bottom"
+                android:textSize="15sp" />
+
+            <TextView
+                android:text="DATE"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:id="@+id/tv_item_story_date"
+                android:layout_weight="1"
+                android:textColor="#444444"
+                android:textSize="12.5sp"
+                android:paddingTop="2dp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/memu"
+            android:id="@+id/iv_item_story_menu"
+            android:layout_weight="0.5"
+            android:tint="#7e7e7e"
+            android:layout_marginRight="5dp" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f1f1f1"
+    android:fitsSystemWindows="false"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nsv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="5">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="270dp">
+
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/iv_family_edit"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/family_write_btn"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:padding="5dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="10dp" />
+
+                        <ImageView
+                            android:id="@+id/iv_family_avatar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:scaleType="fitXY"
+                            app:srcCompat="@drawable/camera" />
+
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="1"
+                        android:background="#fff">
+
+                        <LinearLayout
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_marginRight="10dp">
+                            <ImageView
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_marginLeft="12.5dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/introduce"
+                                android:padding="5dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.8">
+                            <TextView
+                                android:id="@+id/tv_family_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="INTRODUCE"
+                                android:gravity="left|center"
+                                android:textColor="#000" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="#f7f5f0"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView18"
+                        android:layout_width="match_parent"
+                        android:text="우리 가족 활동"
+                        android:layout_marginLeft="12dp"
+                        android:gravity="center_vertical"
+                        android:textColor="#542920"
+                        android:textStyle="bold"
+                        android:layout_height="34dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:background="#ffffff"
+                        >
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rv_family_users"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:columnWidth="90dp"
+                            android:gravity="center"
+                            android:numColumns="auto_fit"
+                            android:scrollbarAlwaysDrawHorizontalTrack="true"
+                            android:scrollbarAlwaysDrawVerticalTrack="false"
+                            android:scrollbars="horizontal"
+                            android:stretchMode="columnWidth"
+                            android:verticalSpacing="5dp"
+                            android:visibility="visible"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="7.5dp"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#e5e5e5"></View>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal"
+                    android:background="#f7f5f0"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:id="@+id/textView15"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.9"
+                        android:layout_marginLeft="12dp"
+                        android:gravity="center_vertical"
+                        android:text="우리 가족 사진첩"
+                        android:textColor="#542920"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btn_family_photos"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="0.1"
+                        android:background="#00f5f5f5"
+                        android:text=">"
+                        android:textColor="#542920"
+                        android:textSize="25sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="7.5dp"
+                    android:visibility="gone">
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#e5e5e5"></View>
+                </LinearLayout>
+
+                <!--<Button
+                    android:id="@+id/btn_family_write"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:background="#f7f7f7"
+                    android:text="글쓰기"
+                    android:textColor="#424242" />-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:weightSum="1"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:background="#fff">
+
+                    <LinearLayout
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent">
+                                                                                                            <!-- 서버이미지 가져와야 됨 id 값설정해야됨 -->
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/profile"
+                            android:layout_marginLeft="0dp"
+                            android:layout_weight="0.2"
+                            android:layout_gravity="center_vertical"
+                            android:id="@+id/iv_family_writer_avatar" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.8"
+                        android:layout_gravity="center_vertical">
+                        <TextView
+                            android:id="@+id/btn_family_write"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.8"
+                            android:layout_marginLeft="18dp"
+                            android:text="새로운 소식을 들려주세요"
+                            android:textColor="#3b3b3b" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_family_contents"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fastScrollEnabled="false"
+                    android:nestedScrollingEnabled="false"
+                    android:scrollbars="vertical"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp" />
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/menu_main"
+        android:background="#fff"
+        app:itemTextColor="#000"
+        app:theme="@style/NavigationDrawer"
+        />
+
+</android.support.v4.widget.DrawerLayout>

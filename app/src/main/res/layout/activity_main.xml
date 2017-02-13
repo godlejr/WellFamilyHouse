@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:fitsSystemWindows="false">
+    <!--android:orientation="vertical">-->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/toolbar_main"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp">
+
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/main_viewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/imageView8"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/arrow_right_black" />
+                    </android.support.v4.view.ViewPager>
+
+                    <ImageView
+                        android:id="@+id/iv_viewPager_prev"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="left"
+                        android:clickable="true"
+                        android:src="@drawable/arrow_left"
+                        android:tint="#fff"
+                        android:layout_width="40dp" />
+
+                    <ImageView
+                        android:id="@+id/iv_viewPager_next"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:clickable="true"
+                        android:src="@drawable/arrow_right_black"
+                        android:layout_width="40dp"
+                        android:tint="#fff" />
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="1"
+                        android:background="#f7f5f0">
+                        <LinearLayout
+                            android:layout_width="1dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.9">
+
+                            <TextView
+                                android:id="@+id/textView7"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="#f7f5f0"
+                                android:paddingLeft="15dp"
+                                android:paddingRight="5dp"
+                                android:paddingTop="7dp"
+                                android:text="가족"
+                                android:textColor="#542920"
+                                android:gravity="center_vertical"
+                                android:paddingBottom="7dp"
+                                android:textStyle="normal|bold" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.1"
+                            android:gravity="center">
+                            <ImageButton
+                                android:background="#f7f5f0"
+                                android:id="@+id/btn_family_add_exist"
+                                android:src="@drawable/plus"
+                                android:tint="#542920"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:scaleType="fitXY" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:id="@+id/ll_family_container_family">
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/textView20"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#f7f5f0"
+                        android:paddingBottom="7dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="7dp"
+                        android:text="Apps"
+                        android:textColor="#542920"
+                        android:textStyle="normal|bold" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:id="@+id/ll_family_container_apps">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rv_apps"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginTop="10dp"
+                            android:paddingLeft="5dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView21"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#f7f5f0"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="7dp"
+                        android:text="가족알림"
+                        android:textColor="#542920"
+                        android:paddingBottom="7dp"
+                        android:textStyle="normal|bold" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:scaleType="fitXY"
+                        android:layout_height="390dp"
+                        android:id="@+id/iv_img_alarm" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/menu_main"
+        android:background="#fff"
+        app:itemTextColor="#424242"
+        app:theme="@style/NavigationDrawer"
+     />
+
+</android.support.v4.widget.DrawerLayout>

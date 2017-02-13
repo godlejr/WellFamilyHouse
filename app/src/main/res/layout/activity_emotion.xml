@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00ffffff">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <TextView
+        android:text="추억 감정"
+        android:layout_width="match_parent"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:background="@drawable/round_corner_top"
+        android:textColor="#fff"
+        android:layout_height="50dp"
+        android:textStyle="normal|bold" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rv_emotion"
+        android:background="#fff">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <Button
+        android:text="저장하기"
+        android:layout_width="match_parent"
+        android:id="@+id/btn_emotion"
+        android:background="@drawable/round_corner_bottom"
+        android:textSize="18sp"
+        android:textColor="#fff"
+        android:layout_height="50dp" />
+
+    </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

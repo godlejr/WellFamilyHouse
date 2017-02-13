@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_all"
+        android:title="전체 메뉴">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/menu_home"
+                    android:icon="@drawable/home"
+                    android:title="홈"
+                    android:checked="false"
+                    android:checkable="true" />
+                <item
+                    android:id="@+id/menu_search"
+                    android:icon="@drawable/search"
+                    android:title="가족 찾기"
+                    android:checked="false"
+                    android:checkable="true" />
+                <item
+                    android:id="@+id/menu_market"
+                    android:icon="@drawable/market"
+                    android:title="웰 패밀리 스토어"
+                    android:checked="false"
+                    android:checkable="true" />
+                <item
+                    android:id="@+id/menu_setting"
+                    android:icon="@drawable/setting"
+                    android:title="설정"
+                    android:checked="false"
+                    android:checkable="true" />
+                <item
+                    android:id="@+id/menu_help"
+                    android:icon="@drawable/help"
+                    android:title="고객센터/도움말"
+                    android:checked="false"
+                    android:checkable="true" />
+                <item
+                    android:id="@+id/menu_logout"
+                    android:icon="@drawable/logout"
+                    android:title="로그아웃"
+                    android:checked="false"
+                    android:checkable="true" />
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/menu_apps"
+        android:title="App 이용하기">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/menu_selffeet"
+                    android:icon="@drawable/selffeet"
+                    android:title="낙상예방 셀핏"
+                    android:checked="false"
+                    android:checkable="true" />
+                <item
+                    android:id="@+id/menu_memory_sound"
+                    android:icon="@drawable/memory_sound"
+                    android:title="치매예방 추억소리"
+                    android:checked="false"
+                    android:checkable="true" />
+                <item
+                    android:id="@+id/menu_bubblefeet"
+                    android:icon="@drawable/bubblefeet"
+                    android:title="발근력 강화 버블핏"
+                    android:checked="false"
+                    android:checkable="true" />
+                <item
+                    android:id="@+id/menu_happyfeet"
+                    android:icon="@drawable/happyfeet"
+                    android:title="발근력 강화 해핏"
+                    android:checked="false"
+                    android:checkable="true" />
+            </group>
+        </menu>
+
+    </item>
+</menu>

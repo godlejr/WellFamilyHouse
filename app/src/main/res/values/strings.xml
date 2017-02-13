@@ -1,0 +1,34 @@
+<resources>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="app_name">웰패밀리 하우스</string>
+
+        <string name="agreement">
+        "제 1 조 (목 적) 이 서비스 이용약관(이하 약관 이라 합니다)은 Mobile SNS가 제공하는 서비스와 관련하여 이용 고객(회원) 간에 서비스의 이용 조건 및 절차, 의무 및 책임 사항 기타 필요한 사항을 규정함을 목적으로 합니다.제 2조 (약관의 효력 및 변경)
+
+①이 약관은 서비스 화면에 게시하거나 기타의 방법으로 회원에게 공지함으로써 효력이 발생합니다.
+②회사는 약관의 규제에 관한 법률, 전자상거래 등에서의 소비자보호에 관한 법률, 정보통신망 이용촉진 및 정보보호 등에 관한 법률 등
+관계법령에 위배되지 않는 범위내에서 이 약관을 개정할 수 있습니다.
+③회사는 약관을 개정할 경우 그 개정이유 및 적용일자를 명시하여 현행 약관과 함께 적용일자 7일전부터 적용일 전일까지 제1항의
+방법으로 공지합니다. 다만, 회원의 권리 또는 의무에 관한 중요한 규정의 변경은 최소한 30일전에 공지하고 개정약관을 회원이 등록한 메일(e-mail)로 발송하여 통지합니다.
+④회사가 제3항에 따라 개정약관을 공지 또는 통지하면서 회원에게 약관 변경 적용일까지 거부의사를 표시하지 않으면 의사표시가 표명된 것으로 본다는 뜻을 공지 또는 통지하였음에도 불구하고 회원이 명시적으로 거부의사를 표시하지 아니하는 경우 회원이 개정약관에 동의한 것으로 봅니다.
+⑤회원은 변경된 약관에 동의하지 아니하는 경우 서비스의 이용을 중단하고 이용계약을 해지할 수 있습니다.
+⑥회원은 약관의 변경에 대하여 주의의무를 다하여야 하며, 변경된 약관의 부지로 인한 회원의 피해는 회사가 책임지지 않습니다."</string>
+
+    <string name="server_url">http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/family/</string>
+    <string name="cloud_front_family_avatar">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/avatars/familys/</string>
+    <string name="cloud_front_user_avatar">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/avatars/users/</string>
+    <string name="cloud_front_stories_images">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/stories/</string>
+    <string name="cloud_front_songs_avatar">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/songs/avatars/</string>
+    <string name="cloud_front_songs_file">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/songs/files/</string>
+    <string name="cloud_front_song_story_record">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/songs/records/</string>
+    <string name="cloud_front_song_stories_images">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/songstories/</string>
+    <string name="cloud_front_banners">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/banner/</string>
+
+    <string name="bubblefeet">com.demand.bubblefeet</string>
+    <string name="happyfeet">com.demand.happyfeet</string>
+    <string name="market_front">market://details?id=</string>
+
+</resources>

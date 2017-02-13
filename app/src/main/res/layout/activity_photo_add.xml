@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="false">
+
+    <include
+        android:layout_width="match_parent"
+        layout="@layout/toolbar_main"
+        android:layout_height="50dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#bdbdbd"/>
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        layout="@layout/toolbar_buttons"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f5f5f5"
+        android:id="@+id/sv_gallery_add">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#bdbdbd" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#fff"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView99"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="10dp"
+                    android:tint="#414141"
+                    android:src="@drawable/camera"
+                    android:padding="3dp" />
+
+                <TextView
+                    android:id="@+id/textView99"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="PHOTOS"
+                    android:textColor="#414141"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#bdbdbd" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="10dp">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:inputType="textPersonName"
+                    android:ems="10"
+                    android:id="@+id/editText3"
+                    android:background="@drawable/round_corner"
+                    android:textColor="#414141"
+                    android:layout_height="40dp"
+                    android:paddingLeft="10dp"
+                    android:hint="사진제목"
+                    android:textColorHint="#7e7e7e"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#bdbdbd"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:layout_width="1dp"
+                        android:layout_height="40dp"
+                        android:inputType="textPersonName"
+                        android:ems="10"
+                        android:id="@+id/editText5"
+                        android:textColor="#414141"
+                        android:textColorHint="#7e7e7e"
+                        android:hint="위치"
+                        android:paddingLeft="10dp"
+                        android:background="@drawable/round_corner"
+                        android:layout_weight="5"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp" />
+
+                    <ImageView
+                        android:id="@+id/imageView10"
+                        android:src="@drawable/pause"
+                        android:layout_weight="0.7"
+                        android:layout_height="40dp"
+                        android:layout_width="1dp"
+                        android:padding="5dp"
+                        android:tint="#808080"
+                        android:layout_marginRight="10dp" />
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#bdbdbd"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/spinner" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#bdbdbd"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:id="@+id/textView16"
+                    android:background="@drawable/round_corner"
+                    android:layout_height="40dp"
+                    android:paddingLeft="10dp"
+                    android:hint="앨범명"
+                    android:textColorHint="#7e7e7e"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#bdbdbd"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:inputType="textPersonName"
+                    android:ems="10"
+                    android:id="@+id/editText4"
+                    android:background="@drawable/round_corner"
+                    android:hint="내용"
+                    android:textColor="#414141"
+                    android:padding="10dp"
+                    android:textColorHint="#7e7e7e"
+                    android:gravity="top|center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#bdbdbd"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <Button
+                    android:text="파일 등록"
+                    android:layout_width="120dp"
+                    android:id="@+id/button3"
+                    android:layout_weight="1"
+                    android:background="@drawable/round_corner"
+                    android:textColor="#414141"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#bdbdbd"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical" >
+
+                        <GridView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#bdbdbd"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:text="저장"
+                        android:layout_width="wrap_content"
+                        android:id="@+id/button5"
+                        android:layout_weight="1"
+                        android:background="#FE893A"
+                        android:layout_height="40dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="20dp" />
+
+                    <Button
+                        android:text="취소"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:id="@+id/button4"
+                        android:layout_weight="1"
+                        android:background="#fff"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="#414141"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="10dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

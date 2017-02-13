@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.demand.well_family.well_family">
+
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:largeHeap="true">
+        <!--.LoginActivity-->
+        <activity
+            android:name=".intro.IntroActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:windowSoftInputMode="adjustResize">
+            <!--android:windowSoftInputMode="adjustPan">-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".family.DetailStoryActivity" />
+        <activity android:name=".photos.PhotosActivity" />
+        <activity
+            android:name=".photos.PhotoPopupActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity android:name=".users.UserActivity" />
+        <activity android:name=".family.FamilyActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".register.RegisterActivity" />
+        <activity android:name=".register.AgreementActivity" />
+        <activity android:name=".invite.InviteActivity" />
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".WriteActivity"
+            android:configChanges="keyboardHidden|orientation"/>
+
+        <activity android:name=".memory_sound.SoundMainActivity"/>
+        <activity android:name=".memory_sound.SoundChartListActivity"/>
+        <activity android:name=".memory_sound.SoundCategoryListActivity"/>
+        <activity android:name=".memory_sound.SoundPlayer"
+            android:theme="@style/Theme.AppCompat.Dialog"/>
+        <activity android:name=".users.UserActivitySound"/>
+        <activity android:name=".memory_sound.SoundRecordActivity"/>
+        <activity android:name=".users.SoundStoryDetail"/>
+        <activity android:name=".market.MarketMainActivity"/>
+        <activity android:name=".create_family.CreateFamilyActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"
+         />
+        <activity android:name=".search.SearchUserActivity"/>
+        <activity android:name=".memory_sound.EmotionActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"/>
+
+    </application>
+</manifest>

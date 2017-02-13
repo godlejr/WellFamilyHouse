@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:background="#fff"
+    android:layout_height="70dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <ImageView
+        app:srcCompat="@drawable/comment2"
+        android:id="@+id/iv_search_user_avatar"
+        android:layout_gravity="center_vertical"
+        android:scaleType="centerCrop"
+        android:layout_width="55dp"
+        android:layout_height="55dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:paddingLeft="15dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:text="NAME"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/tv_search_user_name"
+            android:layout_weight="1"
+            android:textColor="#000"
+            android:textStyle="normal|bold"
+            android:gravity="bottom" />
+
+        <TextView
+            android:text="BIRTH"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/tv_search_user_birth"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            android:textColor="#000" />
+
+    </LinearLayout>
+
+    <Button
+        android:text="초대하기"
+        android:layout_width="1dp"
+        android:id="@+id/btn_search_user"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:background="@drawable/round_corner_border_brown"
+        android:layout_height="30dp" />
+
+</LinearLayout>

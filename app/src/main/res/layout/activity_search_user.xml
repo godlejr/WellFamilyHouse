@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        layout="@layout/toolbar_register" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:background="#f1f1f1"
+        android:layout_height="50dp">
+
+        <EditText
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/et_search_user"
+            android:layout_weight="3"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="7dp"
+            android:background="@drawable/round_corner"
+            android:textColor="#000"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColorHint="#bdbdbd"
+            android:hint="가족 이름을 검색해 보세요."
+            android:textSize="14sp" />
+
+        <Button
+            android:text="검색"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:id="@+id/btn_search_user"
+            android:layout_gravity="center"
+            android:textColor="#000"
+            android:background="@null"
+            android:layout_weight="0.7" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rv_search_user"
+        android:background="#fff"
+        />
+
+</LinearLayout>

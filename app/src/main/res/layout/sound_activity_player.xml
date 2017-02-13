@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nsv_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="520dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/back"
+                    android:id="@+id/iv_sound_player_album_bg"
+                    android:tint="#6f020202"
+                    android:scaleType="fitXY" />
+
+                <ImageView
+                    android:id="@+id/iv_sound_player_close"
+                    android:layout_width="30dp"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="0.5"
+                    android:background="#00ffffff"
+                    android:focusable="false"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/close"
+                    android:layout_height="30dp" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/iv_sound_player_album"
+                        android:layout_width="match_parent"
+                        android:focusable="false"
+                        android:src="@drawable/main2"
+                        android:scaleType="centerCrop"
+                        android:layout_margin="55dp"
+                        android:layout_height="216dp" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="0dp">
+
+                        <SeekBar
+                            android:id="@+id/sb_sound"
+                            android:layout_width="match_parent"
+                            android:layout_height="25dp"
+                            style="@style/SeekBarStyle"
+                            android:thumb="@drawable/seekbar_thumb"
+                            android:padding="0dp"
+                            android:paddingEnd="0dp"
+                            android:paddingStart="0dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingLeft="14dp"
+                            android:paddingRight="14dp">
+
+                            <TextView
+                                android:id="@+id/tv_sound_player_start"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="left"
+                                android:text="00:00"
+                                android:textColor="#fff"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/tv_sound_player_end"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:text="00:00"
+                                android:textColor="#fff" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:layout_height="100dp"
+                        android:id="@+id/ll_sound_player_info">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:gravity="top"
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/tv_sound_player_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_weight="2"
+                                android:gravity="center"
+                                android:text="노란 샤쓰의 사나이"
+                                android:textColor="#fff"
+                                android:textSize="20sp" />
+
+                            <TextView
+                                android:id="@+id/tv_sound_player_singer"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_weight="2"
+                                android:gravity="top|center_horizontal"
+                                android:text="한명숙"
+                                android:textColor="#fff"
+                                android:textSize="18sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_weight="1">
+
+                            <RelativeLayout android:layout_height="match_parent"
+                                android:layout_width="1dp"
+                                android:layout_weight="1">
+
+                                <CheckBox
+                                    android:id="@+id/cb_sound_player_like"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/checkbox_like_sound"
+                                    android:button="@null"
+                                    android:checked="false"
+                                    android:layout_width="wrap_content"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_centerHorizontal="true" />
+                            </RelativeLayout>
+
+                            <RelativeLayout android:layout_height="match_parent"
+                                android:layout_width="1dp"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:id="@+id/iv_sound_player_start"
+                                    android:layout_height="match_parent"
+                                    android:background="#00ffffff"
+                                    android:focusable="false"
+                                    android:focusableInTouchMode="false"
+                                    android:src="@drawable/pause_player"
+                                    android:layout_width="wrap_content"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_centerHorizontal="true" />
+                            </RelativeLayout>
+
+                            <RelativeLayout android:layout_height="match_parent"
+                                android:layout_width="1dp"
+                                android:layout_weight="1">
+
+                                <ImageView
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/iv_sound_player_record"
+                                    android:src="@drawable/write"
+                                    android:layout_width="wrap_content"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_centerHorizontal="true" />
+                            </RelativeLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </FrameLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#eaeaea" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="32dp">
+
+
+
+                <RelativeLayout
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+
+                    <ImageView
+                        android:src="@drawable/like_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="right"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginRight="25dp"
+                        android:layout_marginEnd="25dp" />
+
+                    <TextView
+                        android:id="@+id/tv_sound_like_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="77"
+                        android:gravity="right|center_vertical"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginRight="10dp"
+                        android:textColor="#000" />
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.18">
+
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageView24"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/comment"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginRight="5dp" />
+
+                    <TextView
+                        android:id="@+id/tv_sound_comment_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="88"
+                        android:gravity="center"
+                        android:layout_alignTop="@+id/imageView24"
+                        android:layout_toRightOf="@+id/imageView24"
+                        android:layout_toEndOf="@+id/imageView24"
+                        android:textColor="#000" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#eaeaea" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_sound_player_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:nestedScrollingEnabled="false"
+                    android:scrollbars="vertical">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/textView29" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/round_corner_comment"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_sound_comment"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/round_corner"
+            android:ems="10"
+            android:inputType="text"
+            android:paddingLeft="10dp"
+            android:textColor="#424242" />
+
+        <Button
+            android:id="@+id/btn_sound_comment_send"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:text="전송"
+            android:background="@drawable/round_corner_btn"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:textColor="#fff" />
+    </LinearLayout>
+
+</FrameLayout>
