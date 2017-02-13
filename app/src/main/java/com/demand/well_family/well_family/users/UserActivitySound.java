@@ -42,7 +42,6 @@ import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.Server_Connection;
-import com.demand.well_family.well_family.connection.Server_Connector;
 import com.demand.well_family.well_family.dto.Check;
 import com.demand.well_family.well_family.dto.CommentCount;
 import com.demand.well_family.well_family.dto.LikeCount;
@@ -51,6 +50,7 @@ import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStory;
 import com.demand.well_family.well_family.dto.SongStoryInfo;
 import com.demand.well_family.well_family.market.MarketMainActivity;
+import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -64,6 +64,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.demand.well_family.well_family.LoginActivity.finishList;
 
 /**
  * Created by ㅇㅇ on 2017-02-02.
@@ -93,7 +95,6 @@ public class UserActivitySound extends Activity {
     private RecyclerView rv_user_activity_sound;
     private ArrayList<Photo> photoList;
     private ArrayList<SongStoryInfo> storyList;
-    private Server_Connector connector;
     private ContentAdapter contentAdapter;
 
     private String url;
@@ -123,6 +124,8 @@ public class UserActivitySound extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_sound);
+
+        finishList.add(this);
 
         init();
         getContentsData();
@@ -322,16 +325,16 @@ public class UserActivitySound extends Activity {
                         break;
 
                     case R.id.menu_memory_sound:
-//                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
-//                        startLink.putExtra("user_id", getIntent().getStringExtra("user_id"));
-//                        startLink.putExtra("user_level", getIntent().getStringExtra("user_level"));
-//                        startLink.putExtra("user_email", getIntent().getStringExtra("user_email"));
-//                        startLink.putExtra("user_phone", getIntent().getStringExtra("user_phone"));
-//                        startLink.putExtra("user_name", getIntent().getStringExtra("user_name"));
-//                        startLink.putExtra("user_avatar", getIntent().getStringExtra("user_avatar"));
-//                        startLink.putExtra("user_birth", getIntent().getStringExtra("user_birth"));
-//                        startActivity(startLink);
-//                        break;
+                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink.putExtra("user_id", getIntent().getStringExtra("user_id"));
+                        startLink.putExtra("user_level", getIntent().getStringExtra("user_level"));
+                        startLink.putExtra("user_email", getIntent().getStringExtra("user_email"));
+                        startLink.putExtra("user_phone", getIntent().getStringExtra("user_phone"));
+                        startLink.putExtra("user_name", getIntent().getStringExtra("user_name"));
+                        startLink.putExtra("user_avatar", getIntent().getStringExtra("user_avatar"));
+                        startLink.putExtra("user_birth", getIntent().getStringExtra("user_birth"));
+                        startActivity(startLink);
+                        break;
                 }
                 return true;
             }
@@ -763,8 +766,6 @@ public class UserActivitySound extends Activity {
         private Context context;
         private ArrayList<SongStoryInfo> storyList;
         private int layout;
-        //request
-        private Server_Connector connector;
         //photo recycler
         private ArrayList<SongPhoto> photoList;
 

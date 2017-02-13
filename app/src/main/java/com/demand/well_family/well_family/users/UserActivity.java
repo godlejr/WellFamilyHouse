@@ -27,9 +27,9 @@ import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.Server_Connection;
-import com.demand.well_family.well_family.connection.Server_Connector;
 import com.demand.well_family.well_family.dto.Check;
 import com.demand.well_family.well_family.market.MarketMainActivity;
+import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,6 +42,8 @@ import java.util.HashMap;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.demand.well_family.well_family.LoginActivity.finishList;
 
 //import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 
@@ -83,6 +85,8 @@ public class UserActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+
+        finishList.add(this);
 
         story_user_id = getIntent().getIntExtra("story_user_id", 0);
         story_user_name = getIntent().getStringExtra("story_user_name");
@@ -287,15 +291,15 @@ public class UserActivity extends Activity implements View.OnClickListener {
                         break;
 
                     case R.id.menu_memory_sound:
-//                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
-//                        startLink.putExtra("user_id", getIntent().getStringExtra("user_id"));
-//                        startLink.putExtra("user_level", getIntent().getStringExtra("user_level"));
-//                        startLink.putExtra("user_email", getIntent().getStringExtra("user_email"));
-//                        startLink.putExtra("user_phone", getIntent().getStringExtra("user_phone"));
-//                        startLink.putExtra("user_name", getIntent().getStringExtra("user_name"));
-//                        startLink.putExtra("user_avatar", getIntent().getStringExtra("user_avatar"));
-//                        startLink.putExtra("user_birth", getIntent().getStringExtra("user_birth"));
-//                        startActivity(startLink);
+                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink.putExtra("user_id", getIntent().getStringExtra("user_id"));
+                        startLink.putExtra("user_level", getIntent().getStringExtra("user_level"));
+                        startLink.putExtra("user_email", getIntent().getStringExtra("user_email"));
+                        startLink.putExtra("user_phone", getIntent().getStringExtra("user_phone"));
+                        startLink.putExtra("user_name", getIntent().getStringExtra("user_name"));
+                        startLink.putExtra("user_avatar", getIntent().getStringExtra("user_avatar"));
+                        startLink.putExtra("user_birth", getIntent().getStringExtra("user_birth"));
+                        startActivity(startLink);
                         break;
                 }
                 return true;

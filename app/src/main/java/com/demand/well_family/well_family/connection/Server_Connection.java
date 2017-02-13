@@ -8,6 +8,10 @@ import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.Identification;
 import com.demand.well_family.well_family.dto.LikeCount;
 import com.demand.well_family.well_family.dto.Photo;
+import com.demand.well_family.well_family.dto.Range;
+import com.demand.well_family.well_family.dto.Song;
+import com.demand.well_family.well_family.dto.SongCategory;
+import com.demand.well_family.well_family.dto.SongComment;
 import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStory;
 import com.demand.well_family.well_family.dto.SongStoryAvatar;
@@ -150,5 +154,62 @@ public interface Server_Connection {
 
     @DELETE("{family_id}/delete_user_from_family")
     Call<ResponseBody> delete_user_from_family(@Path("family_id") String family_id, @QueryMap HashMap<String, String> map);
+
+
+    //memory sound
+
+    @PUT("{song_id}/Insert_Song_hit")
+    Call<ResponseBody> Insert_Song_hit(@Path("song_id") String song_id);
+
+    @POST("{song_id}/song_like_up")
+    Call<ResponseBody> song_like_up(@Path("song_id") String song_id, @QueryMap Map<String, String> map);
+
+    @DELETE("{song_id}/song_like_down")
+    Call<ResponseBody> song_like_down(@Path("song_id") String song_id, @QueryMap Map<String, String> map);
+
+    @POST("{song_id}/song_like_Count")
+    Call<ArrayList<LikeCount>> song_like_Count(@Path("song_id") String song_id);
+
+    @POST("{song_id}/song_like_check")
+    Call<ArrayList<Check>> song_like_check(@Path("song_id") String song_id, @QueryMap Map<String, String> map);
+
+    @POST("{song_id}/song_comment_Count")
+    Call<ArrayList<CommentCount>> song_comment_count(@Path("song_id") String song_id);
+
+    @POST("song_range_List")
+    Call<ArrayList<Range>> song_range_List();
+
+    @POST("{user_id}/insert_song_story")
+    Call<ArrayList<SongStory>> insert_song_story(@Path("user_id") String user_id, @QueryMap Map<String, String> map);
+
+    @POST("{song_story_id}/insert_song_photos")
+    Call<ResponseBody> insert_song_photos(@Path("song_story_id") String song_story_id, @Body RequestBody requestBody);
+
+    @PUT("{song_story_id}/insert_song_audio")
+    Call<ResponseBody> insert_song_audio(@Path("song_story_id") String song_story_id, @Body RequestBody requestBody);
+
+    @POST("{song_id}/insert_song_comment")
+    Call<ArrayList<SongComment>> insert_song_comment(@Path("song_id") String song_id, @QueryMap Map<String, String> map);
+
+    @POST("{song_id}/song_comment_List")
+    Call<ArrayList<CommentInfo>> song_comment_List(@Path("song_id") String song_id);
+
+    @POST("song_random")
+    Call<ArrayList<Song>> song_random();
+
+    @GET("{category_id}/song_list_by_Category")
+    Call<ArrayList<Song>> song_list_by_Category(@Path("category_id") String category_id);
+
+    @POST("{song_id}/song_comment_Count")
+    Call<ArrayList<CommentCount>> song_comment_Count(@Path("song_id") String song_id);
+
+    @POST("song_list_by_Hits")
+    Call<ArrayList<Song>> song_list_by_Hits();
+
+    @POST("song_category_List")
+    Call<ArrayList<SongCategory>> song_category_List();
+
+    @POST("email_check")
+    Call<ArrayList<User>> email_check(@QueryMap Map<String, String> map);
 
 }

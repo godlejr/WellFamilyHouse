@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.media.ExifInterface;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
@@ -33,6 +34,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -56,17 +58,18 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.connection.FileServer_Connector;
-import com.demand.well_family.well_family.connection.Server_Connector;
+import com.demand.well_family.well_family.connection.Server_Connection;
+import com.demand.well_family.well_family.dto.Range;
+import com.demand.well_family.well_family.dto.SongStory;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,6 +80,15 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.demand.well_family.well_family.LoginActivity.finishList;
 
 /**
  * Created by ㅇㅇ on 2017-02-01.
@@ -96,7 +108,7 @@ public class SoundRecordActivity extends Activity {
     private boolean isRecording = false;
 
     private TextView tv_sound_record, tv_sound_record_complete;
-    private int timer_sec = 0, timer_min = 0, endMinute = 0, endSecond = 0;
+    private int timer_sec = 0, timer_min = 0;
     private TimerHandler timerHandler;
     private Timer timer;
     private SeekBar sb_sound_record;
@@ -120,25 +132,24 @@ public class SoundRecordActivity extends Activity {
     private HashMap<Integer, String> spList;
 
     //user_info
-    private String user_id;
+    private int user_id;
     private String user_name;
-    private String user_level;
+    private int user_level;
     private String user_avatar;
     private String user_email;
     private String user_phone;
     private String user_birth;
 
     //song info
-    private String song_id;
+    private int song_id;
     private String song_title;
     private String song_singer;
     private String song_avatar;
 
     //server
-    private Server_Connector connector;
+    private Server_Connection server_connection;
     private RealPathUtil realPathUtil;
     private ProgressDialog progressDialog;
-    private FileServer_Connector fileServer_connector;
 
     private int range_id;
 
@@ -149,23 +160,28 @@ public class SoundRecordActivity extends Activity {
     private DrawerLayout dl;
     private ImageView iv_sound_record_avatar;
 
+    // progress
+    private int sleepTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sound_activity_record);
 
-        user_id = getIntent().getStringExtra("user_id");
+        user_id = getIntent().getIntExtra("user_id", 0);
         user_name = getIntent().getStringExtra("user_name");
-        user_level = getIntent().getStringExtra("user_level");
+        user_level = getIntent().getIntExtra("user_level", 0);
         user_avatar = getIntent().getStringExtra("user_avatar");
         user_email = getIntent().getStringExtra("user_email");
         user_phone = getIntent().getStringExtra("user_phone");
         user_birth = getIntent().getStringExtra("user_birth");
 
-        song_id = getIntent().getStringExtra("song_id");
+        song_id = getIntent().getIntExtra("song_id", 0);
         song_title = getIntent().getStringExtra("song_title");
         song_singer = getIntent().getStringExtra("song_singer");
         song_avatar = getIntent().getStringExtra("song_avatar");
+
+        finishList.add(this);
 
         checkPermission();
         init();
@@ -174,7 +190,7 @@ public class SoundRecordActivity extends Activity {
 
     // toolbar & menu
     public void setToolbar(View view, Context context, String title) {
-        Log.e("tttttt", user_avatar);
+
         NavigationView nv = (NavigationView) view.findViewById(R.id.nv);
         nv.setItemIconTintList(null);
         dl = (DrawerLayout) view.findViewById(R.id.dl);
@@ -201,7 +217,7 @@ public class SoundRecordActivity extends Activity {
 
         // header
         View nv_header_view = nv.getHeaderView(0);
-        LinearLayout ll_menu_mypage = (LinearLayout)nv_header_view.findViewById(R.id.ll_menu_mypage);
+        LinearLayout ll_menu_mypage = (LinearLayout) nv_header_view.findViewById(R.id.ll_menu_mypage);
         ll_menu_mypage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -242,7 +258,7 @@ public class SoundRecordActivity extends Activity {
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
-        Log.e("ttttt5", view + "");
+
 
         Glide.with(context).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_menu_avatar);
 
@@ -269,7 +285,7 @@ public class SoundRecordActivity extends Activity {
                 Intent intent;
                 switch (item.getItemId()) {
                     case R.id.menu_home:
-                        intent  = new Intent(SoundRecordActivity.this, MainActivity.class);
+                        intent = new Intent(SoundRecordActivity.this, MainActivity.class);
                         intent.putExtra("user_id", user_id);
                         intent.putExtra("user_email", user_email);
                         intent.putExtra("user_birth", user_birth);
@@ -347,22 +363,23 @@ public class SoundRecordActivity extends Activity {
                         break;
 
                     case R.id.menu_memory_sound:
-//                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
-//                        startLink.putExtra("user_id",user_id);
-//                        startLink.putExtra("user_level", user_level);
-//                        startLink.putExtra("user_email", user_email);
-//                        startLink.putExtra("user_phone", user_phone);
-//                        startLink.putExtra("user_name", user_name);
-//                        startLink.putExtra("user_avatar", user_avatar);
-//                        startLink.putExtra("user_birth", user_birth);
-//                        startActivity(startLink);
+                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink.putExtra("user_id", user_id);
+                        startLink.putExtra("user_level", user_level);
+                        startLink.putExtra("user_email", user_email);
+                        startLink.putExtra("user_phone", user_phone);
+                        startLink.putExtra("user_name", user_name);
+                        startLink.putExtra("user_avatar", user_avatar);
+                        startLink.putExtra("user_birth", user_birth);
+                        startActivity(startLink);
                         break;
                 }
                 return true;
             }
         });
     }
-    private void setBack(){
+
+    private void setBack() {
         finish();
     }
 
@@ -371,62 +388,63 @@ public class SoundRecordActivity extends Activity {
 
         spList = new HashMap<>();
 
-        connector = new Server_Connector();
-        connector.execute(getString(R.string.server_url) + "song_range_List");
-
-        try {
-            JSONArray arr = new JSONArray(connector.get().trim());
-
-            if (arr.length() == 0) {
-                //server error
-            } else {
-                for (int i = 0; i < arr.length(); i++) {
-                    JSONObject obj = arr.getJSONObject(i);
-                    spList.put(obj.getInt("id"), obj.getString("name"));
+        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+        Call<ArrayList<Range>> call_song_range = server_connection.song_range_List();
+        call_song_range.enqueue(new Callback<ArrayList<Range>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Range>> call, Response<ArrayList<Range>> response) {
+                ArrayList<Range> rangeList = response.body();
+                for (int i = 0; i < rangeList.size(); i++) {
+                    spList.put(rangeList.get(i).getId(), rangeList.get(i).getName());
                 }
+
+                String[] spinnerArray = new String[spList.size()];
+                for (int i = 0; i < spList.size(); i++) {
+                    spinnerArray[i] = spList.get(i + 1);
+                }
+
+                spinnerAdapter = new ArrayAdapter(SoundRecordActivity.this, R.layout.custom_spinner_item, spinnerArray) {
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        View view = super.getDropDownView(position, convertView, parent);
+                        TextView tv = (TextView) view;
+                        tv.setBackgroundColor(Color.WHITE);
+                        tv.setTextColor(Color.parseColor("#424242"));
+                        tv.append("  ▼");
+                        return view;
+                    }
+
+                    @Override
+                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                        View view = super.getDropDownView(position, convertView, parent);
+                        TextView tv = (TextView) view;
+                        tv.setBackgroundColor(Color.WHITE);
+                        tv.setTextColor(Color.parseColor("#424242"));
+                        tv.setGravity(Gravity.CENTER);
+                        return view;
+                    }
+                };
+                spinnerAdapter.setDropDownViewResource(R.layout.custom_spinner_item);
+
+                sp_sound.setAdapter(spinnerAdapter);
+                sp_sound.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        range_id = position + 1;
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        range_id = 1;
+                    }
+                });
+
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        String[] spinnerArray = new String[spList.size()];
-        for (int i = 0; i < spList.size(); i++) {
-            spinnerArray[i] = spList.get(i + 1);
-        }
-
-        spinnerAdapter = new ArrayAdapter(this, R.layout.custom_spinner_item, spinnerArray) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getDropDownView(position, convertView, parent);
-                TextView tv = (TextView) view;
-                tv.setBackgroundColor(Color.WHITE);
-                tv.setTextColor(Color.parseColor("#424242"));
-                tv.append("  ▼");
-                return view;
-            }
 
             @Override
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View view = super.getDropDownView(position, convertView, parent);
-                TextView tv = (TextView) view;
-                tv.setBackgroundColor(Color.WHITE);
-                tv.setTextColor(Color.parseColor("#424242"));
-                tv.setGravity(Gravity.CENTER);
-                return view;
-            }
-        };
-        spinnerAdapter.setDropDownViewResource(R.layout.custom_spinner_item);
+            public void onFailure(Call<ArrayList<Range>> call, Throwable t) {
+                Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
 
-        sp_sound.setAdapter(spinnerAdapter);
-        sp_sound.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                range_id = position + 1;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                range_id = 1;
             }
         });
     }
@@ -452,8 +470,6 @@ public class SoundRecordActivity extends Activity {
             recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
             recorder.prepare();
             recorder.start();
-
-            Log.e("path", path);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -462,8 +478,8 @@ public class SoundRecordActivity extends Activity {
             @Override
             public void run() {
                 if (timer_min >= 5) {
-                    timerHandler.sendEmptyMessage(1);
                     timer_min = timer_sec = 0;
+                    timerHandler.sendEmptyMessage(1);
                 } else if (timer_sec < 59) {
                     timer_sec++;
                 } else {
@@ -483,11 +499,12 @@ public class SoundRecordActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            tv_sound_record.setText(timer_min + ":" + timer_sec);
+
             if (msg.what == 1) {
                 Toast.makeText(SoundRecordActivity.this, "최대 5분까지 녹음이 가능합니다.", Toast.LENGTH_SHORT).show();
                 timer.cancel();
-            } else {
-                tv_sound_record.setText(timer_min + ":" + timer_sec);
+                stopRec();
             }
         }
     }
@@ -505,6 +522,7 @@ public class SoundRecordActivity extends Activity {
             recorder.stop();
             recorder.release();
             recorder = null;
+            isRecording = false;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -533,14 +551,13 @@ public class SoundRecordActivity extends Activity {
         iv_sound_record_complete_play = (ImageView) ll_sound_record_container.findViewById(R.id.iv_sound_record_complete_play);
         iv_sound_record_complete_replay = (ImageView) ll_sound_record_container.findViewById(R.id.iv_sound_record_complete_replay);
 
-        tv_record_song_title =(TextView) ll_sound_record_container.findViewById(R.id.tv_record_song_title);
+        tv_record_song_title = (TextView) ll_sound_record_container.findViewById(R.id.tv_record_song_title);
         tv_record_song_title.setText(song_title);
-        tv_record_song_singer =(TextView) ll_sound_record_container.findViewById(R.id.tv_record_song_singer);
+        tv_record_song_singer = (TextView) ll_sound_record_container.findViewById(R.id.tv_record_song_singer);
         tv_record_song_singer.setText(song_singer);
 
         iv_sound_record_avatar = (ImageView) ll_sound_record_container.findViewById(R.id.iv_sound_record_avatar);
         Glide.with(this).load(getString(R.string.cloud_front_songs_avatar) + song_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_record_avatar);
-        // !!!!!!!!! 여기에 title, singer findViewById & setText      // sound_item_record2
 
         tv_sound_record_complete.setText(String.format(Locale.getDefault(), "%02d : %02d", minutes, seconds));
 
@@ -550,6 +567,7 @@ public class SoundRecordActivity extends Activity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 isPlaying = false;
@@ -579,9 +597,6 @@ public class SoundRecordActivity extends Activity {
                     mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                         @Override
                         public void onPrepared(MediaPlayer mp) {
-                            endMinute = mp.getDuration() / 60000;
-                            endSecond = ((mp.getDuration() % 60000) / 1000);
-
                             seekBar.setMax(mp.getDuration());
                             seekBar.setProgress(pausePos);
 
@@ -593,7 +608,7 @@ public class SoundRecordActivity extends Activity {
                     mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            isPlaying = isPaused= false;
+                            isPlaying = isPaused = false;
 
                             iv_sound_record_complete_play.setImageResource(R.drawable.play);
                             seekBar.setProgress(0);
@@ -626,18 +641,15 @@ public class SoundRecordActivity extends Activity {
 
                     mp.seekTo(pausePos);
                 } else {
-                    if (isPaused) {  // 일시정지 -> 재생
+                    if (isPaused) {
                         mp.seekTo(pausePos);
                         mp.start();
                         new SeekBarThread().start();
-                    } else { // 끝까지 -> 다시 재생 or 처음 재생
+                    } else {
                         mp = new MediaPlayer();
                         mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                             @Override
                             public void onPrepared(MediaPlayer player) {
-                                endMinute = mp.getDuration() / 60000;
-                                endSecond = ((mp.getDuration() % 60000) / 1000);
-
                                 sb_sound_record.setMax(mp.getDuration());
                                 sb_sound_record.setProgress(0);
 
@@ -649,7 +661,7 @@ public class SoundRecordActivity extends Activity {
                         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                             @Override
                             public void onCompletion(MediaPlayer mp) {
-                                isPlaying = isPaused= false;
+                                isPlaying = isPaused = false;
 
                                 iv_sound_record_complete_play.setImageResource(R.drawable.play);
                                 sb_sound_record.setProgress(0);
@@ -690,19 +702,15 @@ public class SoundRecordActivity extends Activity {
                 }
             }
         });
-
-
     }
 
     private void recordInflate() {
         getLayoutInflater().inflate(R.layout.sound_item_record, ll_sound_record_container, true);
         tv_sound_record = (TextView) ll_sound_record_container.findViewById(R.id.tv_sound_record);
-        iv_sound_record = (ImageView) ll_sound_record_container.findViewById(R.id.iv_sound_record); // 녹음버튼
-
-        // !!!!!!!!! 여기에 title, singer findViewById & setText   // sound_item_record
-        tv_record_song_title =(TextView) ll_sound_record_container.findViewById(R.id.tv_record_song_title);
+        iv_sound_record = (ImageView) ll_sound_record_container.findViewById(R.id.iv_sound_record);
+        tv_record_song_title = (TextView) ll_sound_record_container.findViewById(R.id.tv_record_song_title);
         tv_record_song_title.setText(song_title);
-        tv_record_song_singer =(TextView) ll_sound_record_container.findViewById(R.id.tv_record_song_singer);
+        tv_record_song_singer = (TextView) ll_sound_record_container.findViewById(R.id.tv_record_song_singer);
         tv_record_song_singer.setText(song_singer);
 
         iv_sound_record_avatar = (ImageView) ll_sound_record_container.findViewById(R.id.iv_sound_record_avatar);
@@ -751,16 +759,7 @@ public class SoundRecordActivity extends Activity {
                     Log.e("권한 사용 동의 X", " ");
                 }
                 break;
-//            case WRITE_EXTERNAL_STORAGE_PERMISSION:
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    Log.e("WRITE 권한 사용 동의", " ");
-//                } else {
-//                    Log.e("WRITE 권한 사용 동의해야함", " ");
-//
-//                }
-//                break;
         }
-
     }
 
     private void init() {
@@ -772,7 +771,7 @@ public class SoundRecordActivity extends Activity {
         tv_record_user_name.setText(user_name);
 
         LinearLayout ll_sound_record_location_btn = (LinearLayout) findViewById(R.id.ll_sound_record_location_btn);
-        iv_sound_record_location_btn = (ImageView)findViewById(R.id.iv_sound_record_location_btn);
+        iv_sound_record_location_btn = (ImageView) findViewById(R.id.iv_sound_record_location_btn);
         iv_sound_record_location = (ImageView) findViewById(R.id.iv_sound_record_location);
         btn_sound_record_submit = (Button) findViewById(R.id.btn_sound_record_submit);
         et_sound_record_location = (EditText) findViewById(R.id.et_sound_record_location);
@@ -780,6 +779,8 @@ public class SoundRecordActivity extends Activity {
         btn_sound_record_image_upload = (Button) findViewById(R.id.btn_sound_record_image_upload);
         rv_sound_record_image_upload = (RecyclerView) findViewById(R.id.rv_sound_record_image_upload);
         btn_sound_record_select_emotion = (Button) findViewById(R.id.btn_sound_record_select_emotion);
+
+        et_sound_record_memory.clearFocus();
 
         photoList = new ArrayList<>();
         pathList = new ArrayList<>();
@@ -791,13 +792,11 @@ public class SoundRecordActivity extends Activity {
         File folder = new File(dirName);
         folder.mkdirs();
 
-
         int spacing = getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin) / 2;
         rv_sound_record_image_upload.addItemDecoration(new SpaceItemDecoration(spacing));
         rv_sound_record_image_upload.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         photoViewAdapter = new PhotoViewAdapter(photoList, this, R.layout.item_write_upload_image);
         rv_sound_record_image_upload.setAdapter(photoViewAdapter);
-
 
         setSpinner();
         recordInflate();
@@ -807,11 +806,10 @@ public class SoundRecordActivity extends Activity {
             public void onClick(View v) {
                 if (ll_sound_record_location.getVisibility() == View.VISIBLE) {
                     ll_sound_record_location.setVisibility(View.GONE);
-                    iv_sound_record_location_btn.setImageResource(R.drawable.open);
+                    iv_sound_record_location_btn.setImageResource(R.drawable.arrow_bottom);
                 } else {
                     ll_sound_record_location.setVisibility(View.VISIBLE);
                     iv_sound_record_location_btn.setImageResource(R.drawable.arrow_top);
-
                 }
                 location = et_sound_record_location.getText().toString();
             }
@@ -820,33 +818,25 @@ public class SoundRecordActivity extends Activity {
         btn_sound_record_image_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 사진 업로드
-                if (photoList.size() >= 10) {
-                    Toast.makeText(SoundRecordActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
-                } else {
-                    intent = new Intent();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                intent = new Intent();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 //                        버전 체크 (키캣 이상 : 다중 선택O)
-                        intent.setType("image/*");
-                        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent, "Select Photo"), PICK_PHOTO);
-                    } else {
+                    intent.setType("image/*");
+                    intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Select Photo"), PICK_PHOTO);
+                } else {
 //                       키캣 이하 (다중 선택 X)
-                        intent.setAction(Intent.ACTION_PICK);
-                        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                        startActivityForResult(intent, PICK_PHOTO);
-                    }
+                    intent.setAction(Intent.ACTION_PICK);
+                    intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                    startActivityForResult(intent, PICK_PHOTO);
                 }
             }
         });
 
-
         btn_sound_record_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 if (isRecording) {
                     Toast.makeText(SoundRecordActivity.this, "녹음을 완료하세요.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -859,59 +849,92 @@ public class SoundRecordActivity extends Activity {
                     }
 
                     // 등록버튼
-                    progressDialog = new ProgressDialog(SoundRecordActivity.this);
-                    progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                    progressDialog.setMessage("uploading..");
-                    if (file != null) {
-                        progressDialog.setMax(photoList.size() + 1);
+                    if (photoList.size() == 0 && et_sound_record_memory.getText().toString().length() == 0 && file == null && location.length() == 0) {
+                        Toast.makeText(SoundRecordActivity.this, "하나라도 입력", Toast.LENGTH_SHORT).show();
                     } else {
-                        progressDialog.setMax(photoList.size());
-                    }
-
-                    progressDialog.show();
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            connector = new Server_Connector();
-                            connector.addVariable("range_id", String.valueOf(range_id));
-                            connector.addVariable("song_id", String.valueOf(song_id));
-                            connector.addVariable("song_title", song_title);
-                            connector.addVariable("song_singer", song_singer);
-                            connector.addVariable("content", et_sound_record_memory.getText().toString());
-                            connector.addVariable("location", location);
-                            connector.execute(getString(R.string.server_url) + user_id + "/insert_song_story");
-
-                            try {
-                                JSONArray arr = new JSONArray(connector.get().trim());
-                                if (arr.length() == 0) {
-                                    //insert fail..
-                                } else {
-                                    JSONObject obj = arr.getJSONObject(0);
-                                    String story_id = obj.getString("id"); //received story_id
-
-                                    for (int i = 0; i < photoList.size(); i++) {
-                                        progressDialog.setProgress(i + 1);
-                                        fileServer_connector = new FileServer_Connector();
-                                        fileServer_connector.addBase64Bitmap(encodeImage(photoList.get(i), i));
-                                        fileServer_connector.execute(getString(R.string.server_url) + story_id + "/insert_song_photos");
-                                    }
-
-                                    if (file != null) {
-                                        fileServer_connector = new FileServer_Connector();
-                                        fileServer_connector.addBase64Audio(file);
-                                        fileServer_connector.execute(getString(R.string.server_url) + story_id + "/insert_song_audio");
-                                        progressDialog.setProgress(photoList.size() + 1);
-                                    }
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            progressDialog.dismiss();
-                            finish();
+                        if (location == null) {
+                            location = "";
                         }
-                    }).start();
 
+                        progressDialog = new ProgressDialog(SoundRecordActivity.this);
+                        progressDialog.show();
+                        progressDialog.getWindow().setBackgroundDrawable(new
+                                ColorDrawable(Color.TRANSPARENT));
+                        progressDialog.setContentView(R.layout.progress_dialog);
+
+                        if (photoList.size() > 10) { // 10 개 선택업로드가 제한이지만 선택자체는 100개 할 수 도 있으므로
+                            sleepTime = 850 * 10;
+                        } else {
+                            sleepTime = 850 * photoList.size();
+                        }
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                HashMap<String, String> map = new HashMap<String, String>();
+                                map.put("range_id", String.valueOf(range_id));
+                                map.put("song_id", String.valueOf(song_id));
+                                map.put("song_title", song_title);
+                                map.put("song_singer", song_singer);
+                                map.put("content", et_sound_record_memory.getText().toString());
+                                map.put("location", location);
+
+                                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                                Call<ArrayList<SongStory>> call_insert_song_story = server_connection.insert_song_story(String.valueOf(user_id), map);
+                                call_insert_song_story.enqueue(new Callback<ArrayList<SongStory>>() {
+                                    @Override
+                                    public void onResponse(Call<ArrayList<SongStory>> call, Response<ArrayList<SongStory>> response) {
+                                        for (int i = 0; i < photoList.size(); i++) {
+                                            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                                            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(photoList.get(i), i)));
+                                            Call<ResponseBody> call_write_photo = server_connection.insert_song_photos(String.valueOf(response.body().get(0).getId()), requestBody);
+
+                                            call_write_photo.enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    //scess
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+                                        }
+
+                                        // 녹음 파일 업로드
+                                        if (file != null) {
+                                            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                                            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Audio(file));
+                                            Call<ResponseBody> call_write_audio = server_connection.insert_song_audio(String.valueOf(response.body().get(0).getId()), requestBody);
+                                            call_write_audio.enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    //scess
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ArrayList<SongStory>> call, Throwable t) {
+                                        Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                try {
+                                    Thread.sleep(sleepTime);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                progressDialog.dismiss();
+                                finish();
+                            }
+                        }).start();
+                    }
                 }
             }
         });
@@ -929,11 +952,40 @@ public class SoundRecordActivity extends Activity {
                 System.out.println("추억등록");
                 intent = new Intent(v.getContext(), EmotionActivity.class);
                 startActivity(intent);
-
             }
         });
     }
 
+    public String addBase64Bitmap(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 90, baos);
+        byte[] b = baos.toByteArray();
+        return Base64.encodeToString(b, Base64.NO_WRAP | Base64.URL_SAFE);
+    }
+
+    public String addBase64Audio(File file) {
+        byte[] bytes = convertFileToByteArray(file);
+        return Base64.encodeToString(bytes, 0);
+    }
+
+    public static byte[] convertFileToByteArray(File file) {
+        byte[] byteArray = null;
+        try {
+            InputStream inputStream = new FileInputStream(file);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            byte[] b = new byte[1024 * 8];
+            int bytesRead = 0;
+
+            while ((bytesRead = inputStream.read(b)) != -1) {
+                bos.write(b, 0, bytesRead);
+            }
+
+            byteArray = bos.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return byteArray;
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -942,38 +994,64 @@ public class SoundRecordActivity extends Activity {
                 case PICK_PHOTO:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         ClipData clipdata = data.getClipData();
-                        if (clipdata == null) { // 1개
+                        if (clipdata == null) {
                             Uri uri = data.getData();
-                            String path =null;
+                            String path = null;
                             try {
                                 path = realPathUtil.getRealPathFromURI_API19(this, uri);
-                            }catch(RuntimeException e){
+                            } catch (RuntimeException e) {
                                 path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
                             }
-                            // String path = realPathUtil.getRealPathFromURI_API19(this, uri);
-                            pathList.add(path);
-                            photoList.add(uri);
-                            photoViewAdapter.notifyDataSetChanged();
-                        } else { // 여러개
-                            for (int i = 0; i < clipdata.getItemCount(); i++) {
-                                Uri uri = clipdata.getItemAt(i).getUri();
-                                String path =null;
-                                try {
-                                     path = realPathUtil.getRealPathFromURI_API19(this, uri);
-                                }catch(RuntimeException e){
-                                     path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
-                                }
+                            if (photoList.size() < 10) {
                                 pathList.add(path);
                                 photoList.add(uri);
                                 photoViewAdapter.notifyDataSetChanged();
+                            } else {
+                                Toast.makeText(SoundRecordActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
                             }
+                        } else {
+                            int photoSize = clipdata.getItemCount();
+                            if (photoSize > 10) {
+                                photoSize = 10;
+                                Toast.makeText(SoundRecordActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                photoSize = clipdata.getItemCount();
+                            }
+
+                            for (int i = 0; i < photoSize; i++) {
+                                Uri uri = clipdata.getItemAt(i).getUri();
+                                String path = null;
+                                try {
+                                    path = realPathUtil.getRealPathFromURI_API19(this, uri);
+                                } catch (RuntimeException e) {
+                                    path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
+                                }
+                                if (photoList.size() < 10) {
+                                    pathList.add(path);
+                                    photoList.add(uri);
+                                    photoViewAdapter.notifyDataSetChanged();
+                                } else {
+                                    Toast.makeText(SoundRecordActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
+                                    break;
+                                }
+                            }
+
                         }
                     } else {
                         Uri uri = data.getData();
-                        String path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
-                        pathList.add(path);
-                        photoList.add(uri);
-                        photoViewAdapter.notifyDataSetChanged();
+                        try {
+                            path = realPathUtil.getRealPathFromURI_API19(this, uri);
+                        } catch (RuntimeException e) {
+                            path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
+                        }
+
+                        if (photoList.size() <= 10) {
+                            pathList.add(path);
+                            photoList.add(uri);
+                            photoViewAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(SoundRecordActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                     break;
             }

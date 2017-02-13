@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -18,12 +17,11 @@ import android.widget.Toast;
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.Server_Connection;
-import com.demand.well_family.well_family.connection.Server_Connector;
-
-import org.json.JSONArray;
+import com.demand.well_family.well_family.dto.User;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,7 +44,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private String dateStr;
     private String birthDate;
-    private Server_Connector connector;
     private String et_email;
     private boolean email_duplicate_check = false;
 
@@ -152,68 +149,66 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     noti_pwd_check.setVisibility(View.GONE);
                 }
 
-                Log.e("pwd", checkPassword(et_join_pwd.getText().toString())+"");
-
                 if (!checkPassword(et_join_pwd.getText().toString())) {
                     Toast.makeText(v.getContext(), "비밀번호는 6~20자 대소문자, 숫자/특수문자를 포함해야합니다.", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("email", et_join_email.getText().toString());
+                    map.put("password", et_join_pwd.getText().toString());
+                    map.put("name", et_join_name.getText().toString());
+                    map.put("birth", et_join_birthday.getText().toString());
+                    map.put("phone", et_join_phone.getText().toString());
+
+                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                    Call<ResponseBody> call = server_connection.join(map);
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            Toast.makeText(RegisterActivity.this, "회원가입이 되었습니다.", Toast.LENGTH_LONG).show();
+                            finish();
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(RegisterActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+
+                        }
+                    });
                 }
-
-                HashMap<String, String> map = new HashMap<>();
-                map.put("email", et_join_email.getText().toString());
-                map.put("password", et_join_pwd.getText().toString());
-                map.put("name", et_join_name.getText().toString());
-                map.put("birth", et_join_birthday.getText().toString());
-                map.put("phone", et_join_phone.getText().toString());
-
-                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                Call<ResponseBody> call  =  server_connection.join(map);
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        Toast.makeText(RegisterActivity.this, "회원가입이 되었습니다.", Toast.LENGTH_LONG).show();
-                        finish();
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(RegisterActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-
-                    }
-                });
-
                 break;
 
             case R.id.btn_join_email_check:
-//                아이디(이메일) 중복 체크
                 et_email = et_join_email.getText().toString();
-
                 if(!setNotiVisible(et_join_email, noti_email)) {
-//                    이메일 입력X -> 중복체크 클릭 시
                 } else if (!checkEmail(et_email)) {
-//                형식 체크
                     Toast.makeText(v.getContext(), "올바른 이메일 형식을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 } else {
-
                     if (setNotiVisible(et_join_email, noti_email)) {
-                        connector = new Server_Connector();
-                        connector.addVariable("email", et_email);
-                        connector.execute(getString(R.string.server_url) + "email_check");
 
-                        try {
-                            JSONArray arr = new JSONArray(connector.get().trim());
-                            if (arr.length() == 0) {
-                                Toast.makeText(RegisterActivity.this, "사용가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
-                                email_duplicate_check = true;
-                            } else {
-                                Toast.makeText(RegisterActivity.this, "사용중인 아이디입니다.", Toast.LENGTH_SHORT).show();
-                                email_duplicate_check = false;
+                        HashMap<String, String> mapEmail = new HashMap<>();
+                        mapEmail.put("email", et_join_email.getText().toString());
+
+                        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                        Call<ArrayList<User>> call_email_check  =  server_connection.email_check(mapEmail);
+                        call_email_check.enqueue(new Callback<ArrayList<User>>() {
+                            @Override
+                            public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
+                                if(response.body().size() == 0){
+                                    Toast.makeText(RegisterActivity.this, "사용가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
+                                    email_duplicate_check = true;
+                                } else{
+                                    Toast.makeText(RegisterActivity.this, "사용중인 아이디입니다.", Toast.LENGTH_SHORT).show();
+                                    email_duplicate_check = false;
+                                }
                             }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Toast.makeText(RegisterActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                        }
+                            @Override
+                            public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+                                Toast.makeText(RegisterActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            }
+                        });
 
                     }
                 }

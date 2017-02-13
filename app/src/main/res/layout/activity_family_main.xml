@@ -247,7 +247,7 @@
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="0.8"
                         android:layout_gravity="center_vertical">
                         <TextView
@@ -257,7 +257,8 @@
                             android:layout_weight="0.8"
                             android:layout_marginLeft="18dp"
                             android:text="새로운 소식을 들려주세요"
-                            android:textColor="#3b3b3b" />
+                            android:textColor="#3b3b3b"
+                            android:gravity="center" />
                     </LinearLayout>
                 </LinearLayout>
 

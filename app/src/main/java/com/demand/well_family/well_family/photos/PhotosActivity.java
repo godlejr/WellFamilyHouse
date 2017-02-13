@@ -40,6 +40,7 @@ import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 //import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
+import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 
 import java.text.ParseException;
@@ -50,6 +51,8 @@ import java.util.Date;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.demand.well_family.well_family.LoginActivity.finishList;
 
 /**
  * Created by ㅇㅇ on 2017-01-19.
@@ -88,6 +91,9 @@ public class PhotosActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_list);
+
+        finishList.add(this);
+
         //family info
         family_id = getIntent().getIntExtra("family_id",0);
         family_name = getIntent().getStringExtra("family_name");
@@ -282,15 +288,15 @@ public class PhotosActivity extends Activity {
                         break;
 
                     case R.id.menu_memory_sound:
-//                        startLink = new Intent(view.getContext(), SoundMainActivity.class);
-//                        startLink.putExtra("user_id",user_id);
-//                        startLink.putExtra("user_level", user_level);
-//                        startLink.putExtra("user_email", user_email);
-//                        startLink.putExtra("user_phone", user_phone);
-//                        startLink.putExtra("user_name", user_name);
-//                        startLink.putExtra("user_avatar", user_avatar);
-//                        startLink.putExtra("user_birth", user_birth);
-//                        startActivity(startLink);
+                        startLink = new Intent(view.getContext(), SoundMainActivity.class);
+                        startLink.putExtra("user_id",user_id);
+                        startLink.putExtra("user_level", user_level);
+                        startLink.putExtra("user_email", user_email);
+                        startLink.putExtra("user_phone", user_phone);
+                        startLink.putExtra("user_name", user_name);
+                        startLink.putExtra("user_avatar", user_avatar);
+                        startLink.putExtra("user_birth", user_birth);
+                        startActivity(startLink);
                         break;
                 }
                 return true;

@@ -47,6 +47,7 @@ import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStoryAvatar;
 import com.demand.well_family.well_family.dto.SongStoryComment;
 import com.demand.well_family.well_family.market.MarketMainActivity;
+import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -60,6 +61,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.demand.well_family.well_family.LoginActivity.finishList;
 
 /**
  * Created by ㅇㅇ on 2017-02-03.
@@ -130,6 +133,8 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sound_acivity_story_detail);
+
+        finishList.add(this);
 
         user_id = getIntent().getIntExtra("user_id", 0);
         user_name = getIntent().getStringExtra("user_name");
@@ -336,16 +341,16 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                         break;
 
                     case R.id.menu_memory_sound:
-//                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
-//                        startLink.putExtra("user_id", user_id);
-//                        startLink.putExtra("user_level", user_level);
-//                        startLink.putExtra("user_email", user_email);
-//                        startLink.putExtra("user_phone", user_phone);
-//                        startLink.putExtra("user_name", user_name);
-//                        startLink.putExtra("user_avatar", user_avatar);
-//                        startLink.putExtra("user_birth", user_birth);
-//                        startActivity(startLink);
-//                        break;
+                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink.putExtra("user_id", user_id);
+                        startLink.putExtra("user_level", user_level);
+                        startLink.putExtra("user_email", user_email);
+                        startLink.putExtra("user_phone", user_phone);
+                        startLink.putExtra("user_name", user_name);
+                        startLink.putExtra("user_avatar", user_avatar);
+                        startLink.putExtra("user_birth", user_birth);
+                        startActivity(startLink);
+                        break;
                 }
                 return true;
             }

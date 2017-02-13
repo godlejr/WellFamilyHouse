@@ -44,6 +44,7 @@ import com.demand.well_family.well_family.dto.LikeCount;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 //import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
+import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 
 import java.text.ParseException;
@@ -56,6 +57,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.demand.well_family.well_family.LoginActivity.finishList;
 
 /**
  * Created by Dev-0 on 2017-01-23.
@@ -113,6 +116,9 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_detail);
+
+        finishList.add(this);
+
         user_id = getIntent().getIntExtra("user_id", 0);
         user_name = getIntent().getStringExtra("user_name");
         user_level = getIntent().getIntExtra("user_level", 0);
@@ -314,15 +320,15 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
                         break;
 
                     case R.id.menu_memory_sound:
-//                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
-//                        startLink.putExtra("user_id", user_id);
-//                        startLink.putExtra("user_level", user_level);
-//                        startLink.putExtra("user_email", user_email);
-//                        startLink.putExtra("user_phone", user_phone);
-//                        startLink.putExtra("user_name", user_name);
-//                        startLink.putExtra("user_avatar", user_avatar);
-//                        startLink.putExtra("user_birth", user_birth);
-//                        startActivity(startLink);
+                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink.putExtra("user_id", user_id);
+                        startLink.putExtra("user_level", user_level);
+                        startLink.putExtra("user_email", user_email);
+                        startLink.putExtra("user_phone", user_phone);
+                        startLink.putExtra("user_name", user_name);
+                        startLink.putExtra("user_avatar", user_avatar);
+                        startLink.putExtra("user_birth", user_birth);
+                        startActivity(startLink);
                         break;
                 }
                 return true;
@@ -562,8 +568,6 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
 
         //like count
         tv_story_detail_like_count = (TextView) findViewById(R.id.tv_story_detail_like_count);
-
-
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
         Call<ArrayList<LikeCount>> call_like_count = server_connection.family_like_Count(String.valueOf(story_id));

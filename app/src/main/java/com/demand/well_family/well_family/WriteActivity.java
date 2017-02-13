@@ -45,6 +45,7 @@ import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Story;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.market.MarketMainActivity;
+import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
@@ -62,6 +63,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.demand.well_family.well_family.LoginActivity.finishList;
 
 /**
  * Created by ㅇㅇ on 2017-01-20.
@@ -111,6 +114,8 @@ public class WriteActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write);
+
+        finishList.add(this);
 
         family_id = getIntent().getIntExtra("family_id", 0);
         family_name = getIntent().getStringExtra("family_name");
@@ -320,16 +325,16 @@ public class WriteActivity extends Activity {
                         break;
 
                     case R.id.menu_memory_sound:
-//                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
-//                        startLink.putExtra("user_id",user_id);
-//                        startLink.putExtra("user_level", user_level);
-//                        startLink.putExtra("user_email", user_email);
-//                        startLink.putExtra("user_phone", user_phone);
-//                        startLink.putExtra("user_name", user_name);
-//                        startLink.putExtra("user_avatar", user_avatar);
-//                        startLink.putExtra("user_birth", user_birth);
-//                        startActivity(startLink);
-//                        break;
+                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink.putExtra("user_id",user_id);
+                        startLink.putExtra("user_level", user_level);
+                        startLink.putExtra("user_email", user_email);
+                        startLink.putExtra("user_phone", user_phone);
+                        startLink.putExtra("user_name", user_name);
+                        startLink.putExtra("user_avatar", user_avatar);
+                        startLink.putExtra("user_birth", user_birth);
+                        startActivity(startLink);
+                        break;
                 }
                 return true;
             }
@@ -453,7 +458,6 @@ public class WriteActivity extends Activity {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                 //성공
-                                                response.body();
                                             }
 
                                             @Override

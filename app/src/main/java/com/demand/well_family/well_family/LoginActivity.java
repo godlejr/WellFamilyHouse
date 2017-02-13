@@ -1,6 +1,7 @@
 package com.demand.well_family.well_family;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,7 +12,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.connection.Server_Connection;
-import com.demand.well_family.well_family.connection.Server_Connector;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.register.AgreementActivity;
 
@@ -25,7 +25,6 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private Button login;
     private EditText email, pwd;
-    private Server_Connector connector;
     private Button register;
 
     private String et_email;
@@ -35,10 +34,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private SharedPreferences.Editor editor;
     private Server_Connection server_connection;
 
+    public static ArrayList<Activity> finishList = new ArrayList<Activity>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        finishList.add(this);
+
         init();
     }
 
@@ -109,5 +113,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        for(int i = 0; i < finishList.size(); i++) {
+            finishList.get(i).finish();
+        }
+
+        super.onBackPressed();
     }
 }

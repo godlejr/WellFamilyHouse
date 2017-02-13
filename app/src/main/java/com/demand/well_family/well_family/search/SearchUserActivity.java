@@ -34,6 +34,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.demand.well_family.well_family.LoginActivity.finishList;
+
 /**
  * Created by ㅇㅇ on 2017-02-12.
  */
@@ -68,6 +70,8 @@ public class SearchUserActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_user);
+
+        finishList.add(this);
 
         init();
         setToolbar(getWindow().getDecorView());

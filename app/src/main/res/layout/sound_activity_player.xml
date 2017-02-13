@@ -32,16 +32,18 @@
 
                 <ImageView
                     android:id="@+id/iv_sound_player_close"
-                    android:layout_width="30dp"
                     android:layout_gravity="right"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="2dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_weight="0.5"
                     android:background="#00ffffff"
                     android:focusable="false"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/close"
-                    android:layout_height="30dp" />
+                    android:src="@drawable/arrow_bottom"
+                    android:tint="#fff"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="5dp" />
 
                 <LinearLayout
                     android:orientation="vertical"

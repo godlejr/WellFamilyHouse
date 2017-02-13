@@ -37,8 +37,8 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".register.RegisterActivity" />
         <activity android:name=".register.AgreementActivity" />
-        <activity android:name=".invite.InviteActivity" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".LoginActivity"
+            android:launchMode="singleTop"/>
         <activity android:name=".WriteActivity"
             android:configChanges="keyboardHidden|orientation"/>
 

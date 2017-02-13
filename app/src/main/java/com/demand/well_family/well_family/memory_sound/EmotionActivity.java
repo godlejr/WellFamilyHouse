@@ -57,8 +57,6 @@ public class EmotionActivity extends Activity {
             public void onClick(View v) {
                 // map에 id, category_id 들어있음
 
-                Log.e("tttttt", map.toString());
-
             }
         });
 

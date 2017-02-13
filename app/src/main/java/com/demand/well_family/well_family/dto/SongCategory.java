@@ -5,23 +5,23 @@ package com.demand.well_family.well_family.dto;
  */
 
 public class SongCategory {
-    private String id;
+    private int id;
     private String name;
     private String avatar;
     private String created_at;
 
-    public SongCategory(String id, String name, String avatar, String created_at) {
+    public SongCategory(int id, String name, String avatar, String created_at) {
         this.id = id;
         this.name = name;
         this.avatar = avatar;
         this.created_at = created_at;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

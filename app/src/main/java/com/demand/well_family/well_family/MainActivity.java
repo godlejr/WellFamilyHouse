@@ -37,6 +37,7 @@ import com.demand.well_family.well_family.dto.App;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.family.FamilyActivity;
 import com.demand.well_family.well_family.market.MarketMainActivity;
+import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 
 import java.text.ParseException;
@@ -47,6 +48,8 @@ import java.util.Date;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.demand.well_family.well_family.LoginActivity.finishList;
 
 /**
  * Created by ㅇㅇ on 2017-01-18.
@@ -84,6 +87,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         ImageView iv_img_alarm = (ImageView) findViewById(R.id.iv_img_alarm);
         Glide.with(MainActivity.this).load(getString(R.string.cloud_front_banners) + "notification.jpg").thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_img_alarm);
+
+        finishList.add(this);
 
         init();
         getFamilyData();
@@ -152,7 +157,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void getFamilyData() {
-
         familyList = new ArrayList<>();
 
         user_id = getIntent().getIntExtra("user_id",0);
@@ -168,8 +172,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         btn_family_add_exist = (ImageButton) findViewById(R.id.btn_family_add_exist);
 
-
-
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
         Call<ArrayList<Family>> call = server_connection.family_Info(String.valueOf(user_id));
         call.enqueue(new Callback<ArrayList<Family>>() {
@@ -184,7 +186,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     ll_family_make.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            System.out.println("onclick");
+                            Intent intent = new Intent(v.getContext(), CreateFamilyActivity.class);
+
+                            //user info
+                            intent.putExtra("user_id", user_id);
+                            intent.putExtra("user_email", user_email);
+                            intent.putExtra("user_birth", user_birth);
+                            intent.putExtra("user_phone", user_phone);
+                            intent.putExtra("user_name", user_name);
+                            intent.putExtra("user_level", user_level);
+                            intent.putExtra("user_avatar", user_avatar);
+
+                            startActivity(intent);
                         }
                     });
                 } else {
@@ -198,7 +211,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             @Override
             public void onFailure(Call<ArrayList<Family>> call, Throwable t) {
-
+                Toast.makeText(MainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -314,19 +327,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
             iv_app_img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    MainActivity.this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appList.get(getAdapterPosition()).getPackageName()+"")));
 
                     if (getAdapterPosition() == 0) {
-//                        Intent intent = new Intent(MainActivity.this, SoundMainActivity.class);
-//                        //user info
-//                        intent.putExtra("user_id", user_id);
-//                        intent.putExtra("user_email", user_email);
-//                        intent.putExtra("user_birth", user_birth);
-//                        intent.putExtra("user_phone", user_phone);
-//                        intent.putExtra("user_name", user_name);
-//                        intent.putExtra("user_level", user_level);
-//                        intent.putExtra("user_avatar", user_avatar);
-//                        startActivity(intent);
+                        Intent intent = new Intent(MainActivity.this, SoundMainActivity.class);
+                        //user info
+                        intent.putExtra("user_id", user_id);
+                        intent.putExtra("user_email", user_email);
+                        intent.putExtra("user_birth", user_birth);
+                        intent.putExtra("user_phone", user_phone);
+                        intent.putExtra("user_name", user_name);
+                        intent.putExtra("user_level", user_level);
+                        intent.putExtra("user_avatar", user_avatar);
+                        startActivity(intent);
                     } else if (getAdapterPosition() == 1) {
                         //셀핏
                     } else {
@@ -543,15 +555,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         break;
 
                     case R.id.menu_memory_sound:
-//                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
-//                        startLink.putExtra("user_id", user_id);
-//                        startLink.putExtra("user_level", user_level);
-//                        startLink.putExtra("user_email", user_email);
-//                        startLink.putExtra("user_phone", user_phone);
-//                        startLink.putExtra("user_name", user_name);
-//                        startLink.putExtra("user_avatar", user_avatar);
-//                        startLink.putExtra("user_birth", user_birth);
-//                        startActivity(startLink);
+                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink.putExtra("user_id", user_id);
+                        startLink.putExtra("user_level", user_level);
+                        startLink.putExtra("user_email", user_email);
+                        startLink.putExtra("user_phone", user_phone);
+                        startLink.putExtra("user_name", user_name);
+                        startLink.putExtra("user_avatar", user_avatar);
+                        startLink.putExtra("user_birth", user_birth);
+                        startActivity(startLink);
                         break;
                 }
                 return true;

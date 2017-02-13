@@ -43,7 +43,6 @@ import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.WriteActivity;
 import com.demand.well_family.well_family.connection.Server_Connection;
-import com.demand.well_family.well_family.connection.Server_Connector;
 import com.demand.well_family.well_family.dto.Check;
 import com.demand.well_family.well_family.dto.CommentCount;
 import com.demand.well_family.well_family.dto.LikeCount;
@@ -51,6 +50,7 @@ import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.market.MarketMainActivity;
+import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 import com.demand.well_family.well_family.photos.PhotosActivity;
 import com.demand.well_family.well_family.search.SearchUserActivity;
 import com.demand.well_family.well_family.users.UserActivity;
@@ -66,6 +66,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.demand.well_family.well_family.LoginActivity.finishList;
 
 //import com.demand.well_family.well_family.WriteActivity;
 //import com.demand.well_family.well_family.photos.PhotosActivity;
@@ -135,6 +137,8 @@ public class FamilyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_family_main);
+
+        finishList.add(this);
 
         family_id = getIntent().getIntExtra("family_id", 0);
         family_name = getIntent().getStringExtra("family_name");
@@ -326,15 +330,15 @@ public class FamilyActivity extends Activity {
                         break;
 
                     case R.id.menu_memory_sound:
-//                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
-//                        startLink.putExtra("user_id", user_id);
-//                        startLink.putExtra("user_level", user_level);
-//                        startLink.putExtra("user_email", user_email);
-//                        startLink.putExtra("user_phone", user_phone);
-//                        startLink.putExtra("user_name", user_name);
-//                        startLink.putExtra("user_avatar", user_avatar);
-//                        startLink.putExtra("user_birth", user_birth);
-//                        startActivity(startLink);
+                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink.putExtra("user_id", user_id);
+                        startLink.putExtra("user_level", user_level);
+                        startLink.putExtra("user_email", user_email);
+                        startLink.putExtra("user_phone", user_phone);
+                        startLink.putExtra("user_name", user_name);
+                        startLink.putExtra("user_avatar", user_avatar);
+                        startLink.putExtra("user_birth", user_birth);
+                        startActivity(startLink);
                         break;
 
                 }
@@ -539,8 +543,6 @@ public class FamilyActivity extends Activity {
         private LinearLayout ll_item_main_story_like_comment_info;
         private LinearLayout story_images_container;
         private LayoutInflater story_images_inflater;
-
-        private Server_Connector connector;
 
         public ContentViewHolder(View itemView) {
             super(itemView);
@@ -1211,4 +1213,20 @@ public class FamilyActivity extends Activity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(FamilyActivity.this, MainActivity.class);
+        intent.putExtra("user_id", user_id);
+        intent.putExtra("user_email", user_email);
+        intent.putExtra("user_birth", user_birth);
+        intent.putExtra("user_phone", user_phone);
+        intent.putExtra("user_name", user_name);
+        intent.putExtra("user_level", user_level);
+        intent.putExtra("user_avatar", user_avatar);
+
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+
+        super.onBackPressed();
+    }
 }

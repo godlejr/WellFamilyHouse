@@ -13,10 +13,6 @@ public class SongComment {
     private String created_at;
     private String updated_at;
 
-    public SongComment() {
-        super();
-    }
-
     public SongComment(int id, int user_id, int song_id, String content, int deleted, String created_at,
                        String updated_at) {
         super();

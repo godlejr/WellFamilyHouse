@@ -7,20 +7,16 @@ import java.io.Serializable;
  */
 
 public class Song implements Serializable {
-    private String id;
+    private int id;
     private String name;
     private String ext;
     private String title;
     private String singer;
     private String avatar;
-    private String category_id;
+    private int category_id;
     private String created_at;
 
-
-
-    public Song(String id, String name, String ext, String title, String singer, String avatar, String category_id,
-                String created_at) {
-        super();
+    public Song(int id, String name, String ext, String title, String singer, String avatar, int category_id, String created_at) {
         this.id = id;
         this.name = name;
         this.ext = ext;
@@ -31,11 +27,11 @@ public class Song implements Serializable {
         this.created_at = created_at;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -79,11 +75,11 @@ public class Song implements Serializable {
         this.avatar = avatar;
     }
 
-    public String getCategory_id() {
+    public int getCategory_id() {
         return category_id;
     }
 
-    public void setCategory_id(String category_id) {
+    public void setCategory_id(int category_id) {
         this.category_id = category_id;
     }
 

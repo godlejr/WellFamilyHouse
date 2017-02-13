@@ -24,11 +24,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import static com.demand.well_family.well_family.LoginActivity.finishList;
 
 /**
  * Created by Dev-0 on 2017-02-08.
@@ -37,29 +40,32 @@ import java.util.Date;
 public class MarketMainActivity extends Activity {
     private DrawerLayout dl;
 
-    private String user_id;
+    private int user_id;
     private String user_name;
     private String user_avatar;
     private String user_email;
     private String user_birth;
     private String user_phone;
-    private String user_level;
+    private int user_level;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_main);
+
+        finishList.add(this);
+
         ImageView iv_market = (ImageView) findViewById(R.id.iv_market);
         Glide.with(this).load(getString(R.string.cloud_front_banners) + "market.jpg").thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_market);
 
-        user_id = getIntent().getStringExtra("user_id");
+        user_id = getIntent().getIntExtra("user_id", 0);
         user_name = getIntent().getStringExtra("user_name");
         user_avatar = getIntent().getStringExtra("user_avatar");
         user_email = getIntent().getStringExtra("user_email");
         user_birth = getIntent().getStringExtra("user_birth");
         user_phone = getIntent().getStringExtra("user_phone");
-        user_level = getIntent().getStringExtra("user_level");
+        user_level = getIntent().getIntExtra("user_level", 0);
 
         setToolbar(getWindow().getDecorView());
     }
@@ -229,15 +235,15 @@ public class MarketMainActivity extends Activity {
                         break;
 
                     case R.id.menu_memory_sound:
-//                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
-//                        startLink.putExtra("user_id", user_id);
-//                        startLink.putExtra("user_level", user_level);
-//                        startLink.putExtra("user_email", user_email);
-//                        startLink.putExtra("user_phone", user_phone);
-//                        startLink.putExtra("user_name", user_name);
-//                        startLink.putExtra("user_avatar", user_avatar);
-//                        startLink.putExtra("user_birth", user_birth);
-//                        startActivity(startLink);
+                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink.putExtra("user_id", user_id);
+                        startLink.putExtra("user_level", user_level);
+                        startLink.putExtra("user_email", user_email);
+                        startLink.putExtra("user_phone", user_phone);
+                        startLink.putExtra("user_name", user_name);
+                        startLink.putExtra("user_avatar", user_avatar);
+                        startLink.putExtra("user_birth", user_birth);
+                        startActivity(startLink);
                         break;
                 }
                 return true;
