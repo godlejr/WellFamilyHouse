@@ -48,7 +48,6 @@ import com.demand.well_family.well_family.dto.Story;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
-import com.demand.well_family.well_family.memory_sound.SoundRecordActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
@@ -114,7 +113,7 @@ public class WriteActivity extends Activity {
     private Server_Connection server_connection;
 
     private int sleepTime;
-    private final int UPLOADONEPIC = 850;
+    private final int UPLOADONEPIC = 950;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -332,7 +331,7 @@ public class WriteActivity extends Activity {
 
                     case R.id.menu_memory_sound:
                         startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
-                        startLink.putExtra("user_id",user_id);
+                        startLink.putExtra("user_id", user_id);
                         startLink.putExtra("user_level", user_level);
                         startLink.putExtra("user_email", user_email);
                         startLink.putExtra("user_phone", user_phone);
@@ -445,10 +444,14 @@ public class WriteActivity extends Activity {
                             ColorDrawable(Color.TRANSPARENT));
                     progressDialog.setContentView(R.layout.progress_dialog);
 
-                    if(photoList.size() > 10) {
+                    if (photoList.size() > 10) {
                         sleepTime = UPLOADONEPIC * 10;
                     } else {
-                        sleepTime = UPLOADONEPIC * photoList.size();
+                        if (photoList.size() == 1) {
+                            sleepTime = 1400;
+                        } else {
+                            sleepTime = UPLOADONEPIC * photoList.size();
+                        }
                     }
 
                     new Thread(new Runnable() {
@@ -486,7 +489,7 @@ public class WriteActivity extends Activity {
 
                                     }
 
-                                   try {
+                                    try {
                                         Thread.sleep(sleepTime);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();

@@ -132,6 +132,7 @@ public class FamilyActivity extends Activity {
     private View dialogView;
     private Server_Connection server_connection;
     private LinearLayout ll_user_add_exist;
+    private ContentAddHandler contentAddHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -510,6 +511,20 @@ public class FamilyActivity extends Activity {
     }
 
     class ContentHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            contentAdapter.notifyItemInserted(0);
+            try {
+                Thread.sleep(500);
+                contentAdapter.notifyItemChanged(0);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class ContentAddHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -1177,7 +1192,7 @@ public class FamilyActivity extends Activity {
                 progressDialog.show();
                 progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 progressDialog.setContentView(R.layout.progress_dialog);
-                contentHandler = new ContentHandler();
+                contentAddHandler = new ContentAddHandler();
 
                 new Thread(new Runnable() {
                     @Override
@@ -1189,7 +1204,7 @@ public class FamilyActivity extends Activity {
                         Bundle bundle = new Bundle();
                         bundle.putInt("item_id", 0);
                         msg.setData(bundle);
-                        contentHandler.sendMessage(msg);
+                        contentAddHandler.sendMessage(msg);
                         try {
                             Thread.sleep(3000);
                         } catch (InterruptedException e) {
