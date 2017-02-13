@@ -52,6 +52,7 @@ import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.photos.PhotosActivity;
+import com.demand.well_family.well_family.search.SearchUserActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 
 import java.io.Serializable;
@@ -98,7 +99,6 @@ public class FamilyActivity extends Activity {
     private int user_level;
     private String user_avatar;
 
-    private Server_Connector connector;
 
     //list
     private ArrayList<User> userList;
@@ -129,6 +129,7 @@ public class FamilyActivity extends Activity {
 
     private View dialogView;
     private Server_Connection server_connection;
+    private LinearLayout ll_user_add_exist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1065,6 +1066,31 @@ public class FamilyActivity extends Activity {
     private void init() {
         iv_family_avatar = (ImageView) findViewById(R.id.iv_family_avatar);
         tv_family_content = (TextView) findViewById(R.id.tv_family_content);
+        ll_user_add_exist = (LinearLayout)findViewById(R.id.ll_user_add_exist);
+
+        ll_user_add_exist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FamilyActivity.this, SearchUserActivity.class);
+                intent.putExtra("user_id", user_id);
+                intent.putExtra("user_name", user_name);
+                intent.putExtra("user_avatar", user_avatar);
+                intent.putExtra("user_email", user_email);
+                intent.putExtra("user_birth", user_birth);
+                intent.putExtra("user_phone", user_phone);
+                intent.putExtra("user_level", user_level);
+
+                intent.putExtra("family_id", family_id);
+                intent.putExtra("family_name", family_name);
+                intent.putExtra("family_content", family_content);
+                intent.putExtra("family_avatar", family_avatar);
+                intent.putExtra("family_user_id", family_user_id);
+                intent.putExtra("family_created_at", family_created_at);
+
+                startActivity(intent);
+                finish();
+            }
+        });
 
         Glide.with(this).load(getString(R.string.cloud_front_family_avatar) + family_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_family_avatar);
         tv_family_content.setText(getIntent().getStringExtra("family_content"));

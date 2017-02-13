@@ -105,15 +105,39 @@
                     android:background="#f7f5f0"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/textView18"
+                    <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:text="우리 가족 활동"
-                        android:layout_marginLeft="12dp"
-                        android:gravity="center_vertical"
-                        android:textColor="#542920"
-                        android:textStyle="bold"
-                        android:layout_height="34dp" />
+                        android:layout_height="34dp">
+
+                        <TextView
+                            android:id="@+id/textView18"
+                            android:layout_width="1dp"
+                            android:text="우리 가족"
+                            android:gravity="center_vertical"
+                            android:textColor="#542920"
+                            android:textStyle="bold"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.9"
+                            android:layout_marginLeft="12dp" />
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.1"
+                            android:gravity="center"
+                            android:id="@+id/ll_user_add_exist">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:id="@+id/btn_user_add_exist"
+                                android:src="@drawable/plus"
+                                android:tint="#542920"
+                                android:scaleType="fitXY" />
+                        </LinearLayout>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"

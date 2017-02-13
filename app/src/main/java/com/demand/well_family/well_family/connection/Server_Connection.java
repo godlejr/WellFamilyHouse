@@ -26,6 +26,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -140,6 +141,13 @@ public interface Server_Connection {
     @GET("{song_story_id}/song_story_comment_List")
     Call<ArrayList<CommentInfo>> song_story_comment_List(@Path("song_story_id") String song_story_id);
 
+    @POST("{user_id}/find_user")
+    Call<ArrayList<User>> find_user(@Path("user_id") String user_id, @QueryMap HashMap<String, String> map);
 
+    @POST("{family_id}/insert_user_into_family")
+    Call<ResponseBody> insert_user_into_family(@Path("family_id") String family_id, @QueryMap HashMap<String, String> map);
+
+    @DELETE("{family_id}/delete_user_from_family")
+    Call<ResponseBody> delete_user_from_family(@Path("family_id") String family_id, @QueryMap HashMap<String, String> map);
 
 }
