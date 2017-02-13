@@ -29,6 +29,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -164,7 +165,10 @@ public class SoundRecordActivity extends Activity {
     // progress
     private int sleepTime;
 
+    // emotion
     private ArrayList<SongStoryEmotionInfo> emotionList;
+    private RecyclerView rv_record_emotion;
+    private EmotionAdapter emotionAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -921,6 +925,26 @@ public class SoundRecordActivity extends Activity {
                                                 }
                                             });
                                         }
+
+                                        if(emotionList.size()!=0){
+                                            for(int i =0; i<emotionList.size();i++) {
+                                                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                                                HashMap<String, String> map = new HashMap<String, String>();
+                                                map.put("song_story_emotion_id", String.valueOf(emotionList.get(i).getId()));
+                                                Call<ResponseBody> call_insert_emotions = server_connection.insert_emotion_into_song_story(String.valueOf(response.body().get(0).getId()), map);
+                                                call_insert_emotions.enqueue(new Callback<ResponseBody>() {
+                                                    @Override
+                                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                        //scess
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                        Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                            }
+                                        }
                                     }
 
                                     @Override
@@ -957,6 +981,11 @@ public class SoundRecordActivity extends Activity {
                 startActivityForResult(intent, EMOTION_REQUEST);
             }
         });
+
+
+        // emotion
+        rv_record_emotion = (RecyclerView) findViewById(R.id.rv_record_emotion);
+        rv_record_emotion.setLayoutManager(new GridLayoutManager(SoundRecordActivity.this, 2));
     }
 
 
@@ -997,11 +1026,15 @@ public class SoundRecordActivity extends Activity {
             if (resultCode == 1001) {
                 ArrayList<SongStoryEmotionInfo> dummy_emotionList = (ArrayList<SongStoryEmotionInfo>) data.getSerializableExtra("emotionList");
                 emotionList = new ArrayList<>();
-                for(int i =0 ; i<dummy_emotionList.size();i++){
-                    if(dummy_emotionList.get(i).isChecked()){
+                for (int i = 0; i < dummy_emotionList.size(); i++) {
+                    if (dummy_emotionList.get(i).isChecked()) {
                         emotionList.add(dummy_emotionList.get(i));
                     }
                 }
+                
+                emotionAdapter = new EmotionAdapter(emotionList, SoundRecordActivity.this, R.layout.item_emotion);
+                rv_record_emotion.setAdapter(emotionAdapter);
+
                 return;
             }
         }
@@ -1182,6 +1215,46 @@ public class SoundRecordActivity extends Activity {
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             outRect.bottom = space;
             outRect.right = space;
+        }
+    }
+
+    private class EmotionViewHolder extends RecyclerView.ViewHolder {
+        private TextView tv_emotion;
+        private ImageView iv_emotion;
+
+        public EmotionViewHolder(View itemView) {
+            super(itemView);
+            tv_emotion = (TextView) itemView.findViewById(R.id.tv_emotion);
+            iv_emotion = (ImageView) itemView.findViewById(R.id.iv_emotion);
+        }
+    }
+
+    private class EmotionAdapter extends RecyclerView.Adapter<EmotionViewHolder> {
+        private ArrayList<SongStoryEmotionInfo> emotionList;
+        private Context context;
+        private int layout;
+
+        public EmotionAdapter(ArrayList<SongStoryEmotionInfo> emotionList, Context context, int layout) {
+            this.emotionList = emotionList;
+            this.context = context;
+            this.layout = layout;
+        }
+
+        @Override
+        public int getItemCount() {
+            return emotionList.size();
+        }
+
+        @Override
+        public void onBindViewHolder(EmotionViewHolder holder, int position) {
+            holder.tv_emotion.setText(emotionList.get(position).getName());
+            Glide.with(context).load(getString(R.string.cloud_front_song_story_emotion) + emotionList.get(position).getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_emotion);
+        }
+
+        @Override
+        public EmotionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            EmotionViewHolder holder = new EmotionViewHolder((LayoutInflater.from(context).inflate(layout, parent, false)));
+            return holder;
         }
     }
 
