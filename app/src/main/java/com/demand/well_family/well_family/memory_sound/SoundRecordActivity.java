@@ -61,6 +61,7 @@ import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Range;
 import com.demand.well_family.well_family.dto.SongStory;
+import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 import com.demand.well_family.well_family.util.RealPathUtil;
@@ -153,7 +154,7 @@ public class SoundRecordActivity extends Activity {
 
     private int range_id;
 
-    private final int WRITE_EXTERNAL_STORAGE_PERMISSION = 10002;
+    private static final int EMOTION_REQUEST = 2;
     private final int RECORD_EXTERNAL_STORAGE_PERMISSION = 10003;
 
     //toolbar
@@ -162,6 +163,8 @@ public class SoundRecordActivity extends Activity {
 
     // progress
     private int sleepTime;
+
+    private ArrayList<SongStoryEmotionInfo> emotionList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -951,10 +954,11 @@ public class SoundRecordActivity extends Activity {
             public void onClick(View v) {
                 System.out.println("추억등록");
                 intent = new Intent(v.getContext(), EmotionActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, EMOTION_REQUEST);
             }
         });
     }
+
 
     public String addBase64Bitmap(Bitmap bm) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -989,6 +993,18 @@ public class SoundRecordActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == EMOTION_REQUEST) { //emotion
+            if (resultCode == 1001) {
+                ArrayList<SongStoryEmotionInfo> dummy_emotionList = (ArrayList<SongStoryEmotionInfo>) data.getSerializableExtra("emotionList");
+                emotionList = new ArrayList<>();
+                for(int i =0 ; i<dummy_emotionList.size();i++){
+                    if(dummy_emotionList.get(i).isChecked()){
+                        emotionList.add(dummy_emotionList.get(i));
+                    }
+                }
+                return;
+            }
+        }
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PICK_PHOTO:

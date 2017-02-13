@@ -2,12 +2,12 @@ package com.demand.well_family.well_family.memory_sound;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +16,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.dto.Emotion;
+import com.demand.well_family.well_family.connection.Server_Connection;
+import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by ㅇㅇ on 2017-02-12.
@@ -34,7 +40,9 @@ public class EmotionActivity extends Activity {
     private Button btn_emotion;
 
     private EmotionAdapter emotionAdapter;
-    private HashMap<String, String> map;  // key : id , value : category_id
+    private HashMap<Integer, Integer> map;  // key : id , value : category_id
+    private Server_Connection server_connection;
+    private ArrayList<SongStoryEmotionInfo> emotionList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,39 +56,37 @@ public class EmotionActivity extends Activity {
     }
 
     private void init() {
-        final ArrayList<Emotion> emotionList = new ArrayList<>();
         map = new HashMap<>();
 
         btn_emotion = (Button) findViewById(R.id.btn_emotion);
         btn_emotion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // map에 id, category_id 들어있음
-
+                Intent intent = getIntent();
+                intent.putExtra("emotionList",emotionList);
+                setResult(1001, intent);
+                finish();
             }
         });
 
         rv_emotion = (RecyclerView) findViewById(R.id.rv_emotion);
 
-        emotionList.add(new Emotion("1", "1" , "2017-02-12", "행복해요", "https://cdn.zeplin.io/58997773056e36218ca50ad1/assets/B330C832-3F6A-401B-9744-27C26B23D065.png"));
-        emotionList.add(new Emotion("2", "1", "2017-02-12", "인생은 즐거워요", "https://cdn.zeplin.io/58997773056e36218ca50ad1/assets/B330C832-3F6A-401B-9744-27C26B23D065.png"));
-        emotionList.add(new Emotion("3", "1", "2017-02-12", "완전 설레요", "https://cdn.zeplin.io/58997773056e36218ca50ad1/assets/B330C832-3F6A-401B-9744-27C26B23D065.png"));
-        emotionList.add(new Emotion("4", "1", "2017-02-12", "감동 받았어요", "https://cdn.zeplin.io/58997773056e36218ca50ad1/assets/B330C832-3F6A-401B-9744-27C26B23D065.png"));
+        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+        Call<ArrayList<SongStoryEmotionInfo>> call_emotions = server_connection.song_story_emotion_List();
+        call_emotions.enqueue(new Callback<ArrayList<SongStoryEmotionInfo>>() {
+            @Override
+            public void onResponse(Call<ArrayList<SongStoryEmotionInfo>> call, Response<ArrayList<SongStoryEmotionInfo>> response) {
+                emotionList = response.body();
+                emotionAdapter = new EmotionAdapter(emotionList, EmotionActivity.this, R.layout.item_emotion);
+                rv_emotion.setAdapter(emotionAdapter);
+                rv_emotion.setLayoutManager(new LinearLayoutManager(EmotionActivity.this, LinearLayoutManager.VERTICAL, false));
+            }
 
-        emotionList.add(new Emotion("5", "2", "2017-02-12", "인생은 살만해요", "https://cdn.zeplin.io/58997773056e36218ca50ad1/assets/13DEC6B4-C78E-462F-B262-4A04FEB0D26A.png"));
-        emotionList.add(new Emotion("6", "2", "2017-02-12", "그리워요", "https://cdn.zeplin.io/58997773056e36218ca50ad1/assets/13DEC6B4-C78E-462F-B262-4A04FEB0D26A.png"));
-        emotionList.add(new Emotion("7", "2", "2017-02-12", "궁금해요", "https://cdn.zeplin.io/58997773056e36218ca50ad1/assets/13DEC6B4-C78E-462F-B262-4A04FEB0D26A.png"));
-
-        emotionList.add(new Emotion("8", "3", "2017-02-12", "인생은 서글퍼요", "https://cdn.zeplin.io/58997773056e36218ca50ad1/assets/AE8BAC05-2E1D-42B2-953C-B54B2AB45699.png"));
-        emotionList.add(new Emotion("9", "3", "2017-02-12", "우울해요", "https://cdn.zeplin.io/58997773056e36218ca50ad1/assets/AE8BAC05-2E1D-42B2-953C-B54B2AB45699.png"));
-        emotionList.add(new Emotion("10", "3", "2017-02-12", "외로워요", "https://cdn.zeplin.io/58997773056e36218ca50ad1/assets/AE8BAC05-2E1D-42B2-953C-B54B2AB45699.png"));
-        emotionList.add(new Emotion("11", "3", "2017-02-12", "화나요", "https://cdn.zeplin.io/58997773056e36218ca50ad1/assets/AE8BAC05-2E1D-42B2-953C-B54B2AB45699.png"));
-
-
-
-        emotionAdapter = new EmotionAdapter(emotionList, this, R.layout.item_emotion);
-        rv_emotion.setAdapter(emotionAdapter);
-        rv_emotion.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+            @Override
+            public void onFailure(Call<ArrayList<SongStoryEmotionInfo>> call, Throwable t) {
+                Toast.makeText(EmotionActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 
@@ -99,11 +105,11 @@ public class EmotionActivity extends Activity {
     }
 
     private class EmotionAdapter extends RecyclerView.Adapter<EmotionViewHolder> {
-        private ArrayList<Emotion> emotionList;
+        private ArrayList<SongStoryEmotionInfo> emotionList;
         private Context context;
         private int layout;
 
-        public EmotionAdapter(ArrayList<Emotion> emotionList, Context context, int layout) {
+        public EmotionAdapter(ArrayList<SongStoryEmotionInfo> emotionList, Context context, int layout) {
             this.emotionList = emotionList;
             this.context = context;
             this.layout = layout;
@@ -117,20 +123,18 @@ public class EmotionActivity extends Activity {
 
         @Override
         public void onBindViewHolder(final EmotionViewHolder holder, final int position) {
-            Glide.with(EmotionActivity.this).load(emotionList.get(position).getImage()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_emotion);
+            Glide.with(EmotionActivity.this).load(getString(R.string.cloud_front_song_story_emotion) + emotionList.get(position).getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_emotion);
             holder.tv_emotion.setText(emotionList.get(position).getName());
 
             holder.ll_emotion_background.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(map.get(emotionList.get(position).getId()) != null) {
-                       map.remove(emotionList.get(position).getId());
-
+                    if (emotionList.get(position).isChecked() == true) {
                         holder.ll_emotion_background.setBackgroundColor(Color.WHITE);
-                    } else{
-                        map.put(emotionList.get(position).getId(), emotionList.get(position).getCategory_id());
-
+                        emotionList.get(position).setChecked(false);
+                    } else {
                         holder.ll_emotion_background.setBackgroundColor(Color.parseColor("#ebe4d6"));
+                        emotionList.get(position).setChecked(true);
                     }
                 }
             });

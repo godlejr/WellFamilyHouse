@@ -16,6 +16,7 @@ import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStory;
 import com.demand.well_family.well_family.dto.SongStoryAvatar;
 import com.demand.well_family.well_family.dto.SongStoryComment;
+import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
 import com.demand.well_family.well_family.dto.Story;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
@@ -211,5 +212,8 @@ public interface Server_Connection {
 
     @POST("email_check")
     Call<ArrayList<User>> email_check(@QueryMap Map<String, String> map);
+
+    @GET("song_story_emotion_List")
+    Call<ArrayList<SongStoryEmotionInfo>> song_story_emotion_List();
 
 }
