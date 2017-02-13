@@ -448,7 +448,7 @@ public class WriteActivity extends Activity {
                         sleepTime = UPLOADONEPIC * 10;
                     } else {
                         if (photoList.size() == 1) {
-                            sleepTime = 1400;
+                            sleepTime = 2500;
                         } else {
                             sleepTime = UPLOADONEPIC * photoList.size();
                         }
