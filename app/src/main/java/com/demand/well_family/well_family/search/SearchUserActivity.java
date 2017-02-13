@@ -309,8 +309,6 @@ public class SearchUserActivity extends Activity {
                                         Toast.makeText(SearchUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                     }
                                 });
-
-
                             }
                         });
                     }
