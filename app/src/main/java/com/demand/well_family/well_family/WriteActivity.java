@@ -554,23 +554,36 @@ public class WriteActivity extends Activity {
                         ClipData clipdata = data.getClipData();
                         if (clipdata == null) { // 1개
                             Uri uri = data.getData();
-                            String path = realPathUtil.getRealPathFromURI_API19(this, uri);
+                            String path = null;
+                            try {
+                                path = realPathUtil.getRealPathFromURI_API19(this, uri);
+                            } catch (RuntimeException e) {
+                                path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
+                            }
                             pathList.add(path);
                             photoList.add(uri);
                             photoViewAdapter.notifyDataSetChanged();
                         } else { // 여러개
                             for (int i = 0; i < clipdata.getItemCount(); i++) {
                                 Uri uri = clipdata.getItemAt(i).getUri();
-                                String path = realPathUtil.getRealPathFromURI_API19(this, uri);
-                                pathList.add(path);
+                                String path = null;
+                                try {
+                                    path = realPathUtil.getRealPathFromURI_API19(this, uri);
+                                } catch (RuntimeException e) {
+                                    path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
+                                }                                pathList.add(path);
                                 photoList.add(uri);
                                 photoViewAdapter.notifyDataSetChanged();
                             }
                         }
                     } else {
                         Uri uri = data.getData();
-                        String path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
-                        pathList.add(path);
+                        String path = null;
+                        try {
+                            path = realPathUtil.getRealPathFromURI_API19(this, uri);
+                        } catch (RuntimeException e) {
+                            path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
+                        }                        pathList.add(path);
                         photoList.add(uri);
                         photoViewAdapter.notifyDataSetChanged();
                     }

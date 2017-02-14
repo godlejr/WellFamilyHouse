@@ -857,7 +857,6 @@ public class SoundRecordActivity extends Activity {
 
                     // 등록버튼
                     if (photoList.size() == 0 && et_sound_record_memory.getText().toString().length() == 0 && file == null && location.length() == 0) {
-                        Toast.makeText(SoundRecordActivity.this, "하나라도 입력", Toast.LENGTH_SHORT).show();
                     } else {
                         if (location == null) {
                             location = "";
