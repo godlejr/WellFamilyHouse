@@ -40,7 +40,7 @@ import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
-import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
+import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 
 import org.slf4j.Logger;
@@ -290,7 +290,7 @@ public class PhotosActivity extends Activity {
                         break;
 
                     case R.id.menu_memory_sound:
-                        startLink = new Intent(view.getContext(), SoundMainActivity.class);
+                        startLink = new Intent(view.getContext(), SongMainActivity.class);
                         startLink.putExtra("user_id",user_id);
                         startLink.putExtra("user_level", user_level);
                         startLink.putExtra("user_email", user_email);

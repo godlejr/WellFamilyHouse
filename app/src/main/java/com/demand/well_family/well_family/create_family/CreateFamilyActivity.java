@@ -75,8 +75,6 @@ public class CreateFamilyActivity extends Activity {
     private Server_Connection server_connection;
     private ProgressDialog progressDialog;
 
-    private int sleepTime;
-    private final int UPLOADONEPIC = 850;
     private final int READ_EXTERNAL_STORAGE_PERMISSION = 10001;
 
     private static final Logger logger = LoggerFactory.getLogger(CreateFamilyActivity.class);
@@ -201,7 +199,7 @@ public class CreateFamilyActivity extends Activity {
                                                 intent.putExtra("user_avatar", user_avatar);
 
                                                 try {
-                                                    Thread.sleep(sleepTime);
+                                                    Thread.sleep(200);
                                                 } catch (InterruptedException e) {
                                                     log(e);
                                                 }

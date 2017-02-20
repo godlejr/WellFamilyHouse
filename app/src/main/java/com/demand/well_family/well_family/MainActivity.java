@@ -38,7 +38,7 @@ import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.family.FamilyActivity;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
-import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
+import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 
 import org.slf4j.Logger;
@@ -334,7 +334,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 public void onClick(View v) {
 
                     if (getAdapterPosition() == 0) {
-                        Intent intent = new Intent(MainActivity.this, SoundMainActivity.class);
+                        Intent intent = new Intent(MainActivity.this, SongMainActivity.class);
                         //user info
                         intent.putExtra("user_id", user_id);
                         intent.putExtra("user_email", user_email);
@@ -558,7 +558,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         break;
 
                     case R.id.menu_memory_sound:
-                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink = new Intent(getApplicationContext(), SongMainActivity.class);
                         startLink.putExtra("user_id", user_id);
                         startLink.putExtra("user_level", user_level);
                         startLink.putExtra("user_email", user_email);

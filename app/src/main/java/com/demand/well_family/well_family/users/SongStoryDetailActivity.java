@@ -49,7 +49,7 @@ import com.demand.well_family.well_family.dto.SongStoryComment;
 import com.demand.well_family.well_family.dto.SongStoryEmotionData;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
-import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
+import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +73,7 @@ import static com.demand.well_family.well_family.LoginActivity.finishList;
  * Created by ㅇㅇ on 2017-02-03.
  */
 
-public class SoundStoryDetail extends Activity implements CompoundButton.OnCheckedChangeListener {
+public class SongStoryDetailActivity extends Activity implements CompoundButton.OnCheckedChangeListener {
     private TextView tv_sound_story_detail_title, tv_sound_story_detail_singer, tv_sound_story_detail_writer_name,
             tv_sound_story_detail_play, tv_sound_story_detail_end, tv_sound_story_detail_content, tv_sound_story_detail_location,
             tv_sound_story_detail_date, tv_sound_story_detail_like_count, tv_sound_story_detail_comment_count;
@@ -138,7 +138,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
     private RecyclerView rv_detail_emotion;
     private EmotionAdapter emotionAdapter;
 
-    private static final Logger logger = LoggerFactory.getLogger(SoundStoryDetail.class);
+    private static final Logger logger = LoggerFactory.getLogger(SongStoryDetailActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,7 +215,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         ll_menu_mypage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SoundStoryDetail.this, UserActivity.class);
+                Intent intent = new Intent(SongStoryDetailActivity.this, UserActivity.class);
                 //userinfo
                 intent.putExtra("story_user_id", user_id);
                 intent.putExtra("story_user_email", user_email);
@@ -275,7 +275,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                 Intent intent;
                 switch (item.getItemId()) {
                     case R.id.menu_home:
-                        intent = new Intent(SoundStoryDetail.this, MainActivity.class);
+                        intent = new Intent(SongStoryDetailActivity.this, MainActivity.class);
                         intent.putExtra("user_id", user_id);
                         intent.putExtra("user_email", user_email);
                         intent.putExtra("user_birth", user_birth);
@@ -293,7 +293,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                         break;
 
                     case R.id.menu_market:
-                        intent = new Intent(SoundStoryDetail.this, MarketMainActivity.class);
+                        intent = new Intent(SongStoryDetailActivity.this, MarketMainActivity.class);
                         intent.putExtra("user_id", user_id);
                         intent.putExtra("user_email", user_email);
                         intent.putExtra("user_birth", user_birth);
@@ -324,7 +324,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                         editor.remove("user_level");
                         editor.commit();
 
-                        intent = new Intent(SoundStoryDetail.this, LoginActivity.class);
+                        intent = new Intent(SongStoryDetailActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                         break;
@@ -353,7 +353,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                         break;
 
                     case R.id.menu_memory_sound:
-                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink = new Intent(getApplicationContext(), SongMainActivity.class);
                         startLink.putExtra("user_id", user_id);
                         startLink.putExtra("user_level", user_level);
                         startLink.putExtra("user_email", user_email);
@@ -393,7 +393,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
             @Override
             public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
                 log(t);
-                Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SongStoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -434,14 +434,14 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
             @Override
             public void onResponse(Call<ArrayList<SongStoryAvatar>> call, Response<ArrayList<SongStoryAvatar>> response) {
                 String avatar = response.body().get(0).getAvatar();
-                Glide.with(SoundStoryDetail.this).load(getString(R.string.cloud_front_songs_avatar) + avatar)
+                Glide.with(SongStoryDetailActivity.this).load(getString(R.string.cloud_front_songs_avatar) + avatar)
                         .thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_detail_song_img);
             }
 
             @Override
             public void onFailure(Call<ArrayList<SongStoryAvatar>> call, Throwable t) {
                 log(t);
-                Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SongStoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -481,7 +481,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
             @Override
             public void onFailure(Call<ArrayList<LikeCount>> call, Throwable t) {
                 log(t);
-                Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SongStoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -646,9 +646,9 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                     rv_sound_story_detail.setVisibility(View.GONE);
                     ll_sound_story_detail_image.setVisibility(View.GONE);
                 } else {
-                    photoAdapter = new PhotoAdapter(SoundStoryDetail.this, photoList, R.layout.item_detail_photo);
+                    photoAdapter = new PhotoAdapter(SongStoryDetailActivity.this, photoList, R.layout.item_detail_photo);
                     rv_sound_story_detail.setAdapter(photoAdapter);
-                    rv_sound_story_detail.setLayoutManager(new LinearLayoutManager(SoundStoryDetail.this, LinearLayoutManager.VERTICAL, false));
+                    rv_sound_story_detail.setLayoutManager(new LinearLayoutManager(SongStoryDetailActivity.this, LinearLayoutManager.VERTICAL, false));
                     rv_sound_story_detail.addItemDecoration(new SpaceItemDecoration(16));
                 }
             }
@@ -656,7 +656,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
             @Override
             public void onFailure(Call<ArrayList<SongPhoto>> call, Throwable t) {
                 log(t);
-                Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SongStoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -671,15 +671,15 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
             @Override
             public void onResponse(Call<ArrayList<SongStoryEmotionData>> call, Response<ArrayList<SongStoryEmotionData>> response) {
                 //emotion
-                emotionAdapter = new EmotionAdapter(response.body(), SoundStoryDetail.this, R.layout.item_emotion);
+                emotionAdapter = new EmotionAdapter(response.body(), SongStoryDetailActivity.this, R.layout.item_emotion);
                 rv_detail_emotion.setAdapter(emotionAdapter);
-                rv_detail_emotion.setLayoutManager(new GridLayoutManager(SoundStoryDetail.this, 2));
+                rv_detail_emotion.setLayoutManager(new GridLayoutManager(SongStoryDetailActivity.this, 2));
             }
 
             @Override
             public void onFailure(Call<ArrayList<SongStoryEmotionData>> call, Throwable t) {
                 log(t);
-                Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SongStoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -753,7 +753,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                         @Override
                         public void onFailure(Call<ArrayList<SongStoryComment>> call, Throwable t) {
                             log(t);
-                            Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SongStoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -770,15 +770,15 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
             @Override
             public void onResponse(Call<ArrayList<CommentInfo>> call, Response<ArrayList<CommentInfo>> response) {
                 commentInfoList = response.body();
-                commentAdapter = new CommentAdapter(SoundStoryDetail.this, commentInfoList, R.layout.item_comment);
+                commentAdapter = new CommentAdapter(SongStoryDetailActivity.this, commentInfoList, R.layout.item_comment);
                 rv_sound_story_detail_comments.setAdapter(commentAdapter);
-                rv_sound_story_detail_comments.setLayoutManager(new LinearLayoutManager(SoundStoryDetail.this, LinearLayoutManager.VERTICAL, false));
+                rv_sound_story_detail_comments.setLayoutManager(new LinearLayoutManager(SongStoryDetailActivity.this, LinearLayoutManager.VERTICAL, false));
             }
 
             @Override
             public void onFailure(Call<ArrayList<CommentInfo>> call, Throwable t) {
                 log(t);
-                Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SongStoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -937,7 +937,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         log(t);
-                        Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SongStoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
             } else {
@@ -956,7 +956,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         log(t);
-                        Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SongStoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
             }

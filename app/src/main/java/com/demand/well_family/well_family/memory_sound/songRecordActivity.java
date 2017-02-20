@@ -100,7 +100,7 @@ import static com.demand.well_family.well_family.LoginActivity.finishList;
  * Created by ㅇㅇ on 2017-02-01.
  */
 
-public class SoundRecordActivity extends Activity {
+public class SongRecordActivity extends Activity {
     private TextView tv_record_song_title, tv_record_song_singer;
     private ImageView iv_record_user_avatar;
     private TextView tv_record_user_name;
@@ -174,7 +174,7 @@ public class SoundRecordActivity extends Activity {
     private RecyclerView rv_record_emotion;
     private EmotionAdapter emotionAdapter;
 
-    private static final Logger logger = LoggerFactory.getLogger(SoundRecordActivity.class);
+    private static final Logger logger = LoggerFactory.getLogger(SongRecordActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,7 +233,7 @@ public class SoundRecordActivity extends Activity {
         ll_menu_mypage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SoundRecordActivity.this, UserActivity.class);
+                Intent intent = new Intent(SongRecordActivity.this, UserActivity.class);
                 //userinfo
                 intent.putExtra("story_user_id", user_id);
                 intent.putExtra("story_user_email", user_email);
@@ -293,7 +293,7 @@ public class SoundRecordActivity extends Activity {
                 Intent intent;
                 switch (item.getItemId()) {
                     case R.id.menu_home:
-                        intent = new Intent(SoundRecordActivity.this, MainActivity.class);
+                        intent = new Intent(SongRecordActivity.this, MainActivity.class);
                         intent.putExtra("user_id", user_id);
                         intent.putExtra("user_email", user_email);
                         intent.putExtra("user_birth", user_birth);
@@ -310,7 +310,7 @@ public class SoundRecordActivity extends Activity {
                         break;
 
                     case R.id.menu_market:
-                        intent = new Intent(SoundRecordActivity.this, MarketMainActivity.class);
+                        intent = new Intent(SongRecordActivity.this, MarketMainActivity.class);
                         intent.putExtra("user_id", user_id);
                         intent.putExtra("user_email", user_email);
                         intent.putExtra("user_birth", user_birth);
@@ -342,7 +342,7 @@ public class SoundRecordActivity extends Activity {
                         editor.remove("user_level");
                         editor.commit();
 
-                        intent = new Intent(SoundRecordActivity.this, LoginActivity.class);
+                        intent = new Intent(SongRecordActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                         break;
@@ -371,7 +371,7 @@ public class SoundRecordActivity extends Activity {
                         break;
 
                     case R.id.menu_memory_sound:
-                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink = new Intent(getApplicationContext(), SongMainActivity.class);
                         startLink.putExtra("user_id", user_id);
                         startLink.putExtra("user_level", user_level);
                         startLink.putExtra("user_email", user_email);
@@ -414,7 +414,7 @@ public class SoundRecordActivity extends Activity {
                     spinnerArray[i] = spList.get(i + 1);
                 }
 
-                spinnerAdapter = new ArrayAdapter(SoundRecordActivity.this, R.layout.custom_spinner_item, spinnerArray) {
+                spinnerAdapter = new ArrayAdapter(SongRecordActivity.this, R.layout.custom_spinner_item, spinnerArray) {
                     @Override
                     public View getView(int position, View convertView, ViewGroup parent) {
                         View view = super.getDropDownView(position, convertView, parent);
@@ -455,7 +455,7 @@ public class SoundRecordActivity extends Activity {
             @Override
             public void onFailure(Call<ArrayList<Range>> call, Throwable t) {
                 log(t);
-                Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SongRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -513,7 +513,7 @@ public class SoundRecordActivity extends Activity {
             tv_sound_record.setText(timer_min + ":" + timer_sec);
 
             if (msg.what == 1) {
-                Toast.makeText(SoundRecordActivity.this, "최대 5분까지 녹음이 가능합니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SongRecordActivity.this, "최대 5분까지 녹음이 가능합니다.", Toast.LENGTH_SHORT).show();
                 timer.cancel();
                 stopRec();
             }
@@ -848,7 +848,7 @@ public class SoundRecordActivity extends Activity {
             @Override
             public void onClick(View v) {
                 if (isRecording) {
-                    Toast.makeText(SoundRecordActivity.this, "녹음을 완료하세요.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongRecordActivity.this, "녹음을 완료하세요.", Toast.LENGTH_SHORT).show();
                 } else {
                     final int photoListSize = photoList.size();
 
@@ -867,7 +867,7 @@ public class SoundRecordActivity extends Activity {
                             location = "";
                         }
 
-                        progressDialog = new ProgressDialog(SoundRecordActivity.this);
+                        progressDialog = new ProgressDialog(SongRecordActivity.this);
                         progressDialog.show();
                         progressDialog.getWindow().setBackgroundDrawable(new
                                 ColorDrawable(Color.TRANSPARENT));
@@ -910,7 +910,7 @@ public class SoundRecordActivity extends Activity {
                                                 @Override
                                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                                                     log(t);
-                                                    Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(SongRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                                 }
                                             });
                                         }
@@ -929,7 +929,7 @@ public class SoundRecordActivity extends Activity {
                                                 @Override
                                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                                                     log(t);
-                                                    Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(SongRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                                 }
                                             });
                                         }
@@ -951,7 +951,7 @@ public class SoundRecordActivity extends Activity {
                                                     @Override
                                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                                                         log(t);
-                                                        Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(SongRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                                     }
                                                 });
                                             }
@@ -961,7 +961,7 @@ public class SoundRecordActivity extends Activity {
                                     @Override
                                     public void onFailure(Call<ArrayList<SongStory>> call, Throwable t) {
                                         log(t);
-                                        Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(SongRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                     }
                                 });
                                 try {
@@ -997,7 +997,7 @@ public class SoundRecordActivity extends Activity {
 
         // emotion
         rv_record_emotion = (RecyclerView) findViewById(R.id.rv_record_emotion);
-        rv_record_emotion.setLayoutManager(new GridLayoutManager(SoundRecordActivity.this, 2));
+        rv_record_emotion.setLayoutManager(new GridLayoutManager(SongRecordActivity.this, 2));
     }
 
 
@@ -1046,7 +1046,7 @@ public class SoundRecordActivity extends Activity {
                     }
                 }
 
-                emotionAdapter = new EmotionAdapter(emotionList, SoundRecordActivity.this, R.layout.item_emotion);
+                emotionAdapter = new EmotionAdapter(emotionList, SongRecordActivity.this, R.layout.item_emotion);
                 rv_record_emotion.setAdapter(emotionAdapter);
 
                 return;
@@ -1073,13 +1073,13 @@ public class SoundRecordActivity extends Activity {
                                 photoList.add(uri);
                                 photoViewAdapter.notifyDataSetChanged();
                             } else {
-                                Toast.makeText(SoundRecordActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SongRecordActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             int photoSize = clipdata.getItemCount();
                             if (photoSize > 10) {
                                 photoSize = 10;
-                                Toast.makeText(SoundRecordActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SongRecordActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
                             } else {
                                 photoSize = clipdata.getItemCount();
                             }
@@ -1098,7 +1098,7 @@ public class SoundRecordActivity extends Activity {
                                     photoList.add(uri);
                                     photoViewAdapter.notifyDataSetChanged();
                                 } else {
-                                    Toast.makeText(SoundRecordActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SongRecordActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
                                     break;
                                 }
                             }
@@ -1118,7 +1118,7 @@ public class SoundRecordActivity extends Activity {
                             photoList.add(uri);
                             photoViewAdapter.notifyDataSetChanged();
                         } else {
-                            Toast.makeText(SoundRecordActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SongRecordActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
                         }
                     }
                     break;
@@ -1189,7 +1189,7 @@ public class SoundRecordActivity extends Activity {
                     photoList.remove(getAdapterPosition());
                     photoViewAdapter.notifyDataSetChanged();
 
-                    Toast.makeText(SoundRecordActivity.this, "사진이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongRecordActivity.this, "사진이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
                 }
             });
         }

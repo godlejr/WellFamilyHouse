@@ -50,7 +50,7 @@ import com.demand.well_family.well_family.dto.SongStoryEmotionData;
 import com.demand.well_family.well_family.dto.SongStoryInfo;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
-import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
+import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +74,7 @@ import static com.demand.well_family.well_family.LoginActivity.finishList;
  * Created by ㅇㅇ on 2017-02-02.
  */
 
-public class UserActivitySound extends Activity {
+public class SongStoryActivity extends Activity {
     //user_inf0(accessor)
     private int user_id;
     private String user_name;
@@ -123,7 +123,7 @@ public class UserActivitySound extends Activity {
     //emotion
     private EmotionAdapter emotionAdapter;
 
-    private static final Logger logger = LoggerFactory.getLogger(UserActivitySound.class);
+    private static final Logger logger = LoggerFactory.getLogger(SongStoryActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,7 +192,7 @@ public class UserActivitySound extends Activity {
             public void onClick(View v) {
                 dl.closeDrawers();
 
-                Intent intent = new Intent(UserActivitySound.this, UserActivity.class);
+                Intent intent = new Intent(SongStoryActivity.this, UserActivity.class);
                 //userinfo
                 intent.putExtra("story_user_id", user_id);
                 intent.putExtra("story_user_email", user_email);
@@ -253,7 +253,7 @@ public class UserActivitySound extends Activity {
                 Intent intent;
                 switch (item.getItemId()) {
                     case R.id.menu_home:
-                        intent = new Intent(UserActivitySound.this, MainActivity.class);
+                        intent = new Intent(SongStoryActivity.this, MainActivity.class);
                         intent.putExtra("user_id", user_id);
                         intent.putExtra("user_email", user_email);
                         intent.putExtra("user_birth", user_birth);
@@ -271,7 +271,7 @@ public class UserActivitySound extends Activity {
                         break;
 
                     case R.id.menu_market:
-                        intent = new Intent(UserActivitySound.this, MarketMainActivity.class);
+                        intent = new Intent(SongStoryActivity.this, MarketMainActivity.class);
                         intent.putExtra("user_id", user_id);
                         intent.putExtra("user_email", user_email);
                         intent.putExtra("user_birth", user_birth);
@@ -302,7 +302,7 @@ public class UserActivitySound extends Activity {
                         editor.remove("user_level");
                         editor.commit();
 
-                        intent = new Intent(UserActivitySound.this, LoginActivity.class);
+                        intent = new Intent(SongStoryActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                         break;
@@ -331,7 +331,7 @@ public class UserActivitySound extends Activity {
                         break;
 
                     case R.id.menu_memory_sound:
-                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink = new Intent(getApplicationContext(), SongMainActivity.class);
                         startLink.putExtra("user_id", getIntent().getStringExtra("user_id"));
                         startLink.putExtra("user_level", getIntent().getStringExtra("user_level"));
                         startLink.putExtra("user_email", getIntent().getStringExtra("user_email"));
@@ -356,7 +356,7 @@ public class UserActivitySound extends Activity {
 
         //<----------------- getContentsData 다이얼로그
         mainHandler = new MainHandler();
-        progressDialog = new ProgressDialog(UserActivitySound.this);
+        progressDialog = new ProgressDialog(SongStoryActivity.this);
         progressDialog.show();
         progressDialog.getWindow().setBackgroundDrawable(new
                 ColorDrawable(Color.TRANSPARENT));
@@ -399,7 +399,7 @@ public class UserActivitySound extends Activity {
                                             contentList.get(i).getRecord_file(), contentList.get(i).getCreated_at(), contentList.get(i).getContent(), contentList.get(i).getLocation(), contentList.get(i).getHits()));
                                 }
                             }
-                            contentAdapter = new ContentAdapter(UserActivitySound.this, storyList, R.layout.item_activity_sound);
+                            contentAdapter = new ContentAdapter(SongStoryActivity.this, storyList, R.layout.item_activity_sound);
 
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("contentAdapter", contentAdapter);
@@ -423,7 +423,7 @@ public class UserActivitySound extends Activity {
                         @Override
                         public void onFailure(Call<ArrayList<SongStory>> call, Throwable t) {
                             log(t);
-                            Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
                 } else {
@@ -466,7 +466,7 @@ public class UserActivitySound extends Activity {
                                                         contentList.get(i).getRecord_file(), contentList.get(i).getCreated_at(), contentList.get(i).getContent(), contentList.get(i).getLocation(), contentList.get(i).getHits()));
                                             }
                                         }
-                                        contentAdapter = new ContentAdapter(UserActivitySound.this, storyList, R.layout.item_activity_sound);
+                                        contentAdapter = new ContentAdapter(SongStoryActivity.this, storyList, R.layout.item_activity_sound);
 
                                         Bundle bundle = new Bundle();
                                         bundle.putSerializable("contentAdapter", contentAdapter);
@@ -490,7 +490,7 @@ public class UserActivitySound extends Activity {
                                     @Override
                                     public void onFailure(Call<ArrayList<SongStory>> call, Throwable t) {
                                         log(t);
-                                        Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                     }
                                 });
                             } else {
@@ -523,7 +523,7 @@ public class UserActivitySound extends Activity {
                                                         contentList.get(i).getRecord_file(), contentList.get(i).getCreated_at(), contentList.get(i).getContent(), contentList.get(i).getLocation(), contentList.get(i).getHits()));
                                             }
                                         }
-                                        contentAdapter = new ContentAdapter(UserActivitySound.this, storyList, R.layout.item_activity_sound);
+                                        contentAdapter = new ContentAdapter(SongStoryActivity.this, storyList, R.layout.item_activity_sound);
 
                                         Bundle bundle = new Bundle();
                                         bundle.putSerializable("contentAdapter", contentAdapter);
@@ -547,7 +547,7 @@ public class UserActivitySound extends Activity {
                                     @Override
                                     public void onFailure(Call<ArrayList<SongStory>> call, Throwable t) {
                                         log(t);
-                                        Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                     }
                                 });
                             }
@@ -556,7 +556,7 @@ public class UserActivitySound extends Activity {
                         @Override
                         public void onFailure(Call<ArrayList<Check>> call, Throwable t) {
                             log(t);
-                            Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -591,7 +591,7 @@ public class UserActivitySound extends Activity {
                             content_isFinished = true;
                         }
 
-                        progressDialog = new ProgressDialog(UserActivitySound.this);
+                        progressDialog = new ProgressDialog(SongStoryActivity.this);
                         progressDialog.show();
                         progressDialog.getWindow().setBackgroundDrawable(new
                                 ColorDrawable(Color.TRANSPARENT));
@@ -648,7 +648,7 @@ public class UserActivitySound extends Activity {
             super.handleMessage(msg);
             Bundle bundle = msg.getData();
             rv_user_activity_sound.setAdapter((ContentAdapter) bundle.getSerializable("contentAdapter"));
-            rv_user_activity_sound.setLayoutManager(new LinearLayoutManager(UserActivitySound.this, LinearLayoutManager.VERTICAL, false));
+            rv_user_activity_sound.setLayoutManager(new LinearLayoutManager(SongStoryActivity.this, LinearLayoutManager.VERTICAL, false));
 
         }
     }
@@ -706,7 +706,7 @@ public class UserActivitySound extends Activity {
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                                     log(t);
-                                    Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                 }
                             });
                         } else {
@@ -725,7 +725,7 @@ public class UserActivitySound extends Activity {
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                                     log(t);
-                                    Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                 }
                             });
                         }
@@ -742,7 +742,7 @@ public class UserActivitySound extends Activity {
             switch (v.getId()) {
                 case R.id.ll_sound_story_total:
                 case R.id.ib_item_sound_story_comment:
-                    Intent intent = new Intent(UserActivitySound.this, SoundStoryDetail.class);
+                    Intent intent = new Intent(SongStoryActivity.this, SongStoryDetailActivity.class);
                     intent.putExtra("user_id", user_id);
                     intent.putExtra("user_email", user_email);
                     intent.putExtra("user_birth", user_birth);
@@ -834,16 +834,16 @@ public class UserActivitySound extends Activity {
                 @Override
                 public void onResponse(Call<ArrayList<SongStoryEmotionData>> call, Response<ArrayList<SongStoryEmotionData>> response) {
 
-                    emotionAdapter = new EmotionAdapter(response.body(), UserActivitySound.this, R.layout.item_emotion);
+                    emotionAdapter = new EmotionAdapter(response.body(), SongStoryActivity.this, R.layout.item_emotion);
                     holder.rv_song_story_emotion.setAdapter(emotionAdapter);
-                    holder.rv_song_story_emotion.setLayoutManager(new GridLayoutManager(UserActivitySound.this, 2));
+                    holder.rv_song_story_emotion.setLayoutManager(new GridLayoutManager(SongStoryActivity.this, 2));
 
                 }
 
                 @Override
                 public void onFailure(Call<ArrayList<SongStoryEmotionData>> call, Throwable t) {
                     log(t);
-                    Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -895,7 +895,7 @@ public class UserActivitySound extends Activity {
                 @Override
                 public void onFailure(Call<ArrayList<SongPhoto>> call, Throwable t) {
                     log(t);
-                    Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -911,7 +911,7 @@ public class UserActivitySound extends Activity {
                 @Override
                 public void onFailure(Call<ArrayList<LikeCount>> call, Throwable t) {
                     log(t);
-                    Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -927,7 +927,7 @@ public class UserActivitySound extends Activity {
                 @Override
                 public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
                     log(t);
-                    Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -952,7 +952,7 @@ public class UserActivitySound extends Activity {
                 @Override
                 public void onFailure(Call<ArrayList<Check>> call, Throwable t) {
                     log(t);
-                    Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -1030,7 +1030,7 @@ public class UserActivitySound extends Activity {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(UserActivitySound.this, SoundStoryDetail.class);
+                    Intent intent = new Intent(SongStoryActivity.this, SongStoryDetailActivity.class);
                     intent.putExtra("user_id", user_id);
                     intent.putExtra("user_name", user_name);
                     intent.putExtra("user_avatar", user_avatar);

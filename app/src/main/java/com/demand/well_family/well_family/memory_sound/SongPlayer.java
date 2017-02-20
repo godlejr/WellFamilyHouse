@@ -53,7 +53,7 @@ import retrofit2.Response;
  * Created by ㅇㅇ on 2017-01-31.
  */
 
-public class SoundPlayer extends Activity implements CompoundButton.OnCheckedChangeListener {
+public class SongPlayer extends Activity implements CompoundButton.OnCheckedChangeListener {
     private MediaPlayer mp;
     private SeekBar sb_sound;
     private Boolean isPlaying = false, isPaused = false;
@@ -100,7 +100,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
     private CommentAdapter commentAdapter;
     private ImageView iv_sound_player_album_bg;
 
-    private static final Logger logger = LoggerFactory.getLogger(SoundPlayer.class);
+    private static final Logger logger = LoggerFactory.getLogger(SongPlayer.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,7 +169,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
                         @Override
                         public void onFailure(Call<ArrayList<SongComment>> call, Throwable t) {
                             log(t);
-                            Toast.makeText(SoundPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SongPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -297,7 +297,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         log(t);
-                        Toast.makeText(SoundPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SongPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -312,7 +312,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         log(t);
-                        Toast.makeText(SoundPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SongPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -372,7 +372,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
             @Override
             public void onFailure(Call<ArrayList<LikeCount>> call, Throwable t) {
                 log(t);
-                Toast.makeText(SoundPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SongPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -397,7 +397,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
             @Override
             public void onFailure(Call<ArrayList<Check>> call, Throwable t) {
                 log(t);
-                Toast.makeText(SoundPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SongPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -414,7 +414,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
         iv_sound_player_record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), SoundRecordActivity.class);
+                Intent intent = new Intent(v.getContext(), SongRecordActivity.class);
                 intent.putExtra("user_id", user_id);
                 intent.putExtra("user_email", user_email);
                 intent.putExtra("user_birth", user_birth);
@@ -465,7 +465,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
             @Override
             public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
                 log(t);
-                Toast.makeText(SoundPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SongPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -480,15 +480,15 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
             @Override
             public void onResponse(Call<ArrayList<CommentInfo>> call, Response<ArrayList<CommentInfo>> response) {
                 commentInfoList = response.body();
-                commentAdapter = new CommentAdapter(SoundPlayer.this, commentInfoList, R.layout.item_comment);
-                rv_sound_player_comment.setLayoutManager(new LinearLayoutManager(SoundPlayer.this, LinearLayoutManager.VERTICAL, false));
+                commentAdapter = new CommentAdapter(SongPlayer.this, commentInfoList, R.layout.item_comment);
+                rv_sound_player_comment.setLayoutManager(new LinearLayoutManager(SongPlayer.this, LinearLayoutManager.VERTICAL, false));
                 rv_sound_player_comment.setAdapter(commentAdapter);
             }
 
             @Override
             public void onFailure(Call<ArrayList<CommentInfo>> call, Throwable t) {
                 log(t);
-                Toast.makeText(SoundPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SongPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
     }

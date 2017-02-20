@@ -43,7 +43,7 @@ import com.demand.well_family.well_family.dto.LikeCount;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
-import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
+import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 
 import org.slf4j.Logger;
@@ -66,7 +66,7 @@ import static com.demand.well_family.well_family.LoginActivity.finishList;
  * Created by Dev-0 on 2017-01-23.
  */
 
-public class DetailStoryActivity extends Activity implements CompoundButton.OnCheckedChangeListener {
+public class StoryDetailActivity extends Activity implements CompoundButton.OnCheckedChangeListener {
     private int user_id;
     private String user_name;
     private String user_avatar;
@@ -113,7 +113,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
     private DrawerLayout dl;
     private Server_Connection server_connection;
 
-    private static final Logger logger = LoggerFactory.getLogger(DetailStoryActivity.class);
+    private static final Logger logger = LoggerFactory.getLogger(StoryDetailActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +182,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
             public void onClick(View v) {
                 dl.closeDrawers();
 
-                Intent intent = new Intent(DetailStoryActivity.this, UserActivity.class);
+                Intent intent = new Intent(StoryDetailActivity.this, UserActivity.class);
                 //userinfo
                 intent.putExtra("story_user_id", user_id);
                 intent.putExtra("story_user_email", user_email);
@@ -242,7 +242,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
                 Intent intent;
                 switch (item.getItemId()) {
                     case R.id.menu_home:
-                        intent = new Intent(DetailStoryActivity.this, MainActivity.class);
+                        intent = new Intent(StoryDetailActivity.this, MainActivity.class);
                         intent.putExtra("user_id", user_id);
                         intent.putExtra("user_email", user_email);
                         intent.putExtra("user_birth", user_birth);
@@ -260,7 +260,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
                         break;
 
                     case R.id.menu_market:
-                        intent = new Intent(DetailStoryActivity.this, MarketMainActivity.class);
+                        intent = new Intent(StoryDetailActivity.this, MarketMainActivity.class);
                         intent.putExtra("user_id", user_id);
                         intent.putExtra("user_email", user_email);
                         intent.putExtra("user_birth", user_birth);
@@ -291,7 +291,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
                         editor.remove("user_level");
                         editor.commit();
 
-                        intent = new Intent(DetailStoryActivity.this, LoginActivity.class);
+                        intent = new Intent(StoryDetailActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                         break;
@@ -320,7 +320,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
                         break;
 
                     case R.id.menu_memory_sound:
-                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink = new Intent(getApplicationContext(), SongMainActivity.class);
                         startLink.putExtra("user_id", user_id);
                         startLink.putExtra("user_level", user_level);
                         startLink.putExtra("user_email", user_email);
@@ -377,7 +377,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
                         @Override
                         public void onFailure(Call<ArrayList<Comment>> call, Throwable t) {
                             log(t);
-                            Toast.makeText(DetailStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(StoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -401,7 +401,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
             @Override
             public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
                 log(t);
-                Toast.makeText(DetailStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(StoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -416,17 +416,17 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
             @Override
             public void onResponse(Call<ArrayList<CommentInfo>> call, Response<ArrayList<CommentInfo>> response) {
                 commentInfoList = response.body();
-                commentAdapter = new CommentAdapter(DetailStoryActivity.this, commentInfoList, R.layout.item_comment);
-                rv_story_comments.setLayoutManager(new LinearLayoutManager(DetailStoryActivity.this, LinearLayoutManager.VERTICAL, false));
+                commentAdapter = new CommentAdapter(StoryDetailActivity.this, commentInfoList, R.layout.item_comment);
+                rv_story_comments.setLayoutManager(new LinearLayoutManager(StoryDetailActivity.this, LinearLayoutManager.VERTICAL, false));
                 rv_story_comments.setAdapter(commentAdapter);
                 int spacing = getResources().getDimensionPixelSize(R.dimen.comment_divider_height);
-                rv_story_comments.addItemDecoration(new DetailStoryActivity.SpaceItemDecoration(spacing));
+                rv_story_comments.addItemDecoration(new StoryDetailActivity.SpaceItemDecoration(spacing));
             }
 
             @Override
             public void onFailure(Call<ArrayList<CommentInfo>> call, Throwable t) {
                 log(t);
-                Toast.makeText(DetailStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(StoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -506,16 +506,16 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
                 if (photoList.size() == 0) {
                     rv_content_detail.setVisibility(View.GONE);
                 } else {
-                    photoAdapter = new PhotoAdapter(DetailStoryActivity.this, photoList, R.layout.item_detail_photo);
+                    photoAdapter = new PhotoAdapter(StoryDetailActivity.this, photoList, R.layout.item_detail_photo);
                     rv_content_detail.setAdapter(photoAdapter);
-                    rv_content_detail.setLayoutManager(new LinearLayoutManager(DetailStoryActivity.this, LinearLayoutManager.VERTICAL, false));
+                    rv_content_detail.setLayoutManager(new LinearLayoutManager(StoryDetailActivity.this, LinearLayoutManager.VERTICAL, false));
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<Photo>> call, Throwable t) {
                 log(t);
-                Toast.makeText(DetailStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(StoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -584,7 +584,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
             @Override
             public void onFailure(Call<ArrayList<LikeCount>> call, Throwable t) {
                 log(t);
-                Toast.makeText(DetailStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(StoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -653,7 +653,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         log(t);
-                        Toast.makeText(DetailStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(StoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -673,7 +673,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         log(t);
-                        Toast.makeText(DetailStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(StoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
             }

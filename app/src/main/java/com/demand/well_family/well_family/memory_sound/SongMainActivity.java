@@ -59,12 +59,12 @@ import static com.demand.well_family.well_family.LoginActivity.finishList;
  * Created by ㅇㅇ on 2017-01-31.
  */
 
-public class SoundMainActivity extends Activity implements View.OnClickListener {
+public class SongMainActivity extends Activity implements View.OnClickListener {
     private RecyclerView rv_sound_famous_chart, rv_sound_category;
     private ImageButton ib_sound_chart, ib_sound_today;
     private TextView tv_sound_random_title, tv_sound_random_singer, tv_sound_random_comment_count;
     private ImageView iv_sound_random_avatar;
-    private static final Logger logger = LoggerFactory.getLogger(SoundMainActivity.class);
+    private static final Logger logger = LoggerFactory.getLogger(SongMainActivity.class);
 
     //user_info
     private int user_id;
@@ -149,20 +149,20 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
                             tv_sound_random_title.setText(random_title);
                             tv_sound_random_singer.setText(random_singer);
 
-                            Glide.with(SoundMainActivity.this).load(getString(R.string.cloud_front_songs_avatar) + random_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_random_avatar);
+                            Glide.with(SongMainActivity.this).load(getString(R.string.cloud_front_songs_avatar) + random_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_random_avatar);
 
                             ll_sound_random = (LinearLayout) findViewById(R.id.ll_sound_random);
                             ib_sound_today = (ImageButton) findViewById(R.id.ib_sound_today);
 
-                            ib_sound_today.setOnClickListener(SoundMainActivity.this);
-                            ll_sound_random.setOnClickListener(SoundMainActivity.this);
+                            ib_sound_today.setOnClickListener(SongMainActivity.this);
+                            ll_sound_random.setOnClickListener(SongMainActivity.this);
 
                         }
 
                         @Override
                         public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
                             log(t);
-                            Toast.makeText(SoundMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SongMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -171,7 +171,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
             @Override
             public void onFailure(Call<ArrayList<Song>> call, Throwable t) {
                 log(t);
-                Toast.makeText(SoundMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SongMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -209,7 +209,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
             @Override
             public void onClick(View v) {
                 dl.closeDrawers();
-                Intent intent = new Intent(SoundMainActivity.this, UserActivity.class);
+                Intent intent = new Intent(SongMainActivity.this, UserActivity.class);
                 //userinfo
                 intent.putExtra("story_user_id", user_id);
                 intent.putExtra("story_user_email", user_email);
@@ -269,7 +269,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
                 Intent intent;
                 switch (item.getItemId()) {
                     case R.id.menu_home:
-                        intent = new Intent(SoundMainActivity.this, MainActivity.class);
+                        intent = new Intent(SongMainActivity.this, MainActivity.class);
                         intent.putExtra("user_id", user_id);
                         intent.putExtra("user_email", user_email);
                         intent.putExtra("user_birth", user_birth);
@@ -288,7 +288,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
                         break;
 
                     case R.id.menu_market:
-                        intent = new Intent(SoundMainActivity.this, MarketMainActivity.class);
+                        intent = new Intent(SongMainActivity.this, MarketMainActivity.class);
                         intent.putExtra("user_id", user_id);
                         intent.putExtra("user_email", user_email);
                         intent.putExtra("user_birth", user_birth);
@@ -320,7 +320,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
                         editor.remove("user_level");
                         editor.commit();
 
-                        intent = new Intent(SoundMainActivity.this, LoginActivity.class);
+                        intent = new Intent(SongMainActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                         break;
@@ -376,11 +376,11 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         log(t);
-                        Toast.makeText(SoundMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SongMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
 
-                Intent intent = new Intent(SoundMainActivity.this, SoundPlayer.class);
+                Intent intent = new Intent(SongMainActivity.this, SongPlayer.class);
                 //user info
                 intent.putExtra("user_id", user_id);
                 intent.putExtra("user_email", user_email);
@@ -431,11 +431,11 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                             log(t);
-                            Toast.makeText(SoundMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SongMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
 
-                    Intent intent = new Intent(SoundMainActivity.this, SoundPlayer.class);
+                    Intent intent = new Intent(SongMainActivity.this, SongPlayer.class);
                     //user info
                     intent.putExtra("user_id", user_id);
                     intent.putExtra("user_email", user_email);
@@ -502,8 +502,8 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
             public void onResponse(Call<ArrayList<Song>> call, Response<ArrayList<Song>> response) {
                 songList = response.body();
                 rv_sound_famous_chart = (RecyclerView) findViewById(R.id.rv_sound_famous_chart);
-                rv_sound_famous_chart.setAdapter(new ChartAdapter(SoundMainActivity.this, songList, R.layout.sound_item_chart));
-                rv_sound_famous_chart.setLayoutManager(new LinearLayoutManager(SoundMainActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                rv_sound_famous_chart.setAdapter(new ChartAdapter(SongMainActivity.this, songList, R.layout.sound_item_chart));
+                rv_sound_famous_chart.setLayoutManager(new LinearLayoutManager(SongMainActivity.this, LinearLayoutManager.HORIZONTAL, false));
                 rv_sound_famous_chart.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin) / 2));
 
                 final ArrayList<Song> IntentSongList = songList;
@@ -513,7 +513,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
                     public void onClick(View v) {
                         // 인기 추억 사운드
 
-                        Intent intent = new Intent(SoundMainActivity.this, SoundChartListActivity.class);
+                        Intent intent = new Intent(SongMainActivity.this, SongChartListActivity.class);
                         intent.putExtra("user_id", user_id);
                         intent.putExtra("user_email", user_email);
                         intent.putExtra("user_birth", user_birth);
@@ -531,7 +531,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
             @Override
             public void onFailure(Call<ArrayList<Song>> call, Throwable t) {
                 log(t);
-                Toast.makeText(SoundMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SongMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -551,7 +551,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
                 @Override
                 public void onClick(View v) {
 
-                    Intent intent = new Intent(SoundMainActivity.this, SoundCategoryListActivity.class);
+                    Intent intent = new Intent(SongMainActivity.this, SongCategoryListActivity.class);
                     //user info
                     intent.putExtra("user_id", user_id);
                     intent.putExtra("user_email", user_email);
@@ -610,16 +610,16 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
             public void onResponse(Call<ArrayList<SongCategory>> call, Response<ArrayList<SongCategory>> response) {
                 songCategoryList = response.body();
                 rv_sound_category = (RecyclerView) findViewById(R.id.rv_sound_category);
-                rv_sound_category.setAdapter(new CategoryAdapter(SoundMainActivity.this, songCategoryList, R.layout.sound_item_category));
-                rv_sound_category.setLayoutManager(new LinearLayoutManager(SoundMainActivity.this, LinearLayoutManager.VERTICAL, false));
-                rv_sound_category.setLayoutManager(new GridLayoutManager(SoundMainActivity.this, 3));
+                rv_sound_category.setAdapter(new CategoryAdapter(SongMainActivity.this, songCategoryList, R.layout.sound_item_category));
+                rv_sound_category.setLayoutManager(new LinearLayoutManager(SongMainActivity.this, LinearLayoutManager.VERTICAL, false));
+                rv_sound_category.setLayoutManager(new GridLayoutManager(SongMainActivity.this, 3));
                 rv_sound_category.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin) / 2)); // horizontal spacing
             }
 
             @Override
             public void onFailure(Call<ArrayList<SongCategory>> call, Throwable t) {
                 log(t);
-                Toast.makeText(SoundMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(SongMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
     }

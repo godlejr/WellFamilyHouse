@@ -50,7 +50,7 @@ import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
-import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
+import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.photos.PhotosActivity;
 import com.demand.well_family.well_family.search.SearchUserActivity;
 import com.demand.well_family.well_family.users.UserActivity;
@@ -82,7 +82,7 @@ public class FamilyActivity extends Activity {
     private ImageView iv_family_avatar;
     private TextView tv_family_content;
     private RecyclerView rv_family_users;
-    private Button btn_family_photos, btn_family_write;
+    private Button btn_family_photos;
     private RecyclerView rv_family_content;
 
     //family_info
@@ -329,7 +329,7 @@ public class FamilyActivity extends Activity {
                         break;
 
                     case R.id.menu_memory_sound:
-                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink = new Intent(getApplicationContext(), SongMainActivity.class);
                         startLink.putExtra("user_id", user_id);
                         startLink.putExtra("user_level", user_level);
                         startLink.putExtra("user_email", user_email);
@@ -678,7 +678,7 @@ public class FamilyActivity extends Activity {
                 case R.id.ll_item_main_story_like_comment_info:
                 case R.id.story_images_container:
                 case R.id.btn_item_main_story_comment:
-                    Intent intent = new Intent(FamilyActivity.this, DetailStoryActivity.class);
+                    Intent intent = new Intent(FamilyActivity.this, StoryDetailActivity.class);
                     intent.putExtra("user_id", user_id);
                     intent.putExtra("user_email", user_email);
                     intent.putExtra("user_birth", user_birth);
@@ -916,7 +916,7 @@ public class FamilyActivity extends Activity {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(FamilyActivity.this, DetailStoryActivity.class);
+                    Intent intent = new Intent(FamilyActivity.this, StoryDetailActivity.class);
                     intent.putExtra("user_id", user_id);
                     intent.putExtra("user_email", user_email);
                     intent.putExtra("user_birth", user_birth);

@@ -50,18 +50,17 @@ import retrofit2.Response;
 
 import static com.demand.well_family.well_family.LoginActivity.finishList;
 
+
 /**
  * Created by Dev-0 on 2017-02-01.
  */
 
-public class SoundCategoryListActivity extends Activity {
+public class SongChartListActivity extends Activity {
+    private RecyclerView rv_song_list;
     private TextView toolbar_title;
-    private int category_id;
-    private String category_name;
 
     private Server_Connection server_connection;
     private ArrayList<Song> songList;
-    private RecyclerView rv_song_list;
 
     //user_info
     private int user_id;
@@ -75,27 +74,25 @@ public class SoundCategoryListActivity extends Activity {
     //toolbar
     private DrawerLayout dl;
 
-    private static final Logger logger = LoggerFactory.getLogger(SoundCategoryListActivity.class);
+    private static final Logger logger = LoggerFactory.getLogger(SongRecordActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
-        user_id = getIntent().getIntExtra("user_id",0);
+
+        user_id = getIntent().getIntExtra("user_id", 0);
         user_name = getIntent().getStringExtra("user_name");
-        user_level = getIntent().getIntExtra("user_level",0);
+        user_level = getIntent().getIntExtra("user_level", 0);
         user_avatar = getIntent().getStringExtra("user_avatar");
         user_email = getIntent().getStringExtra("user_email");
         user_phone = getIntent().getStringExtra("user_phone");
         user_birth = getIntent().getStringExtra("user_birth");
 
-        category_id = getIntent().getIntExtra("category_id",0);
-        category_name = getIntent().getStringExtra("category_name");
-
         finishList.add(this);
 
         init();
-        getSongsData();
+        getSongList();
         setToolbar(this.getWindow().getDecorView(), this, "추억소리");
     }
 
@@ -126,13 +123,13 @@ public class SoundCategoryListActivity extends Activity {
 
         // header
         View nv_header_view = nv.getHeaderView(0);
-        LinearLayout ll_menu_mypage = (LinearLayout)nv_header_view.findViewById(R.id.ll_menu_mypage);
+        LinearLayout ll_menu_mypage = (LinearLayout) nv_header_view.findViewById(R.id.ll_menu_mypage);
         ll_menu_mypage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dl.closeDrawers();
 
-                Intent intent = new Intent(SoundCategoryListActivity.this, UserActivity.class);
+                Intent intent = new Intent(SongChartListActivity.this, UserActivity.class);
                 //userinfo
                 intent.putExtra("story_user_id", user_id);
                 intent.putExtra("story_user_email", user_email);
@@ -154,7 +151,6 @@ public class SoundCategoryListActivity extends Activity {
 
             }
         });
-
         TextView tv_menu_name = (TextView) nv_header_view.findViewById(R.id.tv_menu_name);
         tv_menu_name.setText(user_name);
 
@@ -194,7 +190,7 @@ public class SoundCategoryListActivity extends Activity {
                 Intent intent;
                 switch (item.getItemId()) {
                     case R.id.menu_home:
-                        intent  = new Intent(SoundCategoryListActivity.this, MainActivity.class);
+                        intent = new Intent(SongChartListActivity.this, MainActivity.class);
                         intent.putExtra("user_id", user_id);
                         intent.putExtra("user_email", user_email);
                         intent.putExtra("user_birth", user_birth);
@@ -213,7 +209,7 @@ public class SoundCategoryListActivity extends Activity {
                         break;
 
                     case R.id.menu_market:
-                        intent = new Intent(SoundCategoryListActivity.this, MarketMainActivity.class);
+                        intent = new Intent(SongChartListActivity.this, MarketMainActivity.class);
                         intent.putExtra("user_id", user_id);
                         intent.putExtra("user_email", user_email);
                         intent.putExtra("user_birth", user_birth);
@@ -245,7 +241,7 @@ public class SoundCategoryListActivity extends Activity {
                         editor.remove("user_level");
                         editor.commit();
 
-                        intent = new Intent(SoundCategoryListActivity.this, LoginActivity.class);
+                        intent = new Intent(SongChartListActivity.this, LoginActivity.class);
                         startActivity(intent);
                         finish();
                         break;
@@ -274,8 +270,8 @@ public class SoundCategoryListActivity extends Activity {
                         break;
 
                     case R.id.menu_memory_sound:
-                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
-                        startLink.putExtra("user_id",user_id);
+                        startLink = new Intent(getApplicationContext(), SongMainActivity.class);
+                        startLink.putExtra("user_id", user_id);
                         startLink.putExtra("user_level", user_level);
                         startLink.putExtra("user_email", user_email);
                         startLink.putExtra("user_phone", user_phone);
@@ -289,18 +285,19 @@ public class SoundCategoryListActivity extends Activity {
             }
         });
     }
-    private void setBack(){
+
+    private void setBack() {
         finish();
     }
 
     private class SongViewHolder extends RecyclerView.ViewHolder {
-        private LinearLayout ll_item_song;
+        private final LinearLayout ll_item_song;
         private ImageView iv_item_song_avatar;
         private TextView tv_item_song_title, tv_item_song_singer;
 
         public SongViewHolder(View itemView) {
             super(itemView);
-            ll_item_song =(LinearLayout)itemView.findViewById(R.id.ll_item_song);
+            ll_item_song = (LinearLayout) itemView.findViewById(R.id.ll_item_song);
             iv_item_song_avatar = (ImageView) itemView.findViewById(R.id.iv_item_song_avatar);
             tv_item_song_title = (TextView) itemView.findViewById(R.id.tv_item_song_title);
             tv_item_song_singer = (TextView) itemView.findViewById(R.id.tv_item_song_singer);
@@ -313,38 +310,36 @@ public class SoundCategoryListActivity extends Activity {
                     call_insert_song_hit.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            //scess
+                            Intent intent = new Intent(SongChartListActivity.this, SongPlayer.class);
+                            //user info
+                            intent.putExtra("user_id", user_id);
+                            intent.putExtra("user_email", user_email);
+                            intent.putExtra("user_birth", user_birth);
+                            intent.putExtra("user_phone", user_phone);
+                            intent.putExtra("user_name", user_name);
+                            intent.putExtra("user_level", user_level);
+                            intent.putExtra("user_avatar", user_avatar);
+
+                            //song info
+                            intent.putExtra("song_id", songList.get(getAdapterPosition()).getId());
+                            intent.putExtra("song_name", songList.get(getAdapterPosition()).getName());
+                            intent.putExtra("song_ext", songList.get(getAdapterPosition()).getExt());
+                            intent.putExtra("song_title", songList.get(getAdapterPosition()).getTitle());
+                            intent.putExtra("song_singer", songList.get(getAdapterPosition()).getSinger());
+                            intent.putExtra("song_avatar", songList.get(getAdapterPosition()).getAvatar());
+                            intent.putExtra("song_category_id", songList.get(getAdapterPosition()).getCategory_id());
+                            intent.putExtra("song_created_at", songList.get(getAdapterPosition()).getCreated_at());
+
+                            startActivity(intent);
                         }
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                             log(t);
-                            Toast.makeText(SoundCategoryListActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(SongChartListActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
 
-
-                    Intent intent = new Intent(SoundCategoryListActivity.this, SoundPlayer.class);
-                    //user info
-                    intent.putExtra("user_id", user_id);
-                    intent.putExtra("user_email", user_email);
-                    intent.putExtra("user_birth", user_birth);
-                    intent.putExtra("user_phone", user_phone);
-                    intent.putExtra("user_name", user_name);
-                    intent.putExtra("user_level", user_level);
-                    intent.putExtra("user_avatar", user_avatar);
-
-                    //song info
-                    intent.putExtra("song_id", songList.get(getAdapterPosition()).getId());
-                    intent.putExtra("song_name", songList.get(getAdapterPosition()).getName());
-                    intent.putExtra("song_ext", songList.get(getAdapterPosition()).getExt());
-                    intent.putExtra("song_title", songList.get(getAdapterPosition()).getTitle());
-                    intent.putExtra("song_singer", songList.get(getAdapterPosition()).getSinger());
-                    intent.putExtra("song_avatar", songList.get(getAdapterPosition()).getAvatar());
-                    intent.putExtra("song_category_id", songList.get(getAdapterPosition()).getCategory_id());
-                    intent.putExtra("song_created_at", songList.get(getAdapterPosition()).getCreated_at());
-
-                    startActivity(intent);
 
                 }
             });
@@ -369,7 +364,6 @@ public class SoundCategoryListActivity extends Activity {
             return songViewHolder;
         }
 
-
         @Override
         public void onBindViewHolder(SongViewHolder holder, int position) {
             Glide.with(context).load(getString(R.string.cloud_front_songs_avatar) + songList.get(position).getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_item_song_avatar);
@@ -383,30 +377,17 @@ public class SoundCategoryListActivity extends Activity {
         }
     }
 
-    private void getSongsData() {
+    private void getSongList() {
         rv_song_list = (RecyclerView) findViewById(R.id.rv_song_list);
+        songList = (ArrayList<Song>) getIntent().getSerializableExtra("songList");
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<Song>> call_song_list_by_Category = server_connection.song_list_by_Category(category_id);
-        call_song_list_by_Category.enqueue(new Callback<ArrayList<Song>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Song>> call, Response<ArrayList<Song>> response) {
-                songList = response.body();
-                rv_song_list.setAdapter(new SongAdapter(SoundCategoryListActivity.this, songList, R.layout.item_song));
-                rv_song_list.setLayoutManager(new LinearLayoutManager(SoundCategoryListActivity.this, LinearLayoutManager.VERTICAL, false));
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<Song>> call, Throwable t) {
-                log(t);
-                Toast.makeText(SoundCategoryListActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-            }
-        });
+        rv_song_list.setAdapter(new SongAdapter(this, songList, R.layout.item_song));
+        rv_song_list.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
 
     private void init() {
         toolbar_title = (TextView) findViewById(R.id.toolbar_title);
-        toolbar_title.setText(category_name);
+        toolbar_title.setText("인기 추억 사운드");
     }
 
     private static void log(Throwable throwable){
@@ -424,3 +405,4 @@ public class SoundCategoryListActivity extends Activity {
         }
     }
 }
+

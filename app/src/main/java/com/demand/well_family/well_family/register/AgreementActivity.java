@@ -20,9 +20,9 @@ import com.demand.well_family.well_family.R;
  */
 
 public class AgreementActivity extends AppCompatActivity {
-    int f = 0;
-    Button btn_join;
-    CheckBox cb_agree_all, cb_agree1, cb_agree2;
+    private Boolean check_flag = false;
+    private Button btn_join;
+    private CheckBox cb_agree_all, cb_agree1, cb_agree2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class AgreementActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!cb_agree_all.isChecked()) {
-                    if (f == 1) {
+                    if (check_flag) {
                         cb_agree1.setChecked(false);
                         cb_agree2.setChecked(false);
                     }
@@ -69,8 +69,7 @@ public class AgreementActivity extends AppCompatActivity {
                     cb_agree1.setChecked(true);
                     cb_agree2.setChecked(true);
                 }
-
-                f = 1;
+                check_flag = !check_flag;
             }
         });
 
@@ -79,8 +78,8 @@ public class AgreementActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (cb_agree1.isChecked() && cb_agree2.isChecked()) {
                     cb_agree_all.setChecked(true);
-                } else if(!cb_agree2.isChecked() || !cb_agree1.isChecked()){
-                    f=0;
+                } else if (!cb_agree2.isChecked() || !cb_agree1.isChecked()) {
+                    check_flag = !check_flag;
                     cb_agree_all.setChecked(false);
                 }
             }
@@ -106,6 +105,7 @@ public class AgreementActivity extends AppCompatActivity {
         toolbar_title.setText("약관 동의");
 
     }
+
     public void setBack() {
         finish();
     }

@@ -155,9 +155,9 @@ public class SearchUserActivity extends Activity {
         Intent intent = new Intent(SearchUserActivity.this, FamilyActivity.class);
 
         //family info
-        intent.putExtra("family_id",family_id);
+        intent.putExtra("family_id", family_id);
         intent.putExtra("family_name", family_name);
-        intent.putExtra("family_content",family_content );
+        intent.putExtra("family_content", family_content);
         intent.putExtra("family_avatar", family_avatar);
         intent.putExtra("family_user_id", family_user_id);
         intent.putExtra("family_created_at", family_created_at);
@@ -196,7 +196,7 @@ public class SearchUserActivity extends Activity {
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.tv_search_user_name:
                 case R.id.iv_search_user_avatar:
                     Intent intent = new Intent(SearchUserActivity.this, UserActivity.class);
@@ -246,10 +246,11 @@ public class SearchUserActivity extends Activity {
             holder.tv_search_user_name.setText(userList.get(position).getName());
             holder.tv_search_user_birth.setText(userList.get(position).getBirth());
 
+
             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
             HashMap<String, String> map = new HashMap<>();
             map.put("user_id", String.valueOf(user_id));
-            map.put("family_id",String.valueOf(family_id));
+            map.put("family_id", String.valueOf(family_id));
 
             Call<ArrayList<Check>> call_family_check = server_connection.family_user_check(userList.get(position).getId(), map);
             call_family_check.enqueue(new Callback<ArrayList<Check>>() {
@@ -257,7 +258,35 @@ public class SearchUserActivity extends Activity {
                 public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {
                     if (response.body().get(0).getChecked() > 0) {
                         //family
+                        holder.btn_search_user.setText("가족 취소");
+                        holder.btn_search_user.setTextColor(Color.parseColor("#999999"));
+                        holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray);
+                        holder.btn_search_user.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                                HashMap<String, String> map = new HashMap<>();
+                                map.put("user_id", String.valueOf(userList.get(position).getId()));
+                                Call<ResponseBody> call_invite = server_connection.delete_user_from_family(family_id, map);
+                                call_invite.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        Toast.makeText(SearchUserActivity.this, userList.get(position).getName() + "님이 가족에서 탈퇴되었습니다.", Toast.LENGTH_LONG).show();
+                                        userAdapter.notifyItemChanged(position);
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        log(t);
+                                        Toast.makeText(SearchUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        });
+
+                    } else {
                         if (user_id == userList.get(position).getId()) {
+                            //Me
                             holder.btn_search_user.setText("나");
                             holder.btn_search_user.setTextColor(Color.parseColor("#542920"));
                             holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray);
@@ -268,21 +297,22 @@ public class SearchUserActivity extends Activity {
 
                                 }
                             });
-                        } else {
-                            holder.btn_search_user.setText("가족 취소");
-                            holder.btn_search_user.setTextColor(Color.parseColor("#999999"));
-                            holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray);
+                        }else {
+                            //public
+                            holder.btn_search_user.setText("초대하기");
+                            holder.btn_search_user.setTextColor(Color.parseColor("#542920"));
+                            holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_brown);
                             holder.btn_search_user.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                                     HashMap<String, String> map = new HashMap<>();
                                     map.put("user_id", String.valueOf(userList.get(position).getId()));
-                                    Call<ResponseBody> call_invite = server_connection.delete_user_from_family(family_id, map);
+                                    Call<ResponseBody> call_invite = server_connection.insert_user_into_family(family_id, map);
                                     call_invite.enqueue(new Callback<ResponseBody>() {
                                         @Override
                                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            Toast.makeText(SearchUserActivity.this, userList.get(position).getName() + "님이 가족에서 탈퇴되었습니다.", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(SearchUserActivity.this, userList.get(position).getName() + "님이 가족이 되었습니다.", Toast.LENGTH_LONG).show();
                                             userAdapter.notifyItemChanged(position);
                                         }
 
@@ -295,33 +325,6 @@ public class SearchUserActivity extends Activity {
                                 }
                             });
                         }
-                    } else {
-                        //public
-                        holder.btn_search_user.setText("초대하기");
-                        holder.btn_search_user.setTextColor(Color.parseColor("#542920"));
-                        holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_brown);
-                        holder.btn_search_user.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                HashMap<String, String> map = new HashMap<>();
-                                map.put("user_id", String.valueOf(userList.get(position).getId()));
-                                Call<ResponseBody> call_invite = server_connection.insert_user_into_family(family_id, map);
-                                call_invite.enqueue(new Callback<ResponseBody>() {
-                                    @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        Toast.makeText(SearchUserActivity.this, userList.get(position).getName() + "님이 가족이 되었습니다.", Toast.LENGTH_LONG).show();
-                                        userAdapter.notifyItemChanged(position);
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                        log(t);
-                                        Toast.makeText(SearchUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
-                        });
                     }
                 }
 
@@ -346,9 +349,9 @@ public class SearchUserActivity extends Activity {
         Intent intent = new Intent(SearchUserActivity.this, FamilyActivity.class);
 
         //family info
-        intent.putExtra("family_id",family_id);
+        intent.putExtra("family_id", family_id);
         intent.putExtra("family_name", family_name);
-        intent.putExtra("family_content",family_content );
+        intent.putExtra("family_content", family_content);
         intent.putExtra("family_avatar", family_avatar);
         intent.putExtra("family_user_id", family_user_id);
         intent.putExtra("family_created_at", family_created_at);
@@ -366,17 +369,17 @@ public class SearchUserActivity extends Activity {
         super.onBackPressed();
     }
 
-    private static void log(Throwable throwable){
-        StackTraceElement[] ste =  throwable.getStackTrace();
+    private static void log(Throwable throwable) {
+        StackTraceElement[] ste = throwable.getStackTrace();
         String className = ste[0].getClassName();
         String methodName = ste[0].getMethodName();
         int lineNumber = ste[0].getLineNumber();
         String fileName = ste[0].getFileName();
 
-        if(LogFlag.printFlag){
-            if(logger.isInfoEnabled()){
+        if (LogFlag.printFlag) {
+            if (logger.isInfoEnabled()) {
                 logger.info("Exception: " + throwable.getMessage());
-                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+                logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
             }
         }
     }

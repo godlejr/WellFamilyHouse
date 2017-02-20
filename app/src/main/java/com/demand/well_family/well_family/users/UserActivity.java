@@ -29,7 +29,7 @@ import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Check;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
-import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
+import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -292,7 +292,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
                         break;
 
                     case R.id.menu_memory_sound:
-                        startLink = new Intent(getApplicationContext(), SoundMainActivity.class);
+                        startLink = new Intent(getApplicationContext(), SongMainActivity.class);
                         startLink.putExtra("user_id", getIntent().getStringExtra("user_id"));
                         startLink.putExtra("user_level", getIntent().getStringExtra("user_level"));
                         startLink.putExtra("user_email", getIntent().getStringExtra("user_email"));
@@ -384,7 +384,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
         ll_memory_sound_story_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UserActivity.this, UserActivitySound.class);
+                Intent intent = new Intent(UserActivity.this, SongStoryActivity.class);
                 //story user info
                 intent.putExtra("story_user_id", story_user_id);
                 intent.putExtra("story_user_email", story_user_email);

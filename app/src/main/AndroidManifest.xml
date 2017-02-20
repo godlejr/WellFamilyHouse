@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".family.DetailStoryActivity" />
+        <activity android:name=".family.StoryDetailActivity" />
         <activity android:name=".photos.PhotosActivity" />
         <activity
             android:name=".photos.PhotoPopupActivity"
@@ -42,14 +42,14 @@
         <activity android:name=".WriteActivity"
             android:configChanges="keyboardHidden|orientation"/>
 
-        <activity android:name=".memory_sound.SoundMainActivity"/>
-        <activity android:name=".memory_sound.SoundChartListActivity"/>
-        <activity android:name=".memory_sound.SoundCategoryListActivity"/>
-        <activity android:name=".memory_sound.SoundPlayer"
+        <activity android:name=".memory_sound.SongMainActivity"/>
+        <activity android:name=".memory_sound.SongChartListActivity"/>
+        <activity android:name=".memory_sound.SongCategoryListActivity"/>
+        <activity android:name=".memory_sound.SongPlayer"
             android:theme="@style/Theme.AppCompat.Dialog"/>
-        <activity android:name=".users.UserActivitySound"/>
-        <activity android:name=".memory_sound.SoundRecordActivity"/>
-        <activity android:name=".users.SoundStoryDetail"/>
+        <activity android:name=".users.SongStoryActivity"/>
+        <activity android:name=".memory_sound.SongRecordActivity"/>
+        <activity android:name=".users.SongStoryDetailActivity"/>
         <activity android:name=".market.MarketMainActivity"/>
         <activity android:name=".create_family.CreateFamilyActivity"
             android:theme="@style/Theme.AppCompat.Dialog"
