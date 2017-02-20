@@ -154,13 +154,13 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
                     map.put("content", content);
 
                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ArrayList<SongComment>> call_insert_Song_comment = server_connection.insert_song_comment(String.valueOf(song_id), map);
+                    Call<ArrayList<SongComment>> call_insert_Song_comment = server_connection.insert_song_comment(song_id, map);
                     call_insert_Song_comment.enqueue(new Callback<ArrayList<SongComment>>() {
                         @Override
                         public void onResponse(Call<ArrayList<SongComment>> call, Response<ArrayList<SongComment>> response) {
-
                             int comment_id = response.body().get(0).getId();
                             String created_at = response.body().get(0).getCreated_at();
+
                             commentInfoList.add(new CommentInfo(comment_id, user_id, user_name, user_avatar, content, created_at));
                             commentAdapter.notifyItemInserted(commentInfoList.size() - 1);
                             getCommentCount();
@@ -185,10 +185,8 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
             mp.setDataSource(getString(R.string.cloud_front_songs_file) + song_name + "." + song_ext);
             mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
-                public void onPrepared(MediaPlayer mp) {
-                    final MediaPlayer mediaPlayer = mp;
-
-                    sb_sound.setProgress(0); // 시작점
+                public void onPrepared(final MediaPlayer mp) {
+                    sb_sound.setProgress(0);
                     sb_sound.setMax(mp.getDuration());
 
                     endMinute = mp.getDuration() / 60000;
@@ -200,35 +198,32 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
                     }
 
                     tv_sound_player_end.setText(String.format("%02d:%02d", endMinute, endSecond));
-
-
                     mp.start();
-
                     new SeekBarThread().start();
                     isPlaying = true;
 
                     iv_sound_player_start.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (mediaPlayer != null) {
+                            if (mp != null) {
                                 if (isPlaying) {
                                     // 재생중 -> 일시정지
-                                    pausePos = mediaPlayer.getCurrentPosition();
-                                    mediaPlayer.pause();
+                                    pausePos = mp.getCurrentPosition();
+                                    mp.pause();
 
                                     isPlaying = false;
                                     isPaused = true;
-
                                     iv_sound_player_start.setImageResource(R.drawable.play_player);
                                 } else {
                                     if (isPaused) {  // 일시정지 -> 재생
-                                        mediaPlayer.seekTo(pausePos);
-                                        mediaPlayer.start();
+                                        mp.seekTo(pausePos);
+                                        mp.start();
                                         new SeekBarThread().start();
                                     } else {
-                                        mediaPlayer.reset();
+                                        mp.reset();
                                         player();
                                     }
+
                                     isPlaying = true;
                                     isPaused = false;
                                     iv_sound_player_start.setImageResource(R.drawable.pause_player);
@@ -238,10 +233,10 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
                     });
                 }
             });
+
             mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-
                     isPlaying = false;
                     iv_sound_player_start.setImageResource(R.drawable.play_player);
                     sb_sound.setProgress(0);
@@ -279,8 +274,9 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
                     m++;
                     s = 0;
                 }
+
                 tv_sound_player_start.setText(String.format("%02d:%02d", m, s));
-                pausePos = seekBar.getProgress(); // 사용자가 움직여놓은 위치
+                pausePos = seekBar.getProgress();
             }
         });
 
@@ -293,7 +289,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
         if (first_checked) {
             if (isChecked) {
-                Call<ResponseBody> call_song_like_up = server_connection.song_like_up(String.valueOf(song_id), map);
+                Call<ResponseBody> call_song_like_up = server_connection.song_like_up(song_id, map);
                 call_song_like_up.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -307,7 +303,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
                 });
 
             } else {
-                Call<ResponseBody> call_song_like_down = server_connection.song_like_down(String.valueOf(song_id), map);
+                Call<ResponseBody> call_song_like_down = server_connection.song_like_down(song_id, map);
                 call_song_like_down.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -365,7 +361,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
 
         //like
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<LikeCount>> call_song_like_count = server_connection.song_like_Count(String.valueOf(song_id));
+        Call<ArrayList<LikeCount>> call_song_like_count = server_connection.song_like_Count(song_id);
         call_song_like_count.enqueue(new Callback<ArrayList<LikeCount>>() {
             @Override
             public void onResponse(Call<ArrayList<LikeCount>> call, Response<ArrayList<LikeCount>> response) {
@@ -384,7 +380,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
         HashMap<String, String> map = new HashMap<>();
         map.put("user_id", String.valueOf(user_id));
-        Call<ArrayList<Check>> call_song_like_check = server_connection.song_like_check(String.valueOf(song_id), map);
+        Call<ArrayList<Check>> call_song_like_check = server_connection.song_like_check(song_id, map);
         call_song_like_check.enqueue(new Callback<ArrayList<Check>>() {
             @Override
             public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {
@@ -404,7 +400,6 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
         });
 
         cb_sound_player_like.setOnCheckedChangeListener(this);
-
 
         sb_sound = (SeekBar) findViewById(R.id.sb_sound);
         iv_sound_player_start = (ImageView) findViewById(R.id.iv_sound_player_start);
@@ -453,13 +448,11 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
         });
 
         iv_sound_player_start.bringToFront();
-
-
     }
 
     private void getCommentCount() {
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<CommentCount>> call_song_comment_count = server_connection.song_comment_count(String.valueOf(song_id));
+        Call<ArrayList<CommentCount>> call_song_comment_count = server_connection.song_comment_count(song_id);
         call_song_comment_count.enqueue(new Callback<ArrayList<CommentCount>>() {
             @Override
             public void onResponse(Call<ArrayList<CommentCount>> call, Response<ArrayList<CommentCount>> response) {
@@ -470,7 +463,6 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
             @Override
             public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
                 Toast.makeText(SoundPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-
             }
         });
 
@@ -480,7 +472,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
         rv_sound_player_comment = (RecyclerView) findViewById(R.id.rv_sound_player_comment);
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<CommentInfo>> call_song_comment_List = server_connection.song_comment_List(String.valueOf(song_id));
+        Call<ArrayList<CommentInfo>> call_song_comment_List = server_connection.song_comment_List(song_id);
         call_song_comment_List.enqueue(new Callback<ArrayList<CommentInfo>>() {
             @Override
             public void onResponse(Call<ArrayList<CommentInfo>> call, Response<ArrayList<CommentInfo>> response) {
@@ -537,8 +529,6 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
             holder.tv_item_comment_name.setText(commentInfoList.get(position).getUser_name());
             holder.tv_item_comment_content.setText(commentInfoList.get(position).getContent());
             holder.tv_item_comment_date.setText(calculateTime(commentInfoList.get(position).getCreated_at()));
-
-
         }
 
         @Override
@@ -564,18 +554,13 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
         String msg = null;
 
         if (diffTime < 60) {
-            // sec
             msg = diffTime + "초전";
         } else if ((diffTime /= 60) < 60) {
-            // min
             System.out.println(diffTime);
-
             msg = diffTime + "분전";
         } else if ((diffTime /= 60) < 24) {
-            // hour
             msg = (diffTime) + "시간전";
         } else if ((diffTime /= 24) < 7) {
-            // day
             msg = (diffTime) + "일전";
         } else {
             SimpleDateFormat sdf = new SimpleDateFormat("yy.M.d aa h:mm");

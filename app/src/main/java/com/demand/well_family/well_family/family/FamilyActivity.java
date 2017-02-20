@@ -129,7 +129,6 @@ public class FamilyActivity extends Activity {
     private Message msg;
     private ImageView iv_family_writer_avatar;
 
-    private View dialogView;
     private Server_Connection server_connection;
     private LinearLayout ll_user_add_exist;
     private ContentAddHandler contentAddHandler;
@@ -170,7 +169,6 @@ public class FamilyActivity extends Activity {
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 함수 호출
                 setBack();
             }
         });
@@ -200,8 +198,7 @@ public class FamilyActivity extends Activity {
                 intent.putExtra("story_user_avatar", user_avatar);
 
                 intent.putExtra("user_id", user_id);
-                intent.putExtra("user_" +
-                        "name", user_name);
+                intent.putExtra("user_name", user_name);
                 intent.putExtra("user_avatar", user_avatar);
                 intent.putExtra("user_email", user_email);
                 intent.putExtra("user_birth", user_birth);
@@ -226,8 +223,6 @@ public class FamilyActivity extends Activity {
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
-        Log.e("ttttt5", view + "");
-
         Glide.with(context).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_menu_avatar);
 
         // menu
@@ -384,16 +379,17 @@ public class FamilyActivity extends Activity {
             public void run() {
                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
 
-                Call<ArrayList<StoryInfo>> call = server_connection.family_content_List(String.valueOf(family_id));
+                Call<ArrayList<StoryInfo>> call = server_connection.family_content_List(family_id);
                 call.enqueue(new Callback<ArrayList<StoryInfo>>() {
                     @Override
                     public void onResponse(Call<ArrayList<StoryInfo>> call, Response<ArrayList<StoryInfo>> response) {
                         contentList = response.body();
+                        content_size = contentList.size();
 
-                        if (contentList.size() == 0) {
+                        if (content_size == 0) {
                             // contents 비어있음
                         } else {
-                            content_size = contentList.size();
+//                            content_size = contentList.size();
                             int loopSize = 0;
 
                             if (content_size <= CONTENTS_OFFSET) {
@@ -478,12 +474,7 @@ public class FamilyActivity extends Activity {
                             @Override
                             public void run() {
                                 try {
-                                    //dialogView.setEnabled(false);
-                                    //Thread.sleep(600);
-                                    //rv_family_users.setEnabled(false);
-
                                     for (int i = (CONTENTS_OFFSET * contentInsertCount); i < finalLoopSize + (CONTENTS_OFFSET * contentInsertCount); i++) {
-
                                         storyList.add(new StoryInfo(contentList.get(i).getUser_id(), contentList.get(i).getName(), contentList.get(i).getAvatar(),
                                                 contentList.get(i).getStory_id(), contentList.get(i).getCreated_at(), contentList.get(i).getContent()));
                                         //handler
@@ -494,7 +485,6 @@ public class FamilyActivity extends Activity {
                                         contentHandler.sendMessage(msg);
                                     }
                                     Thread.sleep(200);
-                                    //rv_family_users.setEnabled(true);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
@@ -585,7 +575,7 @@ public class FamilyActivity extends Activity {
                             HashMap<String, String> map = new HashMap<>();
                             map.put("user_id", String.valueOf(user_id));
 
-                            Call<ResponseBody> call_like = server_connection.family_content_like_up(String.valueOf(storyList.get(getAdapterPosition()).getStory_id()), map);
+                            Call<ResponseBody> call_like = server_connection.family_content_like_up(storyList.get(getAdapterPosition()).getStory_id(), map);
                             call_like.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -603,7 +593,7 @@ public class FamilyActivity extends Activity {
                             HashMap<String, String> map = new HashMap<>();
                             map.put("user_id", String.valueOf(user_id));
 
-                            Call<ResponseBody> call_dislike = server_connection.family_content_like_down(String.valueOf(storyList.get(getAdapterPosition()).getStory_id()), map);
+                            Call<ResponseBody> call_dislike = server_connection.family_content_like_down(storyList.get(getAdapterPosition()).getStory_id(), map);
                             call_dislike.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -735,17 +725,18 @@ public class FamilyActivity extends Activity {
 
             //images
             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            Call<ArrayList<Photo>> call_photo = server_connection.family_content_photo_List(String.valueOf(storyList.get(position).getStory_id()));
+            Call<ArrayList<Photo>> call_photo = server_connection.family_content_photo_List(storyList.get(position).getStory_id());
             call_photo.enqueue(new Callback<ArrayList<Photo>>() {
                 @Override
                 public void onResponse(Call<ArrayList<Photo>> call, Response<ArrayList<Photo>> response) {
                     ArrayList<Photo>  photoList = response.body();
+                    int photoListSize = photoList.size();
 
-                    if (photoList.size() == 0) {
+                    if (photoListSize == 0) {
                         holder.story_images_container.setVisibility(View.GONE);
                         holder.tv_content_text.setMaxLines(15);
                     }
-                    if (photoList.size() == 1) {
+                    if (photoListSize == 1) {
                         holder.story_images_container.removeAllViews();
                         holder.story_images_container.setVisibility(View.VISIBLE);
                         holder.story_images_container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1200));
@@ -754,7 +745,7 @@ public class FamilyActivity extends Activity {
                         Glide.with(context).load(getString(R.string.cloud_front_stories_images) + photoList.get(0).getName() + "." + photoList.get(0).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image);
                     }
 
-                    if (photoList.size() == 2) {
+                    if (photoListSize == 2) {
                         holder.story_images_container.removeAllViews();
                         holder.story_images_container.setVisibility(View.VISIBLE);
 
@@ -765,7 +756,7 @@ public class FamilyActivity extends Activity {
                         Glide.with(context).load(getString(R.string.cloud_front_stories_images) + photoList.get(1).getName() + "." + photoList.get(1).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image_two2);
                     }
 
-                    if (photoList.size() > 2) {
+                    if (photoListSize > 2) {
                         holder.story_images_container.removeAllViews();
                         holder.story_images_container.setVisibility(View.VISIBLE);
 
@@ -786,7 +777,7 @@ public class FamilyActivity extends Activity {
 
 
             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            Call<ArrayList<LikeCount>> call_like_count = server_connection.family_like_Count(String.valueOf(storyList.get(position).getStory_id()));
+            Call<ArrayList<LikeCount>> call_like_count = server_connection.family_like_Count(storyList.get(position).getStory_id());
             call_like_count.enqueue(new Callback<ArrayList<LikeCount>>() {
                 @Override
                 public void onResponse(Call<ArrayList<LikeCount>> call, Response<ArrayList<LikeCount>> response) {
@@ -800,7 +791,7 @@ public class FamilyActivity extends Activity {
             });
 
             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            Call<ArrayList<CommentCount>> call_comment_count = server_connection.family_comment_Count(String.valueOf(storyList.get(position).getStory_id()));
+            Call<ArrayList<CommentCount>> call_comment_count = server_connection.family_comment_Count(storyList.get(position).getStory_id());
             call_comment_count.enqueue(new Callback<ArrayList<CommentCount>>() {
                 @Override
                 public void onResponse(Call<ArrayList<CommentCount>> call, Response<ArrayList<CommentCount>> response) {
@@ -816,7 +807,7 @@ public class FamilyActivity extends Activity {
             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
             HashMap<String, String> map = new HashMap<>();
             map.put("user_id", String.valueOf(user_id));
-            Call<ArrayList<Check>> call_like_check = server_connection.family_content_like_check(String.valueOf(storyList.get(position).getStory_id()), map);
+            Call<ArrayList<Check>> call_like_check = server_connection.family_content_like_check(storyList.get(position).getStory_id(), map);
             call_like_check.enqueue(new Callback<ArrayList<Check>>() {
                 @Override
                 public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {
@@ -854,18 +845,13 @@ public class FamilyActivity extends Activity {
             String msg = null;
 
             if (diffTime < 60) {
-                // sec
                 msg = diffTime + "초전";
             } else if ((diffTime /= 60) < 60) {
-                // min
                 System.out.println(diffTime);
-
                 msg = diffTime + "분전";
             } else if ((diffTime /= 60) < 24) {
-                // hour
                 msg = (diffTime) + "시간전";
             } else if ((diffTime /= 24) < 7) {
-                // day
                 msg = (diffTime) + "일전";
             } else {
                 SimpleDateFormat sdf = new SimpleDateFormat("yy.M.d aa h:mm");
@@ -983,14 +969,16 @@ public class FamilyActivity extends Activity {
         HashMap<String, String> map = new HashMap<>();
         map.put("user_id", String.valueOf(user_id));
 
-        Call<ArrayList<User>> call_users = server_connection.family_user_Info(String.valueOf(family_id), map);
+        Call<ArrayList<User>> call_users = server_connection.family_user_Info(family_id, map);
         call_users.enqueue(new Callback<ArrayList<User>>() {
             @Override
             public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-                if(response.body().size() ==0){
+                int responseBodySize = response.body().size();
+
+                if(responseBodySize ==0){
                     //유저 없음
                 }else{
-                    for (int i = 0; i < response.body().size(); i++) {
+                    for (int i = 0; i < responseBodySize; i++) {
                         userList.add(new User(response.body().get(i).getId(), response.body().get(i).getEmail(), response.body().get(i).getName(), response.body().get(i).getBirth(),
                                 response.body().get(i).getPhone(), response.body().get(i).getAvatar(), response.body().get(i).getLevel()));
                     }
@@ -1136,28 +1124,6 @@ public class FamilyActivity extends Activity {
         });
 
         // 버튼 을 텍스트뷰로 바꿔서 자바단 수정
-//        글쓰기 버튼
-        /*btn_family_write = (Button) findViewById(R.id.btn_family_write);
-        btn_family_write.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(FamilyActivity.this, WriteActivity.class);
-                intent.putExtra("family_id", family_id);
-                intent.putExtra("family_name", family_name);
-                intent.putExtra("family_content", family_content);
-                intent.putExtra("family_avatar", family_avatar);
-
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_avatar", user_avatar);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_level", user_level);
-                startActivityForResult(intent, WRITE_REQUEST);
-            }
-        });*/
         TextView btn_family_write = (TextView) findViewById(R.id.btn_family_write);
         btn_family_write.setOnClickListener(new View.OnClickListener() {
             @Override

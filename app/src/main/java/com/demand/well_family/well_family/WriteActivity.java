@@ -115,6 +115,8 @@ public class WriteActivity extends Activity {
     private int sleepTime;
     private final int UPLOADONEPIC = 950;
 
+    private int photoListSize;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,7 +157,6 @@ public class WriteActivity extends Activity {
 
     // toolbar & menu
     public void setToolbar(View view, Context context, String title) {
-        Log.e("tttttt", user_avatar);
         NavigationView nv = (NavigationView) view.findViewById(R.id.nv);
         nv.setItemIconTintList(null);
         dl = (DrawerLayout) view.findViewById(R.id.dl);
@@ -224,8 +225,6 @@ public class WriteActivity extends Activity {
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
-        Log.e("ttttt5", view + "");
-
         Glide.with(context).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_menu_avatar);
 
 
@@ -425,12 +424,12 @@ public class WriteActivity extends Activity {
 
         rv_write_image_upload.setAdapter(photoViewAdapter);
 
-
         btn_write.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                if (photoList.size() != 0 || et_content.getText().toString().length() != 0) {
+                photoListSize = photoList.size();
+
+                if (photoListSize != 0 || et_content.getText().toString().length() != 0) {
                     // 등록버튼
                     /*progressDialog = new ProgressDialog(WriteActivity.this);
                     progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
@@ -444,13 +443,13 @@ public class WriteActivity extends Activity {
                             ColorDrawable(Color.TRANSPARENT));
                     progressDialog.setContentView(R.layout.progress_dialog);
 
-                    if (photoList.size() > 10) {
+                    if (photoListSize > 10) {
                         sleepTime = UPLOADONEPIC * 10;
                     } else {
-                        if (photoList.size() == 1) {
+                        if (photoListSize == 1) {
                             sleepTime = 2500;
                         } else {
-                            sleepTime = UPLOADONEPIC * photoList.size();
+                            sleepTime = UPLOADONEPIC * photoListSize;
                         }
                     }
 
@@ -463,18 +462,18 @@ public class WriteActivity extends Activity {
                             map.put("content", et_content.getText().toString());
 
                             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                            Call<ArrayList<Story>> call_write_story = server_connection.insert_story(String.valueOf(user_id), map);
+                            Call<ArrayList<Story>> call_write_story = server_connection.insert_story(user_id, map);
                             call_write_story.enqueue(new Callback<ArrayList<Story>>() {
                                 @Override
                                 public void onResponse(Call<ArrayList<Story>> call, Response<ArrayList<Story>> response) {
                                     int story_id = response.body().get(0).getId();
                                     StoryInfo storyInfo = new StoryInfo(user_id, user_name, user_avatar, response.body().get(0).getId(), response.body().get(0).getCreated_at(), response.body().get(0).getContent());
 
-                                    for (int i = 0; i < photoList.size(); i++) {
+                                    for (int i = 0; i < photoListSize; i++) {
                                         progressDialog.setProgress(i + 1);
                                         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                                         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(photoList.get(i), i)));
-                                        Call<ResponseBody> call_write_photo = server_connection.insert_photos(String.valueOf(story_id), requestBody);
+                                        Call<ResponseBody> call_write_photo = server_connection.insert_photos(story_id, requestBody);
                                         call_write_photo.enqueue(new Callback<ResponseBody>() {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -564,14 +563,17 @@ public class WriteActivity extends Activity {
                             photoList.add(uri);
                             photoViewAdapter.notifyDataSetChanged();
                         } else { // 여러개
-                            for (int i = 0; i < clipdata.getItemCount(); i++) {
+                            int clipDataSize = clipdata.getItemCount();
+
+                            for (int i = 0; i < clipDataSize; i++) {
                                 Uri uri = clipdata.getItemAt(i).getUri();
                                 String path = null;
                                 try {
                                     path = realPathUtil.getRealPathFromURI_API19(this, uri);
                                 } catch (RuntimeException e) {
                                     path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
-                                }                                pathList.add(path);
+                                }
+                                pathList.add(path);
                                 photoList.add(uri);
                                 photoViewAdapter.notifyDataSetChanged();
                             }
@@ -583,7 +585,8 @@ public class WriteActivity extends Activity {
                             path = realPathUtil.getRealPathFromURI_API19(this, uri);
                         } catch (RuntimeException e) {
                             path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
-                        }                        pathList.add(path);
+                        }
+                        pathList.add(path);
                         photoList.add(uri);
                         photoViewAdapter.notifyDataSetChanged();
                     }

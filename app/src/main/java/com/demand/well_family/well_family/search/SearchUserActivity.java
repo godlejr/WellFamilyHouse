@@ -105,7 +105,7 @@ public class SearchUserActivity extends Activity {
 
                     HashMap<String, String> map = new HashMap<>();
                     map.put("search", et_search_user.getText().toString());
-                    Call<ArrayList<User>> call_user = server_connection.find_user(String.valueOf(user_id), map);
+                    Call<ArrayList<User>> call_user = server_connection.find_user(user_id, map);
                     call_user.enqueue(new Callback<ArrayList<User>>() {
                         @Override
                         public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
@@ -135,16 +135,13 @@ public class SearchUserActivity extends Activity {
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 함수 호출
                 setBack();
             }
         });
 
         TextView toolbar_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
         toolbar_title.setText("가족 찾기");
-
         toolbar.setBackgroundColor(Color.WHITE);
-
     }
 
     public void setBack() {
@@ -247,7 +244,7 @@ public class SearchUserActivity extends Activity {
             map.put("user_id", String.valueOf(user_id));
             map.put("family_id",String.valueOf(family_id));
 
-            Call<ArrayList<Check>> call_family_check = server_connection.family_user_check(String.valueOf(userList.get(position).getId()), map);
+            Call<ArrayList<Check>> call_family_check = server_connection.family_user_check(userList.get(position).getId(), map);
             call_family_check.enqueue(new Callback<ArrayList<Check>>() {
                 @Override
                 public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {
@@ -274,7 +271,7 @@ public class SearchUserActivity extends Activity {
                                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                                     HashMap<String, String> map = new HashMap<>();
                                     map.put("user_id", String.valueOf(userList.get(position).getId()));
-                                    Call<ResponseBody> call_invite = server_connection.delete_user_from_family(String.valueOf(family_id), map);
+                                    Call<ResponseBody> call_invite = server_connection.delete_user_from_family(family_id, map);
                                     call_invite.enqueue(new Callback<ResponseBody>() {
                                         @Override
                                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -301,7 +298,7 @@ public class SearchUserActivity extends Activity {
                                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                                 HashMap<String, String> map = new HashMap<>();
                                 map.put("user_id", String.valueOf(userList.get(position).getId()));
-                                Call<ResponseBody> call_invite = server_connection.insert_user_into_family(String.valueOf(family_id), map);
+                                Call<ResponseBody> call_invite = server_connection.insert_user_into_family(family_id, map);
                                 call_invite.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

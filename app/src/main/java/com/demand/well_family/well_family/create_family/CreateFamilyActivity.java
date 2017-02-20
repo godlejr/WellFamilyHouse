@@ -98,9 +98,9 @@ public class CreateFamilyActivity extends Activity {
 
         realPathUtil = new RealPathUtil();
 
-        user_id = getIntent().getIntExtra("user_id",0);
+        user_id = getIntent().getIntExtra("user_id", 0);
         user_name = getIntent().getStringExtra("user_name");
-        user_level = getIntent().getIntExtra("user_level",0);
+        user_level = getIntent().getIntExtra("user_level", 0);
         user_avatar = getIntent().getStringExtra("user_avatar");
         user_email = getIntent().getStringExtra("user_email");
         user_phone = getIntent().getStringExtra("user_phone");
@@ -126,7 +126,6 @@ public class CreateFamilyActivity extends Activity {
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 함수 호출
                 setBack();
             }
         });
@@ -158,23 +157,23 @@ public class CreateFamilyActivity extends Activity {
 
 
                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ArrayList<Identification>> call = server_connection.insert_family(String.valueOf(user_id), map);
+                    Call<ArrayList<Identification>> call = server_connection.insert_family(user_id, map);
                     call.enqueue(new Callback<ArrayList<Identification>>() {
                         @Override
                         public void onResponse(Call<ArrayList<Identification>> call, Response<ArrayList<Identification>> response) {
                             ArrayList<Identification> identificationList = response.body();
                             final int family_id = identificationList.get(0).getId();
 
-                            if(family_photo_uri !=  null) {
+                            if (family_photo_uri != null) {
                                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(family_photo_uri)));
 
-                                Call<ResponseBody> call_photo = server_connection.update_family_avatar(String.valueOf(family_id), requestBody);
+                                Call<ResponseBody> call_photo = server_connection.update_family_avatar(family_id, requestBody);
                                 call_photo.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                        Call<ArrayList<Family>> call_family = server_connection.family(String.valueOf(family_id));
+                                        Call<ArrayList<Family>> call_family = server_connection.family(family_id);
                                         call_family.enqueue(new Callback<ArrayList<Family>>() {
                                             @Override
                                             public void onResponse(Call<ArrayList<Family>> call, Response<ArrayList<Family>> response) {
@@ -222,9 +221,9 @@ public class CreateFamilyActivity extends Activity {
                                         Toast.makeText(CreateFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                     }
                                 });
-                            }else{
+                            } else {
                                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                Call<ArrayList<Family>> call_family = server_connection.family(String.valueOf(family_id));
+                                Call<ArrayList<Family>> call_family = server_connection.family(family_id);
                                 call_family.enqueue(new Callback<ArrayList<Family>>() {
                                     @Override
                                     public void onResponse(Call<ArrayList<Family>> call, Response<ArrayList<Family>> response) {
@@ -250,6 +249,7 @@ public class CreateFamilyActivity extends Activity {
                                         startActivity(intent);
                                         finish();
                                     }
+
                                     @Override
                                     public void onFailure(Call<ArrayList<Family>> call, Throwable t) {
                                         Toast.makeText(CreateFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
@@ -263,10 +263,7 @@ public class CreateFamilyActivity extends Activity {
                             Toast.makeText(CreateFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
-
-
                 }
-
             }
         });
 

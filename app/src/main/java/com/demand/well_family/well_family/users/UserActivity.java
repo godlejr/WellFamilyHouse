@@ -114,7 +114,6 @@ public class UserActivity extends Activity implements View.OnClickListener {
 
     // toolbar & menu
     public void setToolbar(View view, Context context, String title) {
-        Log.e("tttttt", user_avatar);
         NavigationView nv = (NavigationView) view.findViewById(R.id.nv);
         nv.setItemIconTintList(null);
         dl = (DrawerLayout) view.findViewById(R.id.dl);
@@ -127,7 +126,6 @@ public class UserActivity extends Activity implements View.OnClickListener {
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 함수 호출
                 setBack();
             }
         });
@@ -326,7 +324,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
             HashMap<String, String> map = new HashMap<>();
             map.put("user_id", String.valueOf(user_id));
 
-            Call<ArrayList<Check>> call_family_check = server_connection.family_check(String.valueOf(story_user_id), map);
+            Call<ArrayList<Check>> call_family_check = server_connection.family_check(story_user_id, map);
             call_family_check.enqueue(new Callback<ArrayList<Check>>() {
                 @Override
                 public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {

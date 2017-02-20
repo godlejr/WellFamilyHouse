@@ -63,8 +63,6 @@ public class AgreementActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!cb_agree_all.isChecked()) {
                     if (f == 1) {
-                        Log.e("fff", f+"");
-
                         cb_agree1.setChecked(false);
                         cb_agree2.setChecked(false);
                     }
@@ -96,13 +94,11 @@ public class AgreementActivity extends AppCompatActivity {
 
     // toolbar_main & menu
     public void setToolbar(View view) {
-            // toolbar_main
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolBar);
         ImageView toolbar_back = (ImageView) toolbar.findViewById(R.id.toolbar_back);
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 함수 호출
                 setBack();
             }
         });

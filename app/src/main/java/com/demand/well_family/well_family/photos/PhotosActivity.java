@@ -129,7 +129,6 @@ public class PhotosActivity extends Activity {
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 함수 호출
                 setBack();
             }
         });
@@ -184,8 +183,6 @@ public class PhotosActivity extends Activity {
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
-        Log.e("ttttt5", view + "");
-
         Glide.with(context).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_menu_avatar);
 
         // menu
@@ -323,7 +320,7 @@ public class PhotosActivity extends Activity {
             public void run() {
                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
 
-                Call<ArrayList<Photo>> call_photo = server_connection.family_photo_List(String.valueOf(family_id));
+                Call<ArrayList<Photo>> call_photo = server_connection.family_photo_List(family_id);
                 call_photo.enqueue(new Callback<ArrayList<Photo>>() {
                     @Override
                     public void onResponse(Call<ArrayList<Photo>> call, Response<ArrayList<Photo>> response) {

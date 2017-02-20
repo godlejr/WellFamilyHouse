@@ -55,10 +55,10 @@ public class PhotoPopupActivity extends Activity {
         setContentView(R.layout.popup_photo);
         getWindow().setLayout(android.view.WindowManager.LayoutParams.MATCH_PARENT, android.view.WindowManager.LayoutParams.MATCH_PARENT);
 
-        photo_id = getIntent().getIntExtra("photo_id",0);
-        story_id = getIntent().getIntExtra("story_id",0);
+        photo_id = getIntent().getIntExtra("photo_id", 0);
+        story_id = getIntent().getIntExtra("story_id", 0);
         photo_name = getIntent().getStringExtra("photo_name");
-        photo_type = getIntent().getIntExtra("photo_type",0);
+        photo_type = getIntent().getIntExtra("photo_type", 0);
         photo_ext = getIntent().getStringExtra("photo_ext");
         checkPermission();
         init();
@@ -95,9 +95,7 @@ public class PhotoPopupActivity extends Activity {
         iv_popup_download = (ImageView) findViewById(R.id.iv_popup_download);
 
         imageURL = getString(R.string.cloud_front_stories_images) + photo_name + "." + photo_ext;
-
         Glide.with(this).load(imageURL).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_popup_image);
-
 
         iv_popup_close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,7 +130,6 @@ public class PhotoPopupActivity extends Activity {
     }
 
     private class ImageDownload extends AsyncTask<String, Void, Void> {
-        //       파일 명
         private String fileName;
 
         public ImageDownload(String fileName) {
@@ -141,8 +138,6 @@ public class PhotoPopupActivity extends Activity {
 
         @Override
         protected Void doInBackground(String... params) {
-            Log.e("tt", "tt3");
-
             try {
                 URL url = new URL(params[0]);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
