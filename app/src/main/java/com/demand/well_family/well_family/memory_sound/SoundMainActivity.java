@@ -36,8 +36,12 @@ import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.CommentCount;
 import com.demand.well_family.well_family.dto.Song;
 import com.demand.well_family.well_family.dto.SongCategory;
+import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -60,6 +64,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
     private ImageButton ib_sound_chart, ib_sound_today;
     private TextView tv_sound_random_title, tv_sound_random_singer, tv_sound_random_comment_count;
     private ImageView iv_sound_random_avatar;
+    private static final Logger logger = LoggerFactory.getLogger(SoundMainActivity.class);
 
     //user_info
     private int user_id;
@@ -156,6 +161,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
 
                         @Override
                         public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
+                            log(t);
                             Toast.makeText(SoundMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -628,5 +634,19 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
         }
     }
 
+    private void log(Throwable throwable){
+        StackTraceElement[] ste =  throwable.getStackTrace();
+        String className = ste[0].getClassName();
+        String methodName = ste[0].getMethodName();
+        int lineNumber = ste[0].getLineNumber();
+        String fileName = ste[0].getFileName();
+
+        if(LogFlag.printFlag){
+            if(logger.isInfoEnabled()){
+                logger.info("Exception: " + throwable.getMessage());
+                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+            }
+        }
+    }
 
 }
