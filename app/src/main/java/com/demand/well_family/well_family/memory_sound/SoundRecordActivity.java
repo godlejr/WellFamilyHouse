@@ -63,9 +63,13 @@ import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Range;
 import com.demand.well_family.well_family.dto.SongStory;
 import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
+import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 import com.demand.well_family.well_family.util.RealPathUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -170,6 +174,8 @@ public class SoundRecordActivity extends Activity {
     private RecyclerView rv_record_emotion;
     private EmotionAdapter emotionAdapter;
 
+    private static final Logger logger = LoggerFactory.getLogger(SoundRecordActivity.class);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -261,7 +267,7 @@ public class SoundRecordActivity extends Activity {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일생");
             tv_menu_birth.setText(sdf.format(date));
         } catch (ParseException e) {
-            e.printStackTrace();
+            log(e);
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
@@ -450,6 +456,7 @@ public class SoundRecordActivity extends Activity {
 
             @Override
             public void onFailure(Call<ArrayList<Range>> call, Throwable t) {
+                log(t);
                 Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
 
             }
@@ -478,7 +485,7 @@ public class SoundRecordActivity extends Activity {
             recorder.prepare();
             recorder.start();
         } catch (Exception e) {
-            e.printStackTrace();
+            log(e);
         }
 
         TimerTask timeTask = new TimerTask() {
@@ -531,7 +538,7 @@ public class SoundRecordActivity extends Activity {
             recorder = null;
             isRecording = false;
         } catch (Exception e) {
-            e.printStackTrace();
+            log(e);
         }
 
         file = new File(path);
@@ -598,7 +605,7 @@ public class SoundRecordActivity extends Activity {
                     try {
                         mp.setDataSource(path);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        log(e);
                     }
 
                     mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -681,7 +688,7 @@ public class SoundRecordActivity extends Activity {
                             mp.setDataSource(path);
                             mp.prepareAsync();
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            log(e);
                         }
                     } // end else
 
@@ -902,6 +909,7 @@ public class SoundRecordActivity extends Activity {
 
                                                 @Override
                                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    log(t);
                                                     Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                                 }
                                             });
@@ -920,6 +928,7 @@ public class SoundRecordActivity extends Activity {
 
                                                 @Override
                                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    log(t);
                                                     Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                                 }
                                             });
@@ -939,6 +948,7 @@ public class SoundRecordActivity extends Activity {
 
                                                     @Override
                                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                        log(t);
                                                         Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                                     }
                                                 });
@@ -948,13 +958,14 @@ public class SoundRecordActivity extends Activity {
 
                                     @Override
                                     public void onFailure(Call<ArrayList<SongStory>> call, Throwable t) {
+                                        log(t);
                                         Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                     }
                                 });
                                 try {
                                     Thread.sleep(sleepTime);
                                 } catch (InterruptedException e) {
-                                    e.printStackTrace();
+                                    log(e);
                                 }
                                 progressDialog.dismiss();
                                 finish();
@@ -1014,7 +1025,7 @@ public class SoundRecordActivity extends Activity {
 
             byteArray = bos.toByteArray();
         } catch (IOException e) {
-            e.printStackTrace();
+            log(e);
         }
         return byteArray;
     }
@@ -1040,6 +1051,8 @@ public class SoundRecordActivity extends Activity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case PICK_PHOTO:
+                    int photoListSize = photoList.size();
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         ClipData clipdata = data.getClipData();
                         if (clipdata == null) {
@@ -1048,9 +1061,10 @@ public class SoundRecordActivity extends Activity {
                             try {
                                 path = realPathUtil.getRealPathFromURI_API19(this, uri);
                             } catch (RuntimeException e) {
+                                log(e);
                                 path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
                             }
-                            if (photoList.size() < 10) {
+                            if (photoListSize < 10) {
                                 pathList.add(path);
                                 photoList.add(uri);
                                 photoViewAdapter.notifyDataSetChanged();
@@ -1072,9 +1086,10 @@ public class SoundRecordActivity extends Activity {
                                 try {
                                     path = realPathUtil.getRealPathFromURI_API19(this, uri);
                                 } catch (RuntimeException e) {
+                                    log(e);
                                     path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
                                 }
-                                if (photoList.size() < 10) {
+                                if (photoListSize < 10) {
                                     pathList.add(path);
                                     photoList.add(uri);
                                     photoViewAdapter.notifyDataSetChanged();
@@ -1088,12 +1103,13 @@ public class SoundRecordActivity extends Activity {
                     } else {
                         Uri uri = data.getData();
                         try {
-                            path = realPathUtil.getRealPathFromURI_API19(this, uri);
-                        } catch (RuntimeException e) {
                             path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
+                        } catch (RuntimeException e) {
+                            log(e);
+                            path = realPathUtil.getRealPathFromURI_API19(this, uri);
                         }
 
-                        if (photoList.size() <= 10) {
+                        if (photoListSize <= 10) {
                             pathList.add(path);
                             photoList.add(uri);
                             photoViewAdapter.notifyDataSetChanged();
@@ -1116,7 +1132,7 @@ public class SoundRecordActivity extends Activity {
             int exifDegree = exifOrientationToDegrees(exifOrientation);
             bm = rotate(bm, exifDegree);
         } catch (IOException e) {
-            e.printStackTrace();
+            log(e);
         }
         return bm;
     }
@@ -1134,7 +1150,7 @@ public class SoundRecordActivity extends Activity {
                     bitmap = converted;
                 }
             } catch (OutOfMemoryError ex) {
-                ex.printStackTrace();
+                log(ex);
             }
         }
         return bitmap;
@@ -1254,6 +1270,21 @@ public class SoundRecordActivity extends Activity {
         public EmotionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             EmotionViewHolder holder = new EmotionViewHolder((LayoutInflater.from(context).inflate(layout, parent, false)));
             return holder;
+        }
+    }
+
+    private static void log(Throwable throwable){
+        StackTraceElement[] ste =  throwable.getStackTrace();
+        String className = ste[0].getClassName();
+        String methodName = ste[0].getMethodName();
+        int lineNumber = ste[0].getLineNumber();
+        String fileName = ste[0].getFileName();
+
+        if(LogFlag.printFlag){
+            if(logger.isInfoEnabled()){
+                logger.info("Exception: " + throwable.getMessage());
+                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+            }
         }
     }
 

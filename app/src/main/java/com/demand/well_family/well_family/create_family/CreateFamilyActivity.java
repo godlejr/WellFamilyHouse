@@ -34,8 +34,12 @@ import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.Identification;
 import com.demand.well_family.well_family.family.FamilyActivity;
+import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.memory_sound.SoundRecordActivity;
 import com.demand.well_family.well_family.util.RealPathUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -74,9 +78,9 @@ public class CreateFamilyActivity extends Activity {
 
     private int sleepTime;
     private final int UPLOADONEPIC = 850;
-
-
     private final int READ_EXTERNAL_STORAGE_PERMISSION = 10001;
+
+    private static final Logger logger = LoggerFactory.getLogger(CreateFamilyActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,7 +204,7 @@ public class CreateFamilyActivity extends Activity {
                                                 try {
                                                     Thread.sleep(sleepTime);
                                                 } catch (InterruptedException e) {
-                                                    e.printStackTrace();
+                                                    log(e);
                                                 }
 
                                                 progressDialog.dismiss();
@@ -211,6 +215,7 @@ public class CreateFamilyActivity extends Activity {
 
                                             @Override
                                             public void onFailure(Call<ArrayList<Family>> call, Throwable t) {
+                                                log(t);
                                                 Toast.makeText(CreateFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                             }
                                         });
@@ -218,6 +223,7 @@ public class CreateFamilyActivity extends Activity {
 
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        log(t);
                                         Toast.makeText(CreateFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -252,6 +258,7 @@ public class CreateFamilyActivity extends Activity {
 
                                     @Override
                                     public void onFailure(Call<ArrayList<Family>> call, Throwable t) {
+                                        log(t);
                                         Toast.makeText(CreateFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -260,6 +267,7 @@ public class CreateFamilyActivity extends Activity {
 
                         @Override
                         public void onFailure(Call<ArrayList<Identification>> call, Throwable t) {
+                            log(t);
                             Toast.makeText(CreateFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -302,7 +310,7 @@ public class CreateFamilyActivity extends Activity {
             int exifDegree = exifOrientationToDegrees(exifOrientation);
             bm = rotate(bm, exifDegree);
         } catch (IOException e) {
-            e.printStackTrace();
+            log(e);
         }
         return bm;
     }
@@ -319,7 +327,7 @@ public class CreateFamilyActivity extends Activity {
                     bitmap = converted;
                 }
             } catch (OutOfMemoryError ex) {
-                ex.printStackTrace();
+                log(ex);
             }
         }
         return bitmap;
@@ -356,12 +364,28 @@ public class CreateFamilyActivity extends Activity {
                     try {
                         path = realPathUtil.getRealPathFromURI_API19(this, family_photo_uri);
                     } catch (Exception e) {
+                        log(e);
                         path = realPathUtil.getRealPathFromURI_API11to18(this, family_photo_uri);
                     }
                     Glide.with(CreateFamilyActivity.this).load(family_photo_uri).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_create_family_img);
                 } else {
                     Log.e("갤러리 이미지 선택 오류", "");
                 }
+            }
+        }
+    }
+
+    private static void log(Throwable throwable) {
+        StackTraceElement[] ste = throwable.getStackTrace();
+        String className = ste[0].getClassName();
+        String methodName = ste[0].getMethodName();
+        int lineNumber = ste[0].getLineNumber();
+        String fileName = ste[0].getFileName();
+
+        if (LogFlag.printFlag) {
+            if (logger.isInfoEnabled()) {
+                logger.info("Exception: " + throwable.getMessage());
+                logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
             }
         }
     }

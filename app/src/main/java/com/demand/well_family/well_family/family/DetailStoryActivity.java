@@ -42,10 +42,14 @@ import com.demand.well_family.well_family.dto.CommentCount;
 import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.LikeCount;
 import com.demand.well_family.well_family.dto.Photo;
+import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 //import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -111,6 +115,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
     private DrawerLayout dl;
     private Server_Connection server_connection;
 
+    private static final Logger logger = LoggerFactory.getLogger(DetailStoryActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,7 +215,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일생");
             tv_menu_birth.setText(sdf.format(date));
         } catch (ParseException e) {
-            e.printStackTrace();
+            log(e);
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
@@ -373,6 +378,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
 
                         @Override
                         public void onFailure(Call<ArrayList<Comment>> call, Throwable t) {
+                            log(t);
                             Toast.makeText(DetailStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -396,6 +402,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
 
             @Override
             public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
+                log(t);
                 Toast.makeText(DetailStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -420,6 +427,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
 
             @Override
             public void onFailure(Call<ArrayList<CommentInfo>> call, Throwable t) {
+                log(t);
                 Toast.makeText(DetailStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -508,6 +516,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
 
             @Override
             public void onFailure(Call<ArrayList<Photo>> call, Throwable t) {
+                log(t);
                 Toast.makeText(DetailStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -576,6 +585,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
             }
             @Override
             public void onFailure(Call<ArrayList<LikeCount>> call, Throwable t) {
+                log(t);
                 Toast.makeText(DetailStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -599,7 +609,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
         try {
             date = transFormat.parse(dateTime);
         } catch (ParseException e) {
-            e.printStackTrace();
+            log(e);
         }
 
         long curTime = System.currentTimeMillis();
@@ -644,6 +654,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        log(t);
                         Toast.makeText(DetailStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -663,6 +674,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        log(t);
                         Toast.makeText(DetailStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -680,5 +692,19 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
         super.onBackPressed();
     }
 
+    private static void log(Throwable throwable) {
+        StackTraceElement[] ste = throwable.getStackTrace();
+        String className = ste[0].getClassName();
+        String methodName = ste[0].getMethodName();
+        int lineNumber = ste[0].getLineNumber();
+        String fileName = ste[0].getFileName();
+
+        if (LogFlag.printFlag) {
+            if (logger.isInfoEnabled()) {
+                logger.info("Exception: " + throwable.getMessage());
+                logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
+            }
+        }
+    }
 
 }

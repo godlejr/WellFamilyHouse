@@ -18,6 +18,10 @@ import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.User;
+import com.demand.well_family.well_family.log.LogFlag;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,6 +52,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private boolean email_duplicate_check = false;
 
     private Server_Connection server_connection;
+
+    private static final Logger logger = LoggerFactory.getLogger(RegisterActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +122,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             birthDate = transFormat.format(date);
                             et_join_birthday.setText(birthDate);
                         } catch (ParseException e) {
-                            e.printStackTrace();
+                            log(e);
                         }
 
 
@@ -169,6 +175,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            log(t);
                             Toast.makeText(RegisterActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -201,6 +208,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             }
                             @Override
                             public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+                                log(t);
                                 Toast.makeText(RegisterActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                             }
                         });
@@ -235,6 +243,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         Matcher matcher = pattern.matcher(password);
         boolean isNormal = matcher.matches();
         return isNormal;
+    }
+
+    private static void log(Throwable throwable){
+        StackTraceElement[] ste =  throwable.getStackTrace();
+        String className = ste[0].getClassName();
+        String methodName = ste[0].getMethodName();
+        int lineNumber = ste[0].getLineNumber();
+        String fileName = ste[0].getFileName();
+
+        if(LogFlag.printFlag){
+            if(logger.isInfoEnabled()){
+                logger.info("Exception: " + throwable.getMessage());
+                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+            }
+        }
     }
 
 }

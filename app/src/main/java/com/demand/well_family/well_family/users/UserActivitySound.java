@@ -52,8 +52,12 @@ import com.demand.well_family.well_family.dto.SongStory;
 import com.demand.well_family.well_family.dto.SongStoryEmotionData;
 import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
 import com.demand.well_family.well_family.dto.SongStoryInfo;
+import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -97,11 +101,9 @@ public class UserActivitySound extends Activity {
     private Server_Connection server_connection;
 
     private RecyclerView rv_user_activity_sound;
-    private ArrayList<Photo> photoList;
     private ArrayList<SongStoryInfo> storyList;
     private ContentAdapter contentAdapter;
 
-    private String url;
 
     //content
     private int content_size;
@@ -122,10 +124,11 @@ public class UserActivitySound extends Activity {
     private Message msg;
 
     private Call<ArrayList<SongStory>> call_content;
-    private Server_Connection server_connection_for_content;
 
     //emotion
     private EmotionAdapter emotionAdapter;
+
+    private static final Logger logger = LoggerFactory.getLogger(UserActivitySound.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,7 +228,7 @@ public class UserActivitySound extends Activity {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일생");
             tv_menu_birth.setText(sdf.format(date));
         } catch (ParseException e) {
-            e.printStackTrace();
+            log(e);
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
@@ -417,7 +420,7 @@ public class UserActivitySound extends Activity {
                                     try {
                                         progressDialog.dismiss();
                                     } catch (Exception e) {
-                                        e.printStackTrace();
+                                        log(e);
                                     }
                                 }
                             }, 200);
@@ -425,6 +428,7 @@ public class UserActivitySound extends Activity {
 
                         @Override
                         public void onFailure(Call<ArrayList<SongStory>> call, Throwable t) {
+                            log(t);
                             Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -483,7 +487,7 @@ public class UserActivitySound extends Activity {
                                                 try {
                                                     progressDialog.dismiss();
                                                 } catch (Exception e) {
-                                                    e.printStackTrace();
+                                                    log(e);
                                                 }
                                             }
                                         }, 200);
@@ -491,6 +495,7 @@ public class UserActivitySound extends Activity {
 
                                     @Override
                                     public void onFailure(Call<ArrayList<SongStory>> call, Throwable t) {
+                                        log(t);
                                         Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -539,7 +544,7 @@ public class UserActivitySound extends Activity {
                                                 try {
                                                     progressDialog.dismiss();
                                                 } catch (Exception e) {
-                                                    e.printStackTrace();
+                                                    log(e);
                                                 }
                                             }
                                         }, 200);
@@ -547,6 +552,7 @@ public class UserActivitySound extends Activity {
 
                                     @Override
                                     public void onFailure(Call<ArrayList<SongStory>> call, Throwable t) {
+                                        log(t);
                                         Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -555,6 +561,7 @@ public class UserActivitySound extends Activity {
 
                         @Override
                         public void onFailure(Call<ArrayList<Check>> call, Throwable t) {
+                            log(t);
                             Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -616,12 +623,12 @@ public class UserActivitySound extends Activity {
                                         contentHandler.sendMessage(msg);
                                     }
                                 } catch (Exception e) {
-                                    e.printStackTrace();
+                                    log(e);
                                 }
                                 try {
                                     Thread.sleep(200);
                                 } catch (InterruptedException e) {
-                                    e.printStackTrace();
+                                    log(e);
                                 }
                                 progressDialog.dismiss();
                             }
@@ -704,6 +711,7 @@ public class UserActivitySound extends Activity {
 
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    log(t);
                                     Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                 }
                             });
@@ -722,6 +730,7 @@ public class UserActivitySound extends Activity {
 
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    log(t);
                                     Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                 }
                             });
@@ -839,6 +848,7 @@ public class UserActivitySound extends Activity {
 
                 @Override
                 public void onFailure(Call<ArrayList<SongStoryEmotionData>> call, Throwable t) {
+                    log(t);
                     Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
             });
@@ -890,6 +900,7 @@ public class UserActivitySound extends Activity {
 
                 @Override
                 public void onFailure(Call<ArrayList<SongPhoto>> call, Throwable t) {
+                    log(t);
                     Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
             });
@@ -905,6 +916,7 @@ public class UserActivitySound extends Activity {
 
                 @Override
                 public void onFailure(Call<ArrayList<LikeCount>> call, Throwable t) {
+                    log(t);
                     Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
             });
@@ -920,6 +932,7 @@ public class UserActivitySound extends Activity {
 
                 @Override
                 public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
+                    log(t);
                     Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
             });
@@ -944,6 +957,7 @@ public class UserActivitySound extends Activity {
 
                 @Override
                 public void onFailure(Call<ArrayList<Check>> call, Throwable t) {
+                    log(t);
                     Toast.makeText(UserActivitySound.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
             });
@@ -960,7 +974,7 @@ public class UserActivitySound extends Activity {
             try {
                 date = transFormat.parse(dateTime);
             } catch (ParseException e) {
-                e.printStackTrace();
+                log(e);
             }
 
             long curTime = System.currentTimeMillis();
@@ -1122,5 +1136,21 @@ public class UserActivitySound extends Activity {
             }
         }
     }
+
+    private static void log(Throwable throwable){
+        StackTraceElement[] ste =  throwable.getStackTrace();
+        String className = ste[0].getClassName();
+        String methodName = ste[0].getMethodName();
+        int lineNumber = ste[0].getLineNumber();
+        String fileName = ste[0].getFileName();
+
+        if(LogFlag.printFlag){
+            if(logger.isInfoEnabled()){
+                logger.info("Exception: " + throwable.getMessage());
+                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+            }
+        }
+    }
+
 
 }

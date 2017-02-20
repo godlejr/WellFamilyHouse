@@ -48,8 +48,12 @@ import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStoryAvatar;
 import com.demand.well_family.well_family.dto.SongStoryComment;
 import com.demand.well_family.well_family.dto.SongStoryEmotionData;
+import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -134,6 +138,8 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
     //emotion
     private RecyclerView rv_detail_emotion;
     private EmotionAdapter emotionAdapter;
+
+    private static final Logger logger = LoggerFactory.getLogger(SoundStoryDetail.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -241,7 +247,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일생");
             tv_menu_birth.setText(sdf.format(date));
         } catch (ParseException e) {
-            e.printStackTrace();
+            log(e);
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
@@ -387,6 +393,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
 
             @Override
             public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
+                log(t);
                 Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -434,6 +441,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
 
             @Override
             public void onFailure(Call<ArrayList<SongStoryAvatar>> call, Throwable t) {
+                log(t);
                 Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -473,6 +481,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
 
             @Override
             public void onFailure(Call<ArrayList<LikeCount>> call, Throwable t) {
+                log(t);
                 Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -526,7 +535,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
 
             mp.prepareAsync();
         } catch (IOException e) {
-            e.printStackTrace();
+            log(e);
         }
 
         sb_sound_story_detail.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -608,7 +617,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
 
                                 mp.prepareAsync();
                             } catch (IOException e) {
-                                e.printStackTrace();
+                                log(e);
                             }
                         }
 
@@ -647,6 +656,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
 
             @Override
             public void onFailure(Call<ArrayList<SongPhoto>> call, Throwable t) {
+                log(t);
                 Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -669,6 +679,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
 
             @Override
             public void onFailure(Call<ArrayList<SongStoryEmotionData>> call, Throwable t) {
+                log(t);
                 Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -742,6 +753,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
 
                         @Override
                         public void onFailure(Call<ArrayList<SongStoryComment>> call, Throwable t) {
+                            log(t);
                             Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -766,6 +778,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
 
             @Override
             public void onFailure(Call<ArrayList<CommentInfo>> call, Throwable t) {
+                log(t);
                 Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -879,7 +892,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         try {
             date = transFormat.parse(dateTime);
         } catch (ParseException e) {
-            e.printStackTrace();
+            log(e);
         }
 
         long curTime = System.currentTimeMillis();
@@ -924,6 +937,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        log(t);
                         Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -942,6 +956,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        log(t);
                         Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -982,5 +997,20 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         }
 
         super.onPause();
+    }
+
+    private static void log(Throwable throwable){
+        StackTraceElement[] ste =  throwable.getStackTrace();
+        String className = ste[0].getClassName();
+        String methodName = ste[0].getMethodName();
+        int lineNumber = ste[0].getLineNumber();
+        String fileName = ste[0].getFileName();
+
+        if(LogFlag.printFlag){
+            if(logger.isInfoEnabled()){
+                logger.info("Exception: " + throwable.getMessage());
+                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+            }
+        }
     }
 }

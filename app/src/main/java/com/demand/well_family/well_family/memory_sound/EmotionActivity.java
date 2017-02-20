@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
+import com.demand.well_family.well_family.log.LogFlag;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +47,8 @@ public class EmotionActivity extends Activity {
     private HashMap<Integer, Integer> map;  // key : id , value : category_id
     private Server_Connection server_connection;
     private ArrayList<SongStoryEmotionInfo> emotionList;
+
+    private static final Logger logger = LoggerFactory.getLogger(EmotionActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +91,7 @@ public class EmotionActivity extends Activity {
 
             @Override
             public void onFailure(Call<ArrayList<SongStoryEmotionInfo>> call, Throwable t) {
+                log(t);
                 Toast.makeText(EmotionActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -146,6 +152,21 @@ public class EmotionActivity extends Activity {
         @Override
         public int getItemCount() {
             return emotionList.size();
+        }
+    }
+
+    private static void log(Throwable throwable){
+        StackTraceElement[] ste =  throwable.getStackTrace();
+        String className = ste[0].getClassName();
+        String methodName = ste[0].getMethodName();
+        int lineNumber = ste[0].getLineNumber();
+        String fileName = ste[0].getFileName();
+
+        if(LogFlag.printFlag){
+            if(logger.isInfoEnabled()){
+                logger.info("Exception: " + throwable.getMessage());
+                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+            }
         }
     }
 

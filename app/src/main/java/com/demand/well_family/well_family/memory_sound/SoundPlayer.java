@@ -37,9 +37,12 @@ import com.demand.well_family.well_family.dto.LikeCount;
 import com.demand.well_family.well_family.dto.SongComment;
 import com.demand.well_family.well_family.family.DetailStoryActivity;
 import com.demand.well_family.well_family.family.FamilyActivity;
+import com.demand.well_family.well_family.log.LogFlag;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -104,6 +107,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
     private CommentAdapter commentAdapter;
     private ImageView iv_sound_player_album_bg;
 
+    private static final Logger logger = LoggerFactory.getLogger(SoundPlayer.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +175,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
 
                         @Override
                         public void onFailure(Call<ArrayList<SongComment>> call, Throwable t) {
+                            log(t);
                             Toast.makeText(SoundPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -249,7 +254,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
 
             mp.prepareAsync();
         } catch (IOException e) {
-            e.printStackTrace();
+            log(e);
         }
 
         sb_sound.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -298,6 +303,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        log(t);
                         Toast.makeText(SoundPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -312,6 +318,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        log(t);
                         Toast.makeText(SoundPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -371,6 +378,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
 
             @Override
             public void onFailure(Call<ArrayList<LikeCount>> call, Throwable t) {
+                log(t);
                 Toast.makeText(SoundPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -395,6 +403,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
 
             @Override
             public void onFailure(Call<ArrayList<Check>> call, Throwable t) {
+                log(t);
                 Toast.makeText(SoundPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -462,6 +471,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
 
             @Override
             public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
+                log(t);
                 Toast.makeText(SoundPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -484,6 +494,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
 
             @Override
             public void onFailure(Call<ArrayList<CommentInfo>> call, Throwable t) {
+                log(t);
                 Toast.makeText(SoundPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -544,7 +555,7 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
         try {
             date = transFormat.parse(dateTime);
         } catch (ParseException e) {
-            e.printStackTrace();
+            log(e);
         }
 
         long curTime = System.currentTimeMillis();
@@ -577,5 +588,20 @@ public class SoundPlayer extends Activity implements CompoundButton.OnCheckedCha
             mp = null;
         }
         super.onDestroy();
+    }
+
+    private static void log(Throwable throwable){
+        StackTraceElement[] ste =  throwable.getStackTrace();
+        String className = ste[0].getClassName();
+        String methodName = ste[0].getMethodName();
+        int lineNumber = ste[0].getLineNumber();
+        String fileName = ste[0].getFileName();
+
+        if(LogFlag.printFlag){
+            if(logger.isInfoEnabled()){
+                logger.info("Exception: " + throwable.getMessage());
+                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+            }
+        }
     }
 }

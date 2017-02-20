@@ -170,6 +170,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
 
             @Override
             public void onFailure(Call<ArrayList<Song>> call, Throwable t) {
+                log(t);
                 Toast.makeText(SoundMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -240,7 +241,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일생");
             tv_menu_birth.setText(sdf.format(date));
         } catch (ParseException e) {
-            e.printStackTrace();
+            log(e);
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
@@ -374,6 +375,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        log(t);
                         Toast.makeText(SoundMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -428,6 +430,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            log(t);
                             Toast.makeText(SoundMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -527,6 +530,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
 
             @Override
             public void onFailure(Call<ArrayList<Song>> call, Throwable t) {
+                log(t);
                 Toast.makeText(SoundMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -614,6 +618,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
 
             @Override
             public void onFailure(Call<ArrayList<SongCategory>> call, Throwable t) {
+                log(t);
                 Toast.makeText(SoundMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -634,7 +639,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
         }
     }
 
-    private void log(Throwable throwable){
+    private static void log(Throwable throwable){
         StackTraceElement[] ste =  throwable.getStackTrace();
         String className = ste[0].getClassName();
         String methodName = ste[0].getMethodName();

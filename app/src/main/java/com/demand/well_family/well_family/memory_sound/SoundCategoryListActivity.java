@@ -31,8 +31,12 @@ import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Song;
+import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,6 +74,8 @@ public class SoundCategoryListActivity extends Activity {
 
     //toolbar
     private DrawerLayout dl;
+
+    private static final Logger logger = LoggerFactory.getLogger(SoundCategoryListActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,7 +165,7 @@ public class SoundCategoryListActivity extends Activity {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일생");
             tv_menu_birth.setText(sdf.format(date));
         } catch (ParseException e) {
-            e.printStackTrace();
+            log(e);
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
@@ -312,6 +318,7 @@ public class SoundCategoryListActivity extends Activity {
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            log(t);
                             Toast.makeText(SoundCategoryListActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -391,6 +398,7 @@ public class SoundCategoryListActivity extends Activity {
 
             @Override
             public void onFailure(Call<ArrayList<Song>> call, Throwable t) {
+                log(t);
                 Toast.makeText(SoundCategoryListActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
@@ -399,5 +407,20 @@ public class SoundCategoryListActivity extends Activity {
     private void init() {
         toolbar_title = (TextView) findViewById(R.id.toolbar_title);
         toolbar_title.setText(category_name);
+    }
+
+    private static void log(Throwable throwable){
+        StackTraceElement[] ste =  throwable.getStackTrace();
+        String className = ste[0].getClassName();
+        String methodName = ste[0].getMethodName();
+        int lineNumber = ste[0].getLineNumber();
+        String fileName = ste[0].getFileName();
+
+        if(LogFlag.printFlag){
+            if(logger.isInfoEnabled()){
+                logger.info("Exception: " + throwable.getMessage());
+                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+            }
+        }
     }
 }

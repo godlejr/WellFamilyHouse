@@ -46,10 +46,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Story;
 import com.demand.well_family.well_family.dto.StoryInfo;
+import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 import com.demand.well_family.well_family.util.RealPathUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -116,6 +120,8 @@ public class WriteActivity extends Activity {
     private final int UPLOADONEPIC = 950;
 
     private int photoListSize;
+
+    private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,7 +227,7 @@ public class WriteActivity extends Activity {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일생");
             tv_menu_birth.setText(sdf.format(date));
         } catch (ParseException e) {
-            e.printStackTrace();
+            log(e);
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
@@ -381,7 +387,7 @@ public class WriteActivity extends Activity {
             int exifDegree = exifOrientationToDegrees(exifOrientation);
             bm = rotate(bm, exifDegree);
         } catch (IOException e) {
-            e.printStackTrace();
+            log(e);
         }
         return bm;
     }
@@ -398,7 +404,7 @@ public class WriteActivity extends Activity {
                     bitmap = converted;
                 }
             } catch (OutOfMemoryError ex) {
-                ex.printStackTrace();
+                log(ex);
             }
         }
         return bitmap;
@@ -482,6 +488,7 @@ public class WriteActivity extends Activity {
 
                                             @Override
                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                log(t);
                                                 Toast.makeText(WriteActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                             }
                                         });
@@ -491,7 +498,7 @@ public class WriteActivity extends Activity {
                                     try {
                                         Thread.sleep(sleepTime);
                                     } catch (InterruptedException e) {
-                                        e.printStackTrace();
+                                        log(e);
                                     }
 
                                     progressDialog.dismiss();
@@ -503,6 +510,7 @@ public class WriteActivity extends Activity {
 
                                 @Override
                                 public void onFailure(Call<ArrayList<Story>> call, Throwable t) {
+                                    log(t);
                                     Toast.makeText(WriteActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                 }
                             });
@@ -557,6 +565,7 @@ public class WriteActivity extends Activity {
                             try {
                                 path = realPathUtil.getRealPathFromURI_API19(this, uri);
                             } catch (RuntimeException e) {
+                                log(e);
                                 path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
                             }
                             pathList.add(path);
@@ -571,6 +580,7 @@ public class WriteActivity extends Activity {
                                 try {
                                     path = realPathUtil.getRealPathFromURI_API19(this, uri);
                                 } catch (RuntimeException e) {
+                                    log(e);
                                     path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
                                 }
                                 pathList.add(path);
@@ -582,9 +592,10 @@ public class WriteActivity extends Activity {
                         Uri uri = data.getData();
                         String path = null;
                         try {
-                            path = realPathUtil.getRealPathFromURI_API19(this, uri);
-                        } catch (RuntimeException e) {
                             path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
+                        } catch (RuntimeException e) {
+                            log(e);
+                            path = realPathUtil.getRealPathFromURI_API19(this, uri);
                         }
                         pathList.add(path);
                         photoList.add(uri);
@@ -648,5 +659,19 @@ public class WriteActivity extends Activity {
         }
     }
 
+    private static void log(Throwable throwable) {
+        StackTraceElement[] ste = throwable.getStackTrace();
+        String className = ste[0].getClassName();
+        String methodName = ste[0].getMethodName();
+        int lineNumber = ste[0].getLineNumber();
+        String fileName = ste[0].getFileName();
+
+        if (LogFlag.printFlag) {
+            if (logger.isInfoEnabled()) {
+                logger.info("Exception: " + throwable.getMessage());
+                logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
+            }
+        }
+    }
 
 }

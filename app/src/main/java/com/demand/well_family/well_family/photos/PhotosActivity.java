@@ -20,7 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,10 +38,13 @@ import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Photo;
+import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
-//import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -86,6 +89,8 @@ public class PhotosActivity extends Activity {
     private ProgressDialog progressDialog;
     private Message msg;
     private Server_Connection server_connection;
+
+    private static final Logger logger = LoggerFactory.getLogger(PhotosActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,7 +184,7 @@ public class PhotosActivity extends Activity {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일생");
             tv_menu_birth.setText(sdf.format(date));
         } catch (ParseException e) {
-            e.printStackTrace();
+            log(e);
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
@@ -336,6 +341,7 @@ public class PhotosActivity extends Activity {
 
                     @Override
                     public void onFailure(Call<ArrayList<Photo>> call, Throwable t) {
+                        log(t);
                         Toast.makeText(PhotosActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -346,7 +352,7 @@ public class PhotosActivity extends Activity {
                         try {
                             progressDialog.dismiss();
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            log(e);
                         }
                     }
                 }, 200);
@@ -433,6 +439,21 @@ public class PhotosActivity extends Activity {
             int spacing = getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin) / 2;
             rv_photos.addItemDecoration(new SpaceItemDecoration(spacing));
             rv_photos.setHasFixedSize(true);
+        }
+    }
+
+    private static void log(Throwable throwable){
+        StackTraceElement[] ste =  throwable.getStackTrace();
+        String className = ste[0].getClassName();
+        String methodName = ste[0].getMethodName();
+        int lineNumber = ste[0].getLineNumber();
+        String fileName = ste[0].getFileName();
+
+        if(LogFlag.printFlag){
+            if(logger.isInfoEnabled()){
+                logger.info("Exception: " + throwable.getMessage());
+                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+            }
         }
     }
 

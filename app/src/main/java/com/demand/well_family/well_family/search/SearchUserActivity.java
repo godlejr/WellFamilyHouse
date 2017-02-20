@@ -24,7 +24,11 @@ import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Check;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.family.FamilyActivity;
+import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.users.UserActivity;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,6 +69,8 @@ public class SearchUserActivity extends Activity {
 
     private Server_Connection server_connection;
     private ArrayList<User> userList;
+
+    private static final Logger logger = LoggerFactory.getLogger(SearchUserActivity.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +124,7 @@ public class SearchUserActivity extends Activity {
 
                         @Override
                         public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+                            log(t);
                             Toast.makeText(SearchUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -281,6 +288,7 @@ public class SearchUserActivity extends Activity {
 
                                         @Override
                                         public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            log(t);
                                             Toast.makeText(SearchUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                         }
                                     });
@@ -308,6 +316,7 @@ public class SearchUserActivity extends Activity {
 
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        log(t);
                                         Toast.makeText(SearchUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -318,6 +327,7 @@ public class SearchUserActivity extends Activity {
 
                 @Override
                 public void onFailure(Call<ArrayList<Check>> call, Throwable t) {
+                    log(t);
                     Toast.makeText(SearchUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
             });
@@ -354,5 +364,20 @@ public class SearchUserActivity extends Activity {
         startActivity(intent);
         finish();
         super.onBackPressed();
+    }
+
+    private static void log(Throwable throwable){
+        StackTraceElement[] ste =  throwable.getStackTrace();
+        String className = ste[0].getClassName();
+        String methodName = ste[0].getMethodName();
+        int lineNumber = ste[0].getLineNumber();
+        String fileName = ste[0].getFileName();
+
+        if(LogFlag.printFlag){
+            if(logger.isInfoEnabled()){
+                logger.info("Exception: " + throwable.getMessage());
+                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+            }
+        }
     }
 }
