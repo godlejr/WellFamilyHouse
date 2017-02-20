@@ -373,7 +373,6 @@ public class UserActivitySound extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 if (user_id == story_user_id) {
                     //me
                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);

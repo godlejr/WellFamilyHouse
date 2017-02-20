@@ -216,7 +216,6 @@ public class SoundRecordActivity extends Activity {
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 함수 호출
                 setBack();
             }
         });
@@ -234,8 +233,6 @@ public class SoundRecordActivity extends Activity {
         ll_menu_mypage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 Intent intent = new Intent(SoundRecordActivity.this, UserActivity.class);
                 //userinfo
                 intent.putExtra("story_user_id", user_id);
@@ -271,8 +268,6 @@ public class SoundRecordActivity extends Activity {
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
-
-
         Glide.with(context).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_menu_avatar);
 
 
@@ -407,12 +402,15 @@ public class SoundRecordActivity extends Activity {
             @Override
             public void onResponse(Call<ArrayList<Range>> call, Response<ArrayList<Range>> response) {
                 ArrayList<Range> rangeList = response.body();
-                for (int i = 0; i < rangeList.size(); i++) {
+                int rangeListSize = rangeList.size();
+                int spListSize = spList.size();
+
+                for (int i = 0; i < rangeListSize; i++) {
                     spList.put(rangeList.get(i).getId(), rangeList.get(i).getName());
                 }
 
-                String[] spinnerArray = new String[spList.size()];
-                for (int i = 0; i < spList.size(); i++) {
+                String[] spinnerArray = new String[spListSize];
+                for (int i = 0; i < spListSize; i++) {
                     spinnerArray[i] = spList.get(i + 1);
                 }
 
@@ -458,7 +456,6 @@ public class SoundRecordActivity extends Activity {
             public void onFailure(Call<ArrayList<Range>> call, Throwable t) {
                 log(t);
                 Toast.makeText(SoundRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-
             }
         });
     }
@@ -592,7 +589,6 @@ public class SoundRecordActivity extends Activity {
 
             @Override
             public void onStopTrackingTouch(final SeekBar seekBar) {
-                // 사용자가 움직여놓은 위치
                 if (isPaused) {
                     pausePos = seekBar.getProgress();
                     mp.seekTo(pausePos);
@@ -854,6 +850,8 @@ public class SoundRecordActivity extends Activity {
                 if (isRecording) {
                     Toast.makeText(SoundRecordActivity.this, "녹음을 완료하세요.", Toast.LENGTH_SHORT).show();
                 } else {
+                    final int photoListSize = photoList.size();
+
                     if (et_sound_record_memory.getText().toString().equals("") && file == null && photoList.size() == 0) {
                         return;
                     }
@@ -863,7 +861,7 @@ public class SoundRecordActivity extends Activity {
                     }
 
                     // 등록버튼
-                    if (photoList.size() == 0 && et_sound_record_memory.getText().toString().length() == 0 && file == null && location.length() == 0) {
+                    if (photoListSize == 0 && et_sound_record_memory.getText().toString().length() == 0 && file == null && location.length() == 0) {
                     } else {
                         if (location == null) {
                             location = "";
@@ -875,10 +873,10 @@ public class SoundRecordActivity extends Activity {
                                 ColorDrawable(Color.TRANSPARENT));
                         progressDialog.setContentView(R.layout.progress_dialog);
 
-                        if (photoList.size() > 10) { // 10 개 선택업로드가 제한이지만 선택자체는 100개 할 수 도 있으므로
+                        if (photoListSize > 10) { // 10 개 선택업로드가 제한이지만 선택자체는 100개 할 수 도 있으므로
                             sleepTime = 850 * 10;
                         } else {
-                            sleepTime = 850 * photoList.size();
+                            sleepTime = 850 * photoListSize;
                         }
                         new Thread(new Runnable() {
                             @Override
@@ -891,12 +889,14 @@ public class SoundRecordActivity extends Activity {
                                 map.put("content", et_sound_record_memory.getText().toString());
                                 map.put("location", location);
 
+
+
                                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                                 Call<ArrayList<SongStory>> call_insert_song_story = server_connection.insert_song_story(user_id, map);
                                 call_insert_song_story.enqueue(new Callback<ArrayList<SongStory>>() {
                                     @Override
                                     public void onResponse(Call<ArrayList<SongStory>> call, Response<ArrayList<SongStory>> response) {
-                                        for (int i = 0; i < photoList.size(); i++) {
+                                        for (int i = 0; i < photoListSize; i++) {
                                             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                                             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(photoList.get(i), i)));
                                             Call<ResponseBody> call_write_photo = server_connection.insert_song_photos(response.body().get(0).getId(), requestBody);
@@ -934,8 +934,10 @@ public class SoundRecordActivity extends Activity {
                                             });
                                         }
 
-                                        if (emotionList.size() != 0) {
-                                            for (int i = 0; i < emotionList.size(); i++) {
+                                        int emotionListSize = emotionList.size();
+
+                                        if (emotionListSize != 0) {
+                                            for (int i = 0; i < emotionListSize; i++) {
                                                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                                                 HashMap<String, String> map = new HashMap<String, String>();
                                                 map.put("song_story_emotion_id", String.valueOf(emotionList.get(i).getId()));
@@ -1036,7 +1038,9 @@ public class SoundRecordActivity extends Activity {
             if (resultCode == 1001) {
                 ArrayList<SongStoryEmotionInfo> dummy_emotionList = (ArrayList<SongStoryEmotionInfo>) data.getSerializableExtra("emotionList");
                 emotionList = new ArrayList<>();
-                for (int i = 0; i < dummy_emotionList.size(); i++) {
+
+                int dummy_emotionListSize = dummy_emotionList.size();
+                for (int i = 0; i < dummy_emotionListSize; i++) {
                     if (dummy_emotionList.get(i).isChecked()) {
                         emotionList.add(dummy_emotionList.get(i));
                     }
