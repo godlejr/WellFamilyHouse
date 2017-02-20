@@ -120,7 +120,6 @@ public class WriteActivity extends Activity {
     private final int UPLOADONEPIC = 950;
 
     private int photoListSize;
-
     private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
 
     @Override
@@ -175,7 +174,6 @@ public class WriteActivity extends Activity {
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 함수 호출
                 setBack();
             }
         });
@@ -436,13 +434,6 @@ public class WriteActivity extends Activity {
                 photoListSize = photoList.size();
 
                 if (photoListSize != 0 || et_content.getText().toString().length() != 0) {
-                    // 등록버튼
-                    /*progressDialog = new ProgressDialog(WriteActivity.this);
-                    progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                    progressDialog.setMessage("uploading..");
-                    progressDialog.setMax(photoList.size());
-                    progressDialog.show();*/
-
                     progressDialog = new ProgressDialog(WriteActivity.this);
                     progressDialog.show();
                     progressDialog.getWindow().setBackgroundDrawable(new

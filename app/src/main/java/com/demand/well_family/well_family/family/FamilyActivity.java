@@ -20,7 +20,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -73,8 +72,6 @@ import retrofit2.Response;
 
 import static com.demand.well_family.well_family.LoginActivity.finishList;
 
-//import com.demand.well_family.well_family.WriteActivity;
-//import com.demand.well_family.well_family.photos.PhotosActivity;
 
 /**
  * Created by Dev-0 on 2017-01-19.

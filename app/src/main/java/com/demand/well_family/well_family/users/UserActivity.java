@@ -12,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,8 +47,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.demand.well_family.well_family.LoginActivity.finishList;
-
-//import com.demand.well_family.well_family.memory_sound.SoundMainActivity;
 
 /**
  * Created by Dev-0 on 2017-01-23.

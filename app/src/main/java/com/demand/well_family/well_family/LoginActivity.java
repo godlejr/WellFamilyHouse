@@ -1,7 +1,6 @@
 package com.demand.well_family.well_family;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.register.AgreementActivity;
-import com.demand.well_family.well_family.users.UserActivity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         ArrayList<User> userList = response.body();
 
                         if (userList.size() == 0) {
+                            //
                             Toast.makeText(LoginActivity.this, "ID / 패스워드를 확인해주세요.", Toast.LENGTH_LONG).show();
                         } else {
                             loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
