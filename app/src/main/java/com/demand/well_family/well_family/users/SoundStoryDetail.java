@@ -193,7 +193,6 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 함수 호출
                 setBack();
             }
         });
@@ -246,7 +245,6 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
-
         Glide.with(context).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_menu_avatar);
 
 
@@ -379,7 +377,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         tv_sound_story_detail_comment_count = (TextView) findViewById(R.id.tv_sound_story_detail_comment_count);
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<CommentCount>> call_comment_count = server_connection.song_story_comment_Count(String.valueOf(story_id));
+        Call<ArrayList<CommentCount>> call_comment_count = server_connection.song_story_comment_Count(story_id);
         call_comment_count.enqueue(new Callback<ArrayList<CommentCount>>() {
             @Override
             public void onResponse(Call<ArrayList<CommentCount>> call, Response<ArrayList<CommentCount>> response) {
@@ -418,7 +416,6 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         nsv_sound_story_detail = (NestedScrollView) findViewById(R.id.nsv_sound_story_detail);
 
         // song
-
         tv_sound_story_detail_title.setText(song_title);
         tv_sound_story_detail_singer.setText(song_singer);
 
@@ -426,12 +423,12 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         HashMap<String, String> map = new HashMap<>();
         map.put("song_id", String.valueOf(song_id));
 
-        Call<ArrayList<SongStoryAvatar>> call_avatar = server_connection.song_story_avatar(String.valueOf(story_id), map);
+        Call<ArrayList<SongStoryAvatar>> call_avatar = server_connection.song_story_avatar(story_id, map);
         call_avatar.enqueue(new Callback<ArrayList<SongStoryAvatar>>() {
             @Override
             public void onResponse(Call<ArrayList<SongStoryAvatar>> call, Response<ArrayList<SongStoryAvatar>> response) {
                 String avatar = response.body().get(0).getAvatar();
-                Glide.with(SoundStoryDetail.this).load(getString(R.string.cloud_front_songs_avatar) + response.body().get(0).getAvatar())
+                Glide.with(SoundStoryDetail.this).load(getString(R.string.cloud_front_songs_avatar) + avatar)
                         .thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_detail_song_img);
             }
 
@@ -444,7 +441,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         // user info
         Glide.with(this).load(getString(R.string.cloud_front_user_avatar) + story_user_avatar)
                 .thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_avatar);
-        tv_sound_story_detail_writer_name.setText(story_user_name); // 작성자 명
+        tv_sound_story_detail_writer_name.setText(story_user_name);
         tv_sound_story_detail_date.setText(calculateTime(created_at));
 
         // record
@@ -466,7 +463,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         tv_sound_story_detail_like_count = (TextView) findViewById(R.id.tv_sound_story_detail_like_count);
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<LikeCount>> call_like_count = server_connection.song_story_like_Count(String.valueOf(story_id));
+        Call<ArrayList<LikeCount>> call_like_count = server_connection.song_story_like_Count(story_id);
         call_like_count.enqueue(new Callback<ArrayList<LikeCount>>() {
             @Override
             public void onResponse(Call<ArrayList<LikeCount>> call, Response<ArrayList<LikeCount>> response) {
@@ -491,7 +488,6 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
     }
 
     private void setPlayer() {
-
         if (mp == null) {
             mp = new MediaPlayer();
         }
@@ -518,7 +514,6 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
             mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                    Log.e("끝", "끝");
                     isPlaying = isPaused = false;
 
                     iv_sound_story_detail_play.setImageResource(R.drawable.play);
@@ -541,19 +536,16 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                 int s = ((seekBar.getProgress() % 60000) / 1000);
 
                 tv_sound_story_detail_play.setText(m + ":" + s);
-                pausePos = seekBar.getProgress(); // 사용자가 움직여놓은 위치
+                pausePos = seekBar.getProgress();
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-//                isPlaying = false;
                 mp.pause();
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Log.e("ㅐㅐㅐ", pausePos + "");
-
                 if (isPlaying) {
                     if (mp != null) {
                         mp.seekTo(pausePos);
@@ -611,12 +603,10 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                                         mp.pause();
                                         mp.stop();
                                         mp.reset();
-
                                     }
                                 });
 
                                 mp.prepareAsync();
-
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -627,7 +617,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
 
                         new SeekBarThread().start();
                         iv_sound_story_detail_play.setImageResource(R.drawable.pause);
-                    } // end else
+                    }
                 }
             }
         });
@@ -639,7 +629,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
 
         //images
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<SongPhoto>> call_song_photo = server_connection.song_story_photo_List(String.valueOf(story_id));
+        Call<ArrayList<SongPhoto>> call_song_photo = server_connection.song_story_photo_List(story_id);
         call_song_photo.enqueue(new Callback<ArrayList<SongPhoto>>() {
             @Override
             public void onResponse(Call<ArrayList<SongPhoto>> call, Response<ArrayList<SongPhoto>> response) {
@@ -663,11 +653,11 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
 
     }
 
-    private void getEmotionData(){
-        rv_detail_emotion = (RecyclerView)findViewById(R.id.rv_detail_emotion);
+    private void getEmotionData() {
+        rv_detail_emotion = (RecyclerView) findViewById(R.id.rv_detail_emotion);
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<SongStoryEmotionData>> call_emotion_data = server_connection.song_story_emotion_List(String.valueOf(story_id));
+        Call<ArrayList<SongStoryEmotionData>> call_emotion_data = server_connection.song_story_emotion_List(story_id);
         call_emotion_data.enqueue(new Callback<ArrayList<SongStoryEmotionData>>() {
             @Override
             public void onResponse(Call<ArrayList<SongStoryEmotionData>> call, Response<ArrayList<SongStoryEmotionData>> response) {
@@ -676,6 +666,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                 rv_detail_emotion.setAdapter(emotionAdapter);
                 rv_detail_emotion.setLayoutManager(new GridLayoutManager(SoundStoryDetail.this, 2));
             }
+
             @Override
             public void onFailure(Call<ArrayList<SongStoryEmotionData>> call, Throwable t) {
                 Toast.makeText(SoundStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
@@ -733,7 +724,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                     HashMap<String, String> map = new HashMap<>();
                     map.put("user_id", String.valueOf(user_id));
                     map.put("content", content);
-                    Call<ArrayList<SongStoryComment>> call_insert_comment = server_connection.insert_song_story_comment(String.valueOf(story_id), map);
+                    Call<ArrayList<SongStoryComment>> call_insert_comment = server_connection.insert_song_story_comment(story_id, map);
                     call_insert_comment.enqueue(new Callback<ArrayList<SongStoryComment>>() {
                         @Override
                         public void onResponse(Call<ArrayList<SongStoryComment>> call, Response<ArrayList<SongStoryComment>> response) {
@@ -763,7 +754,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         rv_sound_story_detail_comments = (RecyclerView) findViewById(R.id.rv_sound_story_detail_comments);
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<CommentInfo>> call_family = server_connection.song_story_comment_List(String.valueOf(story_id));
+        Call<ArrayList<CommentInfo>> call_family = server_connection.song_story_comment_List(story_id);
         call_family.enqueue(new Callback<ArrayList<CommentInfo>>() {
             @Override
             public void onResponse(Call<ArrayList<CommentInfo>> call, Response<ArrayList<CommentInfo>> response) {
@@ -898,18 +889,13 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
         String msg = null;
 
         if (diffTime < 60) {
-            // sec
             msg = diffTime + "초전";
         } else if ((diffTime /= 60) < 60) {
-            // min
             System.out.println(diffTime);
-
             msg = diffTime + "분전";
         } else if ((diffTime /= 60) < 24) {
-            // hour
             msg = (diffTime) + "시간전";
         } else if ((diffTime /= 24) < 7) {
-            // day
             msg = (diffTime) + "일전";
         } else {
             SimpleDateFormat sdf = new SimpleDateFormat("yy.M.d aa h:mm");
@@ -928,7 +914,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_id", String.valueOf(user_id));
 
-                Call<ResponseBody> call_like = server_connection.song_story_like_up(String.valueOf(story_id), map);
+                Call<ResponseBody> call_like = server_connection.song_story_like_up(story_id, map);
                 call_like.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -946,7 +932,7 @@ public class SoundStoryDetail extends Activity implements CompoundButton.OnCheck
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_id", String.valueOf(user_id));
 
-                Call<ResponseBody> call_dislike = server_connection.song_story_like_down(String.valueOf(story_id), map);
+                Call<ResponseBody> call_dislike = server_connection.song_story_like_down(story_id, map);
                 call_dislike.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

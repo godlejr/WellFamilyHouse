@@ -107,7 +107,6 @@ public class SoundCategoryListActivity extends Activity {
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 함수 호출
                 setBack();
             }
         });
@@ -164,7 +163,6 @@ public class SoundCategoryListActivity extends Activity {
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
-
         Glide.with(context).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_menu_avatar);
 
 
@@ -305,7 +303,7 @@ public class SoundCategoryListActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ResponseBody> call_insert_song_hit = server_connection.Insert_Song_hit(String.valueOf(songList.get(getAdapterPosition()).getId()));
+                    Call<ResponseBody> call_insert_song_hit = server_connection.Insert_Song_hit(songList.get(getAdapterPosition()).getId());
                     call_insert_song_hit.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -382,7 +380,7 @@ public class SoundCategoryListActivity extends Activity {
         rv_song_list = (RecyclerView) findViewById(R.id.rv_song_list);
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<Song>> call_song_list_by_Category = server_connection.song_list_by_Category(String.valueOf(category_id));
+        Call<ArrayList<Song>> call_song_list_by_Category = server_connection.song_list_by_Category(category_id);
         call_song_list_by_Category.enqueue(new Callback<ArrayList<Song>>() {
             @Override
             public void onResponse(Call<ArrayList<Song>> call, Response<ArrayList<Song>> response) {

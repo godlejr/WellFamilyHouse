@@ -124,8 +124,7 @@ public class UserActivitySound extends Activity {
     private Call<ArrayList<SongStory>> call_content;
     private Server_Connection server_connection_for_content;
 
-    // emotion
-//    private RecyclerView rv_song_story_emotion;
+    //emotion
     private EmotionAdapter emotionAdapter;
 
     @Override
@@ -176,7 +175,6 @@ public class UserActivitySound extends Activity {
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 함수 호출
                 setBack();
             }
         });
@@ -376,17 +374,18 @@ public class UserActivitySound extends Activity {
                 if (user_id == story_user_id) {
                     //me
                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    call_content = server_connection.song_story_List_Me(String.valueOf(story_user_id));
+                    call_content = server_connection.song_story_List_Me(story_user_id);
 
                     call_content.enqueue(new Callback<ArrayList<SongStory>>() {
                         @Override
                         public void onResponse(Call<ArrayList<SongStory>> call, Response<ArrayList<SongStory>> response) {
                             contentList = response.body();
+                            content_size = contentList.size();
 
-                            if (contentList.size() == 0) {
+                            if (content_size == 0) {
                                 //contents  비워 있음
                             } else {
-                                content_size = contentList.size();
+//                                content_size = contentList.size();
                                 int loopSize = 0;
 
                                 if (content_size <= CONTENTS_OFFSET) {
@@ -435,23 +434,24 @@ public class UserActivitySound extends Activity {
                     map.put("user_id", String.valueOf(user_id));
 
 
-                    Call<ArrayList<Check>> call_family_check = server_connection.family_check(String.valueOf(story_user_id), map);
+                    Call<ArrayList<Check>> call_family_check = server_connection.family_check(story_user_id, map);
                     call_family_check.enqueue(new Callback<ArrayList<Check>>() {
                         @Override
                         public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {
                             if (response.body().get(0).getChecked() > 0) {
                                 //family
                                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                call_content = server_connection.song_story_List_Family(String.valueOf(story_user_id));
+                                call_content = server_connection.song_story_List_Family(story_user_id);
                                 call_content.enqueue(new Callback<ArrayList<SongStory>>() {
                                     @Override
                                     public void onResponse(Call<ArrayList<SongStory>> call, Response<ArrayList<SongStory>> response) {
                                         contentList = response.body();
+                                        content_size = contentList.size();
 
-                                        if (contentList.size() == 0) {
+                                        if (content_size == 0) {
                                             //contents  비워 있음
                                         } else {
-                                            content_size = contentList.size();
+//                                            content_size = contentList.size();
                                             int loopSize = 0;
 
                                             if (content_size <= CONTENTS_OFFSET) {
@@ -497,16 +497,17 @@ public class UserActivitySound extends Activity {
                             } else {
                                 //public
                                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                call_content = server_connection.song_story_List_Public(String.valueOf(story_user_id));
+                                call_content = server_connection.song_story_List_Public(story_user_id);
                                 call_content.enqueue(new Callback<ArrayList<SongStory>>() {
                                     @Override
                                     public void onResponse(Call<ArrayList<SongStory>> call, Response<ArrayList<SongStory>> response) {
                                         contentList = response.body();
+                                        content_size = contentList.size();
 
-                                        if (contentList.size() == 0) {
+                                        if (content_size == 0) {
                                             //contents  비워 있음
                                         } else {
-                                            content_size = contentList.size();
+//                                            content_size = contentList.size();
                                             int loopSize = 0;
 
                                             if (content_size <= CONTENTS_OFFSET) {
@@ -655,7 +656,7 @@ public class UserActivitySound extends Activity {
         private TextView tv_sound_story_title, tv_sound_story_singer, tv_sound_story_user_name, tv_sound_story_content, tv_sound_story_location,
                 tv_sound_story_like, tv_sound_story_comment, tv_sound_story_date;
         private CircleImageView iv_sound_story_avatar;
-        private LinearLayout ll_sound_story_images_container, ll_sound_story_location, ll_sound_story_images_icon, ll_sound_story_total;
+        private LinearLayout ll_sound_story_images_container, ll_sound_story_location, ll_sound_story_total;
         private ImageButton ib_item_sound_story_comment;
         private CheckBox cb_item_sound_story_like;
         private LayoutInflater story_images_inflater;
@@ -676,7 +677,6 @@ public class UserActivitySound extends Activity {
 
             iv_sound_story_avatar = (CircleImageView) itemView.findViewById(R.id.iv_sound_story_avatar);
             ll_sound_story_total = (LinearLayout) itemView.findViewById(R.id.ll_sound_story_total);
-//            ll_sound_story_images_icon = (LinearLayout) itemView.findViewById(R.id.ll_sound_story_images_icon);
             ll_sound_story_images_container = (LinearLayout) itemView.findViewById(R.id.ll_sound_story_images_container);
             ll_sound_story_location = (LinearLayout) itemView.findViewById(R.id.ll_sound_story_location);
             ib_item_sound_story_comment = (ImageButton) itemView.findViewById(R.id.ib_item_sound_story_comment);
@@ -694,7 +694,7 @@ public class UserActivitySound extends Activity {
                             HashMap<String, String> map = new HashMap<>();
                             map.put("user_id", String.valueOf(user_id));
 
-                            Call<ResponseBody> call_like = server_connection.song_story_like_up(String.valueOf(storyList.get(getAdapterPosition()).getStory_id()), map);
+                            Call<ResponseBody> call_like = server_connection.song_story_like_up(storyList.get(getAdapterPosition()).getStory_id(), map);
                             call_like.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -712,7 +712,7 @@ public class UserActivitySound extends Activity {
                             HashMap<String, String> map = new HashMap<>();
                             map.put("user_id", String.valueOf(user_id));
 
-                            Call<ResponseBody> call_dislike = server_connection.song_story_like_down(String.valueOf(storyList.get(getAdapterPosition()).getStory_id()), map);
+                            Call<ResponseBody> call_dislike = server_connection.song_story_like_down(storyList.get(getAdapterPosition()).getStory_id(), map);
                             call_dislike.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -777,6 +777,7 @@ public class UserActivitySound extends Activity {
         private Context context;
         private ArrayList<SongStoryInfo> storyList;
         private int layout;
+
         //photo recycler
         private ArrayList<SongPhoto> photoList;
 
@@ -801,7 +802,6 @@ public class UserActivitySound extends Activity {
             //user info
             Glide.with(context).load(getString(R.string.cloud_front_user_avatar) + story_user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_sound_story_avatar);
             holder.tv_sound_story_user_name.setText(story_user_name);
-//            holder.tv_sound_story_date.setText(calculateTime(storyList.get(position).getCreated_at()));
 
             //content
             holder.tv_sound_story_content.setText(storyList.get(position).getContent());
@@ -811,9 +811,7 @@ public class UserActivitySound extends Activity {
 
             //location
             if (storyList.get(position).getLocation() != null && storyList.get(position).getLocation().length() != 0) {
-
                 holder.ll_sound_story_location.setVisibility(View.VISIBLE);
-
                 holder.tv_sound_story_location.setText(storyList.get(position).getLocation());
             } else {
                 holder.ll_sound_story_location.setVisibility(View.GONE);
@@ -828,7 +826,7 @@ public class UserActivitySound extends Activity {
 
             // emotion
             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            Call<ArrayList<SongStoryEmotionData>> call_emotion_data = server_connection.song_story_emotion_List(String.valueOf(storyList.get(position).getStory_id()));
+            Call<ArrayList<SongStoryEmotionData>> call_emotion_data = server_connection.song_story_emotion_List(storyList.get(position).getStory_id());
             call_emotion_data.enqueue(new Callback<ArrayList<SongStoryEmotionData>>() {
                 @Override
                 public void onResponse(Call<ArrayList<SongStoryEmotionData>> call, Response<ArrayList<SongStoryEmotionData>> response) {
@@ -848,17 +846,18 @@ public class UserActivitySound extends Activity {
 
             //images
             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            Call<ArrayList<SongPhoto>> call_song_photo = server_connection.song_story_photo_List(String.valueOf(storyList.get(position).getStory_id()));
+            Call<ArrayList<SongPhoto>> call_song_photo = server_connection.song_story_photo_List(storyList.get(position).getStory_id());
             call_song_photo.enqueue(new Callback<ArrayList<SongPhoto>>() {
                 @Override
                 public void onResponse(Call<ArrayList<SongPhoto>> call, Response<ArrayList<SongPhoto>> response) {
                     photoList = response.body();
-                    if (photoList.size() == 0) {
+                    int photoListSize = photoList.size();
+
+                    if (photoListSize == 0) {
                         holder.ll_sound_story_images_container.setVisibility(View.GONE);
                         holder.tv_sound_story_content.setMaxLines(15);
                     }
-
-                    if (photoList.size() == 1) {
+                    if (photoListSize == 1) {
                         holder.ll_sound_story_images_container.removeAllViews();
                         holder.ll_sound_story_images_container.setVisibility(View.VISIBLE);
                         holder.ll_sound_story_images_container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1200));
@@ -866,8 +865,7 @@ public class UserActivitySound extends Activity {
                         ImageView iv_item_main_story_image = (ImageView) holder.ll_sound_story_images_container.findViewById(R.id.iv_item_main_story_image);
                         Glide.with(context).load(getString(R.string.cloud_front_song_stories_images) + photoList.get(0).getName() + "." + photoList.get(0).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image);
                     }
-
-                    if (photoList.size() == 2) {
+                    if (photoListSize == 2) {
                         holder.ll_sound_story_images_container.removeAllViews();
                         holder.ll_sound_story_images_container.setVisibility(View.VISIBLE);
 
@@ -877,8 +875,7 @@ public class UserActivitySound extends Activity {
                         ImageView iv_item_main_story_image_two2 = (ImageView) holder.ll_sound_story_images_container.findViewById(R.id.iv_item_main_story_image_two2);
                         Glide.with(context).load(getString(R.string.cloud_front_song_stories_images) + photoList.get(1).getName() + "." + photoList.get(1).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image_two2);
                     }
-
-                    if (photoList.size() > 2) {
+                    if (photoListSize > 2) {
                         holder.ll_sound_story_images_container.removeAllViews();
                         holder.ll_sound_story_images_container.setVisibility(View.VISIBLE);
                         holder.story_images_inflater.inflate(R.layout.item_main_story_image_list, holder.ll_sound_story_images_container, true);
@@ -898,7 +895,7 @@ public class UserActivitySound extends Activity {
             });
 
             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            Call<ArrayList<LikeCount>> call_like_count = server_connection.song_story_like_Count(String.valueOf(storyList.get(position).getStory_id()));
+            Call<ArrayList<LikeCount>> call_like_count = server_connection.song_story_like_Count(storyList.get(position).getStory_id());
             call_like_count.enqueue(new Callback<ArrayList<LikeCount>>() {
                 @Override
                 public void onResponse(Call<ArrayList<LikeCount>> call, Response<ArrayList<LikeCount>> response) {
@@ -913,7 +910,7 @@ public class UserActivitySound extends Activity {
             });
 
             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            Call<ArrayList<CommentCount>> call_comment_count = server_connection.song_story_comment_Count(String.valueOf(storyList.get(position).getStory_id()));
+            Call<ArrayList<CommentCount>> call_comment_count = server_connection.song_story_comment_Count(storyList.get(position).getStory_id());
             call_comment_count.enqueue(new Callback<ArrayList<CommentCount>>() {
                 @Override
                 public void onResponse(Call<ArrayList<CommentCount>> call, Response<ArrayList<CommentCount>> response) {
@@ -930,7 +927,7 @@ public class UserActivitySound extends Activity {
             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
             HashMap<String, String> map = new HashMap<>();
             map.put("user_id", String.valueOf(user_id));
-            Call<ArrayList<Check>> call_like_check = server_connection.song_story_like_check(String.valueOf(storyList.get(position).getStory_id()), map);
+            Call<ArrayList<Check>> call_like_check = server_connection.song_story_like_check(storyList.get(position).getStory_id(), map);
             call_like_check.enqueue(new Callback<ArrayList<Check>>() {
                 @Override
                 public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {
@@ -971,20 +968,14 @@ public class UserActivitySound extends Activity {
             long diffTime = (curTime - regTime) / 1000;
 
             String msg = null;
-
             if (diffTime < 60) {
-                // sec
                 msg = diffTime + "초전";
             } else if ((diffTime /= 60) < 60) {
-                // min
                 System.out.println(diffTime);
-
                 msg = diffTime + "분전";
             } else if ((diffTime /= 60) < 24) {
-                // hour
                 msg = (diffTime) + "시간전";
             } else if ((diffTime /= 24) < 7) {
-                // day
                 msg = (diffTime) + "일전";
             } else {
                 SimpleDateFormat sdf = new SimpleDateFormat("yy.M.d aa h:mm");
@@ -1069,7 +1060,6 @@ public class UserActivitySound extends Activity {
 
         // multi photos
         private void divideMultiPhotos(LinearLayout ll_main_story_image, ImageView iv_main_story_content) {
-
             ll_main_story_image.setLayoutParams(new LinearLayout.LayoutParams((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics()),
                     LinearLayout.LayoutParams.MATCH_PARENT));
 
@@ -1119,24 +1109,10 @@ public class UserActivitySound extends Activity {
         }
     }
 
-    private class SpaceItemDecoration extends RecyclerView.ItemDecoration {
-        private int space;
-
-        public SpaceItemDecoration(int space) {
-            this.space = space;
-        }
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            outRect.bottom = space;
-            outRect.right = space;
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == DETAIL_REQUEST) { //디테일
+        if (requestCode == DETAIL_REQUEST) {
             if (resultCode == RESULT_OK) {
                 int position = data.getIntExtra("position", 0);
                 Boolean like_checked = data.getBooleanExtra("like_checked", false);

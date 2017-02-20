@@ -173,7 +173,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         btn_family_add_exist = (ImageButton) findViewById(R.id.btn_family_add_exist);
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<Family>> call = server_connection.family_Info(String.valueOf(user_id));
+        Call<ArrayList<Family>> call = server_connection.family_Info(user_id);
         call.enqueue(new Callback<ArrayList<Family>>() {
             @Override
             public void onResponse(Call<ArrayList<Family>> call, Response<ArrayList<Family>> response) {
@@ -302,7 +302,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void getAppData() {
-        //        앱스
         appList = new ArrayList<>();
         appList.add(new App("추억소리", R.drawable.memory_sound));
         appList.add(new App("셀핏", R.drawable.selffeet));
@@ -389,7 +388,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         nv.setItemIconTintList(null);
         dl = (DrawerLayout) view.findViewById(R.id.dl);
 
-        // toolbar_main
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolBar);
         TextView toolbar_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
         toolbar_title.setText("홈");
@@ -531,7 +529,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         finish();
                         break;
 
-//                    App 이용하기
                     case R.id.menu_selffeet:
                         Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
 
@@ -582,7 +579,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         viewPager_prev = (ImageView) findViewById(R.id.iv_viewPager_prev);
         viewPager_next = (ImageView) findViewById(R.id.iv_viewPager_next);
 
-//        getLayoutInflater()
         viewPager.setAdapter(new ViewPageAdapter(getLayoutInflater()));
 
         viewPager_prev.setOnClickListener(this);

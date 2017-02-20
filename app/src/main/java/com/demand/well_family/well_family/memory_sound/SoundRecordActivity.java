@@ -885,14 +885,14 @@ public class SoundRecordActivity extends Activity {
                                 map.put("location", location);
 
                                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                Call<ArrayList<SongStory>> call_insert_song_story = server_connection.insert_song_story(String.valueOf(user_id), map);
+                                Call<ArrayList<SongStory>> call_insert_song_story = server_connection.insert_song_story(user_id, map);
                                 call_insert_song_story.enqueue(new Callback<ArrayList<SongStory>>() {
                                     @Override
                                     public void onResponse(Call<ArrayList<SongStory>> call, Response<ArrayList<SongStory>> response) {
                                         for (int i = 0; i < photoList.size(); i++) {
                                             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                                             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(photoList.get(i), i)));
-                                            Call<ResponseBody> call_write_photo = server_connection.insert_song_photos(String.valueOf(response.body().get(0).getId()), requestBody);
+                                            Call<ResponseBody> call_write_photo = server_connection.insert_song_photos(response.body().get(0).getId(), requestBody);
 
                                             call_write_photo.enqueue(new Callback<ResponseBody>() {
                                                 @Override
@@ -911,7 +911,7 @@ public class SoundRecordActivity extends Activity {
                                         if (file != null) {
                                             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                                             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Audio(file));
-                                            Call<ResponseBody> call_write_audio = server_connection.insert_song_audio(String.valueOf(response.body().get(0).getId()), requestBody);
+                                            Call<ResponseBody> call_write_audio = server_connection.insert_song_audio(response.body().get(0).getId(), requestBody);
                                             call_write_audio.enqueue(new Callback<ResponseBody>() {
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -925,12 +925,12 @@ public class SoundRecordActivity extends Activity {
                                             });
                                         }
 
-                                        if(emotionList.size()!=0){
-                                            for(int i =0; i<emotionList.size();i++) {
+                                        if (emotionList.size() != 0) {
+                                            for (int i = 0; i < emotionList.size(); i++) {
                                                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                                                 HashMap<String, String> map = new HashMap<String, String>();
                                                 map.put("song_story_emotion_id", String.valueOf(emotionList.get(i).getId()));
-                                                Call<ResponseBody> call_insert_emotions = server_connection.insert_emotion_into_song_story(String.valueOf(response.body().get(0).getId()), map);
+                                                Call<ResponseBody> call_insert_emotions = server_connection.insert_emotion_into_song_story(response.body().get(0).getId(), map);
                                                 call_insert_emotions.enqueue(new Callback<ResponseBody>() {
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -1030,7 +1030,7 @@ public class SoundRecordActivity extends Activity {
                         emotionList.add(dummy_emotionList.get(i));
                     }
                 }
-                
+
                 emotionAdapter = new EmotionAdapter(emotionList, SoundRecordActivity.this, R.layout.item_emotion);
                 rv_record_emotion.setAdapter(emotionAdapter);
 

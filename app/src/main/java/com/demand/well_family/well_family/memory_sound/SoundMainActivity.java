@@ -122,6 +122,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
             @Override
             public void onResponse(Call<ArrayList<Song>> call, Response<ArrayList<Song>> response) {
                 if (response.body().size() == 0) {
+
                 } else {
                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                     random_id = response.body().get(0).getId();
@@ -132,29 +133,27 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
                     random_category_id = response.body().get(0).getCategory_id();
                     random_created_at = response.body().get(0).getCreated_at();
                     random_ext = response.body().get(0).getExt();
-                    Call<ArrayList<CommentCount>> call_song_comment_Count = server_connection.song_comment_Count(String.valueOf(random_id));
 
-
+                    Call<ArrayList<CommentCount>> call_song_comment_Count = server_connection.song_comment_Count(random_id);
                     call_song_comment_Count.enqueue(new Callback<ArrayList<CommentCount>>() {
                         @Override
                         public void onResponse(Call<ArrayList<CommentCount>> call, Response<ArrayList<CommentCount>> response) {
+                            String like_count = String.valueOf(response.body().get(0).getComment_count());
+                            tv_sound_random_comment_count.setText(like_count + "건");
 
-                            if (response.body().size() != 0) {
-                                String like_count = String.valueOf(response.body().get(0).getComment_count());
-                                tv_sound_random_comment_count.setText(like_count + "건");
+                            tv_sound_random_title.setText(random_title);
+                            tv_sound_random_singer.setText(random_singer);
 
-                                tv_sound_random_title.setText(random_title);
-                                tv_sound_random_singer.setText(random_singer);
+                            Glide.with(SoundMainActivity.this).load(getString(R.string.cloud_front_songs_avatar) + random_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_random_avatar);
 
-                                Glide.with(SoundMainActivity.this).load(getString(R.string.cloud_front_songs_avatar) + random_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_random_avatar);
+                            ll_sound_random = (LinearLayout) findViewById(R.id.ll_sound_random);
+                            ib_sound_today = (ImageButton) findViewById(R.id.ib_sound_today);
 
-                                ll_sound_random = (LinearLayout) findViewById(R.id.ll_sound_random);
-                                ib_sound_today = (ImageButton) findViewById(R.id.ib_sound_today);
+                            ib_sound_today.setOnClickListener(SoundMainActivity.this);
+                            ll_sound_random.setOnClickListener(SoundMainActivity.this);
 
-                                ib_sound_today.setOnClickListener(SoundMainActivity.this);
-                                ll_sound_random.setOnClickListener(SoundMainActivity.this);
-                            }
                         }
+
                         @Override
                         public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
                             Toast.makeText(SoundMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
@@ -162,6 +161,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
                     });
                 }
             }
+
             @Override
             public void onFailure(Call<ArrayList<Song>> call, Throwable t) {
                 Toast.makeText(SoundMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
@@ -359,12 +359,13 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
             case R.id.ib_sound_today:
             case R.id.ll_sound_random:
                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                Call<ResponseBody> call_insert_song_hit = server_connection.Insert_Song_hit(String.valueOf(random_id));
+                Call<ResponseBody> call_insert_song_hit = server_connection.Insert_Song_hit(random_id);
                 call_insert_song_hit.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         ///scess
                     }
+
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Toast.makeText(SoundMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
@@ -412,7 +413,7 @@ public class SoundMainActivity extends Activity implements View.OnClickListener 
                 @Override
                 public void onClick(View v) {
                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ResponseBody> call_insert_song_hit = server_connection.Insert_Song_hit(String.valueOf(songList.get(getAdapterPosition()).getId()));                    // 반환 없음
+                    Call<ResponseBody> call_insert_song_hit = server_connection.Insert_Song_hit(songList.get(getAdapterPosition()).getId());
                     call_insert_song_hit.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

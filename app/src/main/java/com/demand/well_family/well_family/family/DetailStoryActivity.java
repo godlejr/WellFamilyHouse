@@ -148,7 +148,6 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
 
     // toolbar & menu
     public void setToolbar(View view, Context context, String title) {
-        Log.e("tttttt", user_avatar);
         NavigationView nv = (NavigationView) view.findViewById(R.id.nv);
         nv.setItemIconTintList(null);
         dl = (DrawerLayout) view.findViewById(R.id.dl);
@@ -161,7 +160,6 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 함수 호출
                 setBack();
             }
         });
@@ -216,7 +214,6 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
         }
 
         ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
-
         Glide.with(context).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_menu_avatar);
 
 
@@ -358,7 +355,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
                     map.put("content", content);
 
                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ArrayList<Comment>> call_insert_comment = server_connection.insert_comment(String.valueOf(story_id), map);
+                    Call<ArrayList<Comment>> call_insert_comment = server_connection.insert_comment(story_id, map);
                     call_insert_comment.enqueue(new Callback<ArrayList<Comment>>() {
                         @Override
                         public void onResponse(Call<ArrayList<Comment>> call, Response<ArrayList<Comment>> response) {
@@ -389,7 +386,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
         tv_story_detail_comment_count = (TextView) findViewById(R.id.tv_story_detail_comment_count);
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<CommentCount>> call_comment_count = server_connection.family_comment_Count(String.valueOf(story_id));
+        Call<ArrayList<CommentCount>> call_comment_count = server_connection.family_comment_Count(story_id);
         call_comment_count.enqueue(new Callback<ArrayList<CommentCount>>() {
             @Override
             public void onResponse(Call<ArrayList<CommentCount>> call, Response<ArrayList<CommentCount>> response) {
@@ -409,7 +406,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
         //comment count
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<CommentInfo>> call_family = server_connection.family_detail_comment_List(String.valueOf(story_id));
+        Call<ArrayList<CommentInfo>> call_family = server_connection.family_detail_comment_List(story_id);
         call_family.enqueue(new Callback<ArrayList<CommentInfo>>() {
             @Override
             public void onResponse(Call<ArrayList<CommentInfo>> call, Response<ArrayList<CommentInfo>> response) {
@@ -495,7 +492,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
         photoList = new ArrayList<>();
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<Photo>> call_photo = server_connection.family_content_photo_List(String.valueOf(story_id));
+        Call<ArrayList<Photo>> call_photo = server_connection.family_content_photo_List(story_id);
         call_photo.enqueue(new Callback<ArrayList<Photo>>() {
             @Override
             public void onResponse(Call<ArrayList<Photo>> call, Response<ArrayList<Photo>> response) {
@@ -570,7 +567,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
         tv_story_detail_like_count = (TextView) findViewById(R.id.tv_story_detail_like_count);
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<LikeCount>> call_like_count = server_connection.family_like_Count(String.valueOf(story_id));
+        Call<ArrayList<LikeCount>> call_like_count = server_connection.family_like_Count(story_id);
         call_like_count.enqueue(new Callback<ArrayList<LikeCount>>() {
             @Override
             public void onResponse(Call<ArrayList<LikeCount>> call, Response<ArrayList<LikeCount>> response) {
@@ -612,18 +609,13 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
         String msg = null;
 
         if (diffTime < 60) {
-            // sec
             msg = diffTime + "초전";
         } else if ((diffTime /= 60) < 60) {
-            // min
             System.out.println(diffTime);
-
             msg = diffTime + "분전";
         } else if ((diffTime /= 60) < 24) {
-            // hour
             msg = (diffTime) + "시간전";
         } else if ((diffTime /= 24) < 7) {
-            // day
             msg = (diffTime) + "일전";
         } else {
             SimpleDateFormat sdf = new SimpleDateFormat("yy.M.d aa h:mm");
@@ -638,12 +630,11 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (first_checked) {
             if (isChecked) {
-
                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_id", String.valueOf(user_id));
 
-                Call<ResponseBody> call_like = server_connection.family_content_like_up(String.valueOf(story_id), map);
+                Call<ResponseBody> call_like = server_connection.family_content_like_up(story_id, map);
                 call_like.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -662,7 +653,7 @@ public class DetailStoryActivity extends Activity implements CompoundButton.OnCh
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_id", String.valueOf(user_id));
 
-                Call<ResponseBody> call_dislike = server_connection.family_content_like_down(String.valueOf(story_id), map);
+                Call<ResponseBody> call_dislike = server_connection.family_content_like_down(story_id, map);
                 call_dislike.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

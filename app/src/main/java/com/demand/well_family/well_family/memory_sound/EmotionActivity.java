@@ -131,7 +131,7 @@ public class EmotionActivity extends Activity {
             holder.ll_emotion_background.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (emotionList.get(position).isChecked() == true) {
+                    if (emotionList.get(position).isChecked()) {
                         holder.ll_emotion_background.setBackgroundColor(Color.WHITE);
                         emotionList.get(position).setChecked(false);
                     } else {

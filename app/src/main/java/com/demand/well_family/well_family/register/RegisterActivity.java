@@ -54,7 +54,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-
         init();
         setToolbar(getWindow().getDecorView());
     }
@@ -84,13 +83,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     // toolbar_main & menu
     public void setToolbar(View view) {
-        // toolbar_main
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolBar);
         ImageView toolbar_back = (ImageView) toolbar.findViewById(R.id.toolbar_back);
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 함수 호출
                 setBack();
             }
         });
@@ -131,7 +128,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                 break;
             case R.id.btn_join:
-                // 공백 체크
                 if (!(setNotiVisible(et_join_email, noti_email) && setNotiVisible(et_join_pwd, noti_pwd) && setNotiVisible(et_join_pwd_check, noti_pwd_check) && setNotiVisible(et_join_name, noti_name)
                         && setNotiVisible(et_join_birthday, noti_birthday) && setNotiVisible(et_join_phone, noti_phone))) {
                     break;
@@ -174,7 +170,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                             Toast.makeText(RegisterActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-
                         }
                     });
                 }

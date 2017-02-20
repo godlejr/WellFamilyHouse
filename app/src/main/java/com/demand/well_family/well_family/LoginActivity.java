@@ -36,6 +36,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     public static ArrayList<Activity> finishList = new ArrayList<Activity>();
 
+    private int finishListSize;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,7 +119,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onBackPressed() {
-        for(int i = 0; i < finishList.size(); i++) {
+        finishListSize = finishList.size();
+
+        for(int i = 0; i < finishListSize; i++) {
             finishList.get(i).finish();
         }
 
