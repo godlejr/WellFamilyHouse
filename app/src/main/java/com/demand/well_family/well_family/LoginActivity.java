@@ -25,6 +25,9 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.nhn.android.naverlogin.OAuthLogin;
+import com.nhn.android.naverlogin.OAuthLoginHandler;
+import com.nhn.android.naverlogin.ui.view.OAuthLoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,6 +64,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private CallbackManager callbackManager;
     private Context context;
 
+    //naver
+    private OAuthLogin mOAuthLoginModule;
+    private OAuthLoginButton oAuthLoginButton;
+    private String client_id = "C7DiZf0HXR0Oo3L237p4";
+    private String client_secret = "21xT29Q4hJ";
+    private String client_name = "웰패밀리 하우스";  // 네이버 앱의 로그인 화면에 표시할 애플리케이션 이름
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +82,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         context = this;
         facebookLogin();
+        naverLogin();
     }
 
     private void init() {
@@ -133,6 +144,61 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
     }
+
+    private void naverLogin() {
+        mOAuthLoginModule = OAuthLogin.getInstance();
+        mOAuthLoginModule.init(
+                LoginActivity.this,
+                client_id, client_secret, client_name);
+
+        oAuthLoginButton = (OAuthLoginButton) findViewById(R.id.oAuthLoginButton);
+        oAuthLoginButton.setOAuthLoginHandler(mOAuthLoginHandler);
+
+        oAuthLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOAuthLoginModule.startOauthLoginActivity(LoginActivity.this, mOAuthLoginHandler);
+            }
+        });
+    }
+
+    OAuthLoginHandler mOAuthLoginHandler = new OAuthLoginHandler() {
+        @Override
+        public void run(boolean success) {
+            if (success) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String token = mOAuthLoginModule.getAccessToken(LoginActivity.this);
+                        String response = mOAuthLoginModule.requestApi(LoginActivity.this, token, "https://openapi.naver.com/v1/nid/me");
+                        Log.e("Tt", response);
+
+                        try {
+                            JSONObject json = new JSONObject(response);
+                            String id = json.getJSONObject("response").getString("id");
+                            String name = json.getJSONObject("response").getString("name");
+                            String email = json.getJSONObject("response").getString("email");
+                            String profile_image = json.getJSONObject("response").getString("profile_image");
+
+                            Log.e("user_info", id + "\n" + name + "\n" + email + "\n" + profile_image);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        Intent intent = new Intent(context, MainActivity.class);
+                        startActivity(intent);
+                    }
+                }).start();
+
+            } else {
+                String errorCode = mOAuthLoginModule.getLastErrorCode(context).getCode();
+                String errorDesc = mOAuthLoginModule.getLastErrorDesc(context);
+                Toast.makeText(context, "errorCode:" + errorCode
+                        + ", errorDesc:" + errorDesc, Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
     @Override
     public void onClick(View v) {
