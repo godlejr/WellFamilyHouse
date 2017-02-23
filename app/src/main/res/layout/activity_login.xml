@@ -105,17 +105,51 @@
                 android:layout_height="1dp"
                 android:background="#dddddd" />
 
-            <Button
-                android:id="@+id/btn_main_register"
-                android:layout_width="wrap_content"
-                android:background="#00ffffff"
-                android:gravity="center_vertical|center"
-                android:text="회원가입"
-                android:textColor="#000"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_height="30dp"
-                android:layout_gravity="right"
-                android:layout_marginTop="5dp" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"></LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"></LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp">
+
+                    <Button
+                        android:id="@+id/btn_main_register"
+                        android:layout_width="match_parent"
+                        android:background="#00ffffff"
+                        android:gravity="center_vertical|center"
+                        android:text="회원가입"
+                        android:textColor="#999999"
+                        style="?android:attr/borderlessButtonStyle"
+                        android:layout_height="30dp"
+                        android:layout_gravity="right"
+                        android:layout_marginTop="5dp"
+                        android:textSize="15sp"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#999999"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -132,12 +166,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginBottom="12dp"
-                android:background="@drawable/round_corner_btn"
+                android:background="@drawable/round_corner_login_btn"
                 android:gravity="center_vertical|center"
-                android:text="로그인"
+                android:text="이메일로 로그인"
                 android:textColor="#fff"
                 style="?android:attr/borderlessButtonStyle"/>
 
+            <com.facebook.login.widget.LoginButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/facebookLoginButton"/>
         </LinearLayout>
 
     </LinearLayout>

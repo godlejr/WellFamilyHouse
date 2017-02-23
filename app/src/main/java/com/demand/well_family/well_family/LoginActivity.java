@@ -1,10 +1,12 @@
 package com.demand.well_family.well_family;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,8 +16,18 @@ import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.register.AgreementActivity;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +38,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private Button login;
@@ -43,14 +56,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private static final Logger logger = LoggerFactory.getLogger(LoginActivity.class);
 
+    //facebook
+    private LoginButton facebookLoginButton;
+    private CallbackManager callbackManager;
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
 
         finishList.add(this);
-
         init();
+
+        context = this;
+        facebookLogin();
     }
 
     private void init() {
@@ -61,6 +82,56 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         login.setOnClickListener(this);
         register.setOnClickListener(this);
+    }
+
+    private void facebookLogin(){
+        callbackManager = CallbackManager.Factory.create();
+        facebookLoginButton = (LoginButton) findViewById(R.id.facebookLoginButton);
+        facebookLoginButton.setReadPermissions("email");
+        facebookLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.e("facebookLogin", loginResult+"");
+
+                GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+                        try {
+                            String id = object.getString("id");             //id
+                            String name = object.getString("name");         // 이름
+                            String email = object.getString("email");       // 이메일
+                            String gender = object.getString("gender");     // 성별
+
+
+                            Toast.makeText(context, id+","+name+","+email+","+gender, Toast.LENGTH_SHORT).show();
+                            Log.e("facebook",  object.toString());
+
+                            Intent intent = new Intent(context, MainActivity.class);
+                            startActivity(intent);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id, name, email, gender");
+                graphRequest.setParameters(parameters);
+                graphRequest.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+                Log.e("facebookLogin", "onCancel");
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.e("facebookLogin", "onError");
+
+            }
+        });
     }
 
     @Override
