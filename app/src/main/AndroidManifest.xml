@@ -4,18 +4,19 @@
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:largeHeap="true">
+        android:theme="@style/AppTheme">
         <!--.LoginActivity-->
         <activity
             android:name=".intro.IntroActivity"
@@ -37,26 +38,43 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".register.RegisterActivity" />
         <activity android:name=".register.AgreementActivity" />
-        <activity android:name=".LoginActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".WriteActivity"
-            android:configChanges="keyboardHidden|orientation"/>
+        <activity
+            android:name=".LoginActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".WriteActivity"
+            android:configChanges="keyboardHidden|orientation" />
 
-        <activity android:name=".memory_sound.SongMainActivity"/>
-        <activity android:name=".memory_sound.SongChartListActivity"/>
-        <activity android:name=".memory_sound.SongCategoryListActivity"/>
-        <activity android:name=".memory_sound.SongPlayer"
-            android:theme="@style/Theme.AppCompat.Dialog"/>
-        <activity android:name=".users.SongStoryActivity"/>
-        <activity android:name=".memory_sound.SongRecordActivity"/>
-        <activity android:name=".users.SongStoryDetailActivity"/>
-        <activity android:name=".market.MarketMainActivity"/>
-        <activity android:name=".create_family.CreateFamilyActivity"
-            android:theme="@style/Theme.AppCompat.Dialog"
-         />
-        <activity android:name=".search.SearchUserActivity"/>
-        <activity android:name=".memory_sound.EmotionActivity"
-            android:theme="@style/Theme.AppCompat.Dialog"/>
+        <activity android:name=".memory_sound.SongMainActivity" />
+        <activity android:name=".memory_sound.SongChartListActivity" />
+        <activity android:name=".memory_sound.SongCategoryListActivity" />
+        <activity
+            android:name=".memory_sound.SongPlayer"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity android:name=".users.SongStoryActivity" />
+        <activity android:name=".memory_sound.SongRecordActivity" />
+        <activity android:name=".users.SongStoryDetailActivity" />
+        <activity android:name=".market.MarketMainActivity" />
+        <activity
+            android:name=".create_family.CreateFamilyActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity android:name=".search.SearchUserActivity" />
+        <activity
+            android:name=".memory_sound.EmotionActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+
+
+        <service android:name=".fcm.FirebaseMessageService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service android:name=".fcm.FirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
 
     </application>
 </manifest>

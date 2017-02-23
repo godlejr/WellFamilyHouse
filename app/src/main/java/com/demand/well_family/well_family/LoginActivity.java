@@ -14,6 +14,7 @@ import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.register.AgreementActivity;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -77,34 +79,56 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 call.enqueue(new Callback<ArrayList<User>>() {
                     @Override
                     public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-                        ArrayList<User> userList = response.body();
+                        final ArrayList<User> userList = response.body();
 
                         if (userList.size() == 0) {
                             //
                             Toast.makeText(LoginActivity.this, "ID / 패스워드를 확인해주세요.", Toast.LENGTH_LONG).show();
                         } else {
-                            loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
-                            editor = loginInfo.edit();
-                            editor.putInt("user_id", userList.get(0).getId());
-                            editor.putString("user_name",  userList.get(0).getName());
-                            editor.putString("user_email",  userList.get(0).getEmail());
-                            editor.putString("user_birth",  userList.get(0).getBirth());
-                            editor.putString("user_avatar",  userList.get(0).getAvatar());
-                            editor.putString("user_phone",  userList.get(0).getPhone());
-                            editor.putInt("user_level",  userList.get(0).getLevel());
-                            editor.commit();
+                            final String device_id = getDeviceId();
+                            final String token = FirebaseInstanceId.getInstance().getToken();
 
+                            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                            HashMap<String, String> map = new HashMap<>();
+                            map.put("device_id", device_id);
+                            map.put("token", token);
+                            Call<ResponseBody> call_update_deviceId = server_connection.update_deviceId_token(userList.get(0).getId(), map);
 
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("user_id" , userList.get(0).getId());
-                            intent.putExtra("user_email",  userList.get(0).getEmail());
-                            intent.putExtra("user_birth", userList.get(0).getBirth());
-                            intent.putExtra("user_phone", userList.get(0).getPhone());
-                            intent.putExtra("user_name",  userList.get(0).getName());
-                            intent.putExtra("user_level",  userList.get(0).getLevel());
-                            intent.putExtra("user_avatar", userList.get(0).getAvatar());
-                            startActivity(intent);
-                            finish();
+                            call_update_deviceId.enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                                    loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+                                    editor = loginInfo.edit();
+                                    editor.putInt("user_id", userList.get(0).getId());
+                                    editor.putString("user_name", userList.get(0).getName());
+                                    editor.putString("user_email", userList.get(0).getEmail());
+                                    editor.putString("user_birth", userList.get(0).getBirth());
+                                    editor.putString("user_avatar", userList.get(0).getAvatar());
+                                    editor.putString("user_phone", userList.get(0).getPhone());
+                                    editor.putString("device_id", device_id);
+                                    editor.putString("token", token);
+                                    editor.putInt("user_level", userList.get(0).getLevel());
+                                    editor.commit();
+
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    intent.putExtra("user_id", userList.get(0).getId());
+                                    intent.putExtra("user_email", userList.get(0).getEmail());
+                                    intent.putExtra("user_birth", userList.get(0).getBirth());
+                                    intent.putExtra("user_phone", userList.get(0).getPhone());
+                                    intent.putExtra("user_name", userList.get(0).getName());
+                                    intent.putExtra("user_level", userList.get(0).getLevel());
+                                    intent.putExtra("user_avatar", userList.get(0).getAvatar());
+                                    startActivity(intent);
+                                    finish();
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    log(t);
+                                    Toast.makeText(LoginActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                }
+                            });
                         }
                     }
 
@@ -122,28 +146,35 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    private String getDeviceId() {
+        final String androidId = android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+        logger.info(androidId);
+        return androidId.toString();
+    }
+
+
     @Override
     public void onBackPressed() {
         int finishListSize = finishList.size();
 
-        for(int i = 0; i < finishListSize; i++) {
+        for (int i = 0; i < finishListSize; i++) {
             finishList.get(i).finish();
         }
 
         super.onBackPressed();
     }
 
-    private static void log(Throwable throwable){
-        StackTraceElement[] ste =  throwable.getStackTrace();
+    private static void log(Throwable throwable) {
+        StackTraceElement[] ste = throwable.getStackTrace();
         String className = ste[0].getClassName();
         String methodName = ste[0].getMethodName();
         int lineNumber = ste[0].getLineNumber();
         String fileName = ste[0].getFileName();
 
-        if(LogFlag.printFlag){
-            if(logger.isInfoEnabled()){
+        if (LogFlag.printFlag) {
+            if (logger.isInfoEnabled()) {
                 logger.info("Exception: " + throwable.getMessage());
-                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+                logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
             }
         }
     }

@@ -24,7 +24,6 @@ import com.demand.well_family.well_family.dto.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -66,6 +65,15 @@ public interface Server_Connection {
 
     @POST("login")
     Call<ArrayList<User>> login(@QueryMap HashMap<String, String> map);
+
+    @PUT("{user_id}/update_deviceId_token")
+    Call<ResponseBody> update_deviceId_token(@Path("user_id") int user_id, @QueryMap HashMap<String,String> map);
+
+    @POST("{user_id}/check_device_id")
+    Call<ArrayList<Check>> check_device_id(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
+
+    @PUT("{user_id}/update_token")
+    Call<ResponseBody> update_token(@Path("user_id") int user_id, @QueryMap HashMap<String,String> map);
 
     @GET("{family_id}/family_content_List")
     Call<ArrayList<StoryInfo>> family_content_List(@Path("family_id") int family_id);
