@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolBar"
     android:layout_width="match_parent"
     android:layout_height="50dp"
@@ -24,6 +25,12 @@
             android:padding="10dp" />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar_blank"
+            android:layout_weight="0.8" />
+
+        <TextView
             android:id="@+id/toolbar_title"
             android:layout_width="1dp"
             android:layout_height="50dp"
@@ -33,6 +40,15 @@
             android:layout_weight="4"
             android:textSize="22sp"
             android:textStyle="normal|bold" />
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/toolbar_notification"
+            android:id="@+id/toolbar_notification"
+            android:layout_weight="0.8"
+            android:padding="12dp" />
+
         <ImageView
             android:id="@+id/toolbar_market"
             android:layout_width="1dp"
@@ -42,5 +58,6 @@
             android:layout_weight="0.8"
             android:padding="12dp"
             android:tint="#542920" />
+
     </LinearLayout>
 </android.support.v7.widget.Toolbar>

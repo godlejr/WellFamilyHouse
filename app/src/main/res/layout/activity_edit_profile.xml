@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff">
+    android:background="#fff"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,19 +16,23 @@
             layout="@layout/toolbar_create"
             android:layout_width="match_parent"
             android:layout_height="50dp" />
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#777" />
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:background="#f5f5f5">
 
-            <android.support.v4.widget.CircleImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_edit_profile_avatar"
                 android:layout_width="135dp"
                 android:layout_height="135dp"
                 android:layout_gravity="center"
-                android:src="@drawable/main2"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/main2" />
+
 
             <ImageButton
                 android:id="@+id/ib_edit_profile_avatar"
@@ -68,7 +74,8 @@
                 android:layout_marginLeft="15dp"
                 android:gravity="center_vertical"
                 android:text="개인정보 변경"
-                android:textColor="#000" />
+                android:textColor="#000"
+                android:textStyle="normal|bold" />
 
             <View
                 android:layout_width="match_parent"
@@ -81,7 +88,9 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="#fff"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
             <ImageView
                 android:id="@+id/iv_edit_profile_email_icon"
@@ -93,7 +102,7 @@
                 android:src="@drawable/profile_email" />
 
             <EditText
-                android:id="@+id/iv_edit_profile_email"
+                android:id="@+id/et_edit_profile_email"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ems="10"
@@ -115,7 +124,9 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="#fff"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
             <ImageView
                 android:id="@+id/iv_edit_profile_name_icon"
@@ -127,7 +138,7 @@
                 android:src="@drawable/profile_user" />
 
             <EditText
-                android:id="@+id/iv_edit_profile_name"
+                android:id="@+id/et_edit_profile_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ems="10"
@@ -147,7 +158,9 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="#fff"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
             <ImageView
                 android:id="@+id/iv_edit_profile_birth_icon"
@@ -159,7 +172,7 @@
                 android:src="@drawable/profile_birthday" />
 
             <EditText
-                android:id="@+id/iv_edit_profile_birth"
+                android:id="@+id/et_edit_profile_birth"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ems="10"
@@ -192,7 +205,7 @@
                 android:src="@drawable/profile_phone" />
 
             <EditText
-                android:id="@+id/iv_edit_profile_phone"
+                android:id="@+id/et_edit_profile_phone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ems="10"
@@ -257,9 +270,102 @@
 
         </LinearLayout>
 
-        <include
-            layout="@layout/include_profile_options"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:background="#e5e5e5"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#777777" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="10dp"
+                android:background="#f5f5f5"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#777777" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="33dp"
+                    android:layout_marginLeft="15dp"
+                    android:gravity="center_vertical"
+                    android:text="나의 관심사"
+                    android:textColor="#000"
+                    android:textStyle="normal|bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#777777" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:orientation="vertical"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_profile_favorite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"></android.support.v7.widget.RecyclerView>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#777777" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="10dp"
+                android:background="#f5f5f5"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#777777" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="33dp"
+                    android:layout_marginLeft="15dp"
+                    android:gravity="center_vertical"
+                    android:text="추억 사운드"
+                    android:textColor="#000"
+                    android:textStyle="normal|bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#777777" />
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_profile_song"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:paddingLeft="5dp"
+                android:background="#fff"></android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

@@ -63,7 +63,7 @@
         <activity
             android:name=".memory_sound.EmotionActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
-
+        <activity android:name=".users.EditProfileActivity" />
 
         <service android:name=".fcm.FirebaseMessageService">
             <intent-filter>

@@ -5,277 +5,385 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
-    android:fitsSystemWindows="false"
-    android:orientation="vertical">
+  >
 
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#fff"
-        android:orientation="vertical">
-
-        <include
-            layout="@layout/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#eaeaea" />
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="false"
+      >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="10dp">
+            android:layout_height="match_parent"
+            android:background="#fff"
+            android:orientation="vertical">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_family_activity_avatar"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
-                android:src="@drawable/main2" />
-
-            <TextView
-                android:id="@+id/tv_family_activity_name"
+            <include
+                layout="@layout/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:text="NAME (00)"
-                android:textColor="#000"
-                android:textSize="31.3sp" />
+                android:layout_height="wrap_content" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="1">
-
-                <TextView
-                    android:id="@+id/textViewBlank1"
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.2" />
-
-                <TextView
-                    android:id="@+id/tv_family_activity_birth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="2dp"
-                    android:layout_weight="0.6"
-                    android:text="0000.00.00"
-                    android:textColor="#000"
-                    android:textSize="16sp"
-                    android:textAlignment="center"
-                    android:gravity="left|center_vertical"
-                   />
-
-                <TextView
-                    android:id="@+id/textViewBlank2"
-                    android:layout_width="1dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.2" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ll_user_phone_info"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:orientation="horizontal">
-
-
-                <LinearLayout
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textViewBlank3"
-                        android:layout_width="1dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.1" />
-
-                    <TextView
-                        android:id="@+id/tv_family_activity_phone"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="2dp"
-                        android:gravity="center_vertical|center_horizontal"
-                        android:text="000-0000-0000"
-                        android:textColor="#000"
-                        android:textSize="16sp"
-                        android:visibility="visible" />
-
-                    <ImageView
-                        android:id="@+id/iv_user_call"
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.02"
-                        android:elevation="1dp"
-                        android:src="@drawable/phone" />
-
-                    <TextView
-                        android:id="@+id/textView36"
-                        android:layout_width="1dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.08" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tv_family_activity_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
-                android:gravity="center_horizontal"
-                android:text="EMAIL: aa@aaaaa.aa.aa"
-                android:textColor="#414141"
-                android:textSize="16sp"
-                android:visibility="gone" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#eaeaea" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="7.5dp"
-            android:background="#dedede">
             <View
                 android:layout_width="match_parent"
-                android:layout_height="7.5dp"></View>
+                android:layout_height="1dp"
+                android:background="#777777" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#f5f5f5"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_family_activity_avatar"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="30dp"
+                    android:src="@drawable/main2" />
+
+                <TextView
+                    android:id="@+id/tv_family_activity_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center_horizontal"
+                    android:text="NAME (00)"
+                    android:textColor="#000"
+                    android:textSize="31.3sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#fff"
+                    android:orientation="vertical"
+                    android:paddingBottom="12dp">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="12dp"
+                        android:background="#777777" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="horizontal"
+                        android:weightSum="1"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/textViewBlank1"
+                            android:layout_width="1dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.2" />
+
+                        <TextView
+                            android:id="@+id/tv_family_activity_birth"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.6"
+                            android:gravity="left|center_vertical"
+                            android:text="0000.00.00"
+                            android:textAlignment="center"
+                            android:textColor="#000"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/textViewBlank2"
+                            android:layout_width="1dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.2" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_user_phone_info"
+                        android:layout_width="match_parent"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible">
+
+
+                        <LinearLayout
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textViewBlank3"
+                                android:layout_width="1dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.1" />
+
+                            <TextView
+                                android:id="@+id/tv_family_activity_phone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginBottom="2dp"
+                                android:gravity="center_vertical|center_horizontal"
+                                android:text="000-0000-0000"
+                                android:textColor="#000"
+                                android:textSize="16sp"
+                                android:visibility="visible" />
+
+                            <ImageView
+                                android:id="@+id/iv_user_call"
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.02"
+                                android:elevation="1dp"
+                                android:src="@drawable/phone" />
+
+                            <TextView
+                                android:id="@+id/textView36"
+                                android:layout_width="1dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.08" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_family_activity_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:gravity="center_horizontal"
+                    android:text="EMAIL: aa@aaaaa.aa.aa"
+                    android:textColor="#414141"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="top"
+                    android:background="#777777" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="#e5e5e5" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="#777777" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:background="#f5f5f5"
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="웰 패밀리 하우스"
+                        android:textColor="#000"
+                        android:textSize="12.5sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="#777777" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:background="#fff">
+
+                    <ImageView
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="0.8"
+                        android:padding="5dp"
+                        android:src="@mipmap/ic_launcher" />
+
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:text="프로필 설정"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="5dp" />
+
+                    <ImageButton
+                        android:id="@+id/ib_edit_profile"
+                        android:layout_width="1dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.6"
+                        android:background="#00ffffff"
+                        android:padding="8dp"
+                        android:scaleType="fitCenter"
+                        android:tint="#999"
+                        android:src="@drawable/arrow_right_black"
+                        android:layout_marginLeft="10dp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="top"
+                    android:background="#777777" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="#e5e5e5" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="bottom"
+                    android:background="#777777" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="#f5f5f5"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="App 활동 내역"
+                    android:textColor="#000"
+                    android:textSize="12.5sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#777777" />
+
+            <LinearLayout
+                android:id="@+id/ll_selfit_story_list"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:background="#fff"
+                android:orientation="horizontal"
+                android:paddingLeft="15dp">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/selffeet" />
+
+                <TextView
+                    android:id="@+id/textView24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="낙상예방 '셀핏'"
+                    android:textColor="#000"
+                    android:textSize="17sp" />
+
+                <ImageButton
+                    android:id="@+id/btn_selfit"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:background="#00ffffff"
+                    android:padding="4dp"
+                    android:scaleType="fitCenter"
+                    android:tint="#542920"
+                    app:srcCompat="@drawable/arrow_right_black" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#777777" />
+
+            <LinearLayout
+                android:id="@+id/ll_memory_sound_story_list"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:background="#fff"
+                android:orientation="horizontal"
+                android:paddingLeft="15dp">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/memory_sound" />
+
+                <TextView
+                    android:id="@+id/textView25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="기억력 훈력 '추억소리'"
+                    android:textColor="#000"
+                    android:textSize="17sp" />
+
+                <ImageButton
+                    android:id="@+id/btn_mSound"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:background="#00ffffff"
+                    android:padding="4dp"
+                    android:scaleType="fitCenter"
+                    android:tint="#542920"
+                    app:srcCompat="@drawable/arrow_right_black" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#777777" />
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="#f3f3f3"
-            android:orientation="horizontal"
-            android:paddingBottom="5dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="App 활동 내역"
-                android:textColor="#000"
-                android:textSize="12.5sp"
-                android:gravity="center_vertical" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#eaeaea" />
-
-        <LinearLayout
-            android:id="@+id/ll_selfit_story_list"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:background="#f9f9f9"
-            android:orientation="horizontal"
-            android:paddingLeft="15dp">
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/selffeet" />
-
-            <TextView
-                android:id="@+id/textView24"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="낙상예방 '셀핏'"
-                android:textColor="#000"
-                android:textSize="17sp" />
-
-            <ImageButton
-                android:id="@+id/btn_selfit"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:background="#00ffffff"
-                android:padding="8dp"
-                android:scaleType="fitCenter"
-                android:tint="#542920"
-                app:srcCompat="@drawable/arrow_right_black" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#eaeaea" />
-
-        <LinearLayout
-            android:id="@+id/ll_memory_sound_story_list"
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:background="#f9f9f9"
-            android:orientation="horizontal"
-            android:paddingLeft="15dp">
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/memory_sound" />
-
-            <TextView
-                android:id="@+id/textView25"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="기억력 훈력 '추억소리'"
-                android:textColor="#000"
-                android:textSize="17sp" />
-
-            <ImageButton
-                android:id="@+id/btn_mSound"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:background="#00ffffff"
-                android:padding="8dp"
-                android:scaleType="fitCenter"
-                android:tint="#542920"
-                app:srcCompat="@drawable/arrow_right_black" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#eaeaea" />
-    </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/menu_main"
         android:background="#fff"
+        app:headerLayout="@layout/drawer_header"
         app:itemTextColor="#424242"
-        app:theme="@style/NavigationDrawer"
-        />
+        app:menu="@menu/menu_main"
+        app:theme="@style/NavigationDrawer" />
 </android.support.v4.widget.DrawerLayout>

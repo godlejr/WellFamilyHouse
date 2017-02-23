@@ -15,6 +15,7 @@ import android.text.style.TextAppearanceSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -77,6 +78,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
     private LinearLayout ll_memory_sound_story_list;
     private ImageView iv_user_call;
     private LinearLayout ll_user_phone_info;
+    private ImageButton ib_edit_profile;
 
     //toolbar
     private DrawerLayout dl;
@@ -107,10 +109,10 @@ public class UserActivity extends Activity implements View.OnClickListener {
         user_phone = getIntent().getStringExtra("user_phone");
         user_birth = getIntent().getStringExtra("user_birth");
 
+
         init();
         getUserData();
         setUserFunc();
-
 
         setToolbar(this.getWindow().getDecorView(), this, story_user_name);
     }
@@ -318,7 +320,6 @@ public class UserActivity extends Activity implements View.OnClickListener {
         iv_user_call = (ImageView) findViewById(R.id.iv_user_call);
         ll_user_phone_info = (LinearLayout) findViewById(R.id.ll_user_phone_info);
 
-
         if (user_id == story_user_id) {
             //me
             ll_user_phone_info.setVisibility(View.GONE);
@@ -379,6 +380,25 @@ public class UserActivity extends Activity implements View.OnClickListener {
     }
 
     private void init() {
+        ib_edit_profile = (ImageButton)findViewById(R.id.ib_edit_profile);
+        ib_edit_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserActivity.this, EditProfileActivity.class);
+
+                //user info
+                intent.putExtra("user_id", user_id);
+                intent.putExtra("user_name", user_name);
+                intent.putExtra("user_avatar", user_avatar);
+                intent.putExtra("user_email", user_email);
+                intent.putExtra("user_birth", user_birth);
+                intent.putExtra("user_phone", user_phone);
+                intent.putExtra("user_level", user_level);
+
+                startActivity(intent);
+            }
+        });
+
         //memory sound
         ll_memory_sound_story_list = (LinearLayout) findViewById(R.id.ll_memory_sound_story_list);
         ll_memory_sound_story_list.setOnClickListener(new View.OnClickListener() {
