@@ -17,7 +17,7 @@
         android:layout_height="1dp"
         android:layout_weight="1"
         android:scaleType="fitCenter"
-        android:text="이메일 입력"
+        android:text="추가정보 입력"
         android:textSize="28sp"
         android:gravity="center"
         android:textStyle="normal|bold" />
@@ -48,16 +48,16 @@
                     android:layout_width="22dp"
                     android:layout_height="30dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/login_email"
+                    android:src="@drawable/register_birth"
                     android:layout_marginLeft="5dp" />
 
                 <EditText
-                    android:id="@+id/et_login_email"
+                    android:id="@+id/et_sns_birth"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#00ffffff"
                     android:ems="10"
-                    android:hint="이메일 주소"
+                    android:hint="생년월일"
                     android:inputType="textEmailAddress"
                     android:padding="3dp"
                     android:paddingLeft="15dp"
@@ -82,19 +82,19 @@
                     android:id="@+id/imageView12"
                     android:layout_width="22dp"
                     android:layout_marginRight="10dp"
-                    android:src="@drawable/login_password"
+                    android:src="@drawable/register_phone"
                     android:layout_marginLeft="5dp"
                     android:layout_height="30dp" />
 
                 <EditText
-                    android:id="@+id/et_login_pwd"
+                    android:id="@+id/et_sns_phone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="#00ffffff"
                     android:elevation="1dp"
                     android:ems="10"
-                    android:hint="비밀번호"
+                    android:hint="휴대전화 번호"
                     android:inputType="textPassword"
                     android:padding="3dp"
                     android:paddingLeft="15dp"
@@ -119,7 +119,7 @@
             android:layout_marginTop="15dp">
 
             <Button
-                android:id="@+id/btn_main_login"
+                android:id="@+id/btn_sns_register"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginBottom="12dp"
