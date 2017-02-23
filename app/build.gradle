@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        release {
+            keyAlias 'wellfamily_keystore'
+            keyPassword 'demand8312'
+            storeFile file('C:/wellfamily_keystore.jks')
+            storePassword 'demand8312'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -15,6 +23,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -44,7 +56,6 @@ dependencies {
     compile files('src/main/libs/slf4j-android-1.6.1-RC1.jar')
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile 'com.google.firebase:firebase-messaging:10.0.1'
-
     //    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.facebook.android:facebook-android-sdk:4.5.0'
     compile files('src/main/libs/3rdparty_login_library_android_4.1.4.jar')
