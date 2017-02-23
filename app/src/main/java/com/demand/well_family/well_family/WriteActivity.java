@@ -75,7 +75,7 @@ import static com.demand.well_family.well_family.LoginActivity.finishList;
 /**
  * Created by ㅇㅇ on 2017-01-20.
  */
-
+//
 public class WriteActivity extends Activity {
     private RecyclerView rv_write_image_upload;
     private EditText et_content;
