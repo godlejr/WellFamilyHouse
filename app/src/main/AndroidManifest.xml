@@ -41,6 +41,7 @@
         <activity
             android:name=".LoginActivity"
             android:launchMode="singleTop" />
+        <activity android:name=".register.SNSRegisterActivity"/>
         <activity
             android:name=".WriteActivity"
             android:configChanges="keyboardHidden|orientation" />
