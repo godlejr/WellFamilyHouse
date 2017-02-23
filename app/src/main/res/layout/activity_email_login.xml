@@ -6,23 +6,26 @@
     android:background="#f1f1f1"
     android:orientation="vertical">
 
-    <ImageView
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        layout="@layout/toolbar_register" />
+
+    <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_weight="0.55"
+        android:layout_weight="1"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/splash"
-        android:layout_marginTop="15dp"
-        android:paddingBottom="35dp"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp"
-        android:paddingTop="75dp" />
+        android:text="이메일 입력"
+        android:textSize="28sp"
+        android:gravity="center"
+        android:textStyle="normal|bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_weight="0.8"
+        android:layout_weight="1"
         android:gravity="bottom"
         android:orientation="vertical"
         android:weightSum="3">
@@ -104,18 +107,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#dddddd" />
-
-            <Button
-                android:id="@+id/btn_main_register"
-                android:layout_width="wrap_content"
-                android:background="#00ffffff"
-                android:gravity="center_vertical|center"
-                android:text="회원가입"
-                android:textColor="#000"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_height="30dp"
-                android:layout_gravity="right"
-                android:layout_marginTop="5dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -132,14 +123,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginBottom="12dp"
-                android:background="@drawable/round_corner_btn"
+                android:background="@drawable/round_corner_btn_gray"
                 android:gravity="center_vertical|center"
-                android:text="로그인"
+                android:text="확인"
                 android:textColor="#fff"
                 style="?android:attr/borderlessButtonStyle"/>
 
         </LinearLayout>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:id="@+id/blank"></LinearLayout>
 
 </LinearLayout>

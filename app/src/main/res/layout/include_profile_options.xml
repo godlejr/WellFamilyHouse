@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#e5e5e5">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#777777" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:background="#f5f5f5"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#777777" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:text="나의 관심사"
+            android:textColor="#000" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#777777" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="40dp">
+
+            <CheckBox
+                android:id="@+id/cb_option_health"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:background="@drawable/option_health_none"
+                android:button="@null"
+                android:layout_margin="5dp" />
+
+            <CheckBox
+                android:id="@+id/cb_option_fitness"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:background="@drawable/option_fitness_none"
+                android:button="@null"
+                android:layout_margin="5dp" />
+
+            <CheckBox
+                android:id="@+id/cb_option_food"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:background="@drawable/option_food_none"
+                android:button="@null"
+                android:layout_margin="5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="40dp">
+
+            <CheckBox
+                android:id="@+id/cb_option_safe"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:background="@drawable/option_safe_none"
+                android:button="@null"
+                android:layout_margin="5dp" />
+
+            <CheckBox
+                android:id="@+id/cb_option_hobby"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:background="@drawable/option_hobby_none"
+                android:button="@null"
+                android:layout_margin="5dp" />
+
+            <CheckBox
+                android:id="@+id/cb_option_amity"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:background="@drawable/option_amity_none"
+                android:button="@null"
+                android:layout_margin="5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="40dp">
+
+            <CheckBox
+                android:id="@+id/cb_option_fashion"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:background="@drawable/option_fashion_none"
+                android:button="@null"
+                android:layout_margin="5dp" />
+
+            <CheckBox
+                android:id="@+id/cb_option_trip"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:background="@drawable/option_trip_none"
+                android:button="@null"
+                android:layout_margin="5dp" />
+
+            <LinearLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:orientation="vertical"
+                android:visibility="invisible"
+                android:layout_margin="5dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#777777" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginTop="10dp"
+        android:background="#f5f5f5"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#777777" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:layout_marginLeft="15dp"
+            android:gravity="center_vertical"
+            android:text="추억 사운드"
+            android:textColor="#000" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#777777" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fff"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cb_option_song"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:background="@drawable/option_song_none"
+                android:button="@null"
+                android:layout_margin="5dp" />
+
+            <CheckBox
+                android:id="@+id/cb_option_pop"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:background="@drawable/option_pop_none"
+                android:button="@null"
+                android:layout_margin="5dp" />
+
+            <CheckBox
+                android:id="@+id/cb_option_broadcast"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:background="@drawable/option_broadcast_none"
+                android:button="@null"
+                android:layout_margin="5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/cb_option_living"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:background="@drawable/option_living_none"
+                android:button="@null"
+                android:layout_margin="5dp" />
+
+            <CheckBox
+                android:id="@+id/cb_option_times"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:background="@drawable/option_times_none"
+                android:button="@null"
+                android:layout_margin="5dp" />
+
+            <CheckBox
+                android:id="@+id/cb_option_folk"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:background="@drawable/option_folksong_none"
+                android:button="@null"
+                android:layout_margin="5dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
