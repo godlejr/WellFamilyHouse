@@ -18,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +41,7 @@ import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,16 +92,32 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        user_id = getIntent().getIntExtra("user_id", 0);
+        user_name = getIntent().getStringExtra("user_name");
+        user_level = getIntent().getIntExtra("user_level", 0);
+        user_avatar = getIntent().getStringExtra("user_avatar");
+        user_email = getIntent().getStringExtra("user_email");
+        user_phone = getIntent().getStringExtra("user_phone");
+        user_birth = getIntent().getStringExtra("user_birth");
+
         ImageView iv_img_alarm = (ImageView) findViewById(R.id.iv_img_alarm);
         Glide.with(MainActivity.this).load(getString(R.string.cloud_front_banners) + "notification.jpg").thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_img_alarm);
 
         finishList.add(this);
 
+
+        setFCMService();
         init();
         getFamilyData();
         getAppData();
-
         setToolbar(this.getWindow().getDecorView());
+    }
+
+    private void setFCMService() {
+       //FirebaseMessaging.getInstance().subscribeToTopic("news");
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.e("ttt",token);
     }
 
     private class ViewPageAdapter extends PagerAdapter {
@@ -163,14 +181,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private void getFamilyData() {
         familyList = new ArrayList<>();
-
-        user_id = getIntent().getIntExtra("user_id",0);
-        user_name = getIntent().getStringExtra("user_name");
-        user_level = getIntent().getIntExtra("user_level",0);
-        user_avatar = getIntent().getStringExtra("user_avatar");
-        user_email = getIntent().getStringExtra("user_email");
-        user_phone = getIntent().getStringExtra("user_phone");
-        user_birth = getIntent().getStringExtra("user_birth");
 
         layoutInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         ll_family_container_family = (LinearLayout) findViewById(R.id.ll_family_container_family);
@@ -313,6 +323,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         appList.add(new App("셀핏", R.drawable.selffeet));
         appList.add(new App("해핏", R.drawable.happyfeet, "com.demand.happyfeet"));
         appList.add(new App("버블핏", R.drawable.bubblefeet, "com.demand.bubblefeet"));
+        appList.add(new App("Good Buddy", R.drawable.goodbuddy, "healthcare.nhis.GoodBuddy"));
 
         rv_apps = (RecyclerView) findViewById(R.id.rv_apps);
         rv_apps.setAdapter(new AppAdapter(appList, this, R.layout.item_apps));
@@ -601,17 +612,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onBackPressed();
     }
 
-    private static void log(Throwable throwable){
-        StackTraceElement[] ste =  throwable.getStackTrace();
+    private static void log(Throwable throwable) {
+        StackTraceElement[] ste = throwable.getStackTrace();
         String className = ste[0].getClassName();
         String methodName = ste[0].getMethodName();
         int lineNumber = ste[0].getLineNumber();
         String fileName = ste[0].getFileName();
 
-        if(LogFlag.printFlag){
-            if(logger.isInfoEnabled()){
+        if (LogFlag.printFlag) {
+            if (logger.isInfoEnabled()) {
                 logger.info("Exception: " + throwable.getMessage());
-                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+                logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
             }
         }
     }

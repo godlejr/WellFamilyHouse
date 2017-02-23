@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "102132458989",
+    "firebase_url": "https://familyhouse-95ccc.firebaseio.com",
+    "project_id": "familyhouse-95ccc",
+    "storage_bucket": "familyhouse-95ccc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:102132458989:android:8a2dc77d78cc5cc8",
+        "android_client_info": {
+          "package_name": "com.demand.well_family.well_family"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "102132458989-l1811gggpa281mkk5cjsr8p9or91o8o2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbL1WhMhsBVNyqGCGRlhF9e7VWcvVrJSM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
