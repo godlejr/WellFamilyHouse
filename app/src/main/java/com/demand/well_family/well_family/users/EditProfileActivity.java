@@ -30,6 +30,7 @@ import com.demand.well_family.well_family.util.RealPathUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,7 +48,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class EditProfileActivity extends Activity {
     private CircleImageView iv_edit_profile_avatar;
     private ImageButton ib_edit_profile_avatar;
-    private EditText et_edit_profile_email;
+    private TextView tv_edit_profile_email;
     private EditText et_edit_profile_name;
     private EditText et_edit_profile_birth;
     private EditText et_edit_profile_phone;
@@ -89,7 +90,7 @@ public class EditProfileActivity extends Activity {
     private void init() {
         iv_edit_profile_avatar = (CircleImageView) findViewById(R.id.iv_edit_profile_avatar);
         ib_edit_profile_avatar = (ImageButton) findViewById(R.id.ib_edit_profile_avatar);
-        et_edit_profile_email = (EditText) findViewById(R.id.et_edit_profile_email);
+        tv_edit_profile_email = (TextView) findViewById(R.id.tv_edit_profile_email);
         et_edit_profile_name = (EditText) findViewById(R.id.et_edit_profile_name);
         et_edit_profile_birth = (EditText) findViewById(R.id.et_edit_profile_birth);
         et_edit_profile_phone = (EditText) findViewById(R.id.et_edit_profile_phone);
@@ -107,7 +108,7 @@ public class EditProfileActivity extends Activity {
         user_phone = getIntent().getStringExtra("user_phone");
         user_level = getIntent().getIntExtra("user_level", 0);
 
-        et_edit_profile_email.setText(user_email);
+        tv_edit_profile_email.setText(user_email);
         et_edit_profile_name.setText(user_name);
         et_edit_profile_phone.setText(user_phone);
         Glide.with(EditProfileActivity.this).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_edit_profile_avatar);
@@ -212,7 +213,7 @@ public class EditProfileActivity extends Activity {
                 user_name = et_edit_profile_name.getText().toString();
                 user_birth = et_edit_profile_birth.getText().toString();
                 user_phone = et_edit_profile_phone.getText().toString();
-                user_email = et_edit_profile_email.getText().toString();
+                user_email = tv_edit_profile_email.getText().toString();
 
 
 

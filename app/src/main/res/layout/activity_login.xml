@@ -164,16 +164,17 @@
             android:paddingLeft="25dp"
             android:paddingRight="25dp">
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_main_login"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginBottom="12dp"
-                android:background="@drawable/round_corner_login_btn"
-                android:gravity="center_vertical|center"
+                android:gravity="center"
                 android:text="이메일로 로그인"
-                android:textColor="#fff" />
+                android:textColor="#fff"
+                android:scaleType="fitXY"
+                android:background="@drawable/login_email_btn" />
 
             <com.nhn.android.naverlogin.ui.view.OAuthLoginButton
                 android:id="@+id/oAuthLoginButton"
@@ -181,11 +182,13 @@
                 android:layout_marginBottom="12dp"
                 android:layout_height="40dp" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/facebookLoginButton"
                 android:layout_width="match_parent"
                 android:text="페이스북로그인"
-                android:layout_height="wrap_content" />
+                android:layout_height="45dp"
+                android:background="@drawable/login_facebook_btn"
+                android:scaleType="fitCenter" />
         </LinearLayout>
 
     </LinearLayout>
