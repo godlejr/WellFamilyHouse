@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
@@ -77,6 +78,7 @@ public class EditUserActivity extends Activity {
     private String avatarPath;
     private int user_gender;
     private SharedPreferences loginInfo;
+    private Server_Connection server_connection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +172,9 @@ public class EditUserActivity extends Activity {
                 startActivityForResult(intent, PICK_PHOTO);
             }
         });
+
+        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+//        Call<ArrayList<FavoriteCategory>> call_favorite_list = server_connection.
 
         ArrayList<String> favoriteList = new ArrayList<>();
         favoriteList.add("건강");
