@@ -132,7 +132,7 @@
                     android:elevation="1dp"
                     android:ems="10"
                     android:hint="휴대전화 번호"
-                    android:inputType="textPassword"
+                    android:inputType="none|text"
                     android:padding="3dp"
                     android:paddingLeft="15dp"
                     android:textColor="#000"

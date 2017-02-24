@@ -75,8 +75,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //naver
     private OAuthLogin mOAuthLoginModule;
     private OAuthLoginButton oAuthLoginButton;
-    private String client_id = "C7DiZf0HXR0Oo3L237p4";
-    private String client_secret = "21xT29Q4hJ";
+    private String client_id = "vX9icrhPpuwATfps78ce";
+    private String client_secret = "YiBZjWpiNA";
     private String client_name = "웰패밀리 하우스";  // 네이버 앱의 로그인 화면에 표시할 애플리케이션 이름
 
     @Override

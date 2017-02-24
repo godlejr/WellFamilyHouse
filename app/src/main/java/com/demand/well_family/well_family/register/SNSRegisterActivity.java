@@ -5,11 +5,14 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.MainActivity;
@@ -61,6 +64,7 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sns_register);
         init();
+        setToolbar(getWindow().getDecorView());
     }
 
     private void init() {
@@ -77,6 +81,24 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
 
         et_sns_birth.setOnClickListener(this);
         btn_sns_register.setOnClickListener(this);
+    }
+
+    public void setToolbar(View view) {
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolBar);
+        ImageView toolbar_back = (ImageView) toolbar.findViewById(R.id.toolbar_back);
+        toolbar_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setBack();
+            }
+        });
+
+        TextView toolbar_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        toolbar_title.setText(" ");
+    }
+
+    public void setBack() {
+        finish();
     }
 
     @Override
