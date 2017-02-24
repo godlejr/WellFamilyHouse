@@ -5,6 +5,7 @@ import com.demand.well_family.well_family.dto.Comment;
 import com.demand.well_family.well_family.dto.CommentCount;
 import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.Family;
+import com.demand.well_family.well_family.dto.FavoriteCategory;
 import com.demand.well_family.well_family.dto.Identification;
 import com.demand.well_family.well_family.dto.LikeCount;
 import com.demand.well_family.well_family.dto.Photo;
@@ -186,7 +187,7 @@ public interface Server_Connection {
     @POST("{song_id}/song_comment_Count")
     Call<ArrayList<CommentCount>> song_comment_count(@Path("song_id") int song_id);
 
-    @POST("song_range_List")
+    @GET("song_range_List")
     Call<ArrayList<Range>> song_range_List();
 
     @POST("{user_id}/insert_song_story")
@@ -204,7 +205,7 @@ public interface Server_Connection {
     @POST("{song_id}/song_comment_List")
     Call<ArrayList<CommentInfo>> song_comment_List(@Path("song_id") int song_id);
 
-    @POST("song_random")
+    @GET("song_random")
     Call<ArrayList<Song>> song_random();
 
     @GET("{category_id}/song_list_by_Category")
@@ -213,10 +214,10 @@ public interface Server_Connection {
     @POST("{song_id}/song_comment_Count")
     Call<ArrayList<CommentCount>> song_comment_Count(@Path("song_id") int song_id);
 
-    @POST("song_list_by_Hits")
+    @GET("song_list_by_Hits")
     Call<ArrayList<Song>> song_list_by_Hits();
 
-    @POST("song_category_List")
+    @GET("song_category_List")
     Call<ArrayList<SongCategory>> song_category_List();
 
     @POST("email_check")
@@ -234,5 +235,6 @@ public interface Server_Connection {
     @POST("{other_user_id}/family_user_check")
     Call<ArrayList<Check>> family_user_check(@Path("other_user_id") int other_user_id, @QueryMap HashMap<String, String> map);
 
-
+    @GET("favorite_category_List")
+    Call<ArrayList<FavoriteCategory>> favorite_category_List();
 }
