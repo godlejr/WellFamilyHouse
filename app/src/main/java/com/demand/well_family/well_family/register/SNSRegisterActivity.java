@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -108,7 +109,7 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
         switch (v.getId()) {
             case R.id.et_sns_birth:
                 Calendar calendar = Calendar.getInstance();
-                DatePickerDialog datePicker = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePicker = new DatePickerDialog(v.getContext(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -124,8 +125,9 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
                     }
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)
                         , calendar.get(Calendar.DAY_OF_MONTH));
-
+                datePicker.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 datePicker.show();
+
                 break;
             case R.id.btn_sns_register:
                 String phone = et_sns_phone.getText().toString();

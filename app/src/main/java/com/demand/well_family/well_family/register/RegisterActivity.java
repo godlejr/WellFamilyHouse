@@ -2,6 +2,7 @@ package com.demand.well_family.well_family.register;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -124,14 +125,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         } catch (ParseException e) {
                             log(e);
                         }
-
-
                     }
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)
                         , calendar.get(Calendar.DAY_OF_MONTH));
 
+                datePicker.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 datePicker.show();
-
                 break;
             case R.id.btn_join:
                 if (!(setNotiVisible(et_join_email, noti_email) && setNotiVisible(et_join_pwd, noti_pwd) && setNotiVisible(et_join_pwd_check, noti_pwd_check) && setNotiVisible(et_join_name, noti_name)
