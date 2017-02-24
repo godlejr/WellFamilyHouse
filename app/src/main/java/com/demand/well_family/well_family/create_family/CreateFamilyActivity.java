@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -78,6 +79,7 @@ public class CreateFamilyActivity extends Activity {
     private final int READ_EXTERNAL_STORAGE_PERMISSION = 10001;
 
     private static final Logger logger = LoggerFactory.getLogger(CreateFamilyActivity.class);
+    private SharedPreferences loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,9 +88,19 @@ public class CreateFamilyActivity extends Activity {
         setContentView(R.layout.activity_create_family);
         getWindow().setLayout(android.view.WindowManager.LayoutParams.MATCH_PARENT, android.view.WindowManager.LayoutParams.MATCH_PARENT);
 
+        setUserInfo();
         init();
+    }
+    private void setUserInfo() {
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        user_id = loginInfo.getInt("user_id", 0);
+        user_level = loginInfo.getInt("user_level", 0);
+        user_name = loginInfo.getString("user_name", null);
+        user_email = loginInfo.getString("user_email", null);
+        user_birth = loginInfo.getString("user_birth", null);
+        user_avatar = loginInfo.getString("user_avatar", null);
+        user_phone = loginInfo.getString("user_phone", null);
         setToolbar(getWindow().getDecorView());
-        checkPermission();
     }
 
     private void init() {
@@ -98,14 +110,6 @@ public class CreateFamilyActivity extends Activity {
         Glide.with(this).load(getString(R.string.cloud_front_family_avatar) + "family_avatar.jpg").thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_create_family_img);
 
         realPathUtil = new RealPathUtil();
-
-        user_id = getIntent().getIntExtra("user_id", 0);
-        user_name = getIntent().getStringExtra("user_name");
-        user_level = getIntent().getIntExtra("user_level", 0);
-        user_avatar = getIntent().getStringExtra("user_avatar");
-        user_email = getIntent().getStringExtra("user_email");
-        user_phone = getIntent().getStringExtra("user_phone");
-        user_birth = getIntent().getStringExtra("user_birth");
 
         ib_create_family = (ImageButton) findViewById(R.id.ib_create_family);
         ib_create_family.setOnClickListener(new View.OnClickListener() {
@@ -118,6 +122,7 @@ public class CreateFamilyActivity extends Activity {
             }
         });
 
+        checkPermission();
     }
 
     public void setToolbar(View view) {
@@ -189,15 +194,6 @@ public class CreateFamilyActivity extends Activity {
                                                 intent.putExtra("family_user_id", familyList.get(0).getUser_id());
                                                 intent.putExtra("family_created_at", familyList.get(0).getCreated_at());
 
-                                                //user info
-                                                intent.putExtra("user_id", user_id);
-                                                intent.putExtra("user_email", user_email);
-                                                intent.putExtra("user_birth", user_birth);
-                                                intent.putExtra("user_phone", user_phone);
-                                                intent.putExtra("user_name", user_name);
-                                                intent.putExtra("user_level", user_level);
-                                                intent.putExtra("user_avatar", user_avatar);
-
                                                 try {
                                                     Thread.sleep(200);
                                                 } catch (InterruptedException e) {
@@ -241,14 +237,6 @@ public class CreateFamilyActivity extends Activity {
                                         intent.putExtra("family_user_id", familyList.get(0).getUser_id());
                                         intent.putExtra("family_created_at", familyList.get(0).getCreated_at());
 
-                                        //user info
-                                        intent.putExtra("user_id", user_id);
-                                        intent.putExtra("user_email", user_email);
-                                        intent.putExtra("user_birth", user_birth);
-                                        intent.putExtra("user_phone", user_phone);
-                                        intent.putExtra("user_name", user_name);
-                                        intent.putExtra("user_level", user_level);
-                                        intent.putExtra("user_avatar", user_avatar);
                                         startActivity(intent);
                                         finish();
                                     }

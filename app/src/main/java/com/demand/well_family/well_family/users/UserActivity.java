@@ -85,13 +85,14 @@ public class UserActivity extends Activity implements View.OnClickListener {
     private Server_Connection server_connection;
 
     private static final Logger logger = LoggerFactory.getLogger(UserActivity.class);
+    private SharedPreferences loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
-        finishList.add(this);
+        setUserInfo();
 
         story_user_id = getIntent().getIntExtra("story_user_id", 0);
         story_user_name = getIntent().getStringExtra("story_user_name");
@@ -100,20 +101,22 @@ public class UserActivity extends Activity implements View.OnClickListener {
         story_user_email = getIntent().getStringExtra("story_user_email");
         story_user_phone = getIntent().getStringExtra("story_user_phone");
         story_user_birth = getIntent().getStringExtra("story_user_birth");
-
-        user_id = getIntent().getIntExtra("user_id", 0);
-        user_name = getIntent().getStringExtra("user_name");
-        user_level = getIntent().getIntExtra("user_level", 0);
-        user_avatar = getIntent().getStringExtra("user_avatar");
-        user_email = getIntent().getStringExtra("user_email");
-        user_phone = getIntent().getStringExtra("user_phone");
-        user_birth = getIntent().getStringExtra("user_birth");
-
+        finishList.add(this);
 
         init();
         getUserData();
         setUserFunc();
+    }
 
+    private void setUserInfo() {
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        user_id = loginInfo.getInt("user_id", 0);
+        user_level = loginInfo.getInt("user_level", 0);
+        user_name = loginInfo.getString("user_name", null);
+        user_email = loginInfo.getString("user_email", null);
+        user_birth = loginInfo.getString("user_birth", null);
+        user_avatar = loginInfo.getString("user_avatar", null);
+        user_phone = loginInfo.getString("user_phone", null);
         setToolbar(this.getWindow().getDecorView(), this, story_user_name);
     }
 
@@ -160,14 +163,6 @@ public class UserActivity extends Activity implements View.OnClickListener {
                 intent.putExtra("story_user_name", user_name);
                 intent.putExtra("story_user_level", user_level);
                 intent.putExtra("story_user_avatar", user_avatar);
-
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_avatar", user_avatar);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_level", user_level);
 
                 startActivity(intent);
                 if (user_id == story_user_id) {
@@ -217,14 +212,6 @@ public class UserActivity extends Activity implements View.OnClickListener {
                 switch (item.getItemId()) {
                     case R.id.menu_home:
                         intent = new Intent(UserActivity.this, MainActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
-
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         break;
@@ -235,13 +222,6 @@ public class UserActivity extends Activity implements View.OnClickListener {
 
                     case R.id.menu_market:
                         intent = new Intent(UserActivity.this, MarketMainActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
                         startActivity(intent);
                         break;
 
@@ -295,13 +275,6 @@ public class UserActivity extends Activity implements View.OnClickListener {
 
                     case R.id.menu_memory_sound:
                         startLink = new Intent(getApplicationContext(), SongMainActivity.class);
-                        startLink.putExtra("user_id", getIntent().getStringExtra("user_id"));
-                        startLink.putExtra("user_level", getIntent().getStringExtra("user_level"));
-                        startLink.putExtra("user_email", getIntent().getStringExtra("user_email"));
-                        startLink.putExtra("user_phone", getIntent().getStringExtra("user_phone"));
-                        startLink.putExtra("user_name", getIntent().getStringExtra("user_name"));
-                        startLink.putExtra("user_avatar", getIntent().getStringExtra("user_avatar"));
-                        startLink.putExtra("user_birth", getIntent().getStringExtra("user_birth"));
                         startActivity(startLink);
                         break;
                 }
@@ -380,21 +353,11 @@ public class UserActivity extends Activity implements View.OnClickListener {
     }
 
     private void init() {
-        ib_edit_profile = (ImageButton)findViewById(R.id.ib_edit_profile);
+        ib_edit_profile = (ImageButton) findViewById(R.id.ib_edit_profile);
         ib_edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(UserActivity.this, EditUserActivity.class);
-
-                //user info
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_avatar", user_avatar);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_level", user_level);
-
                 startActivity(intent);
             }
         });
@@ -414,15 +377,6 @@ public class UserActivity extends Activity implements View.OnClickListener {
                 intent.putExtra("story_user_level", story_user_level);
                 intent.putExtra("story_user_avatar", story_user_avatar);
 
-                //user info
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_avatar", user_avatar);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_level", user_level);
-
                 startActivity(intent);
             }
         });
@@ -441,17 +395,17 @@ public class UserActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private static void log(Throwable throwable){
-        StackTraceElement[] ste =  throwable.getStackTrace();
+    private static void log(Throwable throwable) {
+        StackTraceElement[] ste = throwable.getStackTrace();
         String className = ste[0].getClassName();
         String methodName = ste[0].getMethodName();
         int lineNumber = ste[0].getLineNumber();
         String fileName = ste[0].getFileName();
 
-        if(LogFlag.printFlag){
-            if(logger.isInfoEnabled()){
+        if (LogFlag.printFlag) {
+            if (logger.isInfoEnabled()) {
                 logger.info("Exception: " + throwable.getMessage());
-                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+                logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
             }
         }
     }

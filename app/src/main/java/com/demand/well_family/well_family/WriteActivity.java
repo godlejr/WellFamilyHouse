@@ -121,6 +121,7 @@ public class WriteActivity extends Activity {
 
     private int photoListSize;
     private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
+    private SharedPreferences loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +129,7 @@ public class WriteActivity extends Activity {
         setContentView(R.layout.activity_write);
 
         finishList.add(this);
+        setUserInfo();
 
         family_id = getIntent().getIntExtra("family_id", 0);
         family_name = getIntent().getStringExtra("family_name");
@@ -135,18 +137,6 @@ public class WriteActivity extends Activity {
         family_avatar = getIntent().getStringExtra("family_avatar");
         family_user_id = getIntent().getIntExtra("family_user_id", 0);
         family_created_at = getIntent().getStringExtra("family_created_at");
-
-        user_id = getIntent().getIntExtra("user_id", 0);
-        user_name = getIntent().getStringExtra("user_name");
-        user_level = getIntent().getIntExtra("user_level", 0);
-        user_avatar = getIntent().getStringExtra("user_avatar");
-        user_email = getIntent().getStringExtra("user_email");
-        user_phone = getIntent().getStringExtra("user_phone");
-        user_birth = getIntent().getStringExtra("user_birth");
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolBar);
-        TextView toolbar_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        toolbar_title.setText("글쓰기");
 
         realPathUtil = new RealPathUtil();
         photoList = new ArrayList<>();
@@ -156,9 +146,19 @@ public class WriteActivity extends Activity {
 
         init();
         checkPermission();
-        setToolbar(this.getWindow().getDecorView(), this, "글쓰기");
     }
 
+    private void setUserInfo() {
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        user_id = loginInfo.getInt("user_id", 0);
+        user_level = loginInfo.getInt("user_level", 0);
+        user_name = loginInfo.getString("user_name", null);
+        user_email = loginInfo.getString("user_email", null);
+        user_birth = loginInfo.getString("user_birth", null);
+        user_avatar = loginInfo.getString("user_avatar", null);
+        user_phone = loginInfo.getString("user_phone", null);
+        setToolbar(this.getWindow().getDecorView(), this, "글쓰기");
+    }
 
     // toolbar & menu
     public void setToolbar(View view, Context context, String title) {

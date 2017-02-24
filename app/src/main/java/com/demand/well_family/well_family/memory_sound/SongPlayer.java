@@ -3,6 +3,7 @@ package com.demand.well_family.well_family.memory_sound;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -34,6 +35,7 @@ import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.LikeCount;
 import com.demand.well_family.well_family.dto.SongComment;
 import com.demand.well_family.well_family.log.LogFlag;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,6 +103,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
     private ImageView iv_sound_player_album_bg;
 
     private static final Logger logger = LoggerFactory.getLogger(SongPlayer.class);
+    private SharedPreferences loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,14 +112,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
         setContentView(R.layout.sound_activity_player);
         getWindow().setLayout(android.view.WindowManager.LayoutParams.MATCH_PARENT, android.view.WindowManager.LayoutParams.MATCH_PARENT);
 
-        user_id = getIntent().getIntExtra("user_id", 0);
-        user_name = getIntent().getStringExtra("user_name");
-        user_level = getIntent().getIntExtra("user_level", 0);
-        user_avatar = getIntent().getStringExtra("user_avatar");
-        user_email = getIntent().getStringExtra("user_email");
-        user_phone = getIntent().getStringExtra("user_phone");
-        user_birth = getIntent().getStringExtra("user_birth");
-
+        setUserInfo();
 
         song_id = getIntent().getIntExtra("song_id", 0);
         song_name = getIntent().getStringExtra("song_name");
@@ -135,6 +131,17 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
         getCommentData();
         getCommentCount();
         setCommentData();
+    }
+
+    private void setUserInfo() {
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        user_id = loginInfo.getInt("user_id", 0);
+        user_level = loginInfo.getInt("user_level", 0);
+        user_name = loginInfo.getString("user_name", null);
+        user_email = loginInfo.getString("user_email", null);
+        user_birth = loginInfo.getString("user_birth", null);
+        user_avatar = loginInfo.getString("user_avatar", null);
+        user_phone = loginInfo.getString("user_phone", null);
     }
 
     private void setCommentData() {
@@ -415,14 +422,6 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), SongRecordActivity.class);
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_level", user_level);
-                intent.putExtra("user_avatar", user_avatar);
-
                 intent.putExtra("song_id", song_id);
                 intent.putExtra("song_title", song_title);
                 intent.putExtra("song_singer", song_singer);
@@ -583,17 +582,17 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
         super.onDestroy();
     }
 
-    private static void log(Throwable throwable){
-        StackTraceElement[] ste =  throwable.getStackTrace();
+    private static void log(Throwable throwable) {
+        StackTraceElement[] ste = throwable.getStackTrace();
         String className = ste[0].getClassName();
         String methodName = ste[0].getMethodName();
         int lineNumber = ste[0].getLineNumber();
         String fileName = ste[0].getFileName();
 
-        if(LogFlag.printFlag){
-            if(logger.isInfoEnabled()){
+        if (LogFlag.printFlag) {
+            if (logger.isInfoEnabled()) {
                 logger.info("Exception: " + throwable.getMessage());
-                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+                logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
             }
         }
     }

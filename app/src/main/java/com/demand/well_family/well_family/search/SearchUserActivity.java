@@ -3,6 +3,7 @@ package com.demand.well_family.well_family.search;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -71,28 +72,31 @@ public class SearchUserActivity extends Activity {
     private ArrayList<User> userList;
 
     private static final Logger logger = LoggerFactory.getLogger(SearchUserActivity.class);
+    private SharedPreferences loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_user);
 
+        setUserInfo();
         finishList.add(this);
-
         init();
+    }
+
+    private void setUserInfo() {
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        user_id = loginInfo.getInt("user_id", 0);
+        user_level = loginInfo.getInt("user_level", 0);
+        user_name = loginInfo.getString("user_name", null);
+        user_email = loginInfo.getString("user_email", null);
+        user_birth = loginInfo.getString("user_birth", null);
+        user_avatar = loginInfo.getString("user_avatar", null);
+        user_phone = loginInfo.getString("user_phone", null);
         setToolbar(getWindow().getDecorView());
     }
 
     private void init() {
-        user_id = getIntent().getIntExtra("user_id", 0);
-        user_name = getIntent().getStringExtra("user_name");
-        user_avatar = getIntent().getStringExtra("user_avatar");
-        user_email = getIntent().getStringExtra("user_email");
-        user_birth = getIntent().getStringExtra("user_birth");
-        user_phone = getIntent().getStringExtra("user_phone");
-        user_level = getIntent().getIntExtra("user_level", 0);
-
-
         family_id = getIntent().getIntExtra("family_id", 0);
         family_name = getIntent().getStringExtra("family_name");
         family_content = getIntent().getStringExtra("family_content");
@@ -162,14 +166,6 @@ public class SearchUserActivity extends Activity {
         intent.putExtra("family_user_id", family_user_id);
         intent.putExtra("family_created_at", family_created_at);
 
-        //user info
-        intent.putExtra("user_id", user_id);
-        intent.putExtra("user_email", user_email);
-        intent.putExtra("user_birth", user_birth);
-        intent.putExtra("user_phone", user_phone);
-        intent.putExtra("user_name", user_name);
-        intent.putExtra("user_level", user_level);
-        intent.putExtra("user_avatar", user_avatar);
         startActivity(intent);
         finish();
     }
@@ -208,14 +204,6 @@ public class SearchUserActivity extends Activity {
                     intent.putExtra("story_user_name", userList.get(getAdapterPosition()).getName());
                     intent.putExtra("story_user_level", userList.get(getAdapterPosition()).getLevel());
                     intent.putExtra("story_user_avatar", userList.get(getAdapterPosition()).getAvatar());
-
-                    intent.putExtra("user_id", user_id);
-                    intent.putExtra("user_ name", user_name);
-                    intent.putExtra("user_avatar", user_avatar);
-                    intent.putExtra("user_email", user_email);
-                    intent.putExtra("user_birth", user_birth);
-                    intent.putExtra("user_phone", user_phone);
-                    intent.putExtra("user_level", user_level);
 
                     startActivity(intent);
                     break;
@@ -297,7 +285,7 @@ public class SearchUserActivity extends Activity {
 
                                 }
                             });
-                        }else {
+                        } else {
                             //public
                             holder.btn_search_user.setText("초대하기");
                             holder.btn_search_user.setTextColor(Color.parseColor("#542920"));
@@ -356,14 +344,6 @@ public class SearchUserActivity extends Activity {
         intent.putExtra("family_user_id", family_user_id);
         intent.putExtra("family_created_at", family_created_at);
 
-        //user info
-        intent.putExtra("user_id", user_id);
-        intent.putExtra("user_email", user_email);
-        intent.putExtra("user_birth", user_birth);
-        intent.putExtra("user_phone", user_phone);
-        intent.putExtra("user_name", user_name);
-        intent.putExtra("user_level", user_level);
-        intent.putExtra("user_avatar", user_avatar);
         startActivity(intent);
         finish();
         super.onBackPressed();

@@ -92,29 +92,34 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
 
     // toolbar
     private DrawerLayout dl;
+    private SharedPreferences loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sound_activity_main);
 
+        setUserInfo();
         finishList.add(this);
 
         init();
         getChartData();
         getCategoryData();
+    }
+
+    private void setUserInfo() {
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        user_id = loginInfo.getInt("user_id", 0);
+        user_level = loginInfo.getInt("user_level", 0);
+        user_name = loginInfo.getString("user_name", null);
+        user_email = loginInfo.getString("user_email", null);
+        user_birth = loginInfo.getString("user_birth", null);
+        user_avatar = loginInfo.getString("user_avatar", null);
+        user_phone = loginInfo.getString("user_phone", null);
         setToolbar(this.getWindow().getDecorView(), this, "추억소리");
     }
 
     private void init() {
-        user_id = getIntent().getIntExtra("user_id", 0);
-        user_name = getIntent().getStringExtra("user_name");
-        user_level = getIntent().getIntExtra("user_level", 0);
-        user_avatar = getIntent().getStringExtra("user_avatar");
-        user_email = getIntent().getStringExtra("user_email");
-        user_phone = getIntent().getStringExtra("user_phone");
-        user_birth = getIntent().getStringExtra("user_birth");
-
         tv_sound_random_title = (TextView) findViewById(R.id.tv_sound_random_title);
         tv_sound_random_singer = (TextView) findViewById(R.id.tv_sound_random_singer);
         tv_sound_random_comment_count = (TextView) findViewById(R.id.tv_sound_random_comment_count);
@@ -219,14 +224,6 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                 intent.putExtra("story_user_level", user_level);
                 intent.putExtra("story_user_avatar", user_avatar);
 
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_avatar", user_avatar);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_level", user_level);
-
                 startActivity(intent);
 
             }
@@ -270,14 +267,6 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                 switch (item.getItemId()) {
                     case R.id.menu_home:
                         intent = new Intent(SongMainActivity.this, MainActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
-
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
 
@@ -289,13 +278,6 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
 
                     case R.id.menu_market:
                         intent = new Intent(SongMainActivity.this, MarketMainActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
                         startActivity(intent);
 
                         break;
@@ -381,14 +363,6 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                 });
 
                 Intent intent = new Intent(SongMainActivity.this, SongPlayer.class);
-                //user info
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_level", user_level);
-                intent.putExtra("user_avatar", user_avatar);
 
                 //song info
                 intent.putExtra("song_id", random_id);
@@ -436,14 +410,6 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                     });
 
                     Intent intent = new Intent(SongMainActivity.this, SongPlayer.class);
-                    //user info
-                    intent.putExtra("user_id", user_id);
-                    intent.putExtra("user_email", user_email);
-                    intent.putExtra("user_birth", user_birth);
-                    intent.putExtra("user_phone", user_phone);
-                    intent.putExtra("user_name", user_name);
-                    intent.putExtra("user_level", user_level);
-                    intent.putExtra("user_avatar", user_avatar);
 
                     //song info
                     intent.putExtra("song_id", songList.get(getAdapterPosition()).getId());
@@ -514,14 +480,6 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                         // 인기 추억 사운드
 
                         Intent intent = new Intent(SongMainActivity.this, SongChartListActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
-
                         intent.putExtra("songList", IntentSongList);
                         startActivity(intent);
                     }
@@ -552,15 +510,6 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                 public void onClick(View v) {
 
                     Intent intent = new Intent(SongMainActivity.this, SongCategoryListActivity.class);
-                    //user info
-                    intent.putExtra("user_id", user_id);
-                    intent.putExtra("user_email", user_email);
-                    intent.putExtra("user_birth", user_birth);
-                    intent.putExtra("user_phone", user_phone);
-                    intent.putExtra("user_name", user_name);
-                    intent.putExtra("user_level", user_level);
-                    intent.putExtra("user_avatar", user_avatar);
-
                     intent.putExtra("category_id", intentSongCategoryList.get(getAdapterPosition()).getId());
                     intent.putExtra("category_name", intentSongCategoryList.get(getAdapterPosition()).getName());
                     startActivity(intent);
@@ -639,17 +588,17 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private static void log(Throwable throwable){
-        StackTraceElement[] ste =  throwable.getStackTrace();
+    private static void log(Throwable throwable) {
+        StackTraceElement[] ste = throwable.getStackTrace();
         String className = ste[0].getClassName();
         String methodName = ste[0].getMethodName();
         int lineNumber = ste[0].getLineNumber();
         String fileName = ste[0].getFileName();
 
-        if(LogFlag.printFlag){
-            if(logger.isInfoEnabled()){
+        if (LogFlag.printFlag) {
+            if (logger.isInfoEnabled()) {
                 logger.info("Exception: " + throwable.getMessage());
-                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+                logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
             }
         }
     }

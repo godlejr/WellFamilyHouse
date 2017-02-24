@@ -76,18 +76,14 @@ public class SongCategoryListActivity extends Activity {
     private DrawerLayout dl;
 
     private static final Logger logger = LoggerFactory.getLogger(SongCategoryListActivity.class);
+    private SharedPreferences loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_song_list);
-        user_id = getIntent().getIntExtra("user_id",0);
-        user_name = getIntent().getStringExtra("user_name");
-        user_level = getIntent().getIntExtra("user_level",0);
-        user_avatar = getIntent().getStringExtra("user_avatar");
-        user_email = getIntent().getStringExtra("user_email");
-        user_phone = getIntent().getStringExtra("user_phone");
-        user_birth = getIntent().getStringExtra("user_birth");
+
+        setUserInfo();
 
         category_id = getIntent().getIntExtra("category_id",0);
         category_name = getIntent().getStringExtra("category_name");
@@ -96,8 +92,20 @@ public class SongCategoryListActivity extends Activity {
 
         init();
         getSongsData();
+    }
+
+    private void setUserInfo() {
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        user_id = loginInfo.getInt("user_id", 0);
+        user_level = loginInfo.getInt("user_level", 0);
+        user_name = loginInfo.getString("user_name", null);
+        user_email = loginInfo.getString("user_email", null);
+        user_birth = loginInfo.getString("user_birth", null);
+        user_avatar = loginInfo.getString("user_avatar", null);
+        user_phone = loginInfo.getString("user_phone", null);
         setToolbar(this.getWindow().getDecorView(), this, "추억소리");
     }
+
 
     // toolbar & menu
     public void setToolbar(View view, Context context, String title) {
@@ -141,14 +149,6 @@ public class SongCategoryListActivity extends Activity {
                 intent.putExtra("story_user_name", user_name);
                 intent.putExtra("story_user_level", user_level);
                 intent.putExtra("story_user_avatar", user_avatar);
-
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_avatar", user_avatar);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_level", user_level);
 
                 startActivity(intent);
 
@@ -195,14 +195,6 @@ public class SongCategoryListActivity extends Activity {
                 switch (item.getItemId()) {
                     case R.id.menu_home:
                         intent  = new Intent(SongCategoryListActivity.this, MainActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
-
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
 
@@ -214,13 +206,6 @@ public class SongCategoryListActivity extends Activity {
 
                     case R.id.menu_market:
                         intent = new Intent(SongCategoryListActivity.this, MarketMainActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
                         startActivity(intent);
 
                         break;
@@ -275,13 +260,6 @@ public class SongCategoryListActivity extends Activity {
 
                     case R.id.menu_memory_sound:
                         startLink = new Intent(getApplicationContext(), SongMainActivity.class);
-                        startLink.putExtra("user_id",user_id);
-                        startLink.putExtra("user_level", user_level);
-                        startLink.putExtra("user_email", user_email);
-                        startLink.putExtra("user_phone", user_phone);
-                        startLink.putExtra("user_name", user_name);
-                        startLink.putExtra("user_avatar", user_avatar);
-                        startLink.putExtra("user_birth", user_birth);
                         startActivity(startLink);
                         break;
                 }
@@ -325,14 +303,6 @@ public class SongCategoryListActivity extends Activity {
 
 
                     Intent intent = new Intent(SongCategoryListActivity.this, SongPlayer.class);
-                    //user info
-                    intent.putExtra("user_id", user_id);
-                    intent.putExtra("user_email", user_email);
-                    intent.putExtra("user_birth", user_birth);
-                    intent.putExtra("user_phone", user_phone);
-                    intent.putExtra("user_name", user_name);
-                    intent.putExtra("user_level", user_level);
-                    intent.putExtra("user_avatar", user_avatar);
 
                     //song info
                     intent.putExtra("song_id", songList.get(getAdapterPosition()).getId());

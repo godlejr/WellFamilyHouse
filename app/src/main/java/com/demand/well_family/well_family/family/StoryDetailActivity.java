@@ -114,22 +114,14 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
     private Server_Connection server_connection;
 
     private static final Logger logger = LoggerFactory.getLogger(StoryDetailActivity.class);
+    private SharedPreferences loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_detail);
 
-        finishList.add(this);
-
-        user_id = getIntent().getIntExtra("user_id", 0);
-        user_name = getIntent().getStringExtra("user_name");
-        user_level = getIntent().getIntExtra("user_level", 0);
-        user_avatar = getIntent().getStringExtra("user_avatar");
-        user_email = getIntent().getStringExtra("user_email");
-        user_phone = getIntent().getStringExtra("user_phone");
-        user_birth = getIntent().getStringExtra("user_birth");
-
+        setUserInfo();
 
         content_user_id = getIntent().getIntExtra("content_user_id", 0);
         content = getIntent().getStringExtra("content");
@@ -139,6 +131,7 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
         story_user_created_at = getIntent().getStringExtra("story_user_created_at");
         like_checked = getIntent().getBooleanExtra("like_checked", false);
 
+        finishList.add(this);
 
         init();
         getContentData();
@@ -146,6 +139,17 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
         getCommentData();
         setCommentData();
 
+    }
+
+    private void setUserInfo() {
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        user_id = loginInfo.getInt("user_id", 0);
+        user_level = loginInfo.getInt("user_level", 0);
+        user_name = loginInfo.getString("user_name", null);
+        user_email = loginInfo.getString("user_email", null);
+        user_birth = loginInfo.getString("user_birth", null);
+        user_avatar = loginInfo.getString("user_avatar", null);
+        user_phone = loginInfo.getString("user_phone", null);
         setToolbar(this.getWindow().getDecorView(), this.getApplicationContext(), "");
     }
 
@@ -192,14 +196,6 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                 intent.putExtra("story_user_level", user_level);
                 intent.putExtra("story_user_avatar", user_avatar);
 
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_avatar", user_avatar);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_level", user_level);
-
                 startActivity(intent);
             }
         });
@@ -243,14 +239,6 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                 switch (item.getItemId()) {
                     case R.id.menu_home:
                         intent = new Intent(StoryDetailActivity.this, MainActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
-
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         break;
@@ -261,13 +249,6 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
 
                     case R.id.menu_market:
                         intent = new Intent(StoryDetailActivity.this, MarketMainActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
                         startActivity(intent);
                         break;
 
@@ -321,13 +302,6 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
 
                     case R.id.menu_memory_sound:
                         startLink = new Intent(getApplicationContext(), SongMainActivity.class);
-                        startLink.putExtra("user_id", user_id);
-                        startLink.putExtra("user_level", user_level);
-                        startLink.putExtra("user_email", user_email);
-                        startLink.putExtra("user_phone", user_phone);
-                        startLink.putExtra("user_name", user_name);
-                        startLink.putExtra("user_avatar", user_avatar);
-                        startLink.putExtra("user_birth", user_birth);
                         startActivity(startLink);
                         break;
                 }

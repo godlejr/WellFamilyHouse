@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -75,16 +76,28 @@ public class EditUserActivity extends Activity {
     private RealPathUtil realPathUtil;
     private String avatarPath;
     private int user_gender;
+    private SharedPreferences loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        setUserInfo();
         init();
-        setToolbar(getWindow().getDecorView());
     }
 
+    private void setUserInfo() {
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        user_id = loginInfo.getInt("user_id", 0);
+        user_level = loginInfo.getInt("user_level", 0);
+        user_name = loginInfo.getString("user_name", null);
+        user_email = loginInfo.getString("user_email", null);
+        user_birth = loginInfo.getString("user_birth", null);
+        user_avatar = loginInfo.getString("user_avatar", null);
+        user_phone = loginInfo.getString("user_phone", null);
+        setToolbar(getWindow().getDecorView());
+    }
 
     private void init() {
         iv_edit_profile_avatar = (CircleImageView) findViewById(R.id.iv_edit_profile_avatar);
@@ -99,13 +112,6 @@ public class EditUserActivity extends Activity {
         rv_profile_song = (RecyclerView) findViewById(R.id.rv_profile_song);
         realPathUtil = new RealPathUtil();
 
-        user_id = getIntent().getIntExtra("user_id", 0);
-        user_name = getIntent().getStringExtra("user_name");
-        user_avatar = getIntent().getStringExtra("user_avatar");
-        user_email = getIntent().getStringExtra("user_email");
-        user_birth = getIntent().getStringExtra("user_birth");
-        user_phone = getIntent().getStringExtra("user_phone");
-        user_level = getIntent().getIntExtra("user_level", 0);
 
         tv_edit_profile_email.setText(user_email);
         et_edit_profile_name.setText(user_name);
