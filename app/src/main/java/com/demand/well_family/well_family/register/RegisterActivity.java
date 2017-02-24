@@ -163,7 +163,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     map.put("phone", et_join_phone.getText().toString());
 
                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ResponseBody> call = server_connection.join(map);
+                    Call<ResponseBody> call = server_connection.join(1,map);
                     call.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

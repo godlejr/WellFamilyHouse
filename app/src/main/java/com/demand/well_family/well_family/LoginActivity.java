@@ -106,17 +106,33 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         context = this;
         SNSLogin();
-        naverLogin();
 
 
     }
 
     private void SNSLogin() {
+        //facebook
         facebookLoginButton = (Button) findViewById(R.id.facebookLoginButton);
         facebookLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 facebookLogin();
+            }
+        });
+
+        //naver
+        mOAuthLoginModule = OAuthLogin.getInstance();
+        mOAuthLoginModule.init(
+                LoginActivity.this,
+                client_id, client_secret, client_name);
+
+        oAuthLoginButton = (OAuthLoginButton) findViewById(R.id.oAuthLoginButton);
+        oAuthLoginButton.setOAuthLoginHandler(mOAuthLoginHandler);
+
+        oAuthLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOAuthLoginModule.startOauthLoginActivity(LoginActivity.this, mOAuthLoginHandler);
             }
         });
     }
@@ -147,7 +163,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             String name = object.getString("name");         // 이름
                             String email = object.getString("email");       // 이메일
 
-                            setSNSLogin(email, name, id);
+                            setSNSLogin(email, name, id,3);
                         } catch (JSONException e) {
                             log(e);
                         }
@@ -174,22 +190,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private void naverLogin() {
-        mOAuthLoginModule = OAuthLogin.getInstance();
-        mOAuthLoginModule.init(
-                LoginActivity.this,
-                client_id, client_secret, client_name);
-
-        oAuthLoginButton = (OAuthLoginButton) findViewById(R.id.oAuthLoginButton);
-        oAuthLoginButton.setOAuthLoginHandler(mOAuthLoginHandler);
-
-        oAuthLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOAuthLoginModule.startOauthLoginActivity(LoginActivity.this, mOAuthLoginHandler);
-            }
-        });
-    }
 
     OAuthLoginHandler mOAuthLoginHandler = new OAuthLoginHandler() {
         @Override
@@ -208,7 +208,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             String name = json.getJSONObject("response").getString("name");
                             String email = json.getJSONObject("response").getString("email");
 
-                            setSNSLogin(email, name, id);
+                            setSNSLogin(email, name, id, 2);
 
                         } catch (JSONException e) {
                             log(e);
@@ -225,7 +225,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     };
 
-    private void setSNSLogin(final String email, final String name, final String id) {
+    private void setSNSLogin(final String email, final String name, final String id,final int login_category_id) {
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
         HashMap<String, String> map = new HashMap<>();
@@ -243,6 +243,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     intent.putExtra("email",email);
                     intent.putExtra("password",id);
                     intent.putExtra("name",name);
+                    intent.putExtra("login_category_id",login_category_id);
                     startActivity(intent);
                 } else {
                     setLogin(userList);

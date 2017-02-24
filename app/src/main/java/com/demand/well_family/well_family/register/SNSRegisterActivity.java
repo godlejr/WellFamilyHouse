@@ -51,6 +51,7 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
     private String email;
     private String password;
     private String name;
+    private int login_category_id;
 
     private Server_Connection server_connection;
 
@@ -71,6 +72,7 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
         email = getIntent().getStringExtra("email");
         password = getIntent().getStringExtra("password");
         name = getIntent().getStringExtra("name");
+        login_category_id = getIntent().getIntExtra("login_category_id",1);
 
         btn_sns_register = (Button) findViewById(R.id.btn_sns_register);
         et_sns_birth = (EditText) findViewById(R.id.et_sns_birth);
@@ -143,7 +145,7 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
                     map.put("phone", phone);
 
                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ResponseBody> call_join = server_connection.join(map);
+                    Call<ResponseBody> call_join = server_connection.join(login_category_id,map);
                     call_join.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

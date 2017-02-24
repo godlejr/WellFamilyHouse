@@ -54,8 +54,8 @@ public interface Server_Connection {
     @POST("{user_id}/insert_family")
     Call<ArrayList<Identification>> insert_family(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
-    @POST("join")
-    Call<ResponseBody> join(@QueryMap HashMap<String, String> map);
+    @POST("{login_category_id}/join")
+    Call<ResponseBody> join(@Path("login_category_id") int login_category_id,@QueryMap HashMap<String, String> map);
 
     @GET("{user_id}/family_Info")
     Call<ArrayList<Family>> family_Info(@Path("user_id") int user_id);
