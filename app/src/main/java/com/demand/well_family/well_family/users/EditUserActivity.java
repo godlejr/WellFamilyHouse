@@ -30,7 +30,6 @@ import com.demand.well_family.well_family.util.RealPathUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,7 +44,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by ㅇㅇ on 2017-02-23.
  */
 
-public class EditProfileActivity extends Activity {
+public class EditUserActivity extends Activity {
     private CircleImageView iv_edit_profile_avatar;
     private ImageButton ib_edit_profile_avatar;
     private TextView tv_edit_profile_email;
@@ -71,7 +70,7 @@ public class EditProfileActivity extends Activity {
     private String user_phone;
     private int user_level;
 
-    private static final Logger logger = LoggerFactory.getLogger(EditProfileActivity.class);
+    private static final Logger logger = LoggerFactory.getLogger(EditUserActivity.class);
     private static final int PICK_PHOTO = 777;
     private RealPathUtil realPathUtil;
     private String avatarPath;
@@ -111,7 +110,7 @@ public class EditProfileActivity extends Activity {
         tv_edit_profile_email.setText(user_email);
         et_edit_profile_name.setText(user_name);
         et_edit_profile_phone.setText(user_phone);
-        Glide.with(EditProfileActivity.this).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_edit_profile_avatar);
+        Glide.with(EditUserActivity.this).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_edit_profile_avatar);
 
         et_edit_profile_birth.setText(user_birth);
         et_edit_profile_birth.setFocusable(false);
@@ -178,7 +177,7 @@ public class EditProfileActivity extends Activity {
 
         profileOptionAdapter = new ProfileOptionAdapter(this, favoriteList, R.layout.item_text);
         rv_profile_favorite.setAdapter(profileOptionAdapter);
-        rv_profile_favorite.setLayoutManager(new GridLayoutManager(EditProfileActivity.this, 3));
+        rv_profile_favorite.setLayoutManager(new GridLayoutManager(EditUserActivity.this, 3));
 
         ArrayList<String> songList = new ArrayList<>();
         songList.add("가요");
@@ -190,7 +189,7 @@ public class EditProfileActivity extends Activity {
 
         profileSongAdapter = new ProfileSongAdapter(this, songList, R.layout.item_text);
         rv_profile_song.setAdapter(profileSongAdapter);
-        rv_profile_song.setLayoutManager(new GridLayoutManager(EditProfileActivity.this, 3));
+        rv_profile_song.setLayoutManager(new GridLayoutManager(EditUserActivity.this, 3));
     }
 
     public void setToolbar(View view) {
@@ -233,7 +232,7 @@ public class EditProfileActivity extends Activity {
                     avatarPath = realPathUtil.getRealPathFromURI_API11to18(this, uri);
                 }
 
-                Glide.with(EditProfileActivity.this).load(uri).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_edit_profile_avatar);
+                Glide.with(EditUserActivity.this).load(uri).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_edit_profile_avatar);
             }
         }
     }

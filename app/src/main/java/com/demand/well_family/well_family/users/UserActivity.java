@@ -384,7 +384,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
         ib_edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(UserActivity.this, EditProfileActivity.class);
+                Intent intent = new Intent(UserActivity.this, EditUserActivity.class);
 
                 //user info
                 intent.putExtra("user_id", user_id);
