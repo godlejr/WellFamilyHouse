@@ -122,7 +122,7 @@ public class PhotosActivity extends Activity {
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
 
-        setToolbar(this.getWindow().getDecorView(), this.getApplicationContext(), family_name + " 사진첩"); // family_name때문에 여기에서 family_info 받음
+        setToolbar(this.getWindow().getDecorView(), this.getApplicationContext(), family_name + " 사진첩");
     }
 
 
