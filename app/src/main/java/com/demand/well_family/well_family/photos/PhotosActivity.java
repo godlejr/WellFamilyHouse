@@ -98,6 +98,14 @@ public class PhotosActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_list);
 
+        //family info
+        family_id = getIntent().getIntExtra("family_id", 0);
+        family_name = getIntent().getStringExtra("family_name");
+        family_content = getIntent().getStringExtra("family_content");
+        family_avatar = getIntent().getStringExtra("family_avatar");
+        family_user_id = getIntent().getIntExtra("family_user_id", 0);
+        family_created_at = getIntent().getStringExtra("family_created_at");
+
         setUserInfo();
 
         finishList.add(this);
@@ -113,15 +121,6 @@ public class PhotosActivity extends Activity {
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
-
-
-        //family info
-        family_id = getIntent().getIntExtra("family_id", 0);
-        family_name = getIntent().getStringExtra("family_name");
-        family_content = getIntent().getStringExtra("family_content");
-        family_avatar = getIntent().getStringExtra("family_avatar");
-        family_user_id = getIntent().getIntExtra("family_user_id", 0);
-        family_created_at = getIntent().getStringExtra("family_created_at");
 
         setToolbar(this.getWindow().getDecorView(), this.getApplicationContext(), family_name + " 사진첩"); // family_name때문에 여기에서 family_info 받음
     }
