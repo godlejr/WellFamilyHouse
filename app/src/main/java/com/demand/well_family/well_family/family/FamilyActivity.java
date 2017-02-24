@@ -135,6 +135,7 @@ public class FamilyActivity extends Activity {
     private ContentAddHandler contentAddHandler;
 
     private static final Logger logger = LoggerFactory.getLogger(FamilyActivity.class);
+    private SharedPreferences loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,11 +151,24 @@ public class FamilyActivity extends Activity {
         family_user_id = getIntent().getIntExtra("family_user_id", 0);
         family_created_at = getIntent().getStringExtra("family_created_at");
 
+        setUserInfo();
+
         init();
         getUserData();
         getContentsData();
         editFamilyData();
 
+    }
+
+    private void setUserInfo() {
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        user_id = loginInfo.getInt("user_id", 0);
+        user_level = loginInfo.getInt("user_level", 0);
+        user_name = loginInfo.getString("user_name", null);
+        user_email = loginInfo.getString("user_email", null);
+        user_birth = loginInfo.getString("user_birth", null);
+        user_avatar = loginInfo.getString("user_avatar", null);
+        user_phone = loginInfo.getString("user_phone", null);
         setToolbar(this.getWindow().getDecorView(), this.getApplicationContext(), family_name);
     }
 
@@ -958,14 +972,6 @@ public class FamilyActivity extends Activity {
 
     //user
     private void getUserData() {
-        user_id = getIntent().getIntExtra("user_id",0);
-        user_name = getIntent().getStringExtra("user_name");
-        user_level = getIntent().getIntExtra("user_level",0);
-        user_avatar = getIntent().getStringExtra("user_avatar");
-        user_email = getIntent().getStringExtra("user_email");
-        user_phone = getIntent().getStringExtra("user_phone");
-        user_birth = getIntent().getStringExtra("user_birth");
-
         //write user_avatar
         iv_family_writer_avatar = (ImageView) findViewById(R.id.iv_family_writer_avatar);
         Glide.with(this).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_family_writer_avatar);

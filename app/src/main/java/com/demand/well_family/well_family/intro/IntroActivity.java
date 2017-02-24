@@ -32,7 +32,7 @@ public class IntroActivity extends Activity {
     private SharedPreferences loginInfo;
     private String email, name, birth, avatar, phone;
     private int id, level;
-    private String device_id;
+    private String device_id,token;
 
     private Server_Connection server_connection;
 
@@ -54,6 +54,7 @@ public class IntroActivity extends Activity {
                 birth = loginInfo.getString("user_birth", null);
                 avatar = loginInfo.getString("user_avatar", null);
                 phone = loginInfo.getString("user_phone", null);
+                token = loginInfo.getString("token", null);
                 device_id = loginInfo.getString("device_id", null);
 
                 if (email != null && name != null) {
@@ -69,13 +70,6 @@ public class IntroActivity extends Activity {
 
                             if (response.body().get(0).getChecked() > 0){
                                 Intent intent = new Intent(IntroActivity.this, MainActivity.class);
-                                intent.putExtra("user_id", id);
-                                intent.putExtra("user_email", email);
-                                intent.putExtra("user_birth", birth);
-                                intent.putExtra("user_phone", phone);
-                                intent.putExtra("user_name", name);
-                                intent.putExtra("user_level", level);
-                                intent.putExtra("user_avatar", avatar);
                                 startActivity(intent);
                                 finish();
                             }else{

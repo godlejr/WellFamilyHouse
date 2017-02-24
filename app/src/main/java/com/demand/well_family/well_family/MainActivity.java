@@ -87,30 +87,37 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Server_Connection server_connection;
 
     private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
+    private SharedPreferences loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        user_id = getIntent().getIntExtra("user_id", 0);
-        user_name = getIntent().getStringExtra("user_name");
-        user_level = getIntent().getIntExtra("user_level", 0);
-        user_avatar = getIntent().getStringExtra("user_avatar");
-        user_email = getIntent().getStringExtra("user_email");
-        user_phone = getIntent().getStringExtra("user_phone");
-        user_birth = getIntent().getStringExtra("user_birth");
+        setUserInfo();
+
 
         ImageView iv_img_alarm = (ImageView) findViewById(R.id.iv_img_alarm);
         Glide.with(MainActivity.this).load(getString(R.string.cloud_front_banners) + "notification.jpg").thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_img_alarm);
 
         finishList.add(this);
 
-
         setFCMService();
+
         init();
         getFamilyData();
         getAppData();
+    }
+
+    private void setUserInfo() {
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        user_id = loginInfo.getInt("user_id", 0);
+        user_level = loginInfo.getInt("user_level", 0);
+        user_name = loginInfo.getString("user_name", null);
+        user_email = loginInfo.getString("user_email", null);
+        user_birth = loginInfo.getString("user_birth", null);
+        user_avatar = loginInfo.getString("user_avatar", null);
+        user_phone = loginInfo.getString("user_phone", null);
         setToolbar(this.getWindow().getDecorView());
     }
 

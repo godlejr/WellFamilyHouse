@@ -329,13 +329,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 editor.commit();
 
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("user_id", userList.get(0).getId());
-                intent.putExtra("user_email", userList.get(0).getEmail());
-                intent.putExtra("user_birth", userList.get(0).getBirth());
-                intent.putExtra("user_phone", userList.get(0).getPhone());
-                intent.putExtra("user_name", userList.get(0).getName());
-                intent.putExtra("user_level", userList.get(0).getLevel());
-                intent.putExtra("user_avatar", userList.get(0).getAvatar());
                 startActivity(intent);
                 finish();
             }
