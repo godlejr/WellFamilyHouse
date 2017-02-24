@@ -221,10 +221,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }).start();
 
             } else {
-                String errorCode = mOAuthLoginModule.getLastErrorCode(context).getCode();
-                String errorDesc = mOAuthLoginModule.getLastErrorDesc(context);
-                Toast.makeText(context, "errorCode:" + errorCode
-                        + ", errorDesc:" + errorDesc, Toast.LENGTH_SHORT).show();
+//                String errorCode = mOAuthLoginModule.getLastErrorCode(context).getCode();
+//                String errorDesc = mOAuthLoginModule.getLastErrorDesc(context);
+//                Toast.makeText(context, "errorCode:" + errorCode
+//                        + ", errorDesc:" + errorDesc, Toast.LENGTH_SHORT).show();
             }
         }
     };
