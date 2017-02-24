@@ -215,6 +215,8 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         ll_menu_mypage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dl.closeDrawers();
+
                 Intent intent = new Intent(SongStoryDetailActivity.this, UserActivity.class);
                 //userinfo
                 intent.putExtra("story_user_id", user_id);

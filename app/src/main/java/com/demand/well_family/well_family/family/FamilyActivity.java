@@ -204,6 +204,8 @@ public class FamilyActivity extends Activity {
         ll_menu_mypage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dl.closeDrawers();
+
                 Intent intent = new Intent(FamilyActivity.this, UserActivity.class);
                 //userinfo
                 intent.putExtra("story_user_id", user_id);
@@ -214,15 +216,7 @@ public class FamilyActivity extends Activity {
                 intent.putExtra("story_user_level", user_level);
                 intent.putExtra("story_user_avatar", user_avatar);
 
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_avatar", user_avatar);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_level", user_level);
-
-                startActivity(intent);
+                 startActivity(intent);
             }
         });
 
@@ -264,14 +258,6 @@ public class FamilyActivity extends Activity {
                 switch (item.getItemId()) {
                     case R.id.menu_home:
                         intent = new Intent(FamilyActivity.this, MainActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
-
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
 
@@ -283,13 +269,6 @@ public class FamilyActivity extends Activity {
 
                     case R.id.menu_market:
                         intent = new Intent(FamilyActivity.this, MarketMainActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
                         startActivity(intent);
 
                         break;
@@ -344,13 +323,6 @@ public class FamilyActivity extends Activity {
 
                     case R.id.menu_memory_sound:
                         startLink = new Intent(getApplicationContext(), SongMainActivity.class);
-                        startLink.putExtra("user_id", user_id);
-                        startLink.putExtra("user_level", user_level);
-                        startLink.putExtra("user_email", user_email);
-                        startLink.putExtra("user_phone", user_phone);
-                        startLink.putExtra("user_name", user_name);
-                        startLink.putExtra("user_avatar", user_avatar);
-                        startLink.putExtra("user_birth", user_birth);
                         startActivity(startLink);
                         break;
 
@@ -667,13 +639,6 @@ public class FamilyActivity extends Activity {
                                 intent.putExtra("story_user_level", response.body().get(0).getLevel());
                                 intent.putExtra("story_user_avatar", response.body().get(0).getAvatar());
 
-                                intent.putExtra("user_id", user_id);
-                                intent.putExtra("user_name", user_name);
-                                intent.putExtra("user_avatar", user_avatar);
-                                intent.putExtra("user_email", user_email);
-                                intent.putExtra("user_birth", user_birth);
-                                intent.putExtra("user_phone", user_phone);
-                                intent.putExtra("user_level", user_level);
 
                                 startActivity(intent);
                             }
@@ -693,13 +658,6 @@ public class FamilyActivity extends Activity {
                 case R.id.story_images_container:
                 case R.id.btn_item_main_story_comment:
                     Intent intent = new Intent(FamilyActivity.this, StoryDetailActivity.class);
-                    intent.putExtra("user_id", user_id);
-                    intent.putExtra("user_email", user_email);
-                    intent.putExtra("user_birth", user_birth);
-                    intent.putExtra("user_phone", user_phone);
-                    intent.putExtra("user_name", user_name);
-                    intent.putExtra("user_level", user_level);
-                    intent.putExtra("user_avatar", user_avatar);
 
                     intent.putExtra("content_user_id", storyList.get(getAdapterPosition()).getUser_id());
                     intent.putExtra("content", storyList.get(getAdapterPosition()).getContent());
@@ -931,13 +889,6 @@ public class FamilyActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(FamilyActivity.this, StoryDetailActivity.class);
-                    intent.putExtra("user_id", user_id);
-                    intent.putExtra("user_email", user_email);
-                    intent.putExtra("user_birth", user_birth);
-                    intent.putExtra("user_phone", user_phone);
-                    intent.putExtra("user_name", user_name);
-                    intent.putExtra("user_level", user_level);
-                    intent.putExtra("user_avatar", user_avatar);
 
                     intent.putExtra("content_user_id", storyList.get(story_position).getUser_id());
                     intent.putExtra("content", storyList.get(story_position).getContent());
@@ -1036,13 +987,6 @@ public class FamilyActivity extends Activity {
                     intent.putExtra("story_user_level", userList.get(getAdapterPosition()).getLevel());
                     intent.putExtra("story_user_avatar", userList.get(getAdapterPosition()).getAvatar());
 
-                    intent.putExtra("user_id", user_id);
-                    intent.putExtra("user_name", user_name);
-                    intent.putExtra("user_avatar", user_avatar);
-                    intent.putExtra("user_email", user_email);
-                    intent.putExtra("user_birth", user_birth);
-                    intent.putExtra("user_phone", user_phone);
-                    intent.putExtra("user_level", user_level);
                     startActivity(intent);
                 }
             });
@@ -1093,13 +1037,6 @@ public class FamilyActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(FamilyActivity.this, SearchUserActivity.class);
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_avatar", user_avatar);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_level", user_level);
 
                 intent.putExtra("family_id", family_id);
                 intent.putExtra("family_name", family_name);
@@ -1128,19 +1065,10 @@ public class FamilyActivity extends Activity {
                 intent.putExtra("family_user_id", family_user_id);
                 intent.putExtra("family_created_at", family_created_at);
 
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_avatar", user_avatar);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_level", user_level);
-
                 startActivity(intent);
             }
         });
 
-        // 버튼 을 텍스트뷰로 바꿔서 자바단 수정
         TextView btn_family_write = (TextView) findViewById(R.id.btn_family_write);
         btn_family_write.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1153,13 +1081,6 @@ public class FamilyActivity extends Activity {
                 intent.putExtra("family_user_id", family_user_id);
                 intent.putExtra("family_created_at", family_created_at);
 
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_avatar", user_avatar);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_level", user_level);
                 startActivityForResult(intent, WRITE_REQUEST);
             }
         });
@@ -1213,14 +1134,6 @@ public class FamilyActivity extends Activity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(FamilyActivity.this, MainActivity.class);
-        intent.putExtra("user_id", user_id);
-        intent.putExtra("user_email", user_email);
-        intent.putExtra("user_birth", user_birth);
-        intent.putExtra("user_phone", user_phone);
-        intent.putExtra("user_name", user_name);
-        intent.putExtra("user_level", user_level);
-        intent.putExtra("user_avatar", user_avatar);
-
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 

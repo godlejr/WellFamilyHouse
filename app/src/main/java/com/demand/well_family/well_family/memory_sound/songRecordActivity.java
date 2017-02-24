@@ -240,6 +240,7 @@ public class SongRecordActivity extends Activity {
         ll_menu_mypage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dl.closeDrawers();
                 Intent intent = new Intent(SongRecordActivity.this, UserActivity.class);
 
                 //userinfo

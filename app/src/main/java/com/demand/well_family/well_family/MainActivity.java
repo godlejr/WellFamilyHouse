@@ -96,7 +96,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         setUserInfo();
 
-
         ImageView iv_img_alarm = (ImageView) findViewById(R.id.iv_img_alarm);
         Glide.with(MainActivity.this).load(getString(R.string.cloud_front_banners) + "notification.jpg").thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_img_alarm);
 
@@ -209,16 +208,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         @Override
                         public void onClick(View v) {
                             Intent intent = new Intent(v.getContext(), CreateFamilyActivity.class);
-
-                            //user info
-                            intent.putExtra("user_id", user_id);
-                            intent.putExtra("user_email", user_email);
-                            intent.putExtra("user_birth", user_birth);
-                            intent.putExtra("user_phone", user_phone);
-                            intent.putExtra("user_name", user_name);
-                            intent.putExtra("user_level", user_level);
-                            intent.putExtra("user_avatar", user_avatar);
-
                             startActivity(intent);
                         }
                     });
@@ -243,16 +232,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), CreateFamilyActivity.class);
-
-                //user info
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_level", user_level);
-                intent.putExtra("user_avatar", user_avatar);
-
                 startActivity(intent);
             }
         });
@@ -279,15 +258,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     intent.putExtra("family_user_id", familyList.get(getAdapterPosition()).getUser_id());
                     intent.putExtra("family_created_at", familyList.get(getAdapterPosition()).getCreated_at());
 
-
-                    //user info
-                    intent.putExtra("user_id", user_id);
-                    intent.putExtra("user_email", user_email);
-                    intent.putExtra("user_birth", user_birth);
-                    intent.putExtra("user_phone", user_phone);
-                    intent.putExtra("user_name", user_name);
-                    intent.putExtra("user_level", user_level);
-                    intent.putExtra("user_avatar", user_avatar);
                     startActivity(intent);
                 }
             });
@@ -353,14 +323,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                     if (getAdapterPosition() == 0) {
                         Intent intent = new Intent(MainActivity.this, SongMainActivity.class);
-                        //user info
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
                         startActivity(intent);
                     } else if (getAdapterPosition() == 1) {
                         //셀핏
@@ -419,15 +381,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         toolbar_market.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), MarketMainActivity.class);
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_avatar", user_avatar);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_level", user_level);
+                dl.closeDrawers();
 
+                Intent intent = new Intent(v.getContext(), MarketMainActivity.class);
                 startActivity(intent);
 
             }
@@ -457,14 +413,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 intent.putExtra("story_user_name", user_name);
                 intent.putExtra("story_user_level", user_level);
                 intent.putExtra("story_user_avatar", user_avatar);
-
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_avatar", user_avatar);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_level", user_level);
 
                 startActivity(intent);
             }
@@ -517,14 +465,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         break;
 
                     case R.id.menu_market:
+
                         intent = new Intent(MainActivity.this, MarketMainActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
                         startActivity(intent);
                         break;
 
@@ -537,6 +479,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         break;
 
                     case R.id.menu_logout:
+
                         SharedPreferences loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = loginInfo.edit();
                         editor.remove("user_id");
@@ -558,6 +501,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                         break;
                     case R.id.menu_bubblefeet:
+
                         startLink = getPackageManager().getLaunchIntentForPackage(getString(R.string.bubblefeet));
                         if (startLink == null) {
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.market_front) + getString(R.string.bubblefeet))));
@@ -567,6 +511,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         break;
 
                     case R.id.menu_happyfeet:
+
                         startLink = getPackageManager().getLaunchIntentForPackage(getString(R.string.happyfeet));
                         if (startLink == null) {
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.market_front) + getString(R.string.happyfeet))));
@@ -576,14 +521,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         break;
 
                     case R.id.menu_memory_sound:
+
                         startLink = new Intent(getApplicationContext(), SongMainActivity.class);
-                        startLink.putExtra("user_id", user_id);
-                        startLink.putExtra("user_level", user_level);
-                        startLink.putExtra("user_email", user_email);
-                        startLink.putExtra("user_phone", user_phone);
-                        startLink.putExtra("user_name", user_name);
-                        startLink.putExtra("user_avatar", user_avatar);
-                        startLink.putExtra("user_birth", user_birth);
                         startActivity(startLink);
                         break;
                 }
