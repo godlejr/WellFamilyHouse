@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.connection.Server_Connection;
@@ -52,7 +53,7 @@ import retrofit2.Response;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button login;
+    private ImageButton login;
     private EditText email, pwd;
     private Button register;
 
@@ -68,13 +69,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private static final Logger logger = LoggerFactory.getLogger(LoginActivity.class);
 
     //facebook
-    private Button facebookLoginButton;
+    private ImageButton facebookLoginButton;
     private CallbackManager callbackManager;
     private Context context;
 
     //naver
     private OAuthLogin mOAuthLoginModule;
     private OAuthLoginButton oAuthLoginButton;
+    private ImageButton naverLoginButton;
     private String client_id = "vX9icrhPpuwATfps78ce";
     private String client_secret = "YiBZjWpiNA";
     private String client_name = "웰패밀리 하우스";  // 네이버 앱의 로그인 화면에 표시할 애플리케이션 이름
@@ -112,7 +114,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void SNSLogin() {
         //facebook
-        facebookLoginButton = (Button) findViewById(R.id.facebookLoginButton);
+        facebookLoginButton = (ImageButton) findViewById(R.id.facebookLoginButton);
         facebookLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,7 +131,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         oAuthLoginButton = (OAuthLoginButton) findViewById(R.id.oAuthLoginButton);
         oAuthLoginButton.setOAuthLoginHandler(mOAuthLoginHandler);
 
-        oAuthLoginButton.setOnClickListener(new View.OnClickListener() {
+        naverLoginButton = (ImageButton)findViewById(R.id.naverLoginButton);
+        naverLoginButton.bringToFront();
+        naverLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOAuthLoginModule.startOauthLoginActivity(LoginActivity.this, mOAuthLoginHandler);
@@ -138,7 +142,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void init() {
-        login = (Button) findViewById(R.id.btn_main_login);
+        login = (ImageButton) findViewById(R.id.btn_main_login);
         register = (Button) findViewById(R.id.btn_main_register);
         email = (EditText) findViewById(R.id.et_login_email);
         pwd = (EditText) findViewById(R.id.et_login_pwd);
