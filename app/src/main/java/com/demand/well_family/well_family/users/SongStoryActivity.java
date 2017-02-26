@@ -124,6 +124,7 @@ public class SongStoryActivity extends Activity {
     private EmotionAdapter emotionAdapter;
 
     private static final Logger logger = LoggerFactory.getLogger(SongStoryActivity.class);
+    private SharedPreferences loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,9 +134,10 @@ public class SongStoryActivity extends Activity {
         finishList.add(this);
 
         init();
+        setUserInfo();
+
         getContentsData();
 
-        setToolbar(this.getWindow().getDecorView(), this.getApplicationContext(), "추억 소리");
     }
 
     private void init() {
@@ -146,16 +148,18 @@ public class SongStoryActivity extends Activity {
         story_user_email = getIntent().getStringExtra("story_user_email");
         story_user_phone = getIntent().getStringExtra("story_user_phone");
         story_user_birth = getIntent().getStringExtra("story_user_birth");
+    }
 
-        user_id = getIntent().getIntExtra("user_id", 0);
-        user_name = getIntent().getStringExtra("user_name");
-        user_level = getIntent().getIntExtra("user_level", 0);
-        user_avatar = getIntent().getStringExtra("user_avatar");
-        user_email = getIntent().getStringExtra("user_email");
-        user_phone = getIntent().getStringExtra("user_phone");
-        user_birth = getIntent().getStringExtra("user_birth");
-
-
+    private void setUserInfo() {
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        user_id = loginInfo.getInt("user_id", 0);
+        user_level = loginInfo.getInt("user_level", 0);
+        user_name = loginInfo.getString("user_name", null);
+        user_email = loginInfo.getString("user_email", null);
+        user_birth = loginInfo.getString("user_birth", null);
+        user_avatar = loginInfo.getString("user_avatar", null);
+        user_phone = loginInfo.getString("user_phone", null);
+        setToolbar(this.getWindow().getDecorView(), this.getApplicationContext(), "추억 소리");
     }
 
     // toolbar & menu
@@ -272,13 +276,6 @@ public class SongStoryActivity extends Activity {
 
                     case R.id.menu_market:
                         intent = new Intent(SongStoryActivity.this, MarketMainActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
                         startActivity(intent);
                         break;
 
@@ -743,13 +740,6 @@ public class SongStoryActivity extends Activity {
                 case R.id.ll_sound_story_total:
                 case R.id.ib_item_sound_story_comment:
                     Intent intent = new Intent(SongStoryActivity.this, SongStoryDetailActivity.class);
-                    intent.putExtra("user_id", user_id);
-                    intent.putExtra("user_email", user_email);
-                    intent.putExtra("user_birth", user_birth);
-                    intent.putExtra("user_phone", user_phone);
-                    intent.putExtra("user_name", user_name);
-                    intent.putExtra("user_level", user_level);
-                    intent.putExtra("user_avatar", user_avatar);
 
                     intent.putExtra("story_user_id", story_user_id);
                     intent.putExtra("story_user_name", story_user_name);
@@ -1031,10 +1021,7 @@ public class SongStoryActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(SongStoryActivity.this, SongStoryDetailActivity.class);
-                    intent.putExtra("user_id", user_id);
-                    intent.putExtra("user_name", user_name);
-                    intent.putExtra("user_avatar", user_avatar);
-                    intent.putExtra("user_birth", user_birth);
+
 
                     intent.putExtra("story_user_id", story_user_id);
                     intent.putExtra("story_user_name", story_user_name);
