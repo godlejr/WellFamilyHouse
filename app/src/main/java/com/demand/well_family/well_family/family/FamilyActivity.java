@@ -343,7 +343,14 @@ public class FamilyActivity extends Activity {
         iv_family_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(FamilyActivity.this, EditFamilyActivity.class);
+                intent.putExtra("family_id", family_id);
+                intent.putExtra("family_name", family_name);
+                intent.putExtra("family_content", family_content);
+                intent.putExtra("family_avatar", family_avatar);
+                intent.putExtra("family_user_id", family_user_id);
+                intent.putExtra("family_created_at", family_created_at);
+                startActivity(intent);
             }
         });
 

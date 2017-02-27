@@ -509,7 +509,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                 public void onCompletion(MediaPlayer mp) {
                     isPlaying = isPaused = false;
 
-                    iv_sound_story_detail_play.setImageResource(R.drawable.play);
+                    Glide.with(SongStoryDetailActivity.this).load(R.drawable.play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
                     sb_sound_story_detail.setProgress(0);
                     mp.pause();
                     mp.stop();
@@ -547,7 +547,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                     isPlaying = true;
 
                     new SeekBarThread().start();
-                    iv_sound_story_detail_play.setImageResource(R.drawable.pause);
+                    Glide.with(SongStoryDetailActivity.this).load(R.drawable.pause).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
                 }
             }
         });
@@ -561,7 +561,8 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                         mp.pause();
                         isPlaying = false;
                         isPaused = true;
-                        iv_sound_story_detail_play.setImageResource(R.drawable.play);
+
+                        Glide.with(SongStoryDetailActivity.this).load(R.drawable.play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
 
                     } else {
                         if (isPaused) {  // 일시정지 -> 재생
@@ -591,7 +592,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                                     public void onCompletion(MediaPlayer mp) {
                                         isPlaying = isPaused = false;
 
-                                        iv_sound_story_detail_play.setImageResource(R.drawable.play);
+                                        Glide.with(SongStoryDetailActivity.this).load(R.drawable.play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
                                         sb_sound_story_detail.setProgress(0);
                                         mp.pause();
                                         mp.stop();
@@ -609,7 +610,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                         isPaused = false;
 
                         new SeekBarThread().start();
-                        iv_sound_story_detail_play.setImageResource(R.drawable.pause);
+                        Glide.with(SongStoryDetailActivity.this).load(R.drawable.pause).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
                     }
                 }
             }

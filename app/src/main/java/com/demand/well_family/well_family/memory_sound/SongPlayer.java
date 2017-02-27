@@ -218,7 +218,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
 
                                     isPlaying = false;
                                     isPaused = true;
-                                    iv_sound_player_start.setImageResource(R.drawable.play_player);
+                                    Glide.with(SongPlayer.this).load(R.drawable.play_player).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_player_start);
                                 } else {
                                     if (isPaused) {  // 일시정지 -> 재생
                                         mp.seekTo(pausePos);
@@ -231,7 +231,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
 
                                     isPlaying = true;
                                     isPaused = false;
-                                    iv_sound_player_start.setImageResource(R.drawable.pause_player);
+                                    Glide.with(SongPlayer.this).load(R.drawable.pause_player).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_player_start);
                                 }
                             }
                         }
@@ -243,7 +243,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     isPlaying = false;
-                    iv_sound_player_start.setImageResource(R.drawable.play_player);
+                    Glide.with(SongPlayer.this).load(R.drawable.play_player).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_player_start);
                     sb_sound.setProgress(0);
 
                     mp.pause();
@@ -262,7 +262,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                 if (isPlaying) {
                     mp.seekTo(pausePos);
                     mp.start();
-                    iv_sound_player_start.setImageResource(R.drawable.pause_player);
+                    Glide.with(SongPlayer.this).load(R.drawable.pause_player).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_player_start);
 
                     new SeekBarThread().start();
                 }

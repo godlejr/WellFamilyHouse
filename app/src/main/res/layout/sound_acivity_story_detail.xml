@@ -183,10 +183,10 @@
                             <ImageView
                                 android:id="@+id/iv_sound_story_detail_play"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
                                 android:padding="10dp"
                                 android:src="@drawable/pause"
-                                android:layout_marginBottom="10dp" />
+                                android:layout_marginBottom="10dp"
+                                android:layout_height="70dp" />
 
                             <SeekBar
                                 android:id="@+id/sb_sound_story_detail"
