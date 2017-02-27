@@ -22,12 +22,14 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.FavoriteCategory;
+import com.demand.well_family.well_family.dto.SongCategory;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
@@ -86,6 +88,7 @@ public class EditUserActivity extends Activity {
     private ArrayList<FavoriteCategory> favoriteList;
 
     private Server_Connection server_connection;
+    private ArrayList<SongCategory> songList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,22 +198,29 @@ public class EditUserActivity extends Activity {
 
             @Override
             public void onFailure(Call<ArrayList<FavoriteCategory>> call, Throwable t) {
-
+                log(t);
+                Toast.makeText(EditUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 
+        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+        Call<ArrayList<SongCategory>> call_song_category_list = server_connection.song_category_List();
+        call_song_category_list.enqueue(new Callback<ArrayList<SongCategory>>() {
+            @Override
+            public void onResponse(Call<ArrayList<SongCategory>> call, Response<ArrayList<SongCategory>> response) {
+                songList = response.body();
+                profileSongAdapter = new ProfileSongAdapter(EditUserActivity.this, songList, R.layout.item_text);
+                rv_profile_song.setAdapter(profileSongAdapter);
+                rv_profile_song.setLayoutManager(new GridLayoutManager(EditUserActivity.this, 3));
+            }
 
-        ArrayList<String> songList = new ArrayList<>();
-        songList.add("가요");
-        songList.add("가요");
-        songList.add("가요");
-        songList.add("가요");
-        songList.add("가요");
-        songList.add("가요");
+            @Override
+            public void onFailure(Call<ArrayList<SongCategory>> call, Throwable t) {
+                log(t);
+                Toast.makeText(EditUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
 
-        profileSongAdapter = new ProfileSongAdapter(this, songList, R.layout.item_text);
-        rv_profile_song.setAdapter(profileSongAdapter);
-        rv_profile_song.setLayoutManager(new GridLayoutManager(EditUserActivity.this, 3));
     }
 
     public void setToolbar(View view) {
@@ -313,12 +323,12 @@ public class EditUserActivity extends Activity {
 
     private class ProfileSongAdapter extends RecyclerView.Adapter<ProfileSongViewHolder> {
         private Context context;
-        private ArrayList<String> optionList;
+        private ArrayList<SongCategory> songList;
         private int layout;
 
-        public ProfileSongAdapter(Context context, ArrayList<String> optionList, int layout) {
+        public ProfileSongAdapter(Context context, ArrayList<SongCategory> songList, int layout) {
             this.context = context;
-            this.optionList = optionList;
+            this.songList = songList;
             this.layout = layout;
         }
 
@@ -330,12 +340,12 @@ public class EditUserActivity extends Activity {
 
         @Override
         public void onBindViewHolder(ProfileSongViewHolder holder, int position) {
-            holder.tv_option.setText(optionList.get(position));
+            holder.tv_option.setText(songList.get(position).getName());
         }
 
         @Override
         public int getItemCount() {
-            return optionList.size();
+            return songList.size();
         }
     }
 
