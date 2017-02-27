@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.Server_Connection;
+import com.demand.well_family.well_family.dto.FavoriteCategory;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
@@ -40,6 +41,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -78,6 +82,9 @@ public class EditUserActivity extends Activity {
     private String avatarPath;
     private int user_gender;
     private SharedPreferences loginInfo;
+
+    private ArrayList<FavoriteCategory> favoriteList;
+
     private Server_Connection server_connection;
 
     @Override
@@ -174,21 +181,24 @@ public class EditUserActivity extends Activity {
         });
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-//        Call<ArrayList<FavoriteCategory>> call_favorite_list = server_connection.
+        Call<ArrayList<FavoriteCategory>> call_favorite_list = server_connection.favorite_category_List();
+        call_favorite_list.enqueue(new Callback<ArrayList<FavoriteCategory>>() {
+            @Override
+            public void onResponse(Call<ArrayList<FavoriteCategory>> call, Response<ArrayList<FavoriteCategory>> response) {
+                favoriteList = response.body();
 
-        ArrayList<String> favoriteList = new ArrayList<>();
-        favoriteList.add("건강");
-        favoriteList.add("건강");
-        favoriteList.add("건강");
-        favoriteList.add("건강");
-        favoriteList.add("건강");
-        favoriteList.add("건강");
-        favoriteList.add("건강");
-        favoriteList.add("건강");
+                profileOptionAdapter = new ProfileOptionAdapter(EditUserActivity.this, favoriteList, R.layout.item_text);
+                rv_profile_favorite.setAdapter(profileOptionAdapter);
+                rv_profile_favorite.setLayoutManager(new GridLayoutManager(EditUserActivity.this, 3));
+            }
 
-        profileOptionAdapter = new ProfileOptionAdapter(this, favoriteList, R.layout.item_text);
-        rv_profile_favorite.setAdapter(profileOptionAdapter);
-        rv_profile_favorite.setLayoutManager(new GridLayoutManager(EditUserActivity.this, 3));
+
+            @Override
+            public void onFailure(Call<ArrayList<FavoriteCategory>> call, Throwable t) {
+
+            }
+        });
+
 
         ArrayList<String> songList = new ArrayList<>();
         songList.add("가요");
@@ -226,7 +236,6 @@ public class EditUserActivity extends Activity {
                 user_email = tv_edit_profile_email.getText().toString();
 
 
-
             }
         });
     }
@@ -256,14 +265,15 @@ public class EditUserActivity extends Activity {
             tv_option = (TextView) itemView.findViewById(R.id.tv_option);
         }
     }
+
     private class ProfileOptionAdapter extends RecyclerView.Adapter<ProfileOptionViewHolder> {
         private Context context;
-        private ArrayList<String> optionList;
+        private ArrayList<FavoriteCategory> favoriteList;
         private int layout;
 
-        public ProfileOptionAdapter(Context context, ArrayList<String> optionList, int layout) {
+        public ProfileOptionAdapter(Context context, ArrayList<FavoriteCategory> favoriteList, int layout) {
             this.context = context;
-            this.optionList = optionList;
+            this.favoriteList = favoriteList;
             this.layout = layout;
         }
 
@@ -274,25 +284,21 @@ public class EditUserActivity extends Activity {
         }
 
         @Override
-        public void onBindViewHolder(final ProfileOptionViewHolder holder, int position) {
-            holder.tv_option.setText(optionList.get(position));
+        public void onBindViewHolder(final ProfileOptionViewHolder holder, final int position) {
+            holder.tv_option.setText(favoriteList.get(position).getName());
             holder.tv_option.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
+                    if(favoriteList.get(position).isChecked())
                     holder.tv_option.setBackgroundResource(R.drawable.round_corner_border_brown);
                     holder.tv_option.setTextColor(Color.parseColor("#542920"));
-
-
-
                 }
             });
         }
 
         @Override
         public int getItemCount() {
-            return optionList.size();
+            return favoriteList.size();
         }
     }
 
@@ -304,6 +310,7 @@ public class EditUserActivity extends Activity {
             tv_option = (TextView) itemView.findViewById(R.id.tv_option);
         }
     }
+
     private class ProfileSongAdapter extends RecyclerView.Adapter<ProfileSongViewHolder> {
         private Context context;
         private ArrayList<String> optionList;

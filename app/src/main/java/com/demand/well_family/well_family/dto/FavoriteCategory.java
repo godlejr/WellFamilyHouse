@@ -9,6 +9,7 @@ public class FavoriteCategory {
     private String name;
     private String created_at;
     private String updated_at;
+    private boolean checked;
 
     public FavoriteCategory(int id, String name, String created_at, String updated_at) {
         super();
@@ -16,6 +17,15 @@ public class FavoriteCategory {
         this.name = name;
         this.created_at = created_at;
         this.updated_at = updated_at;
+        this.checked = false;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 
     public int getId() {
