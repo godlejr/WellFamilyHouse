@@ -132,7 +132,7 @@ public class SongRecordActivity extends Activity {
     private PhotoViewAdapter photoViewAdapter;
     private EditText et_sound_record_location;
     private String location = null;
-    private ArrayAdapter spinnerAdapter;
+    private ArrayAdapter<String> spinnerAdapter;
     private ImageView iv_sound_record_location, iv_sound_record_location_btn;
 
     private HashMap<Integer, String> spList;
@@ -193,6 +193,8 @@ public class SongRecordActivity extends Activity {
 
         checkPermission();
         init();
+        setSpinner();
+
 
     }
 
@@ -240,6 +242,7 @@ public class SongRecordActivity extends Activity {
         ll_menu_mypage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dl.closeDrawers();
                 Intent intent = new Intent(SongRecordActivity.this, UserActivity.class);
 
                 //userinfo
@@ -373,7 +376,7 @@ public class SongRecordActivity extends Activity {
     private void setSpinner() {
         sp_sound = (Spinner) findViewById(R.id.sp_sound);
 
-        spList = new HashMap<>();
+        spList = new HashMap<Integer, String>();
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
         Call<ArrayList<Range>> call_song_range = server_connection.song_range_List();
@@ -382,18 +385,17 @@ public class SongRecordActivity extends Activity {
             public void onResponse(Call<ArrayList<Range>> call, Response<ArrayList<Range>> response) {
                 ArrayList<Range> rangeList = response.body();
                 int rangeListSize = rangeList.size();
-                int spListSize = spList.size();
 
                 for (int i = 0; i < rangeListSize; i++) {
                     spList.put(rangeList.get(i).getId(), rangeList.get(i).getName());
                 }
 
-                String[] spinnerArray = new String[spListSize];
-                for (int i = 0; i < spListSize; i++) {
+                String[] spinnerArray = new String[rangeListSize];
+                for (int i = 0; i < rangeListSize; i++) {
                     spinnerArray[i] = spList.get(i + 1);
                 }
 
-                spinnerAdapter = new ArrayAdapter(SongRecordActivity.this, R.layout.custom_spinner_item, spinnerArray) {
+                spinnerAdapter = new ArrayAdapter<String>(SongRecordActivity.this, R.layout.custom_spinner_item, spinnerArray) {
                     @Override
                     public View getView(int position, View convertView, ViewGroup parent) {
                         View view = super.getDropDownView(position, convertView, parent);
@@ -787,7 +789,6 @@ public class SongRecordActivity extends Activity {
         photoViewAdapter = new PhotoViewAdapter(photoList, this, R.layout.item_write_upload_image);
         rv_sound_record_image_upload.setAdapter(photoViewAdapter);
 
-        setSpinner();
         recordInflate();
 
         ll_sound_record_location_btn.setOnClickListener(new View.OnClickListener() {
@@ -869,16 +870,18 @@ public class SongRecordActivity extends Activity {
                                 map.put("location", location);
 
 
-
                                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                                Log.e("sdf", range_id + "");
                                 Call<ArrayList<SongStory>> call_insert_song_story = server_connection.insert_song_story(user_id, map);
                                 call_insert_song_story.enqueue(new Callback<ArrayList<SongStory>>() {
                                     @Override
                                     public void onResponse(Call<ArrayList<SongStory>> call, Response<ArrayList<SongStory>> response) {
+                                        Log.e("ddd",response.toString());
+                                        final int song_story_id = response.body().get(0).getId();
                                         for (int i = 0; i < photoListSize; i++) {
                                             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                                             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(photoList.get(i), i)));
-                                            Call<ResponseBody> call_write_photo = server_connection.insert_song_photos(response.body().get(0).getId(), requestBody);
+                                            Call<ResponseBody> call_write_photo = server_connection.insert_song_photos(song_story_id, requestBody);
 
                                             call_write_photo.enqueue(new Callback<ResponseBody>() {
                                                 @Override
@@ -898,7 +901,7 @@ public class SongRecordActivity extends Activity {
                                         if (file != null) {
                                             server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                                             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Audio(file));
-                                            Call<ResponseBody> call_write_audio = server_connection.insert_song_audio(response.body().get(0).getId(), requestBody);
+                                            Call<ResponseBody> call_write_audio = server_connection.insert_song_audio(song_story_id, requestBody);
                                             call_write_audio.enqueue(new Callback<ResponseBody>() {
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -912,15 +915,14 @@ public class SongRecordActivity extends Activity {
                                                 }
                                             });
                                         }
+                                        if(emotionList != null) {
+                                            int emotionListSize = emotionList.size();
 
-                                        int emotionListSize = emotionList.size();
-
-                                        if (emotionListSize != 0) {
                                             for (int i = 0; i < emotionListSize; i++) {
                                                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                                                 HashMap<String, String> map = new HashMap<String, String>();
                                                 map.put("song_story_emotion_id", String.valueOf(emotionList.get(i).getId()));
-                                                Call<ResponseBody> call_insert_emotions = server_connection.insert_emotion_into_song_story(response.body().get(0).getId(), map);
+                                                Call<ResponseBody> call_insert_emotions = server_connection.insert_emotion_into_song_story(song_story_id, map);
                                                 call_insert_emotions.enqueue(new Callback<ResponseBody>() {
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -1256,17 +1258,17 @@ public class SongRecordActivity extends Activity {
         }
     }
 
-    private static void log(Throwable throwable){
-        StackTraceElement[] ste =  throwable.getStackTrace();
+    private static void log(Throwable throwable) {
+        StackTraceElement[] ste = throwable.getStackTrace();
         String className = ste[0].getClassName();
         String methodName = ste[0].getMethodName();
         int lineNumber = ste[0].getLineNumber();
         String fileName = ste[0].getFileName();
 
-        if(LogFlag.printFlag){
-            if(logger.isInfoEnabled()){
+        if (LogFlag.printFlag) {
+            if (logger.isInfoEnabled()) {
                 logger.info("Exception: " + throwable.getMessage());
-                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+                logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
             }
         }
     }

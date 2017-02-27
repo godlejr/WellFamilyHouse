@@ -194,23 +194,6 @@ public class WriteActivity extends Activity {
                 dl.closeDrawers();
 
                 Intent intent = new Intent(WriteActivity.this, UserActivity.class);
-                //userinfo
-                intent.putExtra("story_user_id", user_id);
-                intent.putExtra("story_user_email", user_email);
-                intent.putExtra("story_user_birth", user_birth);
-                intent.putExtra("story_user_phone", user_phone);
-                intent.putExtra("story_user_name", user_name);
-                intent.putExtra("story_user_level", user_level);
-                intent.putExtra("story_user_avatar", user_avatar);
-
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_avatar", user_avatar);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_level", user_level);
-
                 startActivity(intent);
 
             }
@@ -255,14 +238,6 @@ public class WriteActivity extends Activity {
                 switch (item.getItemId()) {
                     case R.id.menu_home:
                         intent = new Intent(WriteActivity.this, MainActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
-
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         break;
@@ -273,13 +248,6 @@ public class WriteActivity extends Activity {
 
                     case R.id.menu_market:
                         intent = new Intent(WriteActivity.this, MarketMainActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
                         startActivity(intent);
 
                         break;
@@ -334,13 +302,6 @@ public class WriteActivity extends Activity {
 
                     case R.id.menu_memory_sound:
                         startLink = new Intent(getApplicationContext(), SongMainActivity.class);
-                        startLink.putExtra("user_id", user_id);
-                        startLink.putExtra("user_level", user_level);
-                        startLink.putExtra("user_email", user_email);
-                        startLink.putExtra("user_phone", user_phone);
-                        startLink.putExtra("user_name", user_name);
-                        startLink.putExtra("user_avatar", user_avatar);
-                        startLink.putExtra("user_birth", user_birth);
                         startActivity(startLink);
                         break;
                 }
