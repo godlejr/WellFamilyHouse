@@ -49,15 +49,10 @@ public class IntroActivity extends Activity {
                 loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
                 id = loginInfo.getInt("user_id", 0);
                 level = loginInfo.getInt("user_level", 0);
-                name = loginInfo.getString("user_name", null);
-                email = loginInfo.getString("user_email", null);
-                birth = loginInfo.getString("user_birth", null);
-                avatar = loginInfo.getString("user_avatar", null);
-                phone = loginInfo.getString("user_phone", null);
                 token = loginInfo.getString("token", null);
                 device_id = loginInfo.getString("device_id", null);
 
-                if (email != null && name != null) {
+                if (id != 0) {
                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                     HashMap<String, String> map = new HashMap<String, String>();
                     map.put("device_id", device_id);

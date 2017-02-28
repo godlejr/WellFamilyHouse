@@ -251,7 +251,7 @@ public interface Server_Connection {
     Call<ResponseBody> udpate_user_info(@Path("user_id") int user_id,@QueryMap HashMap<String, String> map);
 
     @PUT("{user_id}/update_user_avatar")
-    Call<ResponseBody> update_user_avatar(@Path("story_id") int user_id,@Body RequestBody requestBody);
+    Call<ResponseBody> update_user_avatar(@Path("user_id") int userfavorite_category_id_id,@Body RequestBody requestBody);
 
     @DELETE("delete_favorite")
     Call<ResponseBody> delete_favorite( @QueryMap HashMap<String, String> map);
@@ -259,7 +259,7 @@ public interface Server_Connection {
     @DELETE("delete_song_category")
     Call<ResponseBody> delete_song_category( @QueryMap HashMap<String, String> map);
 
-    @POST("{user_id}/check_song_category")
+    @POST("{user_id}/insert_favorite")
     Call<ResponseBody> insert_favorite(@Path("user_id") int user_id,@QueryMap HashMap<String, String> map);
 
     @POST("{user_id}/insert_song_category")

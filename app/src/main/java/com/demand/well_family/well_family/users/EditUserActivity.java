@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Check;
@@ -65,6 +66,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.demand.well_family.well_family.LoginActivity.finishList;
 
 
 /**
@@ -113,7 +116,7 @@ public class EditUserActivity extends Activity {
     private ArrayList<SongCategory> songList;
     private ProgressDialog progressDialog;
     private Uri uri;
-    private SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -268,8 +271,10 @@ public class EditUserActivity extends Activity {
                 if (checked != 0) {
                     if (checked == 1) {
                         rb_man.setChecked(true);
+                        user_gender = 1;
                     } else {
                         rb_female.setChecked(true);
+                        user_gender = 2;
                     }
                 }
             }
@@ -342,7 +347,7 @@ public class EditUserActivity extends Activity {
             }
         });
 
-        btn_edit_profile = (Button)findViewById(R.id.btn_edit_profile);
+        btn_edit_profile = (Button) findViewById(R.id.btn_edit_profile);
         btn_edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -408,7 +413,7 @@ public class EditUserActivity extends Activity {
                                     if (favoriteList.get(i).isChecked()) {
                                         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                                         HashMap<String, String> map = new HashMap<>();
-                                        map.put("favorite_category_id", String.valueOf(favoriteList.get(i).getId()));
+                                        map.put("favorite_id", String.valueOf(favoriteList.get(i).getId()));
 
                                         Call<ResponseBody> call_insert_favorite = server_connection.insert_favorite(user_id, map);
                                         call_insert_favorite.enqueue(new Callback<ResponseBody>() {
@@ -440,7 +445,7 @@ public class EditUserActivity extends Activity {
                         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                         HashMap<String, String> song_map = new HashMap<>();
                         song_map.put("user_id", String.valueOf(user_id));
-                        Call<ResponseBody> call_delete_song_list = server_connection.delete_song_category(favorite_map);
+                        Call<ResponseBody> call_delete_song_list = server_connection.delete_song_category(song_map);
                         call_delete_song_list.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -476,7 +481,7 @@ public class EditUserActivity extends Activity {
 
                         int sleepTime = 500;
                         if (uri != null) {
-                            sleepTime = 2500;
+                            sleepTime = 1500;
                         }
                         try {
                             Thread.sleep(sleepTime);
@@ -486,9 +491,17 @@ public class EditUserActivity extends Activity {
 
                         progressDialog.dismiss();
                         //intent
-                        Intent intent = new Intent(EditUserActivity.this,UserActivity.class);
+
+                        Intent intent = new Intent(EditUserActivity.this, MainActivity.class);
                         startActivity(intent);
+                        Toast.makeText(EditUserActivity.this, "프로필이 변경되었습니다.", Toast.LENGTH_LONG).show();
+
+                        int finishListSize = finishList.size();
+                        for (int i = 0; i < finishListSize; i++) {
+                            finishList.get(i).finish();
+                        }
                         finish();
+
                     }
 
                     @Override
@@ -524,19 +537,23 @@ public class EditUserActivity extends Activity {
         HashMap<String, String> map = new HashMap<>();
         map.put("user_id", String.valueOf(user_id));
 
+
         Call<ArrayList<User>> call_user_info = server_connection.user_Info(map);
         call_user_info.enqueue(new Callback<ArrayList<User>>() {
             @Override
             public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
                 ArrayList<User> user = response.body();
                 loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
-                editor = loginInfo.edit();
-                editor.putString("user_name", user.get(0).getName());
-                editor.putString("user_email", user.get(0).getEmail());
-                editor.putString("user_birth", user.get(0).getBirth());
-                editor.putString("user_avatar", user.get(0).getAvatar());
-                editor.putString("user_phone", user.get(0).getPhone());
-                editor.commit();
+
+                SharedPreferences.Editor editor_update = loginInfo.edit();
+
+                editor_update.putString("user_name", user.get(0).getName());
+                editor_update.putString("user_email", user.get(0).getEmail());
+                editor_update.putString("user_birth", user.get(0).getBirth());
+                editor_update.putString("user_avatar", user.get(0).getAvatar());
+                editor_update.putString("user_phone", user.get(0).getPhone());
+                editor_update.apply();
+
             }
 
             @Override
@@ -563,6 +580,7 @@ public class EditUserActivity extends Activity {
                 Glide.with(EditUserActivity.this).load(uri).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_edit_profile_avatar);
             }
         }
+
     }
 
     private class ProfileOptionViewHolder extends RecyclerView.ViewHolder {

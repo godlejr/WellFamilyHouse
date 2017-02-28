@@ -36,6 +36,7 @@ import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.create_family.CreateFamilyActivity;
 import com.demand.well_family.well_family.dto.App;
 import com.demand.well_family.well_family.dto.Family;
+import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.family.FamilyActivity;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
@@ -50,6 +51,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -87,14 +89,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Server_Connection server_connection;
 
     private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
-    private SharedPreferences loginInfo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setUserInfo();
 
         ImageView iv_img_alarm = (ImageView) findViewById(R.id.iv_img_alarm);
         Glide.with(MainActivity.this).load(getString(R.string.cloud_front_banners) + "notification.jpg").thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_img_alarm);
@@ -103,27 +104,64 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         setFCMService();
 
+        setUserInfo();
         init();
         getFamilyData();
         getAppData();
     }
 
     private void setUserInfo() {
-        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        SharedPreferences loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
         user_id = loginInfo.getInt("user_id", 0);
         user_level = loginInfo.getInt("user_level", 0);
-        user_name = loginInfo.getString("user_name", null);
-        user_email = loginInfo.getString("user_email", null);
-        user_birth = loginInfo.getString("user_birth", null);
-        user_avatar = loginInfo.getString("user_avatar", null);
-        user_phone = loginInfo.getString("user_phone", null);
-        setToolbar(this.getWindow().getDecorView());
+
+        resetUserInfo();
+
+    }
+
+    private void resetUserInfo() {
+        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("user_id", String.valueOf(user_id));
+
+
+        Call<ArrayList<User>> call_user_info = server_connection.user_Info(map);
+        call_user_info.enqueue(new Callback<ArrayList<User>>() {
+            @Override
+            public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
+                ArrayList<User> user = response.body();
+                SharedPreferences loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+                SharedPreferences.Editor editor = loginInfo.edit();
+
+                editor.putString("user_name", user.get(0).getName());
+                editor.putString("user_email", user.get(0).getEmail());
+                editor.putString("user_birth", user.get(0).getBirth());
+                editor.putString("user_avatar", user.get(0).getAvatar());
+                editor.putString("user_phone", user.get(0).getPhone());
+
+                editor.apply();
+
+                user_name = user.get(0).getName();
+                user_email = user.get(0).getEmail();
+                user_birth = user.get(0).getBirth();
+                user_avatar = user.get(0).getAvatar();
+                user_phone = user.get(0).getPhone();
+
+                setToolbar(MainActivity.this.getWindow().getDecorView());
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+                log(t);
+                Toast.makeText(MainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void setFCMService() {
-       //FirebaseMessaging.getInstance().subscribeToTopic("news");
+        //FirebaseMessaging.getInstance().subscribeToTopic("news");
         String token = FirebaseInstanceId.getInstance().getToken();
-        Log.e("ttt",token);
+        Log.e("ttt", token);
     }
 
     private class ViewPageAdapter extends PagerAdapter {

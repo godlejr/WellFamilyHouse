@@ -318,11 +318,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
                 editor = loginInfo.edit();
                 editor.putInt("user_id", userList.get(0).getId());
-                editor.putString("user_name", userList.get(0).getName());
-                editor.putString("user_email", userList.get(0).getEmail());
-                editor.putString("user_birth", userList.get(0).getBirth());
-                editor.putString("user_avatar", userList.get(0).getAvatar());
-                editor.putString("user_phone", userList.get(0).getPhone());
                 editor.putString("device_id", device_id);
                 editor.putString("token", token);
                 editor.putInt("user_level", userList.get(0).getLevel());

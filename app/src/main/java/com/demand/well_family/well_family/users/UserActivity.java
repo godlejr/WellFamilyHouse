@@ -76,6 +76,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
     private TextView tv_family_activity_phone;
     private TextView tv_family_activity_email;
     private LinearLayout ll_memory_sound_story_list;
+    private LinearLayout ll_user_edit;
     private ImageView iv_user_call;
     private LinearLayout ll_user_phone_info;
     private ImageButton ib_edit_profile;
@@ -353,6 +354,11 @@ public class UserActivity extends Activity implements View.OnClickListener {
     }
 
     private void init() {
+        if(user_id != story_user_id){
+            ll_user_edit = (LinearLayout)findViewById(R.id.ll_user_edit);
+            ll_user_edit.setVisibility(View.GONE);
+        }
+
         ib_edit_profile = (ImageButton) findViewById(R.id.ib_edit_profile);
         ib_edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
