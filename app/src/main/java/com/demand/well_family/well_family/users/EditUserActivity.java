@@ -80,6 +80,7 @@ public class EditUserActivity extends Activity {
     private EditText et_edit_profile_phone;
     private RadioButton rb_female;
     private RadioButton rb_man;
+    private Button btn_edit_profile;
 
     private RecyclerView rv_profile_favorite;
     private RecyclerView rv_profile_song;
@@ -341,23 +342,8 @@ public class EditUserActivity extends Activity {
             }
         });
 
-    }
-
-    public void setToolbar(View view) {
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolBar);
-        ImageView toolbar_back = (ImageView) toolbar.findViewById(R.id.toolbar_back);
-        toolbar_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        TextView toolbar_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        toolbar_title.setText("프로필 설정");
-
-        Button toolbar_complete = (Button) toolbar.findViewById(R.id.toolbar_complete);
-        toolbar_complete.setOnClickListener(new View.OnClickListener() {
+        btn_edit_profile = (Button)findViewById(R.id.btn_edit_profile);
+        btn_edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 user_name = et_edit_profile_name.getText().toString();
@@ -511,9 +497,26 @@ public class EditUserActivity extends Activity {
                         Toast.makeText(EditUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
-
             }
         });
+
+    }
+
+    public void setToolbar(View view) {
+        Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolBar);
+        ImageView toolbar_back = (ImageView) toolbar.findViewById(R.id.toolbar_back);
+        toolbar_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        TextView toolbar_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        toolbar_title.setText("프로필 설정");
+
+        Button toolbar_complete = (Button) toolbar.findViewById(R.id.toolbar_complete);
+        toolbar_complete.setVisibility(View.INVISIBLE);
     }
 
     private void resetUserinfo() {
