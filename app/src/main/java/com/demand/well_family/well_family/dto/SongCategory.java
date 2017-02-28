@@ -9,12 +9,22 @@ public class SongCategory {
     private String name;
     private String avatar;
     private String created_at;
+    private boolean checked;
 
     public SongCategory(int id, String name, String avatar, String created_at) {
         this.id = id;
         this.name = name;
         this.avatar = avatar;
         this.created_at = created_at;
+        this.checked = false;
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 
     public int getId() {

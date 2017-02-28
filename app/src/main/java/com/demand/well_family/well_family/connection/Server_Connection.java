@@ -237,4 +237,32 @@ public interface Server_Connection {
 
     @GET("favorite_category_List")
     Call<ArrayList<FavoriteCategory>> favorite_category_List();
+
+    @GET("{user_id}/check_gender")
+    Call<ArrayList<Check>> check_gender(@Path("user_id") int user_id);
+
+    @POST("{user_id}/check_favorite")
+    Call<ArrayList<Check>> check_favorite(@Path("user_id") int user_id,@QueryMap HashMap<String, String> map);
+
+    @POST("{user_id}/check_song_category")
+    Call<ArrayList<Check>> check_song_category(@Path("user_id") int user_id,@QueryMap HashMap<String, String> map);
+
+    @PUT("{user_id}/udpate_user_info")
+    Call<ResponseBody> udpate_user_info(@Path("user_id") int user_id,@QueryMap HashMap<String, String> map);
+
+    @PUT("{user_id}/update_user_avatar")
+    Call<ResponseBody> update_user_avatar(@Path("story_id") int user_id,@Body RequestBody requestBody);
+
+    @DELETE("delete_favorite")
+    Call<ResponseBody> delete_favorite( @QueryMap HashMap<String, String> map);
+
+    @DELETE("delete_song_category")
+    Call<ResponseBody> delete_song_category( @QueryMap HashMap<String, String> map);
+
+    @POST("{user_id}/check_song_category")
+    Call<ResponseBody> insert_favorite(@Path("user_id") int user_id,@QueryMap HashMap<String, String> map);
+
+    @POST("{user_id}/insert_song_category")
+    Call<ResponseBody> insert_song_category(@Path("user_id") int user_id,@QueryMap HashMap<String, String> map);
+
 }
