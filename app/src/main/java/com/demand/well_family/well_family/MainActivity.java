@@ -193,6 +193,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Glide.with(MainActivity.this).load(getString(R.string.cloud_front_banners) + "demand_banner3.jpg").thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(img);
             }
 
+            TextView tv_viewPager_position = (TextView)view.findViewById(R.id.tv_viewPager_position);
+            tv_viewPager_position.setText("");
+
             container.addView(view);
 
             return view;

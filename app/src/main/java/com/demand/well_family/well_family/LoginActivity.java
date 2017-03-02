@@ -8,13 +8,17 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.connection.Server_Connection;
@@ -56,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ImageButton login;
     private EditText email, pwd;
     private Button register;
+    private ScrollView sv_login;
 
     private String et_email;
     private String et_pwd;
@@ -109,7 +114,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         context = this;
         SNSLogin();
 
-
     }
 
     private void SNSLogin() {
@@ -131,7 +135,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         oAuthLoginButton = (OAuthLoginButton) findViewById(R.id.oAuthLoginButton);
         oAuthLoginButton.setOAuthLoginHandler(mOAuthLoginHandler);
 
-        naverLoginButton = (ImageButton)findViewById(R.id.naverLoginButton);
+        naverLoginButton = (ImageButton) findViewById(R.id.naverLoginButton);
         naverLoginButton.bringToFront();
         naverLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,9 +150,48 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         register = (Button) findViewById(R.id.btn_main_register);
         email = (EditText) findViewById(R.id.et_login_email);
         pwd = (EditText) findViewById(R.id.et_login_pwd);
+        sv_login = (ScrollView) findViewById(R.id.sv_login);
 
         login.setOnClickListener(this);
         register.setOnClickListener(this);
+
+        email.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    final Handler handler;
+                    handler = new Handler();
+
+                    final Runnable r = new Runnable() {
+                        public void run() {
+                            sv_login.smoothScrollTo(0, 450);
+                        }
+                    };
+
+                    handler.postDelayed(r, 200);
+                }
+            }
+        });
+
+        pwd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    final Handler handler;
+                    handler = new Handler();
+
+                    final Runnable r = new Runnable() {
+                        public void run() {
+                            sv_login.smoothScrollTo(0, 450);
+                        }
+                    };
+
+                    handler.postDelayed(r, 200);
+                }
+            }
+        });
+
+
     }
 
     private void facebookLogin() {
@@ -167,7 +210,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             String name = object.getString("name");         // 이름
                             String email = object.getString("email");       // 이메일
 
-                            setSNSLogin(email, name, id,3);
+                            setSNSLogin(email, name, id, 3);
                         } catch (JSONException e) {
                             log(e);
                         }
@@ -192,8 +235,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
     }
-
-
 
     OAuthLoginHandler mOAuthLoginHandler = new OAuthLoginHandler() {
         @Override
@@ -229,7 +270,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     };
 
-    private void setSNSLogin(final String email, final String name, final String id,final int login_category_id) {
+    private void setSNSLogin(final String email, final String name, final String id, final int login_category_id) {
 
         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
         HashMap<String, String> map = new HashMap<>();
@@ -244,10 +285,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 if (userList.size() == 0) {
                     Intent intent = new Intent(LoginActivity.this, SNSRegisterActivity.class);
-                    intent.putExtra("email",email);
-                    intent.putExtra("password",id);
-                    intent.putExtra("name",name);
-                    intent.putExtra("login_category_id",login_category_id);
+                    intent.putExtra("email", email);
+                    intent.putExtra("password", id);
+                    intent.putExtra("name", name);
+                    intent.putExtra("login_category_id", login_category_id);
                     startActivity(intent);
                 } else {
                     setLogin(userList);
@@ -298,6 +339,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Intent intent = new Intent(v.getContext(), AgreementActivity.class);
                 startActivity(intent);
                 break;
+
+//            case R.id.et_join_email:
+//            case R.id.et_login_pwd:
+//                Log.e("tttt","tttt");
+//                sv_login.smoothScrollTo(0, 380);
+//                break;
         }
     }
 

@@ -386,7 +386,7 @@
                         <ImageView
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
-                            android:id="@+id/imageView11"
+                            android:id="@+id/iv_sound_story_detail_share"
                             android:layout_weight="1"
                             android:src="@drawable/share" />
                     </LinearLayout>

@@ -125,7 +125,6 @@ public class PhotosActivity extends Activity {
         setToolbar(this.getWindow().getDecorView(), this.getApplicationContext(), family_name + " 사진첩");
     }
 
-
     // toolbar & menu
     public void setToolbar(final View view, Context context, String title) {
         NavigationView nv = (NavigationView) view.findViewById(R.id.nv);
@@ -349,11 +348,14 @@ public class PhotosActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(PhotosActivity.this, PhotoPopupActivity.class);
-                    intent.putExtra("photo_id", photoList.get(getAdapterPosition()).getId());
-                    intent.putExtra("story_id", photoList.get(getAdapterPosition()).getStory_id());
-                    intent.putExtra("photo_type", photoList.get(getAdapterPosition()).getType());
-                    intent.putExtra("photo_name", photoList.get(getAdapterPosition()).getName());
-                    intent.putExtra("photo_ext", photoList.get(getAdapterPosition()).getExt());
+//                    intent.putExtra("photo_id", photoList.get(getAdapterPosition()).getId());
+//                    intent.putExtra("story_id", photoList.get(getAdapterPosition()).getStory_id());
+//                    intent.putExtra("photo_type", photoList.get(getAdapterPosition()).getType());
+//                    intent.putExtra("photo_name", photoList.get(getAdapterPosition()).getName());
+//                    intent.putExtra("photo_ext", photoList.get(getAdapterPosition()).getExt());
+
+                    intent.putExtra("photoList", photoList);
+                    intent.putExtra("photo_position", getAdapterPosition());
                     startActivity(intent);
                 }
             });

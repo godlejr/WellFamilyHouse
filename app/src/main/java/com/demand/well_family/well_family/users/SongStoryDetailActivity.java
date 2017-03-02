@@ -1,13 +1,17 @@
 package com.demand.well_family.well_family.users;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ResolveInfo;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +22,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,6 +55,8 @@ import com.demand.well_family.well_family.dto.SongStoryEmotionData;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
+import com.demand.well_family.well_family.photos.PhotoPopupActivity;
+import com.demand.well_family.well_family.photos.SongPhotoPopupActivity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +67,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
@@ -94,6 +102,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     private boolean isPaused = false, isPlaying = false;
     private String record_file;
     private int endMinute, endSecond;
+    private ImageView iv_sound_story_detail_share;
 
     // photo
     private PhotoAdapter photoAdapter;
@@ -140,6 +149,10 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
 
     private static final Logger logger = LoggerFactory.getLogger(SongStoryDetailActivity.class);
     private SharedPreferences loginInfo;
+
+
+    //
+    private String song_avatar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -397,6 +410,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
 
         iv_sound_story_detail_avatar = (CircleImageView) findViewById(R.id.iv_sound_story_detail_avatar);
         iv_sound_story_detail_play = (ImageView) findViewById(R.id.iv_sound_story_detail_play);
+        iv_sound_story_detail_share = (ImageView) findViewById(R.id.iv_sound_story_detail_share);
 
         sb_sound_story_detail = (SeekBar) findViewById(R.id.sb_sound_story_detail);
         cb_sound_story_detail = (CheckBox) findViewById(R.id.cb_sound_story_detail_like);
@@ -418,8 +432,8 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         call_avatar.enqueue(new Callback<ArrayList<SongStoryAvatar>>() {
             @Override
             public void onResponse(Call<ArrayList<SongStoryAvatar>> call, Response<ArrayList<SongStoryAvatar>> response) {
-                String avatar = response.body().get(0).getAvatar();
-                Glide.with(SongStoryDetailActivity.this).load(getString(R.string.cloud_front_songs_avatar) + avatar)
+                song_avatar = response.body().get(0).getAvatar();
+                Glide.with(SongStoryDetailActivity.this).load(getString(R.string.cloud_front_songs_avatar) + song_avatar)
                         .thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_detail_song_img);
             }
 
@@ -478,6 +492,39 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
             first_checked = !first_checked;
         }
         cb_sound_story_detail.setOnCheckedChangeListener(this);
+
+        // share
+        iv_sound_story_detail_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                intent.setType("text/plain");
+
+                List<ResolveInfo> resInfo = getApplicationContext().getPackageManager().queryIntentActivities(intent, 0);
+                List shareIntentList = new ArrayList();
+                for (int i = 0; i < resInfo.size(); i++) {
+                    Intent shareIntent = (Intent) intent.clone();
+                    ResolveInfo info = resInfo.get(i);
+                    final ComponentName name = new ComponentName(info.activityInfo.applicationInfo.packageName, info.activityInfo.name);
+
+
+                    String content = tv_sound_story_detail_content.getText().toString();
+                    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, content);
+
+                    shareIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    shareIntent.setComponent(name);
+
+                    shareIntent.setPackage(info.activityInfo.packageName);
+                    shareIntentList.add(shareIntent);
+                }
+
+                Intent chooser = Intent.createChooser((Intent) shareIntentList.remove(0), "share");
+                chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, shareIntentList.toArray(new Parcelable[]{}));
+                startActivity(chooser);
+            }
+        });
+
     }
 
     private void setPlayer() {
@@ -697,8 +744,17 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         }
 
         @Override
-        public void onBindViewHolder(PhotoViewHolder holder, int position) {
+        public void onBindViewHolder(PhotoViewHolder holder, final int position) {
             Glide.with(context).load(getString(R.string.cloud_front_song_stories_images) + photoList.get(position).getName() + "." + photoList.get(position).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_item_detail_photo);
+            holder.iv_item_detail_photo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), SongPhotoPopupActivity.class);
+                    intent.putExtra("photo_position", position);
+                    intent.putExtra("photoList", photoList);
+                    startActivity(intent);
+                }
+            });
         }
 
         @Override
@@ -984,17 +1040,17 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         super.onPause();
     }
 
-    private static void log(Throwable throwable){
-        StackTraceElement[] ste =  throwable.getStackTrace();
+    private static void log(Throwable throwable) {
+        StackTraceElement[] ste = throwable.getStackTrace();
         String className = ste[0].getClassName();
         String methodName = ste[0].getMethodName();
         int lineNumber = ste[0].getLineNumber();
         String fileName = ste[0].getFileName();
 
-        if(LogFlag.printFlag){
-            if(logger.isInfoEnabled()){
+        if (LogFlag.printFlag) {
+            if (logger.isInfoEnabled()) {
                 logger.info("Exception: " + throwable.getMessage());
-                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+                logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
             }
         }
     }
