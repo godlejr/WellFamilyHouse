@@ -72,6 +72,15 @@
             android:name=".family.EditFamilyActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
 
+        <activity
+            android:name=".dialog.CommentPopupActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".dialog.CommentDeleteActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+
+        <activity android:name=".dialog.CommentModifyActivity"/>
+
         <service android:name=".fcm.FirebaseMessageService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
