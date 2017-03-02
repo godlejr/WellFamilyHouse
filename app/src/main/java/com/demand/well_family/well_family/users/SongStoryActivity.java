@@ -206,13 +206,6 @@ public class SongStoryActivity extends Activity {
                 intent.putExtra("story_user_level", user_level);
                 intent.putExtra("story_user_avatar", user_avatar);
 
-                intent.putExtra("user_id", user_id);
-                intent.putExtra("user_name", user_name);
-                intent.putExtra("user_avatar", user_avatar);
-                intent.putExtra("user_email", user_email);
-                intent.putExtra("user_birth", user_birth);
-                intent.putExtra("user_phone", user_phone);
-                intent.putExtra("user_level", user_level);
 
                 startActivity(intent);
             }
@@ -823,10 +816,11 @@ public class SongStoryActivity extends Activity {
             call_emotion_data.enqueue(new Callback<ArrayList<SongStoryEmotionData>>() {
                 @Override
                 public void onResponse(Call<ArrayList<SongStoryEmotionData>> call, Response<ArrayList<SongStoryEmotionData>> response) {
-
                     emotionAdapter = new EmotionAdapter(response.body(), SongStoryActivity.this, R.layout.item_emotion);
+
                     holder.rv_song_story_emotion.setAdapter(emotionAdapter);
                     holder.rv_song_story_emotion.setLayoutManager(new GridLayoutManager(SongStoryActivity.this, 2));
+
 
                 }
 
@@ -850,6 +844,7 @@ public class SongStoryActivity extends Activity {
                     if (photoListSize == 0) {
                         holder.ll_sound_story_images_container.setVisibility(View.GONE);
                         holder.tv_sound_story_content.setMaxLines(15);
+
                     }
                     if (photoListSize == 1) {
                         holder.ll_sound_story_images_container.removeAllViews();
@@ -862,6 +857,7 @@ public class SongStoryActivity extends Activity {
                     if (photoListSize == 2) {
                         holder.ll_sound_story_images_container.removeAllViews();
                         holder.ll_sound_story_images_container.setVisibility(View.VISIBLE);
+                        holder.ll_sound_story_images_container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 800));
 
                         holder.story_images_inflater.inflate(R.layout.item_main_story_image_two, holder.ll_sound_story_images_container, true);
                         ImageView iv_item_main_story_image_two1 = (ImageView) holder.ll_sound_story_images_container.findViewById(R.id.iv_item_main_story_image_two1);
@@ -872,6 +868,9 @@ public class SongStoryActivity extends Activity {
                     if (photoListSize > 2) {
                         holder.ll_sound_story_images_container.removeAllViews();
                         holder.ll_sound_story_images_container.setVisibility(View.VISIBLE);
+                        holder.ll_sound_story_images_container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 600));
+
+
                         holder.story_images_inflater.inflate(R.layout.item_main_story_image_list, holder.ll_sound_story_images_container, true);
                         RecyclerView rv_main_story = (RecyclerView) holder.ll_sound_story_images_container.findViewById(R.id.rv_main_story_images);
                         PhotoAdapter photoAdapter = new PhotoAdapter(context, photoList, R.layout.item_main_story_image, position);
@@ -1118,17 +1117,17 @@ public class SongStoryActivity extends Activity {
         }
     }
 
-    private static void log(Throwable throwable){
-        StackTraceElement[] ste =  throwable.getStackTrace();
+    private static void log(Throwable throwable) {
+        StackTraceElement[] ste = throwable.getStackTrace();
         String className = ste[0].getClassName();
         String methodName = ste[0].getMethodName();
         int lineNumber = ste[0].getLineNumber();
         String fileName = ste[0].getFileName();
 
-        if(LogFlag.printFlag){
-            if(logger.isInfoEnabled()){
+        if (LogFlag.printFlag) {
+            if (logger.isInfoEnabled()) {
                 logger.info("Exception: " + throwable.getMessage());
-                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+                logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
             }
         }
     }

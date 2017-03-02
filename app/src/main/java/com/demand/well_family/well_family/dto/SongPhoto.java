@@ -1,10 +1,12 @@
 package com.demand.well_family.well_family.dto;
 
+import java.io.Serializable;
+
 /**
  * Created by ㅇㅇ on 2017-02-02.
  */
 
-public class SongPhoto {
+public class SongPhoto implements Serializable{
     private int id;
     private int song_story_id;
     private int type;

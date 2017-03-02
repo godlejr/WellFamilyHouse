@@ -91,6 +91,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
 
 
+    //
+    private SharedPreferences pref;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -188,6 +192,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             } else {
                 Glide.with(MainActivity.this).load(getString(R.string.cloud_front_banners) + "demand_banner3.jpg").thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(img);
             }
+
+            TextView tv_viewPager_position = (TextView)view.findViewById(R.id.tv_viewPager_position);
+            tv_viewPager_position.setText("");
 
             container.addView(view);
 
@@ -433,6 +440,37 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 dl.openDrawer(GravityCompat.START);
             }
         });
+
+
+
+
+        pref = getApplicationContext().getSharedPreferences("badge", Activity.MODE_PRIVATE);
+        final TextView toolbar_noti_count = (TextView)toolbar.findViewById(R.id.toolbar_noti_count);
+        toolbar_noti_count.setText(String.valueOf(pref.getInt("badge_count",0)));
+
+        ImageView toolbar_notification = (ImageView)toolbar.findViewById(R.id.toolbar_notification);
+        toolbar_notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putInt("badge_count", 0);
+                editor.apply();
+
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.BADGE_COUNT_UPDATE");
+                intent.putExtra("badge_count_package_name", "com.demand.well_family.well_family");
+                intent.putExtra("badge_count_class_name", "com.demand.well_family.well_family.intro.IntroActivity");
+                intent.putExtra("badge_count", 0);
+                getApplicationContext().sendBroadcast(intent);
+
+                toolbar_noti_count.setText("0");
+
+            }
+        });
+
+
+
+
 
         // header
         View nv_header_view = nv.getHeaderView(0);

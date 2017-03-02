@@ -1,208 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#f1f1f1"
     android:orientation="vertical"
-    android:paddingTop="10dp">
-
-    <ImageView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="0.5"
-        android:paddingBottom="35dp"
-        android:paddingLeft="50dp"
-        android:paddingRight="50dp"
-        android:paddingTop="55dp"
-        android:scaleType="fitCenter"
-        app:srcCompat="@drawable/splash"
-        android:layout_marginTop="15dp" />
+    android:paddingTop="10dp"
+    android:id="@+id/sv_login">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="0.9"
-        android:gravity="bottom"
+        android:layout_height="wrap_content"
+        android:background="#f1f1f1"
         android:orientation="vertical"
-        android:weightSum="3">
+        android:paddingTop="10dp">
+
+        <ImageView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:paddingBottom="35dp"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:paddingTop="55dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/splash"
+            android:layout_height="220dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="bottom"
             android:orientation="vertical"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp">
+            android:weightSum="3"
+            android:layout_marginTop="30dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/imageView7"
-                    android:layout_width="22dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/login_email" />
-
-                <EditText
-                    android:id="@+id/et_login_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#00ffffff"
-                    android:ems="10"
-                    android:hint="이메일 주소"
-                    android:inputType="textEmailAddress"
-                    android:padding="3dp"
-                    android:paddingLeft="15dp"
-                    android:textColor="#000"
-                    android:textColorHint="#aaaaaa"
-                    android:textCursorDrawable="@null" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="15dp"
-                android:background="#dddddd" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/imageView12"
-                    android:layout_width="22dp"
-                    android:layout_height="30dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/login_password" />
-
-                <EditText
-                    android:id="@+id/et_login_pwd"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="#00ffffff"
-                    android:elevation="1dp"
-                    android:ems="10"
-                    android:hint="비밀번호"
-                    android:inputType="textPassword"
-                    android:padding="3dp"
-                    android:paddingLeft="15dp"
-                    android:textColor="#000"
-                    android:textColorHint="#aaaaaa"
-                    android:textCursorDrawable="@null" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#dddddd" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:layout_height="140dp">
 
                 <LinearLayout
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"></LinearLayout>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal"
+                 >
 
-                <LinearLayout
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp">
-
-                    <Button
-                        android:id="@+id/btn_main_register"
-                        style="?android:attr/borderlessButtonStyle"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:id="@+id/imageView7"
+                        android:layout_width="22dp"
                         android:layout_height="30dp"
-                        android:layout_gravity="right"
-                        android:layout_marginTop="5dp"
-                        android:background="#00ffffff"
-                        android:gravity="center_vertical|center"
-                        android:text="회원가입"
-                        android:textColor="#999999"
-                        android:textSize="15sp" />
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/login_email" />
 
-                    <View
+                    <EditText
+                        android:id="@+id/et_login_email"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#999999" />
+                        android:layout_height="match_parent"
+                        android:background="#00ffffff"
+                        android:ems="10"
+                        android:hint="이메일 주소"
+                        android:inputType="textEmailAddress"
+                        android:padding="3dp"
+                        android:paddingLeft="15dp"
+                        android:textColor="#000"
+                        android:textColorHint="#aaaaaa"
+                        android:textCursorDrawable="@null"
+                       />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="#dddddd" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/imageView12"
+                        android:layout_width="22dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/login_password" />
+
+                    <EditText
+                        android:id="@+id/et_login_pwd"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="#00ffffff"
+                        android:elevation="1dp"
+                        android:ems="10"
+                        android:hint="비밀번호"
+                        android:inputType="textPassword"
+                        android:padding="3dp"
+                        android:paddingLeft="15dp"
+                        android:textColor="#000"
+                        android:textColorHint="#aaaaaa"
+                        android:textCursorDrawable="@null" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#dddddd" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"></LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp">
+
+                        <Button
+                            android:id="@+id/btn_main_register"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_gravity="right"
+                            android:layout_marginTop="5dp"
+                            android:background="#00ffffff"
+                            android:gravity="center_vertical|center"
+                            android:text="회원가입"
+                            android:textColor="#999999"
+                            android:textSize="15sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#999999" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"></LinearLayout>
+
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"></LinearLayout>
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp">
 
+                <ImageButton
+                    android:id="@+id/btn_main_login"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/login_email_btn"
+                    android:gravity="center"
+                    android:scaleType="fitXY"
+                    android:text="이메일로 로그인"
+                    android:textColor="#fff" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginBottom="12dp">
+
+                    <ImageButton
+                        android:id="@+id/naverLoginButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/login_naver_btn" />
+
+                    <com.nhn.android.naverlogin.ui.view.OAuthLoginButton
+                        android:id="@+id/oAuthLoginButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </FrameLayout>
+
+                <ImageButton
+                    android:id="@+id/facebookLoginButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/login_facebook_btn"
+                    android:scaleType="fitCenter"
+                    android:text="페이스북로그인" />
             </LinearLayout>
 
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp">
-
-            <ImageButton
-                android:id="@+id/btn_main_login"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginBottom="12dp"
-                android:gravity="center"
-                android:text="이메일로 로그인"
-                android:textColor="#fff"
-                android:scaleType="fitXY"
-                android:background="@drawable/login_email_btn" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_marginBottom="12dp">
-
-                <ImageButton
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/naverLoginButton"
-                    android:background="@drawable/login_naver_btn" />
-
-                <com.nhn.android.naverlogin.ui.view.OAuthLoginButton
-                    android:id="@+id/oAuthLoginButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </FrameLayout>
-
-            <ImageButton
-                android:id="@+id/facebookLoginButton"
-                android:layout_width="match_parent"
-                android:text="페이스북로그인"
-                android:layout_height="45dp"
-                android:background="@drawable/login_facebook_btn"
-                android:scaleType="fitCenter" />
-        </LinearLayout>
-
     </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

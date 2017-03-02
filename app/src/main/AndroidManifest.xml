@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -55,7 +57,8 @@
         <activity android:name=".users.SongStoryActivity" />
         <activity android:name=".memory_sound.SongRecordActivity" />
         <activity android:name=".users.SongStoryDetailActivity" />
-        <activity android:name=".market.MarketMainActivity" />
+        <activity android:name=".market.MarketMainActivity"
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".create_family.CreateFamilyActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />

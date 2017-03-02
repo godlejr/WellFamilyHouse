@@ -1,15 +1,21 @@
 package com.demand.well_family.well_family.dto;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * Created by Dev-0 on 2017-01-20.
  */
 
-public class Photo {
+public class Photo implements Serializable{
     private int id;
     private int story_id;
     private int type;
     private String name;
     private String ext;
+
 
     public Photo(int id, int story_id, int type, String name, String ext) {
         this.id = id;
@@ -58,4 +64,6 @@ public class Photo {
     public void setExt(String ext) {
         this.ext = ext;
     }
+
+
 }

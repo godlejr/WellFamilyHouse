@@ -41,13 +41,28 @@
             android:textSize="22sp"
             android:textStyle="normal|bold" />
 
-        <ImageView
+        <FrameLayout
             android:layout_width="1dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/toolbar_notification"
-            android:layout_weight="0.8"
-            android:padding="10dp"
-            android:src="@drawable/toolbar_notification" />
+            android:layout_height="match_parent"
+            android:layout_weight="0.8">
+
+            <TextView
+                android:text="10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/toolbar_noti_count"
+                android:textStyle="normal|bold"
+                android:textSize="18sp"
+                android:layout_gravity="right" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/toolbar_notification"
+                android:padding="10dp"
+                android:src="@drawable/toolbar_notification" />
+
+        </FrameLayout>
 
         <ImageView
             android:id="@+id/toolbar_market"

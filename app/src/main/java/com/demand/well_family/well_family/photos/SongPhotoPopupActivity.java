@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dto.Photo;
+import com.demand.well_family.well_family.dto.SongPhoto;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,21 +40,20 @@ import java.util.ArrayList;
  * Created by ㅇㅇ on 2017-01-23.
  */
 
-public class PhotoPopupActivity extends Activity {
+public class SongPhotoPopupActivity extends Activity {
     private LinearLayout ll_popup_top;
     private ImageView iv_popup_image, iv_popup_close, iv_popup_download;
     private String imageURL;
     private final int WRITE_EXTERNAL_STORAGE_PERMISSION = 999;
     private ViewPager photo_viewPager;
-    private ArrayList<Photo> photoList;
+    private ArrayList<SongPhoto> photoList;
     private int photoListSize;
     private int current_photo_position;
-    private int selected_photo = -1;
 
     //photo info
     private int photo_id;
     private String photo_name;
-    private int story_id;
+    private int song_story_id;
     private int photo_type;
     private String photo_ext;
 
@@ -63,12 +63,10 @@ public class PhotoPopupActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.popup_photo);
-//        getWindow().setLayout(android.view.WindowManager.LayoutParams.MATCH_PARENT, android.view.WindowManager.LayoutParams.MATCH_PARENT);
 
 //        photo_id = getIntent().getIntExtra("photo_id", 0);
-//        story_id = getIntent().getIntExtra("story_id", 0);
+//        song_story_id = getIntent().getIntExtra("story_id", 0);
 //        photo_name = getIntent().getStringExtra("photo_name");
 //        photo_type = getIntent().getIntExtra("photo_type", 0);
 //        photo_ext = getIntent().getStringExtra("photo_ext");
@@ -109,12 +107,20 @@ public class PhotoPopupActivity extends Activity {
         iv_popup_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PhotoPopupActivity.this.finish();
+                SongPhotoPopupActivity.this.finish();
             }
         });
 
 
-        photoList = (ArrayList<Photo>) getIntent().getSerializableExtra("photoList");
+        iv_popup_download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageDownload = new ImageDownload(photo_name + "." + photo_ext);
+                imageDownload.execute(imageURL);
+            }
+        });
+
+        photoList = (ArrayList<SongPhoto>) getIntent().getSerializableExtra("photoList");
         photoListSize = photoList.size();
         current_photo_position = getIntent().getIntExtra("photo_position", 0);
 
@@ -158,7 +164,7 @@ public class PhotoPopupActivity extends Activity {
                 conn.disconnect();
 
             } catch (Exception e) {
-                Log.e("photoPopup", e.getMessage());
+                e.printStackTrace();
             }
 
             return null;
@@ -166,7 +172,7 @@ public class PhotoPopupActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Toast.makeText(PhotoPopupActivity.this, "다운로드가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SongPhotoPopupActivity.this, "다운로드가 완료되었습니다.", Toast.LENGTH_SHORT).show();
             getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + Environment.getExternalStorageDirectory() + "/" + fileName)));
         }
     }
@@ -184,7 +190,7 @@ public class PhotoPopupActivity extends Activity {
         }
 
         @Override
-        public Object instantiateItem(ViewGroup container, final int position) {
+        public Object instantiateItem(ViewGroup container, int position) {
             View view = inflater.inflate(R.layout.viewpager_childview, null);
             ImageView iv_viewPager_childView = (ImageView) view.findViewById(R.id.iv_viewPager_childView);
             TextView tv_viewPager_position = (TextView) view.findViewById(R.id.tv_viewPager_position);
@@ -204,24 +210,14 @@ public class PhotoPopupActivity extends Activity {
                 }
             });
 
-            imageURL = getString(R.string.cloud_front_stories_images) + photoList.get(position).getName() + "." + photoList.get(position).getExt();
-            Glide.with(PhotoPopupActivity.this).load(imageURL).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_viewPager_childView);
+            imageURL = getString(R.string.cloud_front_song_stories_images) + photoList.get(position).getName() + "." + photoList.get(position).getExt();
 
-            iv_popup_download.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.e("pos2",position+"");
-                    imageDownload = new ImageDownload(photoList.get(position-1).getName() + "." + photoList.get(position-1).getExt());
-                    imageDownload.execute(imageURL);
-                }
-            });
+            Glide.with(SongPhotoPopupActivity.this).load(imageURL).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_viewPager_childView);
 
-
-            String viewPager_position = (position+1) + " / " + photoListSize;
+            String viewPager_position = (position + 1) + " / " + photoListSize;
             tv_viewPager_position.setText(viewPager_position);
 
             container.addView(view);
-            Log.e("pos1",position+"");
 
             return view;
         }
