@@ -1,14 +1,23 @@
 package com.demand.well_family.well_family.family;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -22,14 +31,16 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Family;
-import com.demand.well_family.well_family.dto.Identification;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -62,6 +73,20 @@ public class EditFamilyActivity extends Activity {
     private int family_user_id;
     private String family_created_at;
 
+    // userInfo
+    private int user_id;
+    private String user_name;
+    private String user_avatar;
+    private String user_email;
+    private String user_birth;
+    private String user_phone;
+    private int user_level;
+
+    private final int READ_EXTERNAL_STORAGE_PERMISSION = 10001;
+    private SharedPreferences loginInfo;
+    private Server_Connection server_connection;
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,11 +94,76 @@ public class EditFamilyActivity extends Activity {
         setContentView(R.layout.activity_create_family);
         getWindow().setLayout(android.view.WindowManager.LayoutParams.MATCH_PARENT, android.view.WindowManager.LayoutParams.MATCH_PARENT);
 
+        setUserInfo();
         init();
+        checkPermission();
+
+    }
+
+    private void setUserInfo() {
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        user_id = loginInfo.getInt("user_id", 0);
+        user_level = loginInfo.getInt("user_level", 0);
+        user_name = loginInfo.getString("user_name", null);
+        user_email = loginInfo.getString("user_email", null);
+        user_birth = loginInfo.getString("user_birth", null);
+        user_avatar = loginInfo.getString("user_avatar", null);
+        user_phone = loginInfo.getString("user_phone", null);
         setToolbar(getWindow().getDecorView());
     }
 
-    private void init(){
+    private Bitmap encodeImage(Uri uri) {
+        Bitmap bm = null;
+        try {
+            bm = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+            ExifInterface exifInterface = new ExifInterface(path);
+            int exifOrientation = exifInterface.getAttributeInt(
+                    ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+            int exifDegree = exifOrientationToDegrees(exifOrientation);
+            bm = rotate(bm, exifDegree);
+        } catch (IOException e) {
+            log(e);
+        }
+        return bm;
+    }
+
+    public Bitmap rotate(Bitmap bitmap, int degrees) {
+        if (degrees != 0 && bitmap != null) {
+            Matrix m = new Matrix();
+            m.setRotate(degrees, (float) bitmap.getWidth() / 2,
+                    (float) bitmap.getHeight() / 2);
+            try {
+                Bitmap converted = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), m, true);
+                if (bitmap != converted) {
+                    bitmap.recycle();
+                    bitmap = converted;
+                }
+            } catch (OutOfMemoryError ex) {
+                log(ex);
+            }
+        }
+        return bitmap;
+    }
+
+    public int exifOrientationToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270;
+        }
+        return 0;
+    }
+
+    public String addBase64Bitmap(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 90, baos);
+        byte[] b = baos.toByteArray();
+        return Base64.encodeToString(b, Base64.NO_WRAP | Base64.URL_SAFE);
+    }
+
+    private void init() {
         family_id = getIntent().getIntExtra("family_id", 0);
         family_name = getIntent().getStringExtra("family_name");
         family_content = getIntent().getStringExtra("family_content");
@@ -84,9 +174,9 @@ public class EditFamilyActivity extends Activity {
         et_create_family_introduce = (EditText) findViewById(R.id.et_create_family_introduce);
         et_create_family_name = (EditText) findViewById(R.id.et_create_family_name);
         iv_create_family_img = (ImageView) findViewById(R.id.iv_create_family_img);
-        ib_create_family = (ImageButton)findViewById(R.id.ib_create_family);
+        ib_create_family = (ImageButton) findViewById(R.id.ib_create_family);
 
-        Glide.with(this).load(getString(R.string.cloud_front_family_avatar) +  family_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_create_family_img);
+        Glide.with(this).load(getString(R.string.cloud_front_family_avatar) + family_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_create_family_img);
         et_create_family_introduce.setText(family_content);
         et_create_family_name.setText(family_name);
 
@@ -110,7 +200,8 @@ public class EditFamilyActivity extends Activity {
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();           }
+                finish();
+            }
         });
 
         TextView toolbar_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
@@ -120,10 +211,119 @@ public class EditFamilyActivity extends Activity {
         toolbar_complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final String familyName = et_create_family_name.getText().toString();
+                final String familyIntroduce = et_create_family_introduce.getText().toString();
 
+                if (familyIntroduce.equals(family_content) && familyName.equals(family_name) && family_photo_uri == null) {
+                    finish();
+                } else {
+                    progressDialog = new ProgressDialog(EditFamilyActivity.this);
+                    progressDialog.show();
+                    progressDialog.getWindow().setBackgroundDrawable(new
+                            ColorDrawable(Color.TRANSPARENT));
+                    progressDialog.setContentView(R.layout.progress_dialog);
+
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                            HashMap<String, String> map = new HashMap<String, String>();
+                            map.put("name", familyName);
+                            map.put("content", familyIntroduce);
+                            Call<ResponseBody> call_update_family_info = server_connection.update_family_info(family_id, map);
+                            call_update_family_info.enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    if (family_photo_uri != null) {
+                                        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                                        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(family_photo_uri)));
+                                        Call<ResponseBody> call_update_family_avatar = server_connection.update_family_avatar(family_id, requestBody);
+
+                                        call_update_family_avatar.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                //scss
+                                                resetFamilyInfo();
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                log(t);
+                                                Toast.makeText(EditFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                    } else {
+                                        resetFamilyInfo();
+                                    }
+
+
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (InterruptedException e) {
+                                        log(e);
+                                    }
+
+                                    progressDialog.dismiss();
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    log(t);
+                                    Toast.makeText(EditFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    }).start();
+                }
             }
         });
+    }
 
+    private void resetFamilyInfo() {
+        final Intent intent = getIntent();
+
+        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+        Call<ArrayList<Family>> call_get_family_info = server_connection.family_info_by_creator(family_id);
+        call_get_family_info.enqueue(new Callback<ArrayList<Family>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Family>> call, Response<ArrayList<Family>> response) {
+                ArrayList<Family> familyList = response.body();
+                intent.putExtra("avatar", familyList.get(0).getAvatar());
+                intent.putExtra("name", familyList.get(0).getName());
+                intent.putExtra("content", familyList.get(0).getContent());
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Family>> call, Throwable t) {
+                log(t);
+                Toast.makeText(EditFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void checkPermission() {
+        int readPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE_PERMISSION);
+
+        if (readPermission == PackageManager.PERMISSION_DENIED) {
+            Log.e("WRITE PERMISSION", "권한X");
+
+        } else {
+            Log.e("WRITE PERMISSION", "권한O");
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == READ_EXTERNAL_STORAGE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                Toast.makeText(this, "권한을 허가해주세요.", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
     }
 
     @Override

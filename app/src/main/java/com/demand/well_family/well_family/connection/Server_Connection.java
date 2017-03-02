@@ -61,7 +61,10 @@ public interface Server_Connection {
     @GET("{user_id}/family_Info")
     Call<ArrayList<Family>> family_Info(@Path("user_id") int user_id);
 
-    @GET(" {family_id}/family")
+    @GET("{family_id}/family_info_by_creator")
+    Call<ArrayList<Family>> family_info_by_creator(@Path("family_id") int family_id);
+
+    @GET("{family_id}/family")
     Call<ArrayList<Family>> family(@Path("family_id") int family_id);
 
     @POST("login")
@@ -265,4 +268,12 @@ public interface Server_Connection {
     @POST("{user_id}/insert_song_category")
     Call<ResponseBody> insert_song_category(@Path("user_id") int user_id,@QueryMap HashMap<String, String> map);
 
+    @PUT("{family_id}/update_family_info")
+    Call<ResponseBody> update_family_info(@Path("family_id") int family_id,@QueryMap HashMap<String, String> map);
+
+    @PUT("{comment_id}/update_comment")
+    Call<ResponseBody> update_comment(@Path("comment_id") int comment_id,@QueryMap HashMap<String, String> map);
+
+    @DELETE("delete_comment")
+    Call<ResponseBody> delete_comment( @QueryMap HashMap<String, String> map);
 }

@@ -113,6 +113,8 @@ public class FamilyActivity extends Activity {
     //intent code
     private static final int WRITE_REQUEST = 1;
     private static final int DETAIL_REQUEST = 2;
+    private static final int EDIT_REQUEST = 3;
+
     private static final int CONTENTS_OFFSET = 20;
     private boolean content_isFinished = false;
 
@@ -150,7 +152,8 @@ public class FamilyActivity extends Activity {
         family_avatar = getIntent().getStringExtra("family_avatar");
         family_user_id = getIntent().getIntExtra("family_user_id", 0);
         family_created_at = getIntent().getStringExtra("family_created_at");
-
+        
+        setFamilyInfo();
         setUserInfo();
 
         init();
@@ -158,6 +161,14 @@ public class FamilyActivity extends Activity {
         getContentsData();
         editFamilyData();
 
+    }
+
+    private void setFamilyInfo() {
+        iv_family_avatar = (ImageView) findViewById(R.id.iv_family_avatar);
+        tv_family_content = (TextView) findViewById(R.id.tv_family_content);
+
+        Glide.with(this).load(getString(R.string.cloud_front_family_avatar) + family_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_family_avatar);
+        tv_family_content.setText(family_content);
     }
 
     private void setUserInfo() {
@@ -216,7 +227,7 @@ public class FamilyActivity extends Activity {
                 intent.putExtra("story_user_level", user_level);
                 intent.putExtra("story_user_avatar", user_avatar);
 
-                 startActivity(intent);
+                startActivity(intent);
             }
         });
 
@@ -333,26 +344,33 @@ public class FamilyActivity extends Activity {
     }
 
     public void setBack() {
+        Intent intent = new Intent(FamilyActivity.this, MainActivity.class);
+        startActivity(intent);
         finish();
     }
 
     private void editFamilyData() {
         iv_family_edit = (ImageView) findViewById(R.id.iv_family_edit);
-        iv_family_edit.bringToFront();
-        iv_family_edit.invalidate();
-        iv_family_edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(FamilyActivity.this, EditFamilyActivity.class);
-                intent.putExtra("family_id", family_id);
-                intent.putExtra("family_name", family_name);
-                intent.putExtra("family_content", family_content);
-                intent.putExtra("family_avatar", family_avatar);
-                intent.putExtra("family_user_id", family_user_id);
-                intent.putExtra("family_created_at", family_created_at);
-                startActivity(intent);
-            }
-        });
+
+        if (user_id == family_user_id) {
+            iv_family_edit.bringToFront();
+            iv_family_edit.invalidate();
+            iv_family_edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(FamilyActivity.this, EditFamilyActivity.class);
+                    intent.putExtra("family_id", family_id);
+                    intent.putExtra("family_name", family_name);
+                    intent.putExtra("family_content", family_content);
+                    intent.putExtra("family_avatar", family_avatar);
+                    intent.putExtra("family_user_id", family_user_id);
+                    intent.putExtra("family_created_at", family_created_at);
+                    startActivityForResult(intent, EDIT_REQUEST);
+                }
+            });
+        }else{
+            iv_family_edit.setVisibility(View.GONE);
+        }
 
     }
 
@@ -715,7 +733,7 @@ public class FamilyActivity extends Activity {
             call_photo.enqueue(new Callback<ArrayList<Photo>>() {
                 @Override
                 public void onResponse(Call<ArrayList<Photo>> call, Response<ArrayList<Photo>> response) {
-                    ArrayList<Photo>  photoList = response.body();
+                    ArrayList<Photo> photoList = response.body();
                     int photoListSize = photoList.size();
 
                     if (photoListSize == 0) {
@@ -768,9 +786,10 @@ public class FamilyActivity extends Activity {
             call_like_count.enqueue(new Callback<ArrayList<LikeCount>>() {
                 @Override
                 public void onResponse(Call<ArrayList<LikeCount>> call, Response<ArrayList<LikeCount>> response) {
-                        int like_count = response.body().get(0).getLike_count();
-                        holder.tv_item_main_story_like.setText(String.valueOf(like_count));
+                    int like_count = response.body().get(0).getLike_count();
+                    holder.tv_item_main_story_like.setText(String.valueOf(like_count));
                 }
+
                 @Override
                 public void onFailure(Call<ArrayList<LikeCount>> call, Throwable t) {
                     log(t);
@@ -783,9 +802,10 @@ public class FamilyActivity extends Activity {
             call_comment_count.enqueue(new Callback<ArrayList<CommentCount>>() {
                 @Override
                 public void onResponse(Call<ArrayList<CommentCount>> call, Response<ArrayList<CommentCount>> response) {
-                        int comment_count = response.body().get(0).getComment_count();
-                        holder.tv_item_main_comment_story_count.setText(String.valueOf(comment_count));
+                    int comment_count = response.body().get(0).getComment_count();
+                    holder.tv_item_main_comment_story_count.setText(String.valueOf(comment_count));
                 }
+
                 @Override
                 public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
                     log(t);
@@ -950,9 +970,9 @@ public class FamilyActivity extends Activity {
             public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
                 int responseBodySize = response.body().size();
 
-                if(responseBodySize ==0){
+                if (responseBodySize == 0) {
                     //유저 없음
-                }else{
+                } else {
                     for (int i = 0; i < responseBodySize; i++) {
                         userList.add(new User(response.body().get(i).getId(), response.body().get(i).getEmail(), response.body().get(i).getName(), response.body().get(i).getBirth(),
                                 response.body().get(i).getPhone(), response.body().get(i).getAvatar(), response.body().get(i).getLevel()));
@@ -1036,9 +1056,7 @@ public class FamilyActivity extends Activity {
 
 
     private void init() {
-        iv_family_avatar = (ImageView) findViewById(R.id.iv_family_avatar);
-        tv_family_content = (TextView) findViewById(R.id.tv_family_content);
-        ll_user_add_exist = (LinearLayout)findViewById(R.id.ll_user_add_exist);
+        ll_user_add_exist = (LinearLayout) findViewById(R.id.ll_user_add_exist);
 
         ll_user_add_exist.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1057,8 +1075,6 @@ public class FamilyActivity extends Activity {
             }
         });
 
-        Glide.with(this).load(getString(R.string.cloud_front_family_avatar) + family_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_family_avatar);
-        tv_family_content.setText(getIntent().getStringExtra("family_content"));
 
         btn_family_photos = (Button) findViewById(R.id.btn_family_photos);
         btn_family_photos.setOnClickListener(new View.OnClickListener() {
@@ -1134,6 +1150,16 @@ public class FamilyActivity extends Activity {
                 storyList.get(position).setFirst_checked(false); //like sync
                 storyList.get(position).setChecked(like_checked); //like sync
                 contentAdapter.notifyItemChanged(position);
+            }
+        }
+
+        if(requestCode == EDIT_REQUEST){
+            if (resultCode == RESULT_OK) {
+                family_avatar = data.getStringExtra("avatar");
+                family_name = data.getStringExtra("name");
+                family_content = data.getStringExtra("content");
+                setFamilyInfo();
+                setToolbar(this.getWindow().getDecorView(), this.getApplicationContext(), family_name);
             }
         }
     }

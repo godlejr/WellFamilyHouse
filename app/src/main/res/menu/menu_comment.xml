@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <item android:title="댓글 복사"
+            android:id="@+id/menu_comment_copy" />
+        <item android:title="댓글 수정"
+            android:id="@+id/menu_comment_modify" />
+        <item android:title="댓글 삭제"
+            android:id="@+id/menu_comment_delete" />
+</menu>
