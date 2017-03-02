@@ -186,7 +186,7 @@ public class PhotoPopupActivity extends Activity {
         public Object instantiateItem(ViewGroup container, final int position) {
             View view = inflater.inflate(R.layout.viewpager_childview, null);
             ImageView iv_viewPager_childView = (ImageView) view.findViewById(R.id.iv_viewPager_childView);
-            TextView tv_viewPager_position = (TextView) view.findViewById(R.id.tv_viewPager_position);
+            final TextView tv_viewPager_position = (TextView) view.findViewById(R.id.tv_viewPager_position);
 
             iv_viewPager_childView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -203,25 +203,24 @@ public class PhotoPopupActivity extends Activity {
                 }
             });
 
+
             imageURL = getString(R.string.cloud_front_stories_images) + photoList.get(position).getName() + "." + photoList.get(position).getExt();
             Glide.with(PhotoPopupActivity.this).load(imageURL).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_viewPager_childView);
-
-
-            iv_popup_download.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.e("pos2",position+"");
-                    imageDownload = new ImageDownload(photoList.get(position).getName() + "." + photoList.get(position).getExt());
-                    imageDownload.execute(imageURL);
-                }
-            });
-
 
             String viewPager_position = (position+1) + " / " + photoListSize;
             tv_viewPager_position.setText(viewPager_position);
 
             container.addView(view);
-            Log.e("pos1",position+"");
+
+            iv_popup_download.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int viewpagerCurrentItem = photo_viewPager.getCurrentItem();
+                    imageURL = getString(R.string.cloud_front_stories_images) + photoList.get(viewpagerCurrentItem).getName() + "." + photoList.get(viewpagerCurrentItem).getExt();
+                    imageDownload = new ImageDownload(photoList.get(viewpagerCurrentItem).getName() + "." + photoList.get(viewpagerCurrentItem).getExt());
+                    imageDownload.execute(imageURL);
+                }
+            });
 
             return view;
         }
@@ -236,5 +235,7 @@ public class PhotoPopupActivity extends Activity {
             container.removeView((View) object);
         }
     }
+
+
 
 }

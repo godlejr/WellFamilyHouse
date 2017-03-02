@@ -111,15 +111,6 @@ public class SongPhotoPopupActivity extends Activity {
             }
         });
 
-
-        iv_popup_download.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageDownload = new ImageDownload(photo_name + "." + photo_ext);
-                imageDownload.execute(imageURL);
-            }
-        });
-
         photoList = (ArrayList<SongPhoto>) getIntent().getSerializableExtra("photoList");
         photoListSize = photoList.size();
         current_photo_position = getIntent().getIntExtra("photo_position", 0);
@@ -211,13 +202,23 @@ public class SongPhotoPopupActivity extends Activity {
             });
 
             imageURL = getString(R.string.cloud_front_song_stories_images) + photoList.get(position).getName() + "." + photoList.get(position).getExt();
-
             Glide.with(SongPhotoPopupActivity.this).load(imageURL).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_viewPager_childView);
 
             String viewPager_position = (position + 1) + " / " + photoListSize;
             tv_viewPager_position.setText(viewPager_position);
 
             container.addView(view);
+
+            iv_popup_download.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int viewpagerCurrentItem = photo_viewPager.getCurrentItem();
+                    imageURL = getString(R.string.cloud_front_song_stories_images) + photoList.get(viewpagerCurrentItem).getName() + "." + photoList.get(viewpagerCurrentItem).getExt();
+                    imageDownload = new ImageDownload(photoList.get(viewpagerCurrentItem).getName() + "." + photoList.get(viewpagerCurrentItem).getExt());
+                    imageDownload.execute(imageURL);
+                }
+            });
+
 
             return view;
         }
