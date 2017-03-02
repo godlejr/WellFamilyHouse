@@ -458,6 +458,7 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                         intent.putExtra("comment_id", commentInfoList.get(position).getComment_id());
                         intent.putExtra("comment_content", commentInfoList.get(position).getContent());
                         intent.putExtra("position", position);
+                        intent.putExtra("act_flag", 1);
                         startActivityForResult(intent, COMMENT_EDIT_REQUEST);
                     }
                 }
@@ -702,6 +703,8 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                     int position = data.getIntExtra("position", -1);
                     commentAdapter.commentInfoList.remove(position);
                     commentAdapter.notifyItemRemoved(position);
+                    commentAdapter.notifyItemRangeChanged(position,commentAdapter.getItemCount());
+
                 }
             }
         }

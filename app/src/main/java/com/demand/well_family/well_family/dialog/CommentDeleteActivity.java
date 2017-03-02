@@ -34,6 +34,7 @@ public class CommentDeleteActivity extends Activity{
     private Server_Connection server_connection;
 
     private static final Logger logger = LoggerFactory.getLogger(CommentDeleteActivity.class);
+    private int act_flag;
 
 
     @Override
@@ -55,6 +56,8 @@ public class CommentDeleteActivity extends Activity{
     }
 
     private void init() {
+        act_flag = getIntent().getIntExtra("act_flag", 0);
+
         comment_id = getIntent().getIntExtra("comment_id",0);
 
         tv_comment_delete_confirm =  (TextView)findViewById(R.id.tv_comment_delete_confirm);
@@ -75,12 +78,13 @@ public class CommentDeleteActivity extends Activity{
                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                 HashMap<String, String> map = new HashMap<>();
                 map.put("comment_id", String.valueOf(comment_id));
-
+                map.put("flag",String.valueOf(act_flag));
                 Call<ResponseBody> call_delete_comment = server_connection.delete_comment(map);
                 call_delete_comment.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         //scss
+                        Toast.makeText(CommentDeleteActivity.this, "댓글이 삭제되었습니다.", Toast.LENGTH_LONG).show();
                         Intent intent = getIntent();
                         setResult(Activity.RESULT_OK, intent);
                         finish();

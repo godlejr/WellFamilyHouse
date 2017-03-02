@@ -43,6 +43,8 @@ public class CommentPopupActivity extends Activity {
     private String comment_content;
     private int position;
 
+    private int act_flag; //1: well_family. 2:player , 3:song_story
+
     private static final int EDIT_REQUEST = 1;
     private static final int DELETE_REQUEST = 2;
 
@@ -70,6 +72,8 @@ public class CommentPopupActivity extends Activity {
     }
 
     private void init() {
+        act_flag = getIntent().getIntExtra("act_flag", 0);
+
         comment_id = getIntent().getIntExtra("comment_id", 0);
         comment_content = getIntent().getStringExtra("comment_content");
         Log.e("ddddd",position+"");
@@ -130,11 +134,13 @@ public class CommentPopupActivity extends Activity {
                         Intent modify_intent = new Intent(CommentPopupActivity.this, CommentModifyActivity.class);
                         modify_intent.putExtra("comment_id", comment_id);
                         modify_intent.putExtra("comment_content", comment_content);
+                        modify_intent.putExtra("act_flag", act_flag);
                         startActivityForResult(modify_intent, EDIT_REQUEST);
                     }
                     if (position == 2) {
                         Intent modify_intent = new Intent(CommentPopupActivity.this, CommentDeleteActivity.class);
                         modify_intent.putExtra("comment_id", comment_id);
+                        modify_intent.putExtra("act_flag", act_flag);
                         startActivityForResult(modify_intent, DELETE_REQUEST);
                     }
                 }

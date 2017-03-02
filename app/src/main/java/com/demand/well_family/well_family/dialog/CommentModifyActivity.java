@@ -37,6 +37,7 @@ public class CommentModifyActivity extends Activity {
     private Server_Connection server_connection;
 
     private static final Logger logger = LoggerFactory.getLogger(CommentModifyActivity.class);
+    private int act_flag;
 
 
     @Override
@@ -75,6 +76,7 @@ public class CommentModifyActivity extends Activity {
                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                     HashMap<String, String> map = new HashMap<String, String>();
                     map.put("content",content );
+                    map.put("flag",String.valueOf(act_flag));
                     Call<ResponseBody> call_update_comment = server_connection.update_comment(comment_id, map);
                     call_update_comment.enqueue(new Callback<ResponseBody>() {
                         @Override
@@ -99,6 +101,8 @@ public class CommentModifyActivity extends Activity {
     }
 
     private void init() {
+        act_flag = getIntent().getIntExtra("act_flag", 0);
+
         comment_id = getIntent().getIntExtra("comment_id", 0);
         comment_content = getIntent().getStringExtra("comment_content");
 

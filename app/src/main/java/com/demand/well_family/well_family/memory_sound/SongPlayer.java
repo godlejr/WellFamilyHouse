@@ -29,6 +29,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.Server_Connection;
+import com.demand.well_family.well_family.dialog.CommentPopupActivity;
 import com.demand.well_family.well_family.dto.Check;
 import com.demand.well_family.well_family.dto.CommentCount;
 import com.demand.well_family.well_family.dto.CommentInfo;
@@ -94,6 +95,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
     private String song_created_at;
 
     private Server_Connection server_connection;
+    private static final int COMMENT_EDIT_REQUEST = 1;
 
     //first like check
     private Boolean first_checked = false;
@@ -497,9 +499,12 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
         private TextView tv_item_comment_name;
         private TextView tv_item_comment_content;
         private TextView tv_item_comment_date;
+        private LinearLayout ll_comment;
+
 
         public CommentViewHolder(View itemView) {
             super(itemView);
+            ll_comment = (LinearLayout) itemView.findViewById(R.id.ll_comment);
             iv_item_comment_avatar = (ImageView) itemView.findViewById(R.id.iv_item_comment_avatar);
             tv_item_comment_name = (TextView) itemView.findViewById(R.id.tv_item_comment_name);
             tv_item_comment_content = (TextView) itemView.findViewById(R.id.tv_item_comment_content);
@@ -527,11 +532,25 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
         }
 
         @Override
-        public void onBindViewHolder(CommentViewHolder holder, int position) {
+        public void onBindViewHolder(CommentViewHolder holder, final int position) {
             Glide.with(context).load(getString(R.string.cloud_front_user_avatar) + commentInfoList.get(position).getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_item_comment_avatar);
             holder.tv_item_comment_name.setText(commentInfoList.get(position).getUser_name());
             holder.tv_item_comment_content.setText(commentInfoList.get(position).getContent());
             holder.tv_item_comment_date.setText(calculateTime(commentInfoList.get(position).getCreated_at()));
+
+            holder.ll_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (user_id == commentInfoList.get(position).getUser_id()) {
+                        Intent intent = new Intent(SongPlayer.this, CommentPopupActivity.class);
+                        intent.putExtra("comment_id", commentInfoList.get(position).getComment_id());
+                        intent.putExtra("comment_content", commentInfoList.get(position).getContent());
+                        intent.putExtra("position", position);
+                        intent.putExtra("act_flag", 2);
+                        startActivityForResult(intent, COMMENT_EDIT_REQUEST);
+                    }
+                }
+            });
         }
 
         @Override
@@ -539,6 +558,32 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
             return commentInfoList.size();
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == COMMENT_EDIT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                int flag = data.getIntExtra("flag", 0);
+                if (flag == 1) {
+                    //modify
+                    int position = data.getIntExtra("position", -1);
+                    commentAdapter.commentInfoList.get(position).setContent(data.getStringExtra("content"));
+                    commentAdapter.notifyItemChanged(position);
+                }
+
+                if (flag == 2) {
+                    //delete
+                    int position = data.getIntExtra("position", -1);
+                    commentAdapter.commentInfoList.remove(position);
+                    commentAdapter.notifyItemRemoved(position);
+                    commentAdapter.notifyItemRangeChanged(position,commentAdapter.getItemCount());
+
+                }
+            }
+        }
     }
 
     public String calculateTime(String dateTime) {

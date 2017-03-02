@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.ResolveInfo;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
@@ -22,7 +21,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,6 +43,7 @@ import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.Server_Connection;
+import com.demand.well_family.well_family.dialog.CommentPopupActivity;
 import com.demand.well_family.well_family.dto.CommentCount;
 import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.LikeCount;
@@ -55,7 +54,6 @@ import com.demand.well_family.well_family.dto.SongStoryEmotionData;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
-import com.demand.well_family.well_family.photos.PhotoPopupActivity;
 import com.demand.well_family.well_family.photos.SongPhotoPopupActivity;
 
 import org.slf4j.Logger;
@@ -146,6 +144,9 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     //emotion
     private RecyclerView rv_detail_emotion;
     private EmotionAdapter emotionAdapter;
+
+    private static final int COMMENT_EDIT_REQUEST = 1;
+
 
     private static final Logger logger = LoggerFactory.getLogger(SongStoryDetailActivity.class);
     private SharedPreferences loginInfo;
@@ -831,9 +832,11 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         private TextView tv_item_comment_name;
         private TextView tv_item_comment_content;
         private TextView tv_item_comment_date;
+        private LinearLayout ll_comment;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
+            ll_comment = (LinearLayout) itemView.findViewById(R.id.ll_comment);
             iv_item_comment_avatar = (ImageView) itemView.findViewById(R.id.iv_item_comment_avatar);
             tv_item_comment_name = (TextView) itemView.findViewById(R.id.tv_item_comment_name);
             tv_item_comment_content = (TextView) itemView.findViewById(R.id.tv_item_comment_content);
@@ -859,17 +862,57 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         }
 
         @Override
-        public void onBindViewHolder(CommentViewHolder holder, int position) {
+        public void onBindViewHolder(CommentViewHolder holder, final int position) {
             Glide.with(context).load(getString(R.string.cloud_front_user_avatar) + commentInfoList.get(position).getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_item_comment_avatar);
 
             holder.tv_item_comment_name.setText(commentInfoList.get(position).getUser_name());
             holder.tv_item_comment_content.setText(commentInfoList.get(position).getContent());
             holder.tv_item_comment_date.setText(calculateTime(commentInfoList.get(position).getCreated_at()));
+
+            holder.ll_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (user_id == commentInfoList.get(position).getUser_id()) {
+                        Intent intent = new Intent(SongStoryDetailActivity.this, CommentPopupActivity.class);
+                        intent.putExtra("comment_id", commentInfoList.get(position).getComment_id());
+                        intent.putExtra("comment_content", commentInfoList.get(position).getContent());
+                        intent.putExtra("position", position);
+                        intent.putExtra("act_flag", 3);
+                        startActivityForResult(intent, COMMENT_EDIT_REQUEST);
+                    }
+                }
+            });
         }
 
         @Override
         public int getItemCount() {
             return commentInfoList.size();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == COMMENT_EDIT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                int flag = data.getIntExtra("flag", 0);
+                if (flag == 1) {
+                    //modify
+                    int position = data.getIntExtra("position", -1);
+                    commentAdapter.commentInfoList.get(position).setContent(data.getStringExtra("content"));
+                    commentAdapter.notifyItemChanged(position);
+                }
+
+                if (flag == 2) {
+                    //delete
+                    int position = data.getIntExtra("position", -1);
+                    commentAdapter.commentInfoList.remove(position);
+                    commentAdapter.notifyItemRemoved(position);
+                    commentAdapter.notifyItemRangeChanged(position,commentAdapter.getItemCount());
+
+                }
+            }
         }
     }
 
