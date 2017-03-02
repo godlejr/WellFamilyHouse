@@ -11,13 +11,18 @@
         android:src="@mipmap/ic_launcher"
         android:scaleType="centerInside" />
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/tv_viewPager_position"
-        android:textColor="#fff"
-        android:gravity="bottom|center_horizontal"
-        android:paddingBottom="20dp"
-        android:text="7/7"
-        android:textSize="20sp" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tv_viewPager_position"
+            android:textColor="#fff"
+            android:gravity="bottom|center_horizontal"
+            android:paddingBottom="20dp"
+            android:text="7/7"
+            android:textSize="20sp" />
+    </RelativeLayout>
 </FrameLayout>

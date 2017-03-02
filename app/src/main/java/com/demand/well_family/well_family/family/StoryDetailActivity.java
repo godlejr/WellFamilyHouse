@@ -45,6 +45,7 @@ import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
+import com.demand.well_family.well_family.photos.PhotoPopupActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 
 import org.slf4j.Logger;
@@ -539,8 +540,17 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
         }
 
         @Override
-        public void onBindViewHolder(PhotoViewHolder holder, int position) {
+        public void onBindViewHolder(PhotoViewHolder holder, final int position) {
             Glide.with(context).load(getString(R.string.cloud_front_stories_images) + photoList.get(position).getName() + "." + photoList.get(position).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_item_detail_photo);
+            holder.iv_item_detail_photo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), PhotoPopupActivity.class);
+                    intent.putExtra("photo_position", position);
+                    intent.putExtra("photoList", photoList);
+                    startActivity(intent);
+                }
+            });
         }
 
         @Override

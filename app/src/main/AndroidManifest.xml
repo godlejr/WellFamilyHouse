@@ -8,8 +8,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
 
     <application
@@ -33,8 +32,9 @@
         <activity android:name=".family.StoryDetailActivity" />
         <activity android:name=".photos.PhotosActivity" />
         <activity
-            android:name=".photos.PhotoPopupActivity"
-            android:theme="@style/Theme.AppCompat.Dialog" />
+            android:name=".photos.PhotoPopupActivity" />
+        <activity android:name=".photos.SongPhotoPopupActivity" />
+
         <activity android:name=".users.UserActivity" />
         <activity android:name=".family.FamilyActivity" />
         <activity android:name=".MainActivity" />
@@ -43,7 +43,7 @@
         <activity
             android:name=".LoginActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".register.SNSRegisterActivity"/>
+        <activity android:name=".register.SNSRegisterActivity" />
         <activity
             android:name=".WriteActivity"
             android:configChanges="keyboardHidden|orientation" />
@@ -57,8 +57,9 @@
         <activity android:name=".users.SongStoryActivity" />
         <activity android:name=".memory_sound.SongRecordActivity" />
         <activity android:name=".users.SongStoryDetailActivity" />
-        <activity android:name=".market.MarketMainActivity"
-            android:launchMode="singleInstance"/>
+        <activity
+            android:name=".market.MarketMainActivity"
+            android:launchMode="singleInstance" />
         <activity
             android:name=".create_family.CreateFamilyActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
@@ -67,16 +68,9 @@
             android:name=".memory_sound.EmotionActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity android:name=".users.EditUserActivity" />
-        <activity android:name=".family.EditFamilyActivity"
-            android:theme="@style/Theme.AppCompat.Dialog"/>
         <activity
-            android:name=".dialog.CommentPopupActivity"
+            android:name=".family.EditFamilyActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
-        <activity
-            android:name=".dialog.CommentDeleteActivity"
-            android:theme="@style/Theme.AppCompat.Dialog" />
-
-        <activity android:name=".dialog.CommentModifyActivity"/>
 
         <service android:name=".fcm.FirebaseMessageService">
             <intent-filter>
@@ -91,20 +85,23 @@
         </service>
 
         <!-- 페북 -->
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            />
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
 
         <!-- 네이버 -->
-        <activity android:name="com.nhn.android.naverlogin.ui.OAuthLoginActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-        <activity android:name="com.nhn.android.naverlogin.ui.OAuthLoginInAppBrowserActivity"
-            android:label="OAuth2.0 In-app"/>
+        <activity
+            android:name="com.nhn.android.naverlogin.ui.OAuthLoginActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="com.nhn.android.naverlogin.ui.OAuthLoginInAppBrowserActivity"
+            android:label="OAuth2.0 In-app" />
 
     </application>
 </manifest>

@@ -48,7 +48,6 @@ public class PhotoPopupActivity extends Activity {
     private ArrayList<Photo> photoList;
     private int photoListSize;
     private int current_photo_position;
-    private int selected_photo = -1;
 
     //photo info
     private int photo_id;
@@ -207,11 +206,12 @@ public class PhotoPopupActivity extends Activity {
             imageURL = getString(R.string.cloud_front_stories_images) + photoList.get(position).getName() + "." + photoList.get(position).getExt();
             Glide.with(PhotoPopupActivity.this).load(imageURL).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_viewPager_childView);
 
+
             iv_popup_download.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.e("pos2",position+"");
-                    imageDownload = new ImageDownload(photoList.get(position-1).getName() + "." + photoList.get(position-1).getExt());
+                    imageDownload = new ImageDownload(photoList.get(position).getName() + "." + photoList.get(position).getExt());
                     imageDownload.execute(imageURL);
                 }
             });
