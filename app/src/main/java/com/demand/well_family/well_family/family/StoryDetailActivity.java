@@ -462,6 +462,7 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                         startActivityForResult(intent, COMMENT_EDIT_REQUEST);
                     }else{
                         Intent intent = new Intent(StoryDetailActivity.this, CommentPopupActivity.class);
+                        intent.putExtra("comment_content", commentInfoList.get(position).getContent());
                         intent.putExtra("act_flag", 4);
                         startActivity(intent);
                     }
