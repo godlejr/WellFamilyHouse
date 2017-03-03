@@ -183,6 +183,7 @@ public class FamilyActivity extends Activity {
             }
         });
 
+
         Glide.with(this).load(getString(R.string.cloud_front_family_avatar) + family_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_family_avatar);
         tv_family_content.setText(family_content);
     }

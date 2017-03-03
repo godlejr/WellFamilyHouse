@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -121,7 +120,8 @@ public class PhotoPopupActivity extends Activity {
         current_photo_position = getIntent().getIntExtra("photo_position", 0);
 
 
-        switch (getIntent().getStringExtra("from")) {
+        from = getIntent().getStringExtra("from");
+        switch (from) {
             case "FamilyActivity":
                 cloud_front = getString(R.string.cloud_front_family_avatar);
                 break;
@@ -224,8 +224,12 @@ public class PhotoPopupActivity extends Activity {
             imageURL = cloud_front + photoList.get(position).getName() + "." + photoList.get(position).getExt();
             Glide.with(PhotoPopupActivity.this).load(imageURL).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_viewPager_childView);
 
-            String viewPager_position = (position + 1) + " / " + photoListSize;
-            tv_viewPager_position.setText(viewPager_position);
+            if (from.equals("FamilyActivity") || from.equals("UserActivity")) {
+                tv_viewPager_position.setText("");
+            } else {
+                String viewPager_position = (position + 1) + " / " + photoListSize;
+                tv_viewPager_position.setText(viewPager_position);
+            }
 
             container.addView(view);
 
