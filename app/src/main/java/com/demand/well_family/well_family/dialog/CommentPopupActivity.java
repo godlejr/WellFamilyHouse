@@ -46,6 +46,8 @@ public class CommentPopupActivity extends Activity {
 
     private static final int EDIT_REQUEST = 1;
     private static final int DELETE_REQUEST = 2;
+    private String comment_user_name;
+    private int comment_category_id;//1:wellfamilyhouse , 2:songplayer, 3:songstory
 
 
     @Override
@@ -72,10 +74,15 @@ public class CommentPopupActivity extends Activity {
 
     private void init() {
         act_flag = getIntent().getIntExtra("act_flag", 0);
-
         comment_id = getIntent().getIntExtra("comment_id", 0);
         comment_content = getIntent().getStringExtra("comment_content");
-        position = getIntent().getIntExtra("position", -1);
+        if(act_flag ==4 ){
+            comment_user_name = getIntent().getStringExtra("comment_user_name");
+            comment_category_id = getIntent().getIntExtra("comment_category_id", 0);
+        }else{
+            position = getIntent().getIntExtra("position", -1);
+
+        }
 
         rv_popup_comment = (RecyclerView) findViewById(R.id.rv_popup_comment);
         popupList = new ArrayList<>();
@@ -85,6 +92,8 @@ public class CommentPopupActivity extends Activity {
         if(act_flag != 4) {
             popupList.add("댓글 수정");
             popupList.add("댓글 삭제");
+        }else{
+            popupList.add("신고 하기");
         }
         popupAdapter = new PopupAdapter(CommentPopupActivity.this, popupList, R.layout.item_textview);
         rv_popup_comment.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -132,11 +141,15 @@ public class CommentPopupActivity extends Activity {
                         finish();
                     }
                     if (position == 1) {
-                        Intent modify_intent = new Intent(CommentPopupActivity.this, CommentModifyActivity.class);
-                        modify_intent.putExtra("comment_id", comment_id);
-                        modify_intent.putExtra("comment_content", comment_content);
-                        modify_intent.putExtra("act_flag", act_flag);
-                        startActivityForResult(modify_intent, EDIT_REQUEST);
+                        if(act_flag != 4) {
+                            Intent modify_intent = new Intent(CommentPopupActivity.this, CommentModifyActivity.class);
+                            modify_intent.putExtra("comment_id", comment_id);
+                            modify_intent.putExtra("comment_content", comment_content);
+                            modify_intent.putExtra("act_flag", act_flag);
+                            startActivityForResult(modify_intent, EDIT_REQUEST);
+                        }else{
+                            ///intent 신고하기
+                        }
                     }
                     if (position == 2) {
                         Intent modify_intent = new Intent(CommentPopupActivity.this, CommentDeleteActivity.class);
