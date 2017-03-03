@@ -1,5 +1,6 @@
 package com.demand.well_family.well_family.connection;
 
+import com.demand.well_family.well_family.dto.Category;
 import com.demand.well_family.well_family.dto.Check;
 import com.demand.well_family.well_family.dto.Comment;
 import com.demand.well_family.well_family.dto.CommentCount;
@@ -56,7 +57,7 @@ public interface Server_Connection {
     Call<ArrayList<Identification>> insert_family(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
     @POST("{login_category_id}/join")
-    Call<ResponseBody> join(@Path("login_category_id") int login_category_id,@QueryMap HashMap<String, String> map);
+    Call<ResponseBody> join(@Path("login_category_id") int login_category_id, @QueryMap HashMap<String, String> map);
 
     @GET("{user_id}/family_Info")
     Call<ArrayList<Family>> family_Info(@Path("user_id") int user_id);
@@ -71,13 +72,13 @@ public interface Server_Connection {
     Call<ArrayList<User>> login(@QueryMap HashMap<String, String> map);
 
     @PUT("{user_id}/update_deviceId_token")
-    Call<ResponseBody> update_deviceId_token(@Path("user_id") int user_id, @QueryMap HashMap<String,String> map);
+    Call<ResponseBody> update_deviceId_token(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
     @POST("{user_id}/check_device_id")
     Call<ArrayList<Check>> check_device_id(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
     @PUT("{user_id}/update_token")
-    Call<ResponseBody> update_token(@Path("user_id") int user_id, @QueryMap HashMap<String,String> map);
+    Call<ResponseBody> update_token(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
     @GET("{family_id}/family_content_List")
     Call<ArrayList<StoryInfo>> family_content_List(@Path("family_id") int family_id);
@@ -116,10 +117,10 @@ public interface Server_Connection {
     Call<ArrayList<CommentInfo>> family_detail_comment_List(@Path("story_id") int story_id);
 
     @POST("{user_id}/insert_story")
-    Call<ArrayList<Story>> insert_story(@Path("user_id") int user_id,@QueryMap HashMap<String, String> map);
+    Call<ArrayList<Story>> insert_story(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
     @POST("{story_id}/insert_photos")
-    Call<ResponseBody> insert_photos(@Path("story_id") int story_id,@Body RequestBody requestBody);
+    Call<ResponseBody> insert_photos(@Path("story_id") int story_id, @Body RequestBody requestBody);
 
     @POST("{story_user_id}/family_check")
     Call<ArrayList<Check>> family_check(@Path("story_user_id") int story_user_id, @QueryMap HashMap<String, String> map);
@@ -245,35 +246,41 @@ public interface Server_Connection {
     Call<ArrayList<Check>> check_gender(@Path("user_id") int user_id);
 
     @POST("{user_id}/check_favorite")
-    Call<ArrayList<Check>> check_favorite(@Path("user_id") int user_id,@QueryMap HashMap<String, String> map);
+    Call<ArrayList<Check>> check_favorite(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
     @POST("{user_id}/check_song_category")
-    Call<ArrayList<Check>> check_song_category(@Path("user_id") int user_id,@QueryMap HashMap<String, String> map);
+    Call<ArrayList<Check>> check_song_category(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
     @PUT("{user_id}/udpate_user_info")
-    Call<ResponseBody> udpate_user_info(@Path("user_id") int user_id,@QueryMap HashMap<String, String> map);
+    Call<ResponseBody> udpate_user_info(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
     @PUT("{user_id}/update_user_avatar")
-    Call<ResponseBody> update_user_avatar(@Path("user_id") int userfavorite_category_id_id,@Body RequestBody requestBody);
+    Call<ResponseBody> update_user_avatar(@Path("user_id") int userfavorite_category_id_id, @Body RequestBody requestBody);
 
     @DELETE("delete_favorite")
-    Call<ResponseBody> delete_favorite( @QueryMap HashMap<String, String> map);
+    Call<ResponseBody> delete_favorite(@QueryMap HashMap<String, String> map);
 
     @DELETE("delete_song_category")
-    Call<ResponseBody> delete_song_category( @QueryMap HashMap<String, String> map);
+    Call<ResponseBody> delete_song_category(@QueryMap HashMap<String, String> map);
 
     @POST("{user_id}/insert_favorite")
-    Call<ResponseBody> insert_favorite(@Path("user_id") int user_id,@QueryMap HashMap<String, String> map);
+    Call<ResponseBody> insert_favorite(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
     @POST("{user_id}/insert_song_category")
-    Call<ResponseBody> insert_song_category(@Path("user_id") int user_id,@QueryMap HashMap<String, String> map);
+    Call<ResponseBody> insert_song_category(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
     @PUT("{family_id}/update_family_info")
-    Call<ResponseBody> update_family_info(@Path("family_id") int family_id,@QueryMap HashMap<String, String> map);
+    Call<ResponseBody> update_family_info(@Path("family_id") int family_id, @QueryMap HashMap<String, String> map);
 
     @PUT("{comment_id}/update_comment")
-    Call<ResponseBody> update_comment(@Path("comment_id") int comment_id,@QueryMap HashMap<String, String> map);
+    Call<ResponseBody> update_comment(@Path("comment_id") int comment_id, @QueryMap HashMap<String, String> map);
 
     @DELETE("delete_comment")
-    Call<ResponseBody> delete_comment( @QueryMap HashMap<String, String> map);
+    Call<ResponseBody> delete_comment(@QueryMap HashMap<String, String> map);
+
+    @GET("report_category_List")
+    Call<ArrayList<Category>> report_category_List();
+
+    @POST("{user_id}/insert_comment_report")
+    Call<ResponseBody> insert_comment_report(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 }

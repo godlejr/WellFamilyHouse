@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e1e1e1"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/toolbar_register"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="#f1f1f1"
+        android:orientation="vertical"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:paddingLeft="15dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="작성자"
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.15"
+                android:textStyle="normal|bold"
+                android:gravity="left"
+                android:layout_marginRight="2dp" />
+
+            <TextView
+                android:id="@+id/tv_report_author_name"
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:text="NAME"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:text="내용"
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.15"
+                android:textStyle="normal|bold"
+                android:gravity="left"
+                android:layout_marginRight="2dp" />
+
+            <TextView
+                android:id="@+id/tv_report_content"
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:text="CONTENT"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="#f1f1f1"></android.support.v7.widget.RecyclerView>
+</LinearLayout>

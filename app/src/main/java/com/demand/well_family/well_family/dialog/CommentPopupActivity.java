@@ -16,6 +16,7 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demand.well_family.well_family.ReportActivity;
 import com.demand.well_family.well_family.R;
 
 import java.util.ArrayList;
@@ -76,6 +77,7 @@ public class CommentPopupActivity extends Activity {
         act_flag = getIntent().getIntExtra("act_flag", 0);
         comment_id = getIntent().getIntExtra("comment_id", 0);
         comment_content = getIntent().getStringExtra("comment_content");
+
         if(act_flag ==4 ){
             comment_user_name = getIntent().getStringExtra("comment_user_name");
             comment_category_id = getIntent().getIntExtra("comment_category_id", 0);
@@ -149,6 +151,13 @@ public class CommentPopupActivity extends Activity {
                             startActivityForResult(modify_intent, EDIT_REQUEST);
                         }else{
                             ///intent 신고하기
+                            Intent report_intent = new Intent(CommentPopupActivity.this, ReportActivity.class);
+                            report_intent.putExtra("comment_user_name", comment_user_name);
+                            report_intent.putExtra("comment_category_id", comment_category_id);
+                            report_intent.putExtra("comment_id", comment_id);
+                            report_intent.putExtra("comment_content", comment_content);
+                            startActivity(report_intent);
+                            finish();
                         }
                     }
                     if (position == 2) {

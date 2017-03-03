@@ -80,6 +80,7 @@
             android:theme="@style/Theme.AppCompat.Dialog" />
 
         <activity android:name=".dialog.CommentModifyActivity"/>
+        <activity android:name=".ReportActivity"/>
 
         <service android:name=".fcm.FirebaseMessageService">
             <intent-filter>

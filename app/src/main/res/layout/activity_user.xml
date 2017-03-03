@@ -216,7 +216,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:orientation="horizontal"
-                    android:background="#fff">
+                    android:background="#fff"
+                    android:id="@+id/ll_edit_profile">
 
                     <ImageView
                         android:layout_width="1dp"
@@ -235,8 +236,8 @@
                         android:textSize="18sp"
                         android:layout_marginLeft="5dp" />
 
-                    <ImageButton
-                        android:id="@+id/ib_edit_profile"
+                    <ImageView
+                        android:id="@+id/iv_edit_profile"
                         android:layout_width="1dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.6"

@@ -242,7 +242,8 @@
                             android:layout_marginLeft="0dp"
                             android:layout_weight="0.2"
                             android:layout_gravity="center_vertical"
-                            android:id="@+id/iv_family_writer_avatar" />
+                            android:id="@+id/iv_family_writer_avatar"
+                            android:scaleType="fitCenter" />
                     </LinearLayout>
 
                     <LinearLayout
