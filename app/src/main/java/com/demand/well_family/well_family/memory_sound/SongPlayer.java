@@ -548,6 +548,10 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                         intent.putExtra("position", position);
                         intent.putExtra("act_flag", 2);
                         startActivityForResult(intent, COMMENT_EDIT_REQUEST);
+                    }else{
+                        Intent intent = new Intent(SongPlayer.this, CommentPopupActivity.class);
+                        intent.putExtra("act_flag",4);
+                        startActivity(intent);
                     }
                 }
             });

@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +42,7 @@ public class CommentPopupActivity extends Activity {
     private String comment_content;
     private int position;
 
-    private int act_flag; //1: well_family. 2:player , 3:song_story
+    private int act_flag; //1: well_family. 2:player , 3:song_story, 4:public
 
     private static final int EDIT_REQUEST = 1;
     private static final int DELETE_REQUEST = 2;
@@ -76,15 +75,17 @@ public class CommentPopupActivity extends Activity {
 
         comment_id = getIntent().getIntExtra("comment_id", 0);
         comment_content = getIntent().getStringExtra("comment_content");
-        Log.e("ddddd",position+"");
         position = getIntent().getIntExtra("position", -1);
 
         rv_popup_comment = (RecyclerView) findViewById(R.id.rv_popup_comment);
         popupList = new ArrayList<>();
-        popupList.add("댓글 복사");
-        popupList.add("댓글 수정");
-        popupList.add("댓글 삭제");
 
+        popupList.add("댓글 복사");
+
+        if(act_flag != 4) {
+            popupList.add("댓글 수정");
+            popupList.add("댓글 삭제");
+        }
         popupAdapter = new PopupAdapter(CommentPopupActivity.this, popupList, R.layout.item_textview);
         rv_popup_comment.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rv_popup_comment.setAdapter(popupAdapter);

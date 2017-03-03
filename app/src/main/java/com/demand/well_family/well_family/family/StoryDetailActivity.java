@@ -460,6 +460,10 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                         intent.putExtra("position", position);
                         intent.putExtra("act_flag", 1);
                         startActivityForResult(intent, COMMENT_EDIT_REQUEST);
+                    }else{
+                        Intent intent = new Intent(StoryDetailActivity.this, CommentPopupActivity.class);
+                        intent.putExtra("act_flag", 4);
+                        startActivity(intent);
                     }
                 }
             });

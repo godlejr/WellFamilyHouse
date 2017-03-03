@@ -879,6 +879,10 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                         intent.putExtra("position", position);
                         intent.putExtra("act_flag", 3);
                         startActivityForResult(intent, COMMENT_EDIT_REQUEST);
+                    }else{
+                        Intent intent = new Intent(SongStoryDetailActivity.this, CommentPopupActivity.class);
+                        intent.putExtra("act_flag", 4);
+                        startActivity(intent);
                     }
                 }
             });
