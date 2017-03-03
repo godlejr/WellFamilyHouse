@@ -551,6 +551,7 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), PhotoPopupActivity.class);
+                    intent.putExtra("from", "StoryDetailActivity");
                     intent.putExtra("photo_position", position);
                     intent.putExtra("photoList", photoList);
                     startActivity(intent);

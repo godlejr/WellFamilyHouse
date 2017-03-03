@@ -28,9 +28,11 @@ import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Check;
+import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
+import com.demand.well_family.well_family.photos.PhotoPopupActivity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -328,6 +330,21 @@ public class UserActivity extends Activity implements View.OnClickListener {
 
     private void getUserData() {
         iv_family_activity_avatar = (ImageView) findViewById(R.id.iv_family_activity_avatar);
+        iv_family_activity_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), PhotoPopupActivity.class);
+
+                String[] filename = story_user_avatar.split("\\.");
+                ArrayList<Photo> photo = new ArrayList<Photo>();
+                photo.add(new Photo(0,0, 0, filename[0], filename[1]));
+
+                intent.putExtra("photoList", photo);
+                intent.putExtra("from", "UserActivity");
+                startActivity(intent);
+            }
+        });
+
         Glide.with(this).load(getString(R.string.cloud_front_user_avatar) + story_user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_family_activity_avatar);
 
         tv_family_activity_name = (TextView) findViewById(R.id.tv_family_activity_name);

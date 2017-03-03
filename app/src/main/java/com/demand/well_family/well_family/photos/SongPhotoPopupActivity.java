@@ -186,6 +186,8 @@ public class SongPhotoPopupActivity extends Activity {
             ImageView iv_viewPager_childView = (ImageView) view.findViewById(R.id.iv_viewPager_childView);
             TextView tv_viewPager_position = (TextView) view.findViewById(R.id.tv_viewPager_position);
 
+
+
             iv_viewPager_childView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -200,6 +202,8 @@ public class SongPhotoPopupActivity extends Activity {
                     return true;
                 }
             });
+
+            ll_popup_top.setVisibility(View.VISIBLE);
 
             imageURL = getString(R.string.cloud_front_song_stories_images) + photoList.get(position).getName() + "." + photoList.get(position).getExt();
             Glide.with(SongPhotoPopupActivity.this).load(imageURL).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_viewPager_childView);
@@ -218,7 +222,6 @@ public class SongPhotoPopupActivity extends Activity {
                     imageDownload.execute(imageURL);
                 }
             });
-
 
             return view;
         }

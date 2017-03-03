@@ -353,7 +353,7 @@ public class PhotosActivity extends Activity {
 //                    intent.putExtra("photo_type", photoList.get(getAdapterPosition()).getType());
 //                    intent.putExtra("photo_name", photoList.get(getAdapterPosition()).getName());
 //                    intent.putExtra("photo_ext", photoList.get(getAdapterPosition()).getExt());
-
+                    intent.putExtra("from", "PhotosActivity");
                     intent.putExtra("photoList", photoList);
                     intent.putExtra("photo_position", getAdapterPosition());
                     startActivity(intent);

@@ -49,6 +49,9 @@ public class PhotoPopupActivity extends Activity {
     private int photoListSize;
     private int current_photo_position;
 
+    private String from;
+    private String cloud_front;
+
     //photo info
     private int photo_id;
     private String photo_name;
@@ -112,10 +115,24 @@ public class PhotoPopupActivity extends Activity {
             }
         });
 
-
         photoList = (ArrayList<Photo>) getIntent().getSerializableExtra("photoList");
         photoListSize = photoList.size();
+
         current_photo_position = getIntent().getIntExtra("photo_position", 0);
+
+
+        switch (getIntent().getStringExtra("from")) {
+            case "FamilyActivity":
+                cloud_front = getString(R.string.cloud_front_family_avatar);
+                break;
+            case "UserActivity":
+                cloud_front = getString(R.string.cloud_front_user_avatar);
+                break;
+            case "PhotosActivity":
+            case "StoryDetailActivity":
+                cloud_front = getString(R.string.cloud_front_stories_images);
+                break;
+        }
 
         photo_viewPager = (ViewPager) findViewById(R.id.photo_viewPager);
         photo_viewPager.setAdapter(new ViewPageAdapter(getLayoutInflater()));
@@ -188,6 +205,7 @@ public class PhotoPopupActivity extends Activity {
             ImageView iv_viewPager_childView = (ImageView) view.findViewById(R.id.iv_viewPager_childView);
             final TextView tv_viewPager_position = (TextView) view.findViewById(R.id.tv_viewPager_position);
 
+
             iv_viewPager_childView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -198,16 +216,15 @@ public class PhotoPopupActivity extends Activity {
                             ll_popup_top.setVisibility(View.GONE);
                         }
                     }
-
                     return true;
                 }
             });
+            ll_popup_top.setVisibility(View.VISIBLE);
 
-
-            imageURL = getString(R.string.cloud_front_stories_images) + photoList.get(position).getName() + "." + photoList.get(position).getExt();
+            imageURL = cloud_front + photoList.get(position).getName() + "." + photoList.get(position).getExt();
             Glide.with(PhotoPopupActivity.this).load(imageURL).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_viewPager_childView);
 
-            String viewPager_position = (position+1) + " / " + photoListSize;
+            String viewPager_position = (position + 1) + " / " + photoListSize;
             tv_viewPager_position.setText(viewPager_position);
 
             container.addView(view);
@@ -216,7 +233,7 @@ public class PhotoPopupActivity extends Activity {
                 @Override
                 public void onClick(View v) {
                     int viewpagerCurrentItem = photo_viewPager.getCurrentItem();
-                    imageURL = getString(R.string.cloud_front_stories_images) + photoList.get(viewpagerCurrentItem).getName() + "." + photoList.get(viewpagerCurrentItem).getExt();
+                    imageURL = cloud_front + photoList.get(viewpagerCurrentItem).getName() + "." + photoList.get(viewpagerCurrentItem).getExt();
                     imageDownload = new ImageDownload(photoList.get(viewpagerCurrentItem).getName() + "." + photoList.get(viewpagerCurrentItem).getExt());
                     imageDownload.execute(imageURL);
                 }
@@ -235,7 +252,6 @@ public class PhotoPopupActivity extends Activity {
             container.removeView((View) object);
         }
     }
-
 
 
 }

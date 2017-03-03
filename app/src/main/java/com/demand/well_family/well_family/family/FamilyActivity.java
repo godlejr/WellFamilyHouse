@@ -51,6 +51,7 @@ import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
+import com.demand.well_family.well_family.photos.PhotoPopupActivity;
 import com.demand.well_family.well_family.photos.PhotosActivity;
 import com.demand.well_family.well_family.search.SearchUserActivity;
 import com.demand.well_family.well_family.users.UserActivity;
@@ -166,6 +167,21 @@ public class FamilyActivity extends Activity {
     private void setFamilyInfo() {
         iv_family_avatar = (ImageView) findViewById(R.id.iv_family_avatar);
         tv_family_content = (TextView) findViewById(R.id.tv_family_content);
+
+        iv_family_avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), PhotoPopupActivity.class);
+
+                String[] filename = family_avatar.split("\\.");
+                ArrayList<Photo> photo = new ArrayList<Photo>();
+                photo.add(new Photo(0,0, 0, filename[0], filename[1]));
+
+                intent.putExtra("photoList", photo);
+                intent.putExtra("from", "FamilyActivity");
+                startActivity(intent);
+            }
+        });
 
         Glide.with(this).load(getString(R.string.cloud_front_family_avatar) + family_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_family_avatar);
         tv_family_content.setText(family_content);
