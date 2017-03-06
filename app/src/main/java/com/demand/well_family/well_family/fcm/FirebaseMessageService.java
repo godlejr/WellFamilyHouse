@@ -25,28 +25,6 @@ public class FirebaseMessageService extends com.google.firebase.messaging.Fireba
     @Override
     public void onCreate() {
         super.onCreate();
-
-//        ActivityManager am = (ActivityManager) getSystemService(getApplicationContext().ACTIVITY_SERVICE);
-//        List<ActivityManager.RunningTaskInfo> info = am.getRunningTasks(10);
-//        Log.e("info.size", info.size() + "");
-
-//        if (info.size() == 1 && info.get(0).topActivity.getClassName().equals("com.sec.android.app.launcher.activities.LauncherActivity")) {
-//            set_badge();
-//        }
-
-//        List<ActivityManager.RunningAppProcessInfo> processes = am.getRunningAppProcesses();
-//        for (int i = 0; i < processes.size(); i++)
-//            Log.e("프로세스", "("+i+")"+ processes.get(i).importance + "/ " + ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND
-//                    + ActivityManager.RunningAppProcessInfo.IMPORTANCE_BACKGROUND);
-
-//        ActivityManager manager = (ActivityManager) this.getSystemService(Activity.ACTIVITY_SERVICE);
-//        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-//            if ("com.demand.well_family.well_family.fcm.FirebaseMessageService".equals(service.service.getClassName())) {
-//                Log.e("Service", service.service.getClassName());
-//            }
-//        }
-
-        set_badge();
     }
 
     @Override
@@ -56,32 +34,18 @@ public class FirebaseMessageService extends com.google.firebase.messaging.Fireba
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-//        Log.e("dsfd", "From: " + remoteMessage.getFrom());
-//        Log.e("dsfd", "tag: " + remoteMessage.getNotification().getTag());
-//        Log.e("dsfd", "title: " + remoteMessage.getNotification().getTitle());
-
-
-//        Log.e("dsfd", "label: " + remoteMessage.getData().get("message"));
-        // Check if message contains a data payload.
-//        if (remoteMessage.getData().size() > 0) {
-            Log.e("알림", "Message data payload: " + remoteMessage.getData());
-//        }
-
-        // Check if message contains a notification payload.
-//        if (remoteMessage.getData() != null) {
-//            Log.e("dsfd", "Message Notification Body: " + remoteMessage.getNotification().getBody());
-//        }
-
-
-//        sendNotification(remoteMessage.getFrom(), remoteMessage.getData().toString());
-
+        String message = remoteMessage.getData().get("body");
+        sendNotification(message);
+        set_badge();
     }
 
-    private void sendNotification(String from, String message) {
+    private void sendNotification(String message) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
+
+
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
