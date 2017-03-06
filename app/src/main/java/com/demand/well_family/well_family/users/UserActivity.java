@@ -15,7 +15,6 @@ import android.text.style.TextAppearanceSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,6 +25,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.settings.SettingActivity;
 import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Check;
 import com.demand.well_family.well_family.dto.Photo;
@@ -229,7 +229,9 @@ public class UserActivity extends Activity implements View.OnClickListener {
                         break;
 
                     case R.id.menu_setting:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
+                        Intent settingIntent = new Intent(getApplicationContext(), SettingActivity.class);
+                        startActivity(settingIntent);
+                        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
                         break;
 
                     case R.id.menu_help:

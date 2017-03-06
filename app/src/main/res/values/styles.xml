@@ -43,4 +43,15 @@
         <item name="android:popupBackground">@android:color/background_light</item>
     </style>
 
+    <style name="SCBSwitch" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">#542920</item>
+
+        <!-- inactive thumb color -->
+        <item name="colorSwitchThumbNormal">#f5f5f5
+        </item>
+        <!-- inactive track color (30% transparency) -->
+        <item name="android:colorForeground">#42221f1f
+        </item>
+    </style>
+
 </resources>

@@ -81,6 +81,7 @@
 
         <activity android:name=".dialog.CommentModifyActivity"/>
         <activity android:name=".ReportActivity"/>
+        <activity android:name=".settings.SettingActivity"/>
 
         <service android:name=".fcm.FirebaseMessageService">
             <intent-filter>

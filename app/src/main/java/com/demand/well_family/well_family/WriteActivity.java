@@ -49,6 +49,7 @@ import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
+import com.demand.well_family.well_family.settings.SettingActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
@@ -253,7 +254,9 @@ public class WriteActivity extends Activity {
                         break;
 
                     case R.id.menu_setting:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
+                        Intent settingIntent = new Intent(getApplicationContext(), SettingActivity.class);
+                        startActivity(settingIntent);
+                        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
                         break;
 
                     case R.id.menu_help:

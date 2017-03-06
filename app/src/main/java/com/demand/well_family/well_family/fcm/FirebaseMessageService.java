@@ -56,24 +56,24 @@ public class FirebaseMessageService extends com.google.firebase.messaging.Fireba
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.e("dsfd", "From: " + remoteMessage.getFrom());
-        Log.e("dsfd", "tag: " + remoteMessage.getNotification().getTag());
-        Log.e("dsfd", "title: " + remoteMessage.getNotification().getTitle());
+//        Log.e("dsfd", "From: " + remoteMessage.getFrom());
+//        Log.e("dsfd", "tag: " + remoteMessage.getNotification().getTag());
+//        Log.e("dsfd", "title: " + remoteMessage.getNotification().getTitle());
 
 
-        Log.e("dsfd", "label: " + remoteMessage.getData().get("message"));
+//        Log.e("dsfd", "label: " + remoteMessage.getData().get("message"));
         // Check if message contains a data payload.
-        if (remoteMessage.getData().size() > 0) {
-            Log.e("dsfd", "Message data payload: " + remoteMessage.getData());
-        }
+//        if (remoteMessage.getData().size() > 0) {
+            Log.e("알림", "Message data payload: " + remoteMessage.getData());
+//        }
 
         // Check if message contains a notification payload.
-        if (remoteMessage.getNotification() != null) {
-            Log.e("dsfd", "Message Notification Body: " + remoteMessage.getNotification().getBody());
-        }
+//        if (remoteMessage.getData() != null) {
+//            Log.e("dsfd", "Message Notification Body: " + remoteMessage.getNotification().getBody());
+//        }
 
 
-        sendNotification(remoteMessage.getFrom(), remoteMessage.getNotification().getBody());
+//        sendNotification(remoteMessage.getFrom(), remoteMessage.getData().toString());
 
     }
 
