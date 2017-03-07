@@ -31,8 +31,7 @@
         </activity>
         <activity android:name=".family.StoryDetailActivity" />
         <activity android:name=".photos.PhotosActivity" />
-        <activity
-            android:name=".photos.PhotoPopupActivity" />
+        <activity android:name=".photos.PhotoPopupActivity" />
         <activity android:name=".photos.SongPhotoPopupActivity" />
 
         <activity android:name=".users.UserActivity" />
@@ -79,9 +78,10 @@
             android:name=".dialog.CommentDeleteActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
 
-        <activity android:name=".dialog.CommentModifyActivity"/>
-        <activity android:name=".ReportActivity"/>
-        <activity android:name=".settings.SettingActivity"/>
+        <activity android:name=".dialog.CommentModifyActivity" />
+        <activity android:name=".ReportActivity" />
+        <activity android:name=".settings.SettingActivity" />
+        <activity android:name=".notification.NotificationActivity" />
 
         <service android:name=".fcm.FirebaseMessageService">
             <intent-filter>

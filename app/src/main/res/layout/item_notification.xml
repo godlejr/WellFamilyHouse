@@ -10,10 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:orientation="horizontal"
-        android:paddingLeft="12dp">
+        android:paddingLeft="12dp"
+        android:id="@+id/ll_notification">
 
         <ImageView
-            android:id="@+id/iv_noti_avatar"
+            android:id="@+id/iv_notification_avatar"
             android:layout_width="60dp"
             android:layout_gravity="center_vertical"
             android:scaleType="centerCrop"
@@ -28,7 +29,7 @@
             android:paddingRight="12dp">
 
             <TextView
-                android:id="@+id/iv_noti_content"
+                android:id="@+id/tv_notification_content"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_weight="1"
@@ -37,10 +38,11 @@
                 android:maxLines="2"
                 android:text="TTT\nTT"
                 android:textColor="#000"
-                android:paddingTop="2dp" />
+                android:paddingTop="2dp"
+                android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/iv_noti_date"
+                android:id="@+id/tv_notification_date"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_weight="0.5"

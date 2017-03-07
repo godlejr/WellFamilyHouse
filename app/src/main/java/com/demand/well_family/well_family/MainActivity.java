@@ -41,6 +41,7 @@ import com.demand.well_family.well_family.family.FamilyActivity;
 import com.demand.well_family.well_family.log.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
+import com.demand.well_family.well_family.notification.NotificationActivity;
 import com.demand.well_family.well_family.settings.SettingActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -434,6 +435,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             }
         });
+
         ImageView toolbar_menu = (ImageView) toolbar.findViewById(R.id.toolbar_menu);
         toolbar_menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -441,8 +443,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 dl.openDrawer(GravityCompat.START);
             }
         });
-
-
 
 
         pref = getApplicationContext().getSharedPreferences("badge", Activity.MODE_PRIVATE);
@@ -466,6 +466,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                 toolbar_noti_count.setText("0");
 
+                Intent notificationIntent = new Intent(v.getContext(), NotificationActivity.class);
+                startActivity(notificationIntent);
             }
         });
 
