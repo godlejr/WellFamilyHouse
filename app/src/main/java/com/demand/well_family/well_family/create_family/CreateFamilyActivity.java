@@ -179,7 +179,7 @@ public class CreateFamilyActivity extends Activity {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                        Call<ArrayList<Family>> call_family = server_connection.family(family_id);
+                                        Call<ArrayList<Family>> call_family = server_connection.family_info_by_creator(family_id);
                                         call_family.enqueue(new Callback<ArrayList<Family>>() {
                                             @Override
                                             public void onResponse(Call<ArrayList<Family>> call, Response<ArrayList<Family>> response) {

@@ -40,7 +40,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.settings.SettingActivity;
 import com.demand.well_family.well_family.WriteActivity;
 import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Check;
@@ -55,6 +54,7 @@ import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.photos.PhotoPopupActivity;
 import com.demand.well_family.well_family.photos.PhotosActivity;
 import com.demand.well_family.well_family.search.SearchUserActivity;
+import com.demand.well_family.well_family.settings.SettingActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 
 import org.slf4j.Logger;
@@ -140,6 +140,7 @@ public class FamilyActivity extends Activity {
 
     private static final Logger logger = LoggerFactory.getLogger(FamilyActivity.class);
     private SharedPreferences loginInfo;
+    private int notification_flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +155,8 @@ public class FamilyActivity extends Activity {
         family_avatar = getIntent().getStringExtra("family_avatar");
         family_user_id = getIntent().getIntExtra("family_user_id", 0);
         family_created_at = getIntent().getStringExtra("family_created_at");
-        
+        notification_flag = getIntent().getIntExtra("notification_flag", 0);
+
         setFamilyInfo();
         setUserInfo();
 
@@ -176,7 +178,7 @@ public class FamilyActivity extends Activity {
 
                 String[] filename = family_avatar.split("\\.");
                 ArrayList<Photo> photo = new ArrayList<Photo>();
-                photo.add(new Photo(0,0, 0, filename[0], filename[1]));
+                photo.add(new Photo(0, 0, 0, filename[0], filename[1]));
 
                 intent.putExtra("photoList", photo);
                 intent.putExtra("from", "FamilyActivity");
@@ -364,9 +366,15 @@ public class FamilyActivity extends Activity {
     }
 
     public void setBack() {
-        Intent intent = new Intent(FamilyActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
+
+        if (notification_flag == 1) {
+            finish();
+
+        } else {
+            Intent intent = new Intent(FamilyActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     private void editFamilyData() {
@@ -388,7 +396,7 @@ public class FamilyActivity extends Activity {
                     startActivityForResult(intent, EDIT_REQUEST);
                 }
             });
-        }else{
+        } else {
             iv_family_edit.setVisibility(View.GONE);
         }
 
@@ -1173,7 +1181,7 @@ public class FamilyActivity extends Activity {
             }
         }
 
-        if(requestCode == EDIT_REQUEST){
+        if (requestCode == EDIT_REQUEST) {
             if (resultCode == RESULT_OK) {
                 family_avatar = data.getStringExtra("avatar");
                 family_name = data.getStringExtra("name");
@@ -1186,9 +1194,15 @@ public class FamilyActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(FamilyActivity.this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+
+        if (notification_flag == 1) {
+            finish();
+        } else {
+            Intent intent = new Intent(FamilyActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+        }
 
         super.onBackPressed();
     }

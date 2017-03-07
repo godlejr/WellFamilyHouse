@@ -9,6 +9,8 @@ import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.FavoriteCategory;
 import com.demand.well_family.well_family.dto.Identification;
 import com.demand.well_family.well_family.dto.LikeCount;
+import com.demand.well_family.well_family.dto.Notification;
+import com.demand.well_family.well_family.dto.NotificationInfo;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.Range;
 import com.demand.well_family.well_family.dto.Song;
@@ -283,4 +285,13 @@ public interface Server_Connection {
 
     @POST("{user_id}/insert_comment_report")
     Call<ResponseBody> insert_comment_report(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
+
+    @GET("{user_id}/notifications")
+    Call<ArrayList<Notification>> notifications(@Path("user_id") int user_id);
+
+    @GET("{notification_id}/NotificationForCreatingFamily")
+    Call<NotificationInfo> NotificationForCreatingFamily(@Path("notification_id") int notification_id);
+
+    @POST("update_notification_check")
+    Call<ResponseBody> update_notification_check( @QueryMap HashMap<String, String> map);
 }
