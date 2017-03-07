@@ -1,307 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#fff"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#fff">
 
-    <LinearLayout
+    <include
+        layout="@layout/toolbar_create"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#777" />
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-
-
-        <include
-            layout="@layout/toolbar_create"
-            android:layout_width="match_parent"
-            android:layout_height="50dp" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#777" />
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="#f5f5f5">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_edit_profile_avatar"
-                android:layout_width="135dp"
-                android:layout_height="135dp"
-                android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                android:src="@drawable/main2" />
-
-
-            <ImageButton
-                android:id="@+id/ib_edit_profile_avatar"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="bottom|right"
-                android:layout_marginBottom="35dp"
-                android:layout_marginRight="135dp"
-                android:background="#00ffffff"
-                android:scaleType="fitCenter"
-                android:src="@drawable/edit_camera" />
-        </FrameLayout>
-
+        android:background="#fff"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#f5f5f5"
             android:orientation="vertical">
 
-            <View
+
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#777" />
+                android:layout_height="200dp"
+                android:background="#f5f5f5">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="#e5e5e5" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#777" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="33dp"
-                android:layout_marginLeft="15dp"
-                android:gravity="center_vertical"
-                android:text="개인정보 변경"
-                android:textColor="#000"
-                android:textStyle="normal|bold" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#777777" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#fff"
-            android:orientation="horizontal"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
-
-            <ImageView
-                android:id="@+id/iv_edit_profile_email_icon"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/profile_email" />
-
-            <TextView
-                android:id="@+id/tv_edit_profile_email"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:text="dddd1234@demand.co.kr"
-                android:textColor="#000"
-                android:clickable="false"
-                android:layout_weight="1"
-                android:gravity="center_vertical" />
-
-        </LinearLayout>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_edit_profile_avatar"
+                    android:layout_width="135dp"
+                    android:layout_height="135dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/main2" />
 
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#777777" />
+                <ImageButton
+                    android:id="@+id/ib_edit_profile_avatar"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginBottom="35dp"
+                    android:layout_marginRight="135dp"
+                    android:background="#00ffffff"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/edit_camera" />
+            </FrameLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#fff"
-            android:orientation="horizontal"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
-
-            <ImageView
-                android:id="@+id/iv_edit_profile_name_icon"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/profile_user" />
-
-            <EditText
-                android:id="@+id/et_edit_profile_name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:text="TTT"
-                android:textColor="#000" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#777777" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#fff"
-            android:orientation="horizontal"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
-
-            <ImageView
-                android:id="@+id/iv_edit_profile_birth_icon"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/profile_birthday" />
-
-            <EditText
-                android:id="@+id/et_edit_profile_birth"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:text="1994Y 01M 18D"
-                android:textColor="#000" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#777777" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#fff"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/iv_edit_profile_phone_icon"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/profile_phone" />
-
-            <EditText
-                android:id="@+id/et_edit_profile_phone"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:text="010-1234-5678"
-                android:textColor="#000" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#777777" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#fff"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/iv_edit_profile_gender_icon"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/profile_symbol" />
-
-            <RadioGroup
-                android:id="@+id/rg_gender"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp">
-
-                <RadioButton
-                    android:id="@+id/rb_man"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="30dp"
-                    android:layout_weight="1"
-                    android:buttonTint="#999"
-                    android:gravity="center"
-                    android:text="남성"
-                    android:textColor="#000" />
-
-                <RadioButton
-                    android:id="@+id/rb_female"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:buttonTint="#999"
-                    android:gravity="center"
-                    android:text="여성"
-                    android:textColor="#000" />
-
-            </RadioGroup>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#e5e5e5"
-            android:orientation="vertical">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#777777" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
                 android:background="#f5f5f5"
                 android:orientation="vertical">
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#777777" />
+                    android:background="#777" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:background="#e5e5e5" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#777" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="33dp"
                     android:layout_marginLeft="15dp"
                     android:gravity="center_vertical"
-                    android:text="나의 관심사"
+                    android:text="개인정보 변경"
                     android:textColor="#000"
                     android:textStyle="normal|bold" />
 
@@ -312,12 +91,37 @@
 
             </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_profile_favorite"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="5dp"
-                android:background="#fff"></android.support.v7.widget.RecyclerView>
+                android:layout_height="50dp"
+                android:background="#fff"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_edit_profile_email_icon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/profile_email" />
+
+                <TextView
+                    android:id="@+id/tv_edit_profile_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="dddd1234@demand.co.kr"
+                    android:textColor="#000" />
+
+            </LinearLayout>
+
 
             <View
                 android:layout_width="match_parent"
@@ -326,9 +130,158 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginTop="10dp"
-                android:background="#f5f5f5"
+                android:layout_height="50dp"
+                android:background="#fff"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_edit_profile_name_icon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/profile_user" />
+
+                <EditText
+                    android:id="@+id/et_edit_profile_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="TTT"
+                    android:textColor="#000" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#777777" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#fff"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_edit_profile_birth_icon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/profile_birthday" />
+
+                <EditText
+                    android:id="@+id/et_edit_profile_birth"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="1994Y 01M 18D"
+                    android:textColor="#000" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#777777" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#fff"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_edit_profile_phone_icon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/profile_phone" />
+
+                <EditText
+                    android:id="@+id/et_edit_profile_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="010-1234-5678"
+                    android:textColor="#000" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#777777" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#fff"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_edit_profile_gender_icon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/profile_symbol" />
+
+                <RadioGroup
+                    android:id="@+id/rg_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
+
+                    <RadioButton
+                        android:id="@+id/rb_man"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="30dp"
+                        android:layout_weight="1"
+                        android:buttonTint="#999"
+                        android:gravity="center"
+                        android:text="남성"
+                        android:textColor="#000" />
+
+                    <RadioButton
+                        android:id="@+id/rb_female"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:buttonTint="#999"
+                        android:gravity="center"
+                        android:text="여성"
+                        android:textColor="#000" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#e5e5e5"
                 android:orientation="vertical">
 
                 <View
@@ -336,42 +289,96 @@
                     android:layout_height="1dp"
                     android:background="#777777" />
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="33dp"
-                    android:layout_marginLeft="15dp"
-                    android:gravity="center_vertical"
-                    android:text="추억 사운드"
-                    android:textColor="#000"
-                    android:textStyle="normal|bold" />
+                    android:layout_height="35dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#f5f5f5"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#777777" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="33dp"
+                        android:layout_marginLeft="15dp"
+                        android:gravity="center_vertical"
+                        android:text="나의 관심사"
+                        android:textColor="#000"
+                        android:textStyle="normal|bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#777777" />
+
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_profile_favorite"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#fff"
+                    android:paddingLeft="5dp"></android.support.v7.widget.RecyclerView>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#777777" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#f5f5f5"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#777777" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="33dp"
+                        android:layout_marginLeft="15dp"
+                        android:gravity="center_vertical"
+                        android:text="추억 사운드"
+                        android:textColor="#000"
+                        android:textStyle="normal|bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#777777" />
+
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_profile_song"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#fff"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="5dp"></android.support.v7.widget.RecyclerView>
+
             </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_profile_song"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#777777" />
+
+            <Button
+                android:id="@+id/btn_edit_profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:paddingLeft="5dp"
-                android:background="#fff"></android.support.v7.widget.RecyclerView>
-
+                android:background="#f5f5f5"
+                android:text="완료" />
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#777777" />
-        <Button
-            android:text="완료"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_edit_profile"
-            android:background="#f5f5f5" />
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

@@ -12,39 +12,42 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:background="#999">
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#777"
+          />
         <TextView
             android:text="알림 설정"
             android:layout_width="match_parent"
-            android:textSize="18sp"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
-            android:layout_height="35dp"
             android:background="#f5f5f5"
-            android:layout_marginBottom="1dp"
-            android:layout_marginTop="1dp"
-            android:textStyle="normal|bold" />
-
+            android:textStyle="normal|bold"
+            android:textSize="14sp"
+            android:layout_height="30dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#777"
+          />
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_weight="1"
             android:paddingLeft="15dp"
             android:paddingRight="10dp"
             android:background="#fff"
-            android:layout_marginBottom="1dp">
+            android:layout_marginBottom="1dp"
+            android:layout_height="50dp">
 
             <TextView
-                android:text="가족 알림"
-                android:layout_width="wrap_content"
+                android:text="알림"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:textSize="17sp" />
+                android:layout_width="1dp"
+                android:layout_weight="3" />
 
             <Switch
                 android:layout_height="match_parent"
@@ -52,27 +55,26 @@
                 android:checked="false"
                 android:gravity="center_vertical"
                 android:theme="@style/SCBSwitch"
-                android:layout_width="wrap_content" />
+                android:layout_width="1dp"
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_weight="1"
             android:paddingLeft="15dp"
             android:paddingRight="10dp"
             android:background="#fff"
-            android:layout_marginBottom="1dp">
+            android:layout_marginBottom="1dp"
+            android:layout_height="50dp">
 
             <TextView
-                android:text="알림 팝업"
-                android:layout_width="wrap_content"
+                android:text="팝업"
+                android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:id="@+id/textView29"
-                android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:textSize="17sp" />
+                android:layout_weight="4" />
 
             <Switch
                 android:layout_height="match_parent"
@@ -80,18 +82,17 @@
                 android:checked="false"
                 android:gravity="center_vertical"
                 android:theme="@style/SCBSwitch"
-                android:layout_width="wrap_content" />
+                android:layout_width="1dp"
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_weight="1"
             android:paddingLeft="15dp"
             android:paddingRight="10dp"
             android:background="#fff"
-            android:layout_marginBottom="1dp">
+            android:layout_height="50dp">
 
             <TextView
                 android:text="소리"
@@ -99,8 +100,7 @@
                 android:layout_height="match_parent"
                 android:id="@+id/textView30"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:textSize="17sp" />
+                android:gravity="center_vertical" />
 
             <Switch
                 android:layout_height="match_parent"
@@ -113,41 +113,57 @@
     </LinearLayout>
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#e5e5e5">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#777"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#777"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:background="#999">
 
         <TextView
             android:text="계정 설정"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
             android:id="@+id/textView17"
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
             android:background="#f5f5f5"
-            android:layout_marginBottom="1dp"
-            android:textSize="18sp"
-            android:textStyle="normal|bold" />
-
+            android:textStyle="normal|bold"
+            android:textSize="14sp"
+            android:layout_height="30dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#777" />
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_weight="1"
             android:background="#fff"
             android:layout_marginBottom="1dp"
             android:paddingLeft="15dp"
             android:id="@+id/ll_setting_pwd"
-            android:paddingRight="15dp">
+            android:paddingRight="15dp"
+            android:layout_height="50dp">
             <TextView
                 android:text="계정 비밀번호 재설정"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:textSize="17sp" />
+                android:gravity="center_vertical" />
 
             <ImageView
                 android:layout_width="30dp"
@@ -160,20 +176,18 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_weight="1"
             android:background="#fff"
             android:layout_marginBottom="1dp"
             android:paddingLeft="15dp"
             android:id="@+id/ll_setting_disable"
-            android:paddingRight="15dp">
+            android:paddingRight="15dp"
+            android:layout_height="50dp">
             <TextView
                 android:text="계정 비활성화"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:textSize="17sp" />
+                android:gravity="center_vertical" />
 
             <ImageView
                 android:text="Switch"
@@ -196,10 +210,4 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_weight="1.5"
-        android:id="@+id/ll_blank2"/>
 </LinearLayout>

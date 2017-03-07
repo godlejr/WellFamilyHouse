@@ -627,6 +627,8 @@ public class EditUserActivity extends Activity {
                         favoriteList.get(position).setChecked(true);
                         holder.tv_option.setBackgroundResource(R.drawable.round_corner_border_brown);
                         holder.tv_option.setTextColor(Color.parseColor("#cc3a1c"));
+                    } else {
+                        holder.tv_option.setTextColor(Color.parseColor("#999999"));
                     }
                 }
 
@@ -643,7 +645,7 @@ public class EditUserActivity extends Activity {
                 public void onClick(View v) {
                     if (favoriteList.get(position).isChecked()) {
                         holder.tv_option.setBackgroundResource(R.drawable.round_corner_border_gray);
-                        holder.tv_option.setTextColor(Color.BLACK);
+                        holder.tv_option.setTextColor(Color.parseColor("#999999"));
                         favoriteList.get(position).setChecked(false);
                     } else {
                         holder.tv_option.setBackgroundResource(R.drawable.round_corner_border_brown);
@@ -652,7 +654,6 @@ public class EditUserActivity extends Activity {
                     }
                 }
             });
-
 
         }
 
@@ -707,6 +708,8 @@ public class EditUserActivity extends Activity {
                         songList.get(position).setChecked(true);
                         holder.tv_option.setBackgroundResource(R.drawable.round_corner_border_brown);
                         holder.tv_option.setTextColor(Color.parseColor("#cc3a1c"));
+                    } else {
+                        holder.tv_option.setTextColor(Color.parseColor("#999999"));
                     }
                 }
 
@@ -722,7 +725,7 @@ public class EditUserActivity extends Activity {
                 public void onClick(View v) {
                     if (songList.get(position).isChecked()) {
                         holder.tv_option.setBackgroundResource(R.drawable.round_corner_border_gray);
-                        holder.tv_option.setTextColor(Color.BLACK);
+                        holder.tv_option.setTextColor(Color.parseColor("#999999"));
                         songList.get(position).setChecked(false);
                     } else {
                         holder.tv_option.setBackgroundResource(R.drawable.round_corner_border_brown);
