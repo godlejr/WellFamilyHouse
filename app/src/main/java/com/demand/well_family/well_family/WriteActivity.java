@@ -420,6 +420,8 @@ public class WriteActivity extends Activity {
 
                             HashMap<String, String> map = new HashMap<>();
                             map.put("family_id", String.valueOf(family_id));
+                            map.put("family_name", family_name);
+
                             map.put("content", et_content.getText().toString());
 
                             server_connection = Server_Connection.retrofit.create(Server_Connection.class);

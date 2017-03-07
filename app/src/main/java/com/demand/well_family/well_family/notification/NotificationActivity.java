@@ -167,16 +167,21 @@ public class NotificationActivity extends Activity {
 
         @Override
         public void onBindViewHolder(final NotificationViewHolder holder, final int position) {
+            final int id = notificationList.get(position).getId();
+            final int behavior_id = notificationList.get(position).getBehavior_id();
+            final int intent_id = notificationList.get(position).getIntent_id();
+            final int intent_flag = notificationList.get(position).getIntent_flag();
 
-            if (notificationList.get(position).getBehavior_id() == 1) {
+            if (behavior_id == 1) {
+                //creating family
                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                Call<NotificationInfo> call_notificationInfoForCreatingFamily = server_connection.NotificationForCreatingFamily(notificationList.get(position).getId());
+                Call<NotificationInfo> call_notificationInfoForCreatingFamily = server_connection.NotificationForCreatingFamily(id);
                 call_notificationInfoForCreatingFamily.enqueue(new Callback<NotificationInfo>() {
                     @Override
                     public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {
                         NotificationInfo notificationInfo = response.body();
                         Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
-                        holder.tv_notification_content.setText(notificationInfo.getName() + "님! <" + notificationInfo.getContent() + "> 가족 페이지 개설을 축하합니다.^^");
+                        holder.tv_notification_content.setText(notificationInfo.getName() + "님! <" + notificationInfo.getContent() + "> 가족 페이지 개설을 축하합니다.");
                         holder.ll_noti_photo.setVisibility(View.VISIBLE);
 
                         Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_family_avatar) + notificationInfo.getPhoto()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_noti_photo);
@@ -189,6 +194,33 @@ public class NotificationActivity extends Activity {
                     }
                 });
             }
+
+            if (behavior_id == 5) {
+                //writing the story
+                if (intent_flag == 2) {
+                    //family story
+                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                    Call<NotificationInfo> call_notificationInfoForWritingStory= server_connection.NotificationForWritingStory(id);
+                    call_notificationInfoForWritingStory.enqueue(new Callback<NotificationInfo>() {
+                        @Override
+                        public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {
+                            NotificationInfo notificationInfo = response.body();
+                            Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
+                            holder.tv_notification_content.setText(notificationInfo.getName() + "님이 <" + notificationInfo.getContent() + "> 에 게시글을 남겼습니다. : \"" +notificationInfo.getTitle()+"\"");
+                            holder.ll_noti_photo.setVisibility(View.VISIBLE);
+                            Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_stories_images) + notificationInfo.getPhoto()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_noti_photo);
+                        }
+
+                        @Override
+                        public void onFailure(Call<NotificationInfo> call, Throwable t) {
+                            log(t);
+                            Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                }
+            }
+
             if (notificationList.get(position).getChecked() == 1) {
                 holder.ll_notification.setBackgroundColor(Color.parseColor("#ffffff"));
             }
@@ -196,10 +228,10 @@ public class NotificationActivity extends Activity {
             holder.ll_notification.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(notificationList.get(position).getIntent_flag()==1){
+                    if (intent_flag == 1) {
                         //familyActivity
                         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                        final Call<ArrayList<Family>> call_family  = server_connection.family_info_by_creator(notificationList.get(position).getIntent_id());
+                        final Call<ArrayList<Family>> call_family = server_connection.family_info_by_creator(intent_id);
 
                         call_family.enqueue(new Callback<ArrayList<Family>>() {
                             @Override
@@ -208,8 +240,8 @@ public class NotificationActivity extends Activity {
 
                                 server_connection = Server_Connection.retrofit.create(Server_Connection.class);
 
-                                HashMap<String,String> map= new HashMap<String, String>();
-                                map.put("notification_id",String.valueOf(notificationList.get(position).getId()));
+                                HashMap<String, String> map = new HashMap<String, String>();
+                                map.put("notification_id", String.valueOf(id));
 
                                 Call<ResponseBody> call_update_check = server_connection.update_notification_check(map);
                                 call_update_check.enqueue(new Callback<ResponseBody>() {
@@ -238,6 +270,37 @@ public class NotificationActivity extends Activity {
 
                             @Override
                             public void onFailure(Call<ArrayList<Family>> call, Throwable t) {
+                                log(t);
+                                Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+
+                    if(intent_flag == 2){
+                        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+
+                        HashMap<String, String> map = new HashMap<String, String>();
+                        map.put("notification_id", String.valueOf(id));
+
+                        Call<ResponseBody> call_update_check = server_connection.update_notification_check(map);
+                        call_update_check.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                                Intent intent = new Intent(NotificationActivity.this, FamilyActivity.class);
+//                                //family info
+//                                intent.putExtra("family_id", familyList.get(0).getId());
+//                                intent.putExtra("family_name", familyList.get(0).getName());
+//                                intent.putExtra("family_content", familyList.get(0).getContent());
+//                                intent.putExtra("family_avatar", familyList.get(0).getAvatar());
+//                                intent.putExtra("family_user_id", familyList.get(0).getUser_id());
+//                                intent.putExtra("family_created_at", familyList.get(0).getCreated_at());
+//                                intent.putExtra("notification_flag", 1);
+//
+//                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
                                 log(t);
                                 Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                             }
