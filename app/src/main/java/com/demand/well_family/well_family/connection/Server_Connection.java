@@ -292,6 +292,9 @@ public interface Server_Connection {
     @GET("{notification_id}/NotificationForCreatingFamily")
     Call<NotificationInfo> NotificationForCreatingFamily(@Path("notification_id") int notification_id);
 
+    @GET("{notification_id}/NotificationForWritingStory")
+    Call<NotificationInfo> NotificationForWritingStory(@Path("notification_id") int notification_id);
+
     @POST("update_notification_check")
     Call<ResponseBody> update_notification_check( @QueryMap HashMap<String, String> map);
 }
