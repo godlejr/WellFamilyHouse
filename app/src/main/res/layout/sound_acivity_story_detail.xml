@@ -414,7 +414,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
-                        android:id="@+id/textView22"
+                        android:id="@+id/blank"
                         android:layout_height="50dp" />
                 </LinearLayout>
             </LinearLayout>

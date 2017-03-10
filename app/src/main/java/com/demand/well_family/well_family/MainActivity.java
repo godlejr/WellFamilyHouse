@@ -131,7 +131,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         map.put("user_id", String.valueOf(user_id));
 
 
-        Call<ArrayList<User>> call_user_info = server_connection.user_Info(map);
+            Call<ArrayList<User>> call_user_info = server_connection.user_Info(map);
         call_user_info.enqueue(new Callback<ArrayList<User>>() {
             @Override
             public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {

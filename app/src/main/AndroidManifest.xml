@@ -82,6 +82,10 @@
         <activity android:name=".ReportActivity" />
         <activity android:name=".settings.SettingActivity" />
         <activity android:name=".notification.NotificationActivity" />
+        <activity android:name=".settings.ConfirmPasswordActivity" />
+        <activity android:name=".settings.SearchAccountActivity" />
+        <activity android:name=".settings.ConfirmAccountActivity" />
+        <!--<activity android:name=".notification.NotificationFamilyStoryDetail"/>-->
 
         <service android:name=".fcm.FirebaseMessageService">
             <intent-filter>

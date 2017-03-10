@@ -12,12 +12,10 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -335,6 +333,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 });
                 break;
+
             case R.id.btn_main_register:
                 Intent intent = new Intent(v.getContext(), AgreementActivity.class);
                 startActivity(intent);
@@ -357,7 +356,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         map.put("device_id", device_id);
         map.put("token", token);
         Call<ResponseBody> call_update_deviceId_token = server_connection.update_deviceId_token(userList.get(0).getId(), map);
-
         call_update_deviceId_token.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -369,6 +367,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 editor.putString("token", token);
                 editor.putInt("user_level", userList.get(0).getLevel());
                 editor.commit();
+
+
 
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);

@@ -21,6 +21,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -81,16 +82,26 @@ import static com.demand.well_family.well_family.LoginActivity.finishList;
  */
 
 public class SongStoryDetailActivity extends Activity implements CompoundButton.OnCheckedChangeListener {
-    private TextView tv_sound_story_detail_title, tv_sound_story_detail_singer, tv_sound_story_detail_writer_name,
-            tv_sound_story_detail_play, tv_sound_story_detail_end, tv_sound_story_detail_content, tv_sound_story_detail_location,
-            tv_sound_story_detail_date, tv_sound_story_detail_like_count, tv_sound_story_detail_comment_count;
+    private TextView tv_sound_story_detail_title;
+    private TextView tv_sound_story_detail_singer;
+    private TextView  tv_sound_story_detail_writer_name;
+    private TextView tv_sound_story_detail_play;
+    private TextView tv_sound_story_detail_end;
+    private TextView tv_sound_story_detail_content;
+    private TextView tv_sound_story_detail_location;
+    private TextView tv_sound_story_detail_date;
+    private TextView tv_sound_story_detail_like_count;
+    private TextView tv_sound_story_detail_comment_count;
 
     private NestedScrollView nsv_sound_story_detail;
     private CircleImageView iv_sound_story_detail_avatar;
     private SeekBar sb_sound_story_detail;
     private ImageView iv_sound_story_detail_play;
-    private RecyclerView rv_sound_story_detail, rv_sound_story_detail_comments;
-    private LinearLayout ll_sound_story_detail_location, ll_sound_story_detail_image, ll_sound_story_detail_play;
+    private RecyclerView rv_sound_story_detail;
+    private RecyclerView rv_sound_story_detail_comments;
+    private LinearLayout ll_sound_story_detail_location;
+    private LinearLayout ll_sound_story_detail_image;
+    private LinearLayout ll_sound_story_detail_play;
     private CheckBox cb_sound_story_detail;
 
     private EditText et_sound_story_comment;
@@ -112,6 +123,8 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     private ArrayList<CommentInfo> commentInfoList;
 
     //intent
+    private String user_name;
+    private String user_avatar;
     private int user_id;
     private int story_user_id;
     private String story_user_name;
@@ -127,11 +140,9 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     private boolean like_checked;
     private String content;
 
-
     //first like check
     private Boolean first_checked = false;
-    private String user_name;
-    private String user_avatar;
+
 
     //toolbar
     private DrawerLayout dl;
@@ -147,7 +158,6 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     private EmotionAdapter emotionAdapter;
 
     private static final int COMMENT_EDIT_REQUEST = 1;
-
 
     private static final Logger logger = LoggerFactory.getLogger(SongStoryDetailActivity.class);
     private SharedPreferences loginInfo;
@@ -182,7 +192,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         hits = getIntent().getIntExtra("hits", 0);
         like_checked = getIntent().getBooleanExtra("like_checked", false);
 
-
+        Log.e("tt", story_id + "");
         init();
 
         getCommentCount();

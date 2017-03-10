@@ -6,6 +6,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -24,6 +26,9 @@ import com.demand.well_family.well_family.log.LogFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -60,6 +65,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
 
         init();
         setToolbar(getWindow().getDecorView());
@@ -103,6 +109,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         toolbar_title.setText("회원 가입");
 
     }
+
     public void setBack() {
         finish();
     }
@@ -153,16 +160,18 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 if (!checkPassword(et_join_pwd.getText().toString())) {
                     Toast.makeText(v.getContext(), "비밀번호는 6~20자 대소문자, 숫자/특수문자를 포함해야합니다.", Toast.LENGTH_SHORT).show();
                 } else {
+                    String encrypt_password = encrypt_SHA256(et_join_pwd.getText().toString());
+                    Log.e("비밀번호", encrypt_password);
 
                     HashMap<String, String> map = new HashMap<>();
                     map.put("email", et_join_email.getText().toString());
-                    map.put("password", et_join_pwd.getText().toString());
+                    map.put("password", encrypt_password);
                     map.put("name", et_join_name.getText().toString());
                     map.put("birth", et_join_birthday.getText().toString());
                     map.put("phone", et_join_phone.getText().toString());
 
                     server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ResponseBody> call = server_connection.join(1,map);
+                    Call<ResponseBody> call = server_connection.join(1, map);
                     call.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -183,7 +192,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
             case R.id.btn_join_email_check:
                 et_email = et_join_email.getText().toString();
-                if(!setNotiVisible(et_join_email, noti_email)) {
+                if (!setNotiVisible(et_join_email, noti_email)) {
                 } else if (!checkEmail(et_email)) {
                     Toast.makeText(v.getContext(), "올바른 이메일 형식을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -193,18 +202,19 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         mapEmail.put("email", et_join_email.getText().toString());
 
                         server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                        Call<ArrayList<User>> call_email_check  =  server_connection.email_check(mapEmail);
+                        Call<ArrayList<User>> call_email_check = server_connection.email_check(mapEmail);
                         call_email_check.enqueue(new Callback<ArrayList<User>>() {
                             @Override
                             public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-                                if(response.body().size() == 0){
+                                if (response.body().size() == 0) {
                                     Toast.makeText(RegisterActivity.this, "사용가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
                                     email_duplicate_check = true;
-                                } else{
+                                } else {
                                     Toast.makeText(RegisterActivity.this, "사용중인 아이디입니다.", Toast.LENGTH_SHORT).show();
                                     email_duplicate_check = false;
                                 }
                             }
+
                             @Override
                             public void onFailure(Call<ArrayList<User>> call, Throwable t) {
                                 log(t);
@@ -244,17 +254,32 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         return isNormal;
     }
 
-    private static void log(Throwable throwable){
-        StackTraceElement[] ste =  throwable.getStackTrace();
+    public String encrypt_SHA256(String pwd)  {
+        MessageDigest messageDigest = null;
+
+        try {
+            messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(pwd.getBytes(), 0, pwd.length());
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return String.format("%064x", new java.math.BigInteger(1, messageDigest.digest()));
+
+    }
+
+    private static void log(Throwable throwable) {
+        StackTraceElement[] ste = throwable.getStackTrace();
         String className = ste[0].getClassName();
         String methodName = ste[0].getMethodName();
         int lineNumber = ste[0].getLineNumber();
         String fileName = ste[0].getFileName();
 
-        if(LogFlag.printFlag){
-            if(logger.isInfoEnabled()){
+        if (LogFlag.printFlag) {
+            if (logger.isInfoEnabled()) {
                 logger.info("Exception: " + throwable.getMessage());
-                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+                logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
             }
         }
     }
