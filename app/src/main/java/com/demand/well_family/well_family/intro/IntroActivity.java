@@ -83,6 +83,7 @@ public class IntroActivity extends Activity {
                                     editor.remove("user_phone");
                                     editor.remove("user_level");
                                     editor.remove("device_id");
+                                    editor.remove("access_token");
                                     editor.commit();
 
                                     Intent mainIntent = new Intent(IntroActivity.this, LoginActivity.class);
