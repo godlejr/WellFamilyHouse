@@ -218,10 +218,14 @@ public class EditUserActivity extends Activity {
 
     public String addBase64Bitmap(Bitmap bm) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 90, baos);
+        bm.compress(Bitmap.CompressFormat.JPEG, 40, baos);
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b, Base64.NO_WRAP | Base64.URL_SAFE);
     }
+
+
+
+
 
 
     private void init() {
