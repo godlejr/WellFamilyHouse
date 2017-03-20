@@ -56,11 +56,10 @@ public class ErrorUtils {
                 break;
         }
 
-        Log.e("RESPONSE_CODE", "(" + response.code() + ") " + response.message());
+        Log.e("RESPONSE_CODE", "(" + response.code() + ")  " + response.message());
         log();
         return new APIError(response.code(), errorMessage);
     }
-
 
 
     public void log() {
