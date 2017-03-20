@@ -15,8 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.demand.well_family.well_family.connection.Server_Connection;
+import com.demand.well_family.well_family.connection.MainServerConnection;
+import com.demand.well_family.well_family.connection.UserServerConnection;
 import com.demand.well_family.well_family.dto.Category;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,13 +40,16 @@ public class ReportActivity extends Activity {
     private int report_category_id;
     private String comment_content;
     private int user_id;
+    private String access_token;
 
     private TextView tv_report_content;
     private TextView tv_report_author_name;
     private RecyclerView rv_report;
     private ReportAdapter reportAdapter;
-    private Server_Connection server_connection;
     private SharedPreferences loginInfo;
+
+    private MainServerConnection mainServerConnection;
+    private UserServerConnection userServerConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +64,7 @@ public class ReportActivity extends Activity {
         //user_info
         loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
         user_id = loginInfo.getInt("user_id", 0);
+        access_token = loginInfo.getString("access_token", null);
 
         init();
     }
@@ -69,8 +76,8 @@ public class ReportActivity extends Activity {
         tv_report_content.setText(comment_content);
 
         rv_report = (RecyclerView) findViewById(R.id.rv_report);
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        final Call<ArrayList<Category>> call_report_category_list = server_connection.report_category_List();
+        mainServerConnection = new HeaderInterceptor(access_token).getClientForMainServer().create(MainServerConnection.class);
+        final Call<ArrayList<Category>> call_report_category_list = mainServerConnection.report_category_List();
         call_report_category_list.enqueue(new Callback<ArrayList<Category>>() {
             @Override
             public void onResponse(Call<ArrayList<Category>> call, Response<ArrayList<Category>> response) {
@@ -122,13 +129,17 @@ public class ReportActivity extends Activity {
                     map.put("comment_id", String.valueOf(comment_id));
 
                     Log.e("신고", user_id + "," + comment_category_id + " ," + report_category_id + "," + comment_id);
-                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    final Call<ResponseBody> call_report = server_connection.insert_comment_report(user_id, map);
+                    userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                    final Call<ResponseBody> call_report = userServerConnection.insert_comment_report(user_id, map);
                     call_report.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            Toast.makeText(ReportActivity.this, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                            finish();
+                            if(response.isSuccessful()) {
+                                Toast.makeText(ReportActivity.this, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                finish();
+                            } else{
+                                Toast.makeText(ReportActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override

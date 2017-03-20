@@ -3,7 +3,6 @@ package com.demand.well_family.well_family.settings;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,12 +14,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.connection.Server_Connection;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by ㅇㅇ on 2017-03-07.

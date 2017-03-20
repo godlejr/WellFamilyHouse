@@ -32,14 +32,15 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.connection.SongServerConnection;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.settings.SettingActivity;
-import com.demand.well_family.well_family.connection.Server_Connection;
-import com.demand.well_family.well_family.dto.CommentCount;
 import com.demand.well_family.well_family.dto.Song;
 import com.demand.well_family.well_family.dto.SongCategory;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,9 +62,13 @@ import static com.demand.well_family.well_family.LoginActivity.finishList;
  */
 
 public class SongMainActivity extends Activity implements View.OnClickListener {
-    private RecyclerView rv_sound_famous_chart, rv_sound_category;
-    private ImageButton ib_sound_chart, ib_sound_today;
-    private TextView tv_sound_random_title, tv_sound_random_singer, tv_sound_random_comment_count;
+    private RecyclerView rv_sound_famous_chart;
+    private RecyclerView rv_sound_category;
+    private ImageButton ib_sound_chart;
+    private ImageButton ib_sound_today;
+    private TextView tv_sound_random_title;
+    private TextView tv_sound_random_singer;
+    private TextView tv_sound_random_comment_count;
     private ImageView iv_sound_random_avatar;
     private static final Logger logger = LoggerFactory.getLogger(SongMainActivity.class);
 
@@ -75,6 +80,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
     private String user_email;
     private String user_phone;
     private String user_birth;
+    private String access_token;
 
     //random song info
     private int random_id;
@@ -86,7 +92,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
     private int random_category_id;
     private String random_created_at;
 
-    private Server_Connection server_connection;
+    private SongServerConnection songServerConnection;
     private ArrayList<SongCategory> songCategoryList;
     private LinearLayout ll_sound_random;
     private ArrayList<Song> songList;
@@ -117,6 +123,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
         setToolbar(this.getWindow().getDecorView(), this, "추억소리");
     }
 
@@ -127,55 +134,64 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
 
         iv_sound_random_avatar = (ImageView) findViewById(R.id.iv_sound_random_avatar);
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<Song>> call_song_random = server_connection.song_random();
-        call_song_random.enqueue(new Callback<ArrayList<Song>>() {
+        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        Call<Song> call_song_random = songServerConnection.song_random();
+        call_song_random.enqueue(new Callback<Song>() {
             @Override
-            public void onResponse(Call<ArrayList<Song>> call, Response<ArrayList<Song>> response) {
-                if (response.body().size() == 0) {
+            public void onResponse(Call<Song> call, Response<Song> response) {
+                if (response.isSuccessful()) {
+                    Song songInfo = response.body();
 
+                    if (songInfo == null) {
+
+                    } else {
+                        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+                        random_id = songInfo.getId();
+                        random_avatar = songInfo.getAvatar();
+                        random_singer = songInfo.getSinger();
+                        random_title = songInfo.getTitle();
+                        random_name = songInfo.getName();
+                        random_category_id = songInfo.getCategory_id();
+                        random_created_at = songInfo.getCreated_at();
+                        random_ext = songInfo.getExt();
+
+                        Call<Integer> call_song_comment_Count = songServerConnection.song_comment_Count(random_id);
+                        call_song_comment_Count.enqueue(new Callback<Integer>() {
+                            @Override
+                            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                                if (response.isSuccessful()) {
+                                    String like_count = String.valueOf(response.body());
+                                    tv_sound_random_comment_count.setText(like_count + "건");
+
+                                    tv_sound_random_title.setText(random_title);
+                                    tv_sound_random_singer.setText(random_singer);
+
+                                    Glide.with(SongMainActivity.this).load(getString(R.string.cloud_front_songs_avatar) + random_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_random_avatar);
+
+                                    ll_sound_random = (LinearLayout) findViewById(R.id.ll_sound_random);
+                                    ib_sound_today = (ImageButton) findViewById(R.id.ib_sound_today);
+
+                                    ib_sound_today.setOnClickListener(SongMainActivity.this);
+                                    ll_sound_random.setOnClickListener(SongMainActivity.this);
+                                } else {
+                                    Toast.makeText(SongMainActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Integer> call, Throwable t) {
+                                log(t);
+                                Toast.makeText(SongMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
                 } else {
-                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    random_id = response.body().get(0).getId();
-                    random_avatar = response.body().get(0).getAvatar();
-                    random_singer = response.body().get(0).getSinger();
-                    random_title = response.body().get(0).getTitle();
-                    random_name = response.body().get(0).getName();
-                    random_category_id = response.body().get(0).getCategory_id();
-                    random_created_at = response.body().get(0).getCreated_at();
-                    random_ext = response.body().get(0).getExt();
-
-                    Call<ArrayList<CommentCount>> call_song_comment_Count = server_connection.song_comment_Count(random_id);
-                    call_song_comment_Count.enqueue(new Callback<ArrayList<CommentCount>>() {
-                        @Override
-                        public void onResponse(Call<ArrayList<CommentCount>> call, Response<ArrayList<CommentCount>> response) {
-                            String like_count = String.valueOf(response.body().get(0).getComment_count());
-                            tv_sound_random_comment_count.setText(like_count + "건");
-
-                            tv_sound_random_title.setText(random_title);
-                            tv_sound_random_singer.setText(random_singer);
-
-                            Glide.with(SongMainActivity.this).load(getString(R.string.cloud_front_songs_avatar) + random_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_random_avatar);
-
-                            ll_sound_random = (LinearLayout) findViewById(R.id.ll_sound_random);
-                            ib_sound_today = (ImageButton) findViewById(R.id.ib_sound_today);
-
-                            ib_sound_today.setOnClickListener(SongMainActivity.this);
-                            ll_sound_random.setOnClickListener(SongMainActivity.this);
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
-                            log(t);
-                            Toast.makeText(SongMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    Toast.makeText(SongMainActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Song>> call, Throwable t) {
+            public void onFailure(Call<Song> call, Throwable t) {
                 log(t);
                 Toast.makeText(SongMainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
@@ -272,11 +288,6 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                         startActivity(intent);
 
                         break;
-
-                    case R.id.menu_search:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
-                        break;
-
                     case R.id.menu_market:
                         intent = new Intent(SongMainActivity.this, MarketMainActivity.class);
                         startActivity(intent);
@@ -303,6 +314,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                         editor.remove("user_avatar");
                         editor.remove("user_phone");
                         editor.remove("user_level");
+                        editor.remove("access_token");
                         editor.commit();
 
                         intent = new Intent(SongMainActivity.this, LoginActivity.class);
@@ -350,11 +362,14 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.ib_sound_today:
             case R.id.ll_sound_random:
-                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                Call<ResponseBody> call_insert_song_hit = server_connection.Insert_Song_hit(random_id);
+                songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+                Call<ResponseBody> call_insert_song_hit = songServerConnection.Insert_Song_hit(random_id);
                 call_insert_song_hit.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if(!response.isSuccessful()){
+                            Toast.makeText(SongMainActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        }
                         ///scess
                     }
 
@@ -397,12 +412,14 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
             iv_sound_chart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ResponseBody> call_insert_song_hit = server_connection.Insert_Song_hit(songList.get(getAdapterPosition()).getId());
+                    songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+                    Call<ResponseBody> call_insert_song_hit = songServerConnection.Insert_Song_hit(songList.get(getAdapterPosition()).getId());
                     call_insert_song_hit.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
+                            if(!response.isSuccessful()){
+                                Toast.makeText(SongMainActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
@@ -462,31 +479,35 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
     }
 
     private void getChartData() {
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
 
-        Call<ArrayList<Song>> call_song_list_by_Hits = server_connection.song_list_by_Hits();
+        Call<ArrayList<Song>> call_song_list_by_Hits = songServerConnection.song_list_by_Hits();
 
         call_song_list_by_Hits.enqueue(new Callback<ArrayList<Song>>() {
             @Override
             public void onResponse(Call<ArrayList<Song>> call, Response<ArrayList<Song>> response) {
-                songList = response.body();
-                rv_sound_famous_chart = (RecyclerView) findViewById(R.id.rv_sound_famous_chart);
-                rv_sound_famous_chart.setAdapter(new ChartAdapter(SongMainActivity.this, songList, R.layout.sound_item_chart));
-                rv_sound_famous_chart.setLayoutManager(new LinearLayoutManager(SongMainActivity.this, LinearLayoutManager.HORIZONTAL, false));
-                rv_sound_famous_chart.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin) / 2));
+                if(response.isSuccessful()) {
+                    songList = response.body();
+                    rv_sound_famous_chart = (RecyclerView) findViewById(R.id.rv_sound_famous_chart);
+                    rv_sound_famous_chart.setAdapter(new ChartAdapter(SongMainActivity.this, songList, R.layout.sound_item_chart));
+                    rv_sound_famous_chart.setLayoutManager(new LinearLayoutManager(SongMainActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                    rv_sound_famous_chart.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin) / 2));
 
-                final ArrayList<Song> IntentSongList = songList;
-                ib_sound_chart = (ImageButton) findViewById(R.id.ib_sound_chart);
-                ib_sound_chart.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // 인기 추억 사운드
+                    final ArrayList<Song> IntentSongList = songList;
+                    ib_sound_chart = (ImageButton) findViewById(R.id.ib_sound_chart);
+                    ib_sound_chart.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // 인기 추억 사운드
 
-                        Intent intent = new Intent(SongMainActivity.this, SongChartListActivity.class);
-                        intent.putExtra("songList", IntentSongList);
-                        startActivity(intent);
-                    }
-                });
+                            Intent intent = new Intent(SongMainActivity.this, SongChartListActivity.class);
+                            intent.putExtra("songList", IntentSongList);
+                            startActivity(intent);
+                        }
+                    });
+                } else {
+                    Toast.makeText(SongMainActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -553,19 +574,23 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
     }
 
     private void getCategoryData() {
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
 
-        Call<ArrayList<SongCategory>> call_song_category_List = server_connection.song_category_List();
+        Call<ArrayList<SongCategory>> call_song_category_List = songServerConnection.song_category_List();
 
         call_song_category_List.enqueue(new Callback<ArrayList<SongCategory>>() {
             @Override
             public void onResponse(Call<ArrayList<SongCategory>> call, Response<ArrayList<SongCategory>> response) {
-                songCategoryList = response.body();
-                rv_sound_category = (RecyclerView) findViewById(R.id.rv_sound_category);
-                rv_sound_category.setAdapter(new CategoryAdapter(SongMainActivity.this, songCategoryList, R.layout.sound_item_category));
-                rv_sound_category.setLayoutManager(new LinearLayoutManager(SongMainActivity.this, LinearLayoutManager.VERTICAL, false));
-                rv_sound_category.setLayoutManager(new GridLayoutManager(SongMainActivity.this, 3));
-                rv_sound_category.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin) / 2)); // horizontal spacing
+                if(response.isSuccessful()) {
+                    songCategoryList = response.body();
+                    rv_sound_category = (RecyclerView) findViewById(R.id.rv_sound_category);
+                    rv_sound_category.setAdapter(new CategoryAdapter(SongMainActivity.this, songCategoryList, R.layout.sound_item_category));
+                    rv_sound_category.setLayoutManager(new LinearLayoutManager(SongMainActivity.this, LinearLayoutManager.VERTICAL, false));
+                    rv_sound_category.setLayoutManager(new GridLayoutManager(SongMainActivity.this, 3));
+                    rv_sound_category.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin) / 2)); // horizontal spacing
+                } else {
+                    Toast.makeText(SongMainActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override

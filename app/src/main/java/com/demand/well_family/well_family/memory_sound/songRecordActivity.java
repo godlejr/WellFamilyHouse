@@ -59,14 +59,17 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.connection.SongServerConnection;
+import com.demand.well_family.well_family.connection.SongStoryServerConnection;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.settings.SettingActivity;
-import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Range;
 import com.demand.well_family.well_family.dto.SongStory;
 import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
+import com.demand.well_family.well_family.util.ErrorUtils;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
 import org.slf4j.Logger;
@@ -102,29 +105,40 @@ import static com.demand.well_family.well_family.LoginActivity.finishList;
  */
 
 public class SongRecordActivity extends Activity {
-    private TextView tv_record_song_title, tv_record_song_singer;
+    private TextView tv_record_song_title;
+    private TextView tv_record_song_singer;
     private ImageView iv_record_user_avatar;
     private TextView tv_record_user_name;
     private EditText et_sound_record_memory;
 
     private Spinner sp_sound;
-    private LinearLayout ll_sound_record_container, ll_sound_record_location;
-    private ImageView iv_sound_record, iv_sound_record_complete_play, iv_sound_record_complete_replay;
+    private LinearLayout ll_sound_record_container;
+    private LinearLayout ll_sound_record_location;
+    private ImageView iv_sound_record;
+    private ImageView iv_sound_record_complete_play;
+    private ImageView iv_sound_record_complete_replay;
     private MediaRecorder recorder;
-    private String fileName, dirName, path;
+    private String fileName;
+    private String dirName;
+    private String path;
     private boolean isRecording = false;
 
-    private TextView tv_sound_record, tv_sound_record_complete;
-    private int timer_sec = 0, timer_min = 0;
+    private TextView tv_sound_record;
+    private TextView tv_sound_record_complete;
+    private int timer_sec = 0;
+    private int timer_min = 0;
     private TimerHandler timerHandler;
     private Timer timer;
     private SeekBar sb_sound_record;
     private File file = null;
-    private boolean isPlaying = false, isPaused = false;
+    private boolean isPlaying = false;
+    private boolean isPaused = false;
     private int pausePos;
     private MediaPlayer mp;
 
-    private Button btn_sound_record_image_upload, btn_sound_record_submit, btn_sound_record_select_emotion;
+    private Button btn_sound_record_image_upload;
+    private Button btn_sound_record_submit;
+    private Button btn_sound_record_select_emotion;
     private RecyclerView rv_sound_record_image_upload;
     private ArrayList<Uri> photoList;
     private ArrayList<String> pathList;
@@ -134,7 +148,8 @@ public class SongRecordActivity extends Activity {
     private EditText et_sound_record_location;
     private String location = null;
     private ArrayAdapter<String> spinnerAdapter;
-    private ImageView iv_sound_record_location, iv_sound_record_location_btn;
+    private ImageView iv_sound_record_location;
+    private ImageView iv_sound_record_location_btn;
 
     private HashMap<Integer, String> spList;
 
@@ -146,6 +161,7 @@ public class SongRecordActivity extends Activity {
     private String user_email;
     private String user_phone;
     private String user_birth;
+    private String access_token;
 
     //song info
     private int song_id;
@@ -154,7 +170,8 @@ public class SongRecordActivity extends Activity {
     private String song_avatar;
 
     //server
-    private Server_Connection server_connection;
+    private SongServerConnection songServerConnection;
+    private SongStoryServerConnection songStoryServerConnection;
     private RealPathUtil realPathUtil;
     private ProgressDialog progressDialog;
 
@@ -195,8 +212,6 @@ public class SongRecordActivity extends Activity {
         checkPermission();
         init();
         setSpinner();
-
-
     }
 
     private void setUserInfo() {
@@ -208,12 +223,12 @@ public class SongRecordActivity extends Activity {
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
         setToolbar(this.getWindow().getDecorView(), this, "추억기록");
     }
 
     // toolbar & menu
     public void setToolbar(View view, Context context, String title) {
-
         NavigationView nv = (NavigationView) view.findViewById(R.id.nv);
         nv.setItemIconTintList(null);
         dl = (DrawerLayout) view.findViewById(R.id.dl);
@@ -302,10 +317,6 @@ public class SongRecordActivity extends Activity {
 
                         break;
 
-                    case R.id.menu_search:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
-                        break;
-
                     case R.id.menu_market:
                         intent = new Intent(SongRecordActivity.this, MarketMainActivity.class);
                         startActivity(intent);
@@ -332,6 +343,7 @@ public class SongRecordActivity extends Activity {
                         editor.remove("user_avatar");
                         editor.remove("user_phone");
                         editor.remove("user_level");
+                        editor.remove("access_token");
                         editor.commit();
 
                         intent = new Intent(SongRecordActivity.this, LoginActivity.class);
@@ -381,59 +393,62 @@ public class SongRecordActivity extends Activity {
 
         spList = new HashMap<Integer, String>();
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<Range>> call_song_range = server_connection.song_range_List();
+        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        Call<ArrayList<Range>> call_song_range = songServerConnection.song_range_List();
         call_song_range.enqueue(new Callback<ArrayList<Range>>() {
             @Override
             public void onResponse(Call<ArrayList<Range>> call, Response<ArrayList<Range>> response) {
-                ArrayList<Range> rangeList = response.body();
-                int rangeListSize = rangeList.size();
+                if (response.isSuccessful()) {
+                    ArrayList<Range> rangeList = response.body();
+                    int rangeListSize = rangeList.size();
 
-                for (int i = 0; i < rangeListSize; i++) {
-                    spList.put(rangeList.get(i).getId(), rangeList.get(i).getName());
+                    for (int i = 0; i < rangeListSize; i++) {
+                        spList.put(rangeList.get(i).getId(), rangeList.get(i).getName());
+                    }
+
+                    String[] spinnerArray = new String[rangeListSize];
+                    for (int i = 0; i < rangeListSize; i++) {
+                        spinnerArray[i] = spList.get(i + 1);
+                    }
+
+                    spinnerAdapter = new ArrayAdapter<String>(SongRecordActivity.this, R.layout.custom_spinner_item, spinnerArray) {
+                        @Override
+                        public View getView(int position, View convertView, ViewGroup parent) {
+                            View view = super.getDropDownView(position, convertView, parent);
+                            TextView tv = (TextView) view;
+                            tv.setBackgroundColor(Color.WHITE);
+                            tv.setTextColor(Color.parseColor("#424242"));
+                            tv.append("  ▼");
+                            return view;
+                        }
+
+                        @Override
+                        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                            View view = super.getDropDownView(position, convertView, parent);
+                            TextView tv = (TextView) view;
+                            tv.setBackgroundColor(Color.WHITE);
+                            tv.setTextColor(Color.parseColor("#424242"));
+                            tv.setGravity(Gravity.CENTER);
+                            return view;
+                        }
+                    };
+                    spinnerAdapter.setDropDownViewResource(R.layout.custom_spinner_item);
+
+                    sp_sound.setAdapter(spinnerAdapter);
+                    sp_sound.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                            range_id = position + 1;
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> parent) {
+                            range_id = 1;
+                        }
+                    });
+                } else {
+                    Toast.makeText(SongRecordActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
-
-                String[] spinnerArray = new String[rangeListSize];
-                for (int i = 0; i < rangeListSize; i++) {
-                    spinnerArray[i] = spList.get(i + 1);
-                }
-
-                spinnerAdapter = new ArrayAdapter<String>(SongRecordActivity.this, R.layout.custom_spinner_item, spinnerArray) {
-                    @Override
-                    public View getView(int position, View convertView, ViewGroup parent) {
-                        View view = super.getDropDownView(position, convertView, parent);
-                        TextView tv = (TextView) view;
-                        tv.setBackgroundColor(Color.WHITE);
-                        tv.setTextColor(Color.parseColor("#424242"));
-                        tv.append("  ▼");
-                        return view;
-                    }
-
-                    @Override
-                    public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                        View view = super.getDropDownView(position, convertView, parent);
-                        TextView tv = (TextView) view;
-                        tv.setBackgroundColor(Color.WHITE);
-                        tv.setTextColor(Color.parseColor("#424242"));
-                        tv.setGravity(Gravity.CENTER);
-                        return view;
-                    }
-                };
-                spinnerAdapter.setDropDownViewResource(R.layout.custom_spinner_item);
-
-                sp_sound.setAdapter(spinnerAdapter);
-                sp_sound.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        range_id = position + 1;
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                        range_id = 1;
-                    }
-                });
-
             }
 
             @Override
@@ -835,16 +850,13 @@ public class SongRecordActivity extends Activity {
                 } else {
                     final int photoListSize = photoList.size();
 
-                    if (et_sound_record_memory.getText().toString().equals("") && file == null && photoList.size() == 0) {
-                        return;
-                    }
-
                     if (ll_sound_record_location.getVisibility() == View.VISIBLE) {
                         location = et_sound_record_location.getText().toString();
                     }
 
                     // 등록버튼
-                    if (photoListSize == 0 && et_sound_record_memory.getText().toString().length() == 0 && file == null && location.length() == 0) {
+                    if (photoListSize == 0 && et_sound_record_memory.getText().toString().length() == 0 && file == null && location == null && emotionList == null) {
+                        Toast.makeText(SongRecordActivity.this, "추억을 작성해주세요.", Toast.LENGTH_SHORT).show();
                     } else {
                         if (location == null) {
                             location = "";
@@ -871,64 +883,29 @@ public class SongRecordActivity extends Activity {
                                 map.put("song_singer", song_singer);
                                 map.put("content", et_sound_record_memory.getText().toString());
                                 map.put("location", location);
+                                map.put("user_id", String.valueOf(user_id));
 
-
-                                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                Log.e("sdf", range_id + "");
-                                Call<ArrayList<SongStory>> call_insert_song_story = server_connection.insert_song_story(user_id, map);
-                                call_insert_song_story.enqueue(new Callback<ArrayList<SongStory>>() {
+                                songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+                                Log.e("range_id", range_id + "");
+                                Call<SongStory> call_insert_song_story = songServerConnection.insert_song_story(map);
+                                call_insert_song_story.enqueue(new Callback<SongStory>() {
                                     @Override
-                                    public void onResponse(Call<ArrayList<SongStory>> call, Response<ArrayList<SongStory>> response) {
-                                        Log.e("ddd",response.toString());
-                                        final int song_story_id = response.body().get(0).getId();
-                                        for (int i = 0; i < photoListSize; i++) {
-                                            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(photoList.get(i), i)));
-                                            Call<ResponseBody> call_write_photo = server_connection.insert_song_photos(song_story_id, requestBody);
+                                    public void onResponse(Call<SongStory> call, Response<SongStory> response) {
+                                        if (response.isSuccessful()) {
+                                            final int song_story_id = response.body().getId();
 
-                                            call_write_photo.enqueue(new Callback<ResponseBody>() {
-                                                @Override
-                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                    //scess
-                                                }
+                                            // photos
+                                            for (int i = 0; i < photoListSize; i++) {
+                                                songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                                                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(photoList.get(i), i)));
+                                                Call<ResponseBody> call_write_photo = songStoryServerConnection.insert_song_photos(song_story_id, requestBody);
 
-                                                @Override
-                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                    log(t);
-                                                    Toast.makeText(SongRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                                }
-                                            });
-                                        }
-
-                                        // 녹음 파일 업로드
-                                        if (file != null) {
-                                            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Audio(file));
-                                            Call<ResponseBody> call_write_audio = server_connection.insert_song_audio(song_story_id, requestBody);
-                                            call_write_audio.enqueue(new Callback<ResponseBody>() {
-                                                @Override
-                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                    //scess
-                                                }
-
-                                                @Override
-                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                    log(t);
-                                                    Toast.makeText(SongRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                                }
-                                            });
-                                        }
-                                        if(emotionList != null) {
-                                            int emotionListSize = emotionList.size();
-
-                                            for (int i = 0; i < emotionListSize; i++) {
-                                                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                                HashMap<String, String> map = new HashMap<String, String>();
-                                                map.put("song_story_emotion_id", String.valueOf(emotionList.get(i).getId()));
-                                                Call<ResponseBody> call_insert_emotions = server_connection.insert_emotion_into_song_story(song_story_id, map);
-                                                call_insert_emotions.enqueue(new Callback<ResponseBody>() {
+                                                call_write_photo.enqueue(new Callback<ResponseBody>() {
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                        if (!response.isSuccessful()) {
+                                                            Toast.makeText(SongRecordActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                        }
                                                         //scess
                                                     }
 
@@ -939,11 +916,62 @@ public class SongRecordActivity extends Activity {
                                                     }
                                                 });
                                             }
+
+                                            // audio
+                                            if (file != null) {
+                                                songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                                                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Audio(file));
+                                                Call<ResponseBody> call_write_audio = songStoryServerConnection.insert_song_audio(song_story_id, requestBody);
+                                                call_write_audio.enqueue(new Callback<ResponseBody>() {
+                                                    @Override
+                                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                        if (!response.isSuccessful()) {
+                                                            Toast.makeText(SongRecordActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                        //scess
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                        log(t);
+                                                        Toast.makeText(SongRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                            }
+
+                                            // emotion
+                                            if (emotionList != null) {
+                                                int emotionListSize = emotionList.size();
+
+                                                for (int i = 0; i < emotionListSize; i++) {
+                                                    songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                                                    HashMap<String, String> map = new HashMap<String, String>();
+                                                    map.put("song_story_emotion_id", String.valueOf(emotionList.get(i).getId()));
+                                                    Call<ResponseBody> call_insert_emotions = songStoryServerConnection.insert_emotion_into_song_story(song_story_id, map);
+                                                    call_insert_emotions.enqueue(new Callback<ResponseBody>() {
+                                                        @Override
+                                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                            if (!response.isSuccessful()) {
+                                                                Toast.makeText(SongRecordActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                            }
+                                                            //scess
+                                                        }
+
+                                                        @Override
+                                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                            log(t);
+                                                            Toast.makeText(SongRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        } else {
+                                            Toast.makeText(SongRecordActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
                                     @Override
-                                    public void onFailure(Call<ArrayList<SongStory>> call, Throwable t) {
+                                    public void onFailure(Call<SongStory> call, Throwable t) {
                                         log(t);
                                         Toast.makeText(SongRecordActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                     }

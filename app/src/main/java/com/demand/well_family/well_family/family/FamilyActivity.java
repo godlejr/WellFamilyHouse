@@ -41,14 +41,14 @@ import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.WriteActivity;
-import com.demand.well_family.well_family.connection.Server_Connection;
-import com.demand.well_family.well_family.dto.Check;
-import com.demand.well_family.well_family.dto.CommentCount;
-import com.demand.well_family.well_family.dto.LikeCount;
+import com.demand.well_family.well_family.connection.FamilyServerConnection;
+import com.demand.well_family.well_family.connection.StoryServerConnection;
+import com.demand.well_family.well_family.connection.UserServerConnection;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.photos.PhotoPopupActivity;
@@ -56,6 +56,7 @@ import com.demand.well_family.well_family.photos.PhotosActivity;
 import com.demand.well_family.well_family.search.SearchUserActivity;
 import com.demand.well_family.well_family.settings.SettingActivity;
 import com.demand.well_family.well_family.users.UserActivity;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,13 +135,16 @@ public class FamilyActivity extends Activity {
     private Message msg;
     private ImageView iv_family_writer_avatar;
 
-    private Server_Connection server_connection;
+    private FamilyServerConnection familyServerConnection;
+    private StoryServerConnection storyServerConnection;
+    private UserServerConnection userServerConnection;
     private LinearLayout ll_user_add_exist;
     private ContentAddHandler contentAddHandler;
 
     private static final Logger logger = LoggerFactory.getLogger(FamilyActivity.class);
     private SharedPreferences loginInfo;
     private int notification_flag;
+    private String access_token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,6 +204,7 @@ public class FamilyActivity extends Activity {
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
         setToolbar(this.getWindow().getDecorView(), this.getApplicationContext(), family_name);
     }
 
@@ -293,11 +298,6 @@ public class FamilyActivity extends Activity {
                         startActivity(intent);
 
                         break;
-
-                    case R.id.menu_search:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
-                        break;
-
                     case R.id.menu_market:
                         intent = new Intent(FamilyActivity.this, MarketMainActivity.class);
                         startActivity(intent);
@@ -324,6 +324,7 @@ public class FamilyActivity extends Activity {
                         editor.remove("user_avatar");
                         editor.remove("user_phone");
                         editor.remove("user_level");
+                        editor.remove("access_token");
                         editor.commit();
 
                         intent = new Intent(FamilyActivity.this, LoginActivity.class);
@@ -419,40 +420,44 @@ public class FamilyActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-
-                Call<ArrayList<StoryInfo>> call = server_connection.family_content_List(family_id);
+//                familyServerConnection = FamilyServerConnection.retrofit.create(FamilyServerConnection.class);
+                familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
+                Call<ArrayList<StoryInfo>> call = familyServerConnection.family_content_List(family_id);
                 call.enqueue(new Callback<ArrayList<StoryInfo>>() {
                     @Override
                     public void onResponse(Call<ArrayList<StoryInfo>> call, Response<ArrayList<StoryInfo>> response) {
-                        contentList = response.body();
-                        content_size = contentList.size();
+                        if(response.isSuccessful()) {
+                            contentList = response.body();
+                            content_size = contentList.size();
 
-                        if (content_size == 0) {
-                            // contents 비어있음
-                        } else {
-//                            content_size = contentList.size();
-                            int loopSize = 0;
-
-                            if (content_size <= CONTENTS_OFFSET) {
-                                loopSize = content_size;
-                                content_isFinished = true;
+                            if (content_size == 0) {
+                                // contents 비어있음
                             } else {
-                                loopSize = CONTENTS_OFFSET;
-                                content_size -= loopSize;
-                            }
-                            for (int i = 0; i < loopSize; i++) {
-                                storyList.add(new StoryInfo(contentList.get(i).getUser_id(), contentList.get(i).getName(), contentList.get(i).getAvatar(),
-                                        contentList.get(i).getStory_id(), contentList.get(i).getCreated_at(), contentList.get(i).getContent()));
-                            }
-                        }
-                        contentAdapter = new ContentAdapter(FamilyActivity.this, storyList, R.layout.item_main_story);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("contentAdapter", contentAdapter);
+//                            content_size = contentList.size();
+                                int loopSize = 0;
 
-                        msg = new Message();
-                        msg.setData(bundle);
-                        mainHanlder.sendMessage(msg);
+                                if (content_size <= CONTENTS_OFFSET) {
+                                    loopSize = content_size;
+                                    content_isFinished = true;
+                                } else {
+                                    loopSize = CONTENTS_OFFSET;
+                                    content_size -= loopSize;
+                                }
+                                for (int i = 0; i < loopSize; i++) {
+                                    storyList.add(new StoryInfo(contentList.get(i).getUser_id(), contentList.get(i).getName(), contentList.get(i).getAvatar(),
+                                            contentList.get(i).getStory_id(), contentList.get(i).getCreated_at(), contentList.get(i).getContent()));
+                                }
+                            }
+                            contentAdapter = new ContentAdapter(FamilyActivity.this, storyList, R.layout.item_main_story);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("contentAdapter", contentAdapter);
+
+                            msg = new Message();
+                            msg.setData(bundle);
+                            mainHanlder.sendMessage(msg);
+                        }else {
+                            Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -614,16 +619,21 @@ public class FamilyActivity extends Activity {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (storyList.get(getAdapterPosition()).getFirst_checked()) {
                         if (isChecked) {
-                            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+//                            storyServerConnection = StoryServerConnection.retrofit.create(StoryServerConnection.class);
+                            storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
                             HashMap<String, String> map = new HashMap<>();
                             map.put("user_id", String.valueOf(user_id));
 
-                            Call<ResponseBody> call_like = server_connection.family_content_like_up(storyList.get(getAdapterPosition()).getStory_id(), map);
+                            Call<ResponseBody> call_like = storyServerConnection.family_content_like_up(storyList.get(getAdapterPosition()).getStory_id(), map);
                             call_like.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    tv_item_main_story_like.setText(String.valueOf(Integer.parseInt(tv_item_main_story_like.getText().toString()) + 1));
-                                    storyList.get(getAdapterPosition()).setChecked(true);
+                                    if(response.isSuccessful()) {
+                                        tv_item_main_story_like.setText(String.valueOf(Integer.parseInt(tv_item_main_story_like.getText().toString()) + 1));
+                                        storyList.get(getAdapterPosition()).setChecked(true);
+                                    } else {
+                                        Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    }
                                 }
 
                                 @Override
@@ -633,16 +643,18 @@ public class FamilyActivity extends Activity {
                                 }
                             });
                         } else {
-                            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                            HashMap<String, String> map = new HashMap<>();
-                            map.put("user_id", String.valueOf(user_id));
+                            storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
 
-                            Call<ResponseBody> call_dislike = server_connection.family_content_like_down(storyList.get(getAdapterPosition()).getStory_id(), map);
+                            Call<ResponseBody> call_dislike = storyServerConnection.family_content_like_down(storyList.get(getAdapterPosition()).getStory_id(), user_id);
                             call_dislike.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    tv_item_main_story_like.setText(String.valueOf(Integer.parseInt(tv_item_main_story_like.getText().toString()) - 1));
-                                    storyList.get(getAdapterPosition()).setChecked(false);
+                                    if(response.isSuccessful()) {
+                                        tv_item_main_story_like.setText(String.valueOf(Integer.parseInt(tv_item_main_story_like.getText().toString()) - 1));
+                                        storyList.get(getAdapterPosition()).setChecked(false);
+                                    } else{
+                                        Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    }
                                 }
 
                                 @Override
@@ -670,35 +682,38 @@ public class FamilyActivity extends Activity {
             switch (v.getId()) {
                 case R.id.iv_item_story_avatar:
                 case R.id.tv_item_story_name:
-                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("user_id", String.valueOf(user_id));
+                    userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
 
-                    Call<ArrayList<User>> call_user = server_connection.user_Info(map);
-                    call_user.enqueue(new Callback<ArrayList<User>>() {
+                    Call<User> call_user = userServerConnection.user_Info(user_id);
+                    call_user.enqueue(new Callback<User>() {
                         @Override
-                        public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-                            if (response.body().size() == 0) {
-                                //spring error
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            if(response.isSuccessful()) {
+                                User userInfo = response.body();
+
+                                if (userInfo == null) {
+                                    //spring error
+                                } else {
+                                    Intent intent = new Intent(FamilyActivity.this, UserActivity.class);
+
+                                    //userinfo
+                                    intent.putExtra("story_user_id", userInfo.getId());
+                                    intent.putExtra("story_user_email", userInfo.getEmail());
+                                    intent.putExtra("story_user_birth", userInfo.getBirth());
+                                    intent.putExtra("story_user_phone", userInfo.getPhone());
+                                    intent.putExtra("story_user_name", userInfo.getName());
+                                    intent.putExtra("story_user_level", userInfo.getLevel());
+                                    intent.putExtra("story_user_avatar", userInfo.getAvatar());
+
+                                    startActivity(intent);
+                                }
                             } else {
-                                Intent intent = new Intent(FamilyActivity.this, UserActivity.class);
-
-                                //userinfo
-                                intent.putExtra("story_user_id", response.body().get(0).getId());
-                                intent.putExtra("story_user_email", response.body().get(0).getEmail());
-                                intent.putExtra("story_user_birth", response.body().get(0).getBirth());
-                                intent.putExtra("story_user_phone", response.body().get(0).getPhone());
-                                intent.putExtra("story_user_name", response.body().get(0).getName());
-                                intent.putExtra("story_user_level", response.body().get(0).getLevel());
-                                intent.putExtra("story_user_avatar", response.body().get(0).getAvatar());
-
-
-                                startActivity(intent);
+                                Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+                        public void onFailure(Call<User> call, Throwable t) {
                             log(t);
                             Toast.makeText(FamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
@@ -756,48 +771,52 @@ public class FamilyActivity extends Activity {
             holder.tv_content_text.setText(storyList.get(position).getContent());
 
             //images
-            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            Call<ArrayList<Photo>> call_photo = server_connection.family_content_photo_List(storyList.get(position).getStory_id());
+            storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+            Call<ArrayList<Photo>> call_photo = storyServerConnection.family_content_photo_List(storyList.get(position).getStory_id());
             call_photo.enqueue(new Callback<ArrayList<Photo>>() {
                 @Override
                 public void onResponse(Call<ArrayList<Photo>> call, Response<ArrayList<Photo>> response) {
-                    ArrayList<Photo> photoList = response.body();
-                    int photoListSize = photoList.size();
+                    if(response.isSuccessful()) {
+                        ArrayList<Photo> photoList = response.body();
+                        int photoListSize = photoList.size();
 
-                    if (photoListSize == 0) {
-                        holder.story_images_container.setVisibility(View.GONE);
-                        holder.tv_content_text.setMaxLines(15);
-                    }
-                    if (photoListSize == 1) {
-                        holder.story_images_container.removeAllViews();
-                        holder.story_images_container.setVisibility(View.VISIBLE);
-                        holder.story_images_container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1200));
-                        holder.story_images_inflater.inflate(R.layout.item_main_story_image_one, holder.story_images_container, true);
-                        ImageView iv_item_main_story_image = (ImageView) holder.story_images_container.findViewById(R.id.iv_item_main_story_image);
-                        Glide.with(context).load(getString(R.string.cloud_front_stories_images) + photoList.get(0).getName() + "." + photoList.get(0).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image);
-                    }
+                        if (photoListSize == 0) {
+                            holder.story_images_container.setVisibility(View.GONE);
+                            holder.tv_content_text.setMaxLines(15);
+                        }
+                        if (photoListSize == 1) {
+                            holder.story_images_container.removeAllViews();
+                            holder.story_images_container.setVisibility(View.VISIBLE);
+                            holder.story_images_container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1200));
+                            holder.story_images_inflater.inflate(R.layout.item_main_story_image_one, holder.story_images_container, true);
+                            ImageView iv_item_main_story_image = (ImageView) holder.story_images_container.findViewById(R.id.iv_item_main_story_image);
+                            Glide.with(context).load(getString(R.string.cloud_front_stories_images) + photoList.get(0).getName() + "." + photoList.get(0).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image);
+                        }
 
-                    if (photoListSize == 2) {
-                        holder.story_images_container.removeAllViews();
-                        holder.story_images_container.setVisibility(View.VISIBLE);
+                        if (photoListSize == 2) {
+                            holder.story_images_container.removeAllViews();
+                            holder.story_images_container.setVisibility(View.VISIBLE);
 
-                        holder.story_images_inflater.inflate(R.layout.item_main_story_image_two, holder.story_images_container, true);
-                        ImageView iv_item_main_story_image_two1 = (ImageView) holder.story_images_container.findViewById(R.id.iv_item_main_story_image_two1);
-                        Glide.with(context).load(getString(R.string.cloud_front_stories_images) + photoList.get(0).getName() + "." + photoList.get(0).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image_two1);
-                        ImageView iv_item_main_story_image_two2 = (ImageView) holder.story_images_container.findViewById(R.id.iv_item_main_story_image_two2);
-                        Glide.with(context).load(getString(R.string.cloud_front_stories_images) + photoList.get(1).getName() + "." + photoList.get(1).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image_two2);
-                    }
+                            holder.story_images_inflater.inflate(R.layout.item_main_story_image_two, holder.story_images_container, true);
+                            ImageView iv_item_main_story_image_two1 = (ImageView) holder.story_images_container.findViewById(R.id.iv_item_main_story_image_two1);
+                            Glide.with(context).load(getString(R.string.cloud_front_stories_images) + photoList.get(0).getName() + "." + photoList.get(0).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image_two1);
+                            ImageView iv_item_main_story_image_two2 = (ImageView) holder.story_images_container.findViewById(R.id.iv_item_main_story_image_two2);
+                            Glide.with(context).load(getString(R.string.cloud_front_stories_images) + photoList.get(1).getName() + "." + photoList.get(1).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image_two2);
+                        }
 
-                    if (photoListSize > 2) {
-                        holder.story_images_container.removeAllViews();
-                        holder.story_images_container.setVisibility(View.VISIBLE);
+                        if (photoListSize > 2) {
+                            holder.story_images_container.removeAllViews();
+                            holder.story_images_container.setVisibility(View.VISIBLE);
 
-                        holder.story_images_inflater.inflate(R.layout.item_main_story_image_list, holder.story_images_container, true);
-                        rv_main_story = (RecyclerView) holder.story_images_container.findViewById(R.id.rv_main_story_images);
-                        PhotoAdapter photoAdapter = new PhotoAdapter(context, photoList, R.layout.item_main_story_image, position);
-                        rv_main_story.setAdapter(photoAdapter);
-                        rv_main_story.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                        photoAdapter.notifyDataSetChanged();
+                            holder.story_images_inflater.inflate(R.layout.item_main_story_image_list, holder.story_images_container, true);
+                            rv_main_story = (RecyclerView) holder.story_images_container.findViewById(R.id.rv_main_story_images);
+                            PhotoAdapter photoAdapter = new PhotoAdapter(context, photoList, R.layout.item_main_story_image, position);
+                            rv_main_story.setAdapter(photoAdapter);
+                            rv_main_story.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                            photoAdapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        Toast.makeText(context, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -809,58 +828,68 @@ public class FamilyActivity extends Activity {
             });
 
 
-            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            Call<ArrayList<LikeCount>> call_like_count = server_connection.family_like_Count(storyList.get(position).getStory_id());
-            call_like_count.enqueue(new Callback<ArrayList<LikeCount>>() {
+            storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+            Call<Integer> call_like_count = storyServerConnection.family_like_Count(storyList.get(position).getStory_id());
+            call_like_count.enqueue(new Callback<Integer>() {
                 @Override
-                public void onResponse(Call<ArrayList<LikeCount>> call, Response<ArrayList<LikeCount>> response) {
-                    int like_count = response.body().get(0).getLike_count();
-                    holder.tv_item_main_story_like.setText(String.valueOf(like_count));
-                }
-
-                @Override
-                public void onFailure(Call<ArrayList<LikeCount>> call, Throwable t) {
-                    log(t);
-                    Toast.makeText(FamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                }
-            });
-
-            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            Call<ArrayList<CommentCount>> call_comment_count = server_connection.family_comment_Count(storyList.get(position).getStory_id());
-            call_comment_count.enqueue(new Callback<ArrayList<CommentCount>>() {
-                @Override
-                public void onResponse(Call<ArrayList<CommentCount>> call, Response<ArrayList<CommentCount>> response) {
-                    int comment_count = response.body().get(0).getComment_count();
-                    holder.tv_item_main_comment_story_count.setText(String.valueOf(comment_count));
-                }
-
-                @Override
-                public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
-                    log(t);
-                    Toast.makeText(FamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                }
-            });
-
-            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            HashMap<String, String> map = new HashMap<>();
-            map.put("user_id", String.valueOf(user_id));
-            Call<ArrayList<Check>> call_like_check = server_connection.family_content_like_check(storyList.get(position).getStory_id(), map);
-            call_like_check.enqueue(new Callback<ArrayList<Check>>() {
-                @Override
-                public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {
-                    int checked = response.body().get(0).getChecked();
-                    if (checked == 1) {
-                        holder.btn_item_main_story_like.setChecked(true);
-                        storyList.get(position).setFirst_checked(true);
-                        storyList.get(position).setChecked(true);
-                    } else {
-                        holder.btn_item_main_story_like.setChecked(false);
-                        storyList.get(position).setFirst_checked(true);
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                    if(response.isSuccessful()) {
+                        int like_count = response.body();
+                        holder.tv_item_main_story_like.setText(String.valueOf(like_count));
+                    }else {
+                        Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ArrayList<Check>> call, Throwable t) {
+                public void onFailure(Call<Integer> call, Throwable t) {
+                    log(t);
+                    Toast.makeText(FamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+            Call<Integer> call_comment_count = storyServerConnection.family_comment_Count(storyList.get(position).getStory_id());
+            call_comment_count.enqueue(new Callback<Integer>() {
+                @Override
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                    if(response.isSuccessful()) {
+                        int comment_count = response.body();
+                        holder.tv_item_main_comment_story_count.setText(String.valueOf(comment_count));
+                    } else {
+                        Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Integer> call, Throwable t) {
+                    log(t);
+                    Toast.makeText(FamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+            Call<Integer> call_like_check = storyServerConnection.family_content_like_check(storyList.get(position).getStory_id(), user_id);
+            call_like_check.enqueue(new Callback<Integer>() {
+                @Override
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                    if(response.isSuccessful()) {
+                        int checked = response.body();
+                        if (checked == 1) {
+                            holder.btn_item_main_story_like.setChecked(true);
+                            storyList.get(position).setFirst_checked(true);
+                            storyList.get(position).setChecked(true);
+                        } else {
+                            holder.btn_item_main_story_like.setChecked(false);
+                            storyList.get(position).setFirst_checked(true);
+                        }
+                    } else {
+                        Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Integer> call, Throwable t) {
                     log(t);
                     Toast.makeText(FamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
@@ -986,29 +1015,31 @@ public class FamilyActivity extends Activity {
 
         //my info
         userList = new ArrayList<>();
-        userList.add(new User(user_id, user_email, user_name, user_birth, user_phone, user_avatar, user_level));
+        userList.add(new User(user_id, user_email, user_name, user_birth, user_phone, user_avatar, user_level, null)); // 토큰
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("user_id", String.valueOf(user_id));
-
-        Call<ArrayList<User>> call_users = server_connection.family_user_Info(family_id, map);
+//        familyServerConnection = FamilyServerConnection.retrofit.create(FamilyServerConnection.class);
+        familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
+        Call<ArrayList<User>> call_users = familyServerConnection.family_user_Info(family_id, user_id);
         call_users.enqueue(new Callback<ArrayList<User>>() {
             @Override
             public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-                int responseBodySize = response.body().size();
+                if(response.isSuccessful()) {
+                    int responseBodySize = response.body().size();
 
-                if (responseBodySize == 0) {
-                    //유저 없음
-                } else {
-                    for (int i = 0; i < responseBodySize; i++) {
-                        userList.add(new User(response.body().get(i).getId(), response.body().get(i).getEmail(), response.body().get(i).getName(), response.body().get(i).getBirth(),
-                                response.body().get(i).getPhone(), response.body().get(i).getAvatar(), response.body().get(i).getLevel()));
+                    if (responseBodySize == 0) {
+                        //유저 없음
+                    } else {
+                        for (int i = 0; i < responseBodySize; i++) {
+                            userList.add(new User(response.body().get(i).getId(), response.body().get(i).getEmail(), response.body().get(i).getName(), response.body().get(i).getBirth(),
+                                    response.body().get(i).getPhone(), response.body().get(i).getAvatar(), response.body().get(i).getLevel(), null)); // 토큰
+                        }
                     }
+                    userAdapter = new UserAdapter(FamilyActivity.this, userList, R.layout.item_users_familys);
+                    rv_family_users.setAdapter(userAdapter);
+                    rv_family_users.setLayoutManager(new LinearLayoutManager(FamilyActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                } else {
+                    Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
-                userAdapter = new UserAdapter(FamilyActivity.this, userList, R.layout.item_users_familys);
-                rv_family_users.setAdapter(userAdapter);
-                rv_family_users.setLayoutManager(new LinearLayoutManager(FamilyActivity.this, LinearLayoutManager.HORIZONTAL, false));
             }
 
             @Override
@@ -1221,4 +1252,5 @@ public class FamilyActivity extends Activity {
             }
         }
     }
+
 }

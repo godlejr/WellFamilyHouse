@@ -21,6 +21,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,12 +41,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.connection.Server_Connection;
-import com.demand.well_family.well_family.dto.Check;
+import com.demand.well_family.well_family.connection.SongServerConnection;
+import com.demand.well_family.well_family.connection.UserServerConnection;
 import com.demand.well_family.well_family.dto.FavoriteCategory;
 import com.demand.well_family.well_family.dto.SongCategory;
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.util.ErrorUtils;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
 import org.slf4j.Logger;
@@ -58,6 +62,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
@@ -100,6 +105,7 @@ public class EditUserActivity extends Activity {
     private String user_birth;
     private String user_phone;
     private int user_level;
+    private String access_token;
 
     private final int READ_EXTERNAL_STORAGE_PERMISSION = 10001;
 
@@ -112,7 +118,9 @@ public class EditUserActivity extends Activity {
 
     private ArrayList<FavoriteCategory> favoriteList;
 
-    private Server_Connection server_connection;
+    private UserServerConnection userServerConnection;
+    private SongServerConnection songServerConnection;
+
     private ArrayList<SongCategory> songList;
     private ProgressDialog progressDialog;
     private Uri uri;
@@ -159,6 +167,8 @@ public class EditUserActivity extends Activity {
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
+
         setToolbar(getWindow().getDecorView());
     }
 
@@ -229,9 +239,18 @@ public class EditUserActivity extends Activity {
 
 
         tv_edit_profile_email.setText(user_email);
+        tv_edit_profile_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(EditUserActivity.this, "이메일은 변경할 수 없습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
         et_edit_profile_name.setText(user_name);
         et_edit_profile_phone.setText(user_phone);
         Glide.with(EditUserActivity.this).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_edit_profile_avatar);
+
+        et_edit_profile_name.setFilters(new InputFilter[]{characterFilter});
+
 
         et_edit_profile_birth.setText(user_birth);
         et_edit_profile_birth.setFocusable(false);
@@ -239,7 +258,7 @@ public class EditUserActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
-                DatePickerDialog datePicker = new DatePickerDialog(v.getContext(), new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePicker = new DatePickerDialog(v.getContext(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -257,32 +276,37 @@ public class EditUserActivity extends Activity {
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)
                         , calendar.get(Calendar.DAY_OF_MONTH));
 
+                datePicker.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 datePicker.show();
             }
         });
 
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<Check>> call_gender_check = server_connection.check_gender(user_id);
-        call_gender_check.enqueue(new Callback<ArrayList<Check>>() {
+        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+        Call<Integer> call_gender_check = userServerConnection.check_gender(user_id);
+        call_gender_check.enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {
-                int checked = response.body().get(0).getChecked();
-                if (checked != 0) {
-                    if (checked == 1) {
-                        rb_man.setChecked(true);
-                        user_gender = 1;
-                    } else {
-                        rb_female.setChecked(true);
-                        user_gender = 2;
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful()) {
+                    int checked = response.body();
+                    if (checked != 0) {
+                        if (checked == 1) {
+                            rb_man.setChecked(true);
+                            user_gender = 1;
+                        } else {
+                            rb_female.setChecked(true);
+                            user_gender = 2;
+                        }
                     }
+                } else {
+                    Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Check>> call, Throwable t) {
+            public void onFailure(Call<Integer> call, Throwable t) {
                 log(t);
-                Toast.makeText(EditUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(EditUserActivity.this, "네트워크가 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -310,40 +334,48 @@ public class EditUserActivity extends Activity {
             }
         });
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<FavoriteCategory>> call_favorite_list = server_connection.favorite_category_List();
+        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+        Call<ArrayList<FavoriteCategory>> call_favorite_list = userServerConnection.favorite_category_List();
         call_favorite_list.enqueue(new Callback<ArrayList<FavoriteCategory>>() {
             @Override
             public void onResponse(Call<ArrayList<FavoriteCategory>> call, Response<ArrayList<FavoriteCategory>> response) {
-                favoriteList = response.body();
+                if (response.isSuccessful()) {
+                    favoriteList = response.body();
 
-                profileOptionAdapter = new ProfileOptionAdapter(EditUserActivity.this, favoriteList, R.layout.item_text);
-                rv_profile_favorite.setAdapter(profileOptionAdapter);
-                rv_profile_favorite.setLayoutManager(new GridLayoutManager(EditUserActivity.this, 3));
+                    profileOptionAdapter = new ProfileOptionAdapter(EditUserActivity.this, favoriteList, R.layout.item_text);
+                    rv_profile_favorite.setAdapter(profileOptionAdapter);
+                    rv_profile_favorite.setLayoutManager(new GridLayoutManager(EditUserActivity.this, 3));
+                } else {
+                    Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call<ArrayList<FavoriteCategory>> call, Throwable t) {
                 log(t);
-                Toast.makeText(EditUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(EditUserActivity.this, "네트워크가 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<SongCategory>> call_song_category_list = server_connection.song_category_List();
+        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        Call<ArrayList<SongCategory>> call_song_category_list = songServerConnection.song_category_List();
         call_song_category_list.enqueue(new Callback<ArrayList<SongCategory>>() {
             @Override
             public void onResponse(Call<ArrayList<SongCategory>> call, Response<ArrayList<SongCategory>> response) {
-                songList = response.body();
-                profileSongAdapter = new ProfileSongAdapter(EditUserActivity.this, songList, R.layout.item_text);
-                rv_profile_song.setAdapter(profileSongAdapter);
-                rv_profile_song.setLayoutManager(new GridLayoutManager(EditUserActivity.this, 3));
+                if (response.isSuccessful()) {
+                    songList = response.body();
+                    profileSongAdapter = new ProfileSongAdapter(EditUserActivity.this, songList, R.layout.item_text);
+                    rv_profile_song.setAdapter(profileSongAdapter);
+                    rv_profile_song.setLayoutManager(new GridLayoutManager(EditUserActivity.this, 3));
+                } else {
+                    Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onFailure(Call<ArrayList<SongCategory>> call, Throwable t) {
                 log(t);
-                Toast.makeText(EditUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(EditUserActivity.this, "네트워크가 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -361,153 +393,170 @@ public class EditUserActivity extends Activity {
                         ColorDrawable(Color.TRANSPARENT));
                 progressDialog.setContentView(R.layout.progress_dialog);
 
-
                 HashMap<String, String> map = new HashMap<>();
                 map.put("name", user_name);
                 map.put("birth", user_birth);
                 map.put("phone", user_phone);
                 map.put("gender", String.valueOf(user_gender));
 
-                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                Call<ResponseBody> call_update_user_info = server_connection.udpate_user_info(user_id, map);
+                userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                Call<ResponseBody> call_update_user_info = userServerConnection.update_user_info(user_id, map);
                 call_update_user_info.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        //scss
+                        if (response.isSuccessful()) {
+                            //scss
 
-                        //avatar
-                        if (uri != null) {
-                            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(uri)));
-                            Call<ResponseBody> call_update_user_avatar = server_connection.update_user_avatar(user_id, requestBody);
-                            call_update_user_avatar.enqueue(new Callback<ResponseBody>() {
+                            //avatar
+                            if (uri != null) {
+                                userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(uri)));
+                                Call<ResponseBody> call_update_user_avatar = userServerConnection.update_user_avatar(user_id, requestBody);
+                                call_update_user_avatar.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if (response.isSuccessful()) {
+                                            //scss
+                                            resetUserinfo();
+                                        } else {
+                                            Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                        log(t);
+                                        Toast.makeText(EditUserActivity.this, "네트워크가 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            } else {
+                                //sync
+                                resetUserinfo();
+                            }
+
+
+                            //favorite and song category
+                            final int favorite_size = favoriteList.size();
+                            //delete prior favorite list
+                            userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                            Call<ResponseBody> call_delete_favorite_list = userServerConnection.delete_favorite(user_id);
+                            call_delete_favorite_list.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    //scss
-                                    resetUserinfo();
+                                    if (response.isSuccessful()) {
+                                        for (int i = 0; i < favorite_size; i++) {
+                                            if (favoriteList.get(i).isChecked()) {
+                                                userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                                                HashMap<String, String> map = new HashMap<>();
+                                                map.put("favorite_id", String.valueOf(favoriteList.get(i).getId()));
+
+                                                Call<ResponseBody> call_insert_favorite = userServerConnection.insert_favorite(user_id, map);
+                                                call_insert_favorite.enqueue(new Callback<ResponseBody>() {
+                                                    @Override
+                                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                        if (!response.isSuccessful()) {
+                                                            Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                        //scss
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                        log(t);
+                                                        Toast.makeText(EditUserActivity.this, "네트워크가 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    } else {
+                                        Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    }
                                 }
 
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                                     log(t);
-                                    Toast.makeText(EditUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(EditUserActivity.this, "네트워크가 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                 }
                             });
+
+
+                            final int song_size = songList.size();
+                            //delete prior song category list
+                            userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                            Call<ResponseBody> call_delete_song_list = userServerConnection.delete_song_category(user_id);
+                            call_delete_song_list.enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    if (response.isSuccessful()) {
+                                        for (int i = 0; i < song_size; i++) {
+                                            if (songList.get(i).isChecked()) {
+                                                userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                                                HashMap<String, String> map = new HashMap<>();
+                                                map.put("song_category_id", String.valueOf(songList.get(i).getId()));
+                                                Call<ResponseBody> call_insert_song_category = userServerConnection.insert_song_category(user_id, map);
+                                                call_insert_song_category.enqueue(new Callback<ResponseBody>() {
+                                                    @Override
+                                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                        if (!response.isSuccessful()) {
+                                                            Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                        //scss
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                        log(t);
+                                                        Toast.makeText(EditUserActivity.this, "네트워크가 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    } else {
+                                        Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                    log(t);
+                                    Toast.makeText(EditUserActivity.this, "네트워크가 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+
+                            int sleepTime = 500;
+                            if (uri != null) {
+                                sleepTime = 1500;
+                            }
+                            try {
+                                Thread.sleep(sleepTime);
+                            } catch (InterruptedException e) {
+                                log(e);
+                            }
+
+                            progressDialog.dismiss();
+                            //intent
+
+                            Intent intent = new Intent(EditUserActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            Toast.makeText(EditUserActivity.this, "프로필이 변경되었습니다.", Toast.LENGTH_LONG).show();
+
+                            int finishListSize = finishList.size();
+                            for (int i = 0; i < finishListSize; i++) {
+                                finishList.get(i).finish();
+                            }
+                            finish();
+
                         } else {
-                            //sync
-                            resetUserinfo();
+                            Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
-
-
-                        //favorite and song category
-                        final int favorite_size = favoriteList.size();
-                        //delete prior favorite list
-                        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                        HashMap<String, String> favorite_map = new HashMap<>();
-                        favorite_map.put("user_id", String.valueOf(user_id));
-                        Call<ResponseBody> call_delete_favorite_list = server_connection.delete_favorite(favorite_map);
-                        call_delete_favorite_list.enqueue(new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                for (int i = 0; i < favorite_size; i++) {
-                                    if (favoriteList.get(i).isChecked()) {
-                                        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                        HashMap<String, String> map = new HashMap<>();
-                                        map.put("favorite_id", String.valueOf(favoriteList.get(i).getId()));
-
-                                        Call<ResponseBody> call_insert_favorite = server_connection.insert_favorite(user_id, map);
-                                        call_insert_favorite.enqueue(new Callback<ResponseBody>() {
-                                            @Override
-                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                //scss
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                log(t);
-                                                Toast.makeText(EditUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                log(t);
-                                Toast.makeText(EditUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                            }
-                        });
-
-
-                        final int song_size = songList.size();
-                        //delete prior song category list
-                        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                        HashMap<String, String> song_map = new HashMap<>();
-                        song_map.put("user_id", String.valueOf(user_id));
-                        Call<ResponseBody> call_delete_song_list = server_connection.delete_song_category(song_map);
-                        call_delete_song_list.enqueue(new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                for (int i = 0; i < song_size; i++) {
-                                    if (songList.get(i).isChecked()) {
-                                        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                        HashMap<String, String> map = new HashMap<>();
-                                        map.put("song_category_id", String.valueOf(songList.get(i).getId()));
-                                        Call<ResponseBody> call_insert_song_category = server_connection.insert_song_category(user_id, map);
-                                        call_insert_song_category.enqueue(new Callback<ResponseBody>() {
-                                            @Override
-                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                //scss
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                log(t);
-                                                Toast.makeText(EditUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                log(t);
-                                Toast.makeText(EditUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                            }
-                        });
-
-
-                        int sleepTime = 500;
-                        if (uri != null) {
-                            sleepTime = 1500;
-                        }
-                        try {
-                            Thread.sleep(sleepTime);
-                        } catch (InterruptedException e) {
-                            log(e);
-                        }
-
-                        progressDialog.dismiss();
-                        //intent
-
-                        Intent intent = new Intent(EditUserActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        Toast.makeText(EditUserActivity.this, "프로필이 변경되었습니다.", Toast.LENGTH_LONG).show();
-
-                        int finishListSize = finishList.size();
-                        for (int i = 0; i < finishListSize; i++) {
-                            finishList.get(i).finish();
-                        }
-                        finish();
-
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         log(t);
-                        Toast.makeText(EditUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(EditUserActivity.this, "네트워크가 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -533,33 +582,31 @@ public class EditUserActivity extends Activity {
     }
 
     private void resetUserinfo() {
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("user_id", String.valueOf(user_id));
-
-
-        Call<ArrayList<User>> call_user_info = server_connection.user_Info(map);
-        call_user_info.enqueue(new Callback<ArrayList<User>>() {
+        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+        Call<User> call_user_info = userServerConnection.user_Info(user_id);
+        call_user_info.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-                ArrayList<User> user = response.body();
-                loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    User userInfo = response.body();
 
-                SharedPreferences.Editor editor_update = loginInfo.edit();
-
-                editor_update.putString("user_name", user.get(0).getName());
-                editor_update.putString("user_email", user.get(0).getEmail());
-                editor_update.putString("user_birth", user.get(0).getBirth());
-                editor_update.putString("user_avatar", user.get(0).getAvatar());
-                editor_update.putString("user_phone", user.get(0).getPhone());
-                editor_update.apply();
-
+                    loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor editor_update = loginInfo.edit();
+                    editor_update.putString("user_name", userInfo.getName());
+                    editor_update.putString("user_email", userInfo.getEmail());
+                    editor_update.putString("user_birth", userInfo.getBirth());
+                    editor_update.putString("user_avatar", userInfo.getAvatar());
+                    editor_update.putString("user_phone", userInfo.getPhone());
+                    editor_update.apply();
+                } else {
+                    Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 log(t);
-                Toast.makeText(EditUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(EditUserActivity.this, "네트워크가 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -613,27 +660,28 @@ public class EditUserActivity extends Activity {
         public void onBindViewHolder(final ProfileOptionViewHolder holder, final int position) {
             holder.tv_option.setText(favoriteList.get(position).getName());
 
-            HashMap<String, String> map = new HashMap<>();
-            map.put("favorite_category_id", String.valueOf(favoriteList.get(position).getId()));
-            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-
-            Call<ArrayList<Check>> call_check_favorite = server_connection.check_favorite(user_id, map);
-            call_check_favorite.enqueue(new Callback<ArrayList<Check>>() {
+            userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+            Call<Integer> call_check_favorite = userServerConnection.check_favorite(user_id, favoriteList.get(position).getId());
+            call_check_favorite.enqueue(new Callback<Integer>() {
                 @Override
-                public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {
-                    int checked = response.body().get(0).getChecked();
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                    if (response.isSuccessful()) {
+                        int checked = response.body();
 
-                    if (checked > 0) {
-                        favoriteList.get(position).setChecked(true);
-                        holder.tv_option.setBackgroundResource(R.drawable.round_corner_border_brown);
-                        holder.tv_option.setTextColor(Color.parseColor("#cc3a1c"));
+                        if (checked > 0) {
+                            favoriteList.get(position).setChecked(true);
+                            holder.tv_option.setBackgroundResource(R.drawable.round_corner_border_brown);
+                            holder.tv_option.setTextColor(Color.parseColor("#cc3a1c"));
+                        } else {
+                            holder.tv_option.setTextColor(Color.parseColor("#999999"));
+                        }
                     } else {
-                        holder.tv_option.setTextColor(Color.parseColor("#999999"));
+                        Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ArrayList<Check>> call, Throwable t) {
+                public void onFailure(Call<Integer> call, Throwable t) {
                     log(t);
                     Toast.makeText(EditUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
@@ -692,29 +740,29 @@ public class EditUserActivity extends Activity {
         @Override
         public void onBindViewHolder(final ProfileSongViewHolder holder, final int position) {
             holder.tv_option.setText(songList.get(position).getName());
+            userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
 
-
-            HashMap<String, String> map = new HashMap<>();
-            map.put("song_category_id", String.valueOf(songList.get(position).getId()));
-            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-
-            Call<ArrayList<Check>> call_check_song_category = server_connection.check_song_category(user_id, map);
-            call_check_song_category.enqueue(new Callback<ArrayList<Check>>() {
+            Call<Integer> call_check_song_category = userServerConnection.check_song_category(user_id, songList.get(position).getId());
+            call_check_song_category.enqueue(new Callback<Integer>() {
                 @Override
-                public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {
-                    int checked = response.body().get(0).getChecked();
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                    if (response.isSuccessful()) {
+                        int checked = response.body();
 
-                    if (checked > 0) {
-                        songList.get(position).setChecked(true);
-                        holder.tv_option.setBackgroundResource(R.drawable.round_corner_border_brown);
-                        holder.tv_option.setTextColor(Color.parseColor("#cc3a1c"));
+                        if (checked > 0) {
+                            songList.get(position).setChecked(true);
+                            holder.tv_option.setBackgroundResource(R.drawable.round_corner_border_brown);
+                            holder.tv_option.setTextColor(Color.parseColor("#cc3a1c"));
+                        } else {
+                            holder.tv_option.setTextColor(Color.parseColor("#999999"));
+                        }
                     } else {
-                        holder.tv_option.setTextColor(Color.parseColor("#999999"));
+                        Toast.makeText(context, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ArrayList<Check>> call, Throwable t) {
+                public void onFailure(Call<Integer> call, Throwable t) {
                     log(t);
                     Toast.makeText(EditUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
@@ -743,6 +791,23 @@ public class EditUserActivity extends Activity {
             return songList.size();
         }
     }
+
+    InputFilter characterFilter = new InputFilter() {
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            int length = source.length();
+            for (int i = 0; i < length; i++) {
+                Pattern pattern = Pattern.compile("^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\\u318D\\u119E\\u11A2\\u2022\\u2025a\\u00B7\\uFE55]+$");
+                if (!pattern.matcher(source).matches()) {
+                    Toast.makeText(EditUserActivity.this, "특수문자는 입력이 불가합니다.", Toast.LENGTH_SHORT).show();
+                    return "";
+                }
+            }
+            return null;
+        }
+    };
+
+
 
     private static void log(Throwable throwable) {
         StackTraceElement[] ste = throwable.getStackTrace();

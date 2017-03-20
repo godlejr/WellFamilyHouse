@@ -2,6 +2,7 @@ package com.demand.well_family.well_family.dialog;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,8 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.connection.Server_Connection;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.connection.CommentServerConnection;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +37,12 @@ public class CommentModifyActivity extends Activity {
 
     private int comment_id;
     private String comment_content;
-    private Server_Connection server_connection;
+    private CommentServerConnection commentServerConnection;
 
     private static final Logger logger = LoggerFactory.getLogger(CommentModifyActivity.class);
     private int act_flag;
-
+    private String access_token;
+    private SharedPreferences loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,20 +77,24 @@ public class CommentModifyActivity extends Activity {
                 if (comment_content.equals(content)) {
                     finish();
                 } else {
-                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                    commentServerConnection = new HeaderInterceptor(access_token).getClientForCommentServer().create(CommentServerConnection.class);
                     HashMap<String, String> map = new HashMap<String, String>();
                     map.put("content",content );
                     map.put("flag",String.valueOf(act_flag));
-                    Call<ResponseBody> call_update_comment = server_connection.update_comment(comment_id, map);
+                    Call<ResponseBody> call_update_comment = commentServerConnection.update_comment(comment_id, map);
                     call_update_comment.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            //scss
-                            Toast.makeText(CommentModifyActivity.this, "댓글이 수정되었습니다.", Toast.LENGTH_LONG).show();
-                            Intent intent = getIntent();
-                            intent.putExtra("content",content);
-                            setResult(Activity.RESULT_OK, intent);
-                            finish();
+                            if(response.isSuccessful()) {
+                                //scss
+                                Toast.makeText(CommentModifyActivity.this, "댓글이 수정되었습니다.", Toast.LENGTH_LONG).show();
+                                Intent intent = getIntent();
+                                intent.putExtra("content", content);
+                                setResult(Activity.RESULT_OK, intent);
+                                finish();
+                            } else {
+                                Toast.makeText(CommentModifyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
@@ -109,6 +117,8 @@ public class CommentModifyActivity extends Activity {
         et_comment_modify = (EditText) findViewById(R.id.et_comment_modify);
         et_comment_modify.setText(comment_content);
 
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        access_token = loginInfo.getString("access_token", null);
     }
 
     private static void log(Throwable throwable) {

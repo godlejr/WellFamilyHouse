@@ -16,7 +16,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,19 +35,19 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.connection.StoryServerConnection;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.settings.SettingActivity;
-import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dialog.CommentPopupActivity;
 import com.demand.well_family.well_family.dto.Comment;
-import com.demand.well_family.well_family.dto.CommentCount;
 import com.demand.well_family.well_family.dto.CommentInfo;
-import com.demand.well_family.well_family.dto.LikeCount;
 import com.demand.well_family.well_family.dto.Photo;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.photos.PhotoPopupActivity;
 import com.demand.well_family.well_family.users.UserActivity;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,11 +114,12 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
 
     //toolbar
     private DrawerLayout dl;
-    private Server_Connection server_connection;
+    private StoryServerConnection storyServerConnection;
     private static final int COMMENT_EDIT_REQUEST = 1;
 
     private static final Logger logger = LoggerFactory.getLogger(StoryDetailActivity.class);
     private SharedPreferences loginInfo;
+    private String access_token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +155,7 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
         setToolbar(this.getWindow().getDecorView(), this.getApplicationContext(), "");
     }
 
@@ -247,11 +248,6 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         break;
-
-                    case R.id.menu_search:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
-                        break;
-
                     case R.id.menu_market:
                         intent = new Intent(StoryDetailActivity.this, MarketMainActivity.class);
                         startActivity(intent);
@@ -277,6 +273,7 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                         editor.remove("user_avatar");
                         editor.remove("user_phone");
                         editor.remove("user_level");
+                        editor.remove("access_token");
                         editor.commit();
 
                         intent = new Intent(StoryDetailActivity.this, LoginActivity.class);
@@ -338,25 +335,29 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                     map.put("user_id", String.valueOf(user_id));
                     map.put("content", content);
 
-                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ArrayList<Comment>> call_insert_comment = server_connection.insert_comment(story_id, map);
-                    call_insert_comment.enqueue(new Callback<ArrayList<Comment>>() {
+//                    storyServerConnection = StoryServerConnection.retrofit.create(StoryServerConnection.class);
+                    storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+                    Call<Comment> call_insert_comment = storyServerConnection.insert_comment(story_id, map);
+                    call_insert_comment.enqueue(new Callback<Comment>() {
                         @Override
-                        public void onResponse(Call<ArrayList<Comment>> call, Response<ArrayList<Comment>> response) {
+                        public void onResponse(Call<Comment> call, Response<Comment> response) {
+                            if (response.isSuccessful()) {
+                                int comment_id = response.body().getId();
+                                String created_at = response.body().getCreated_at();
+                                commentInfoList.add(new CommentInfo(comment_id, user_id, user_name, user_avatar, content, created_at));
+                                commentAdapter.notifyItemInserted(commentInfoList.size() - 1);
+                                getCommentCount();
 
-                            int comment_id = response.body().get(0).getId();
-                            String created_at = response.body().get(0).getCreated_at();
-                            commentInfoList.add(new CommentInfo(comment_id, user_id, user_name, user_avatar, content, created_at));
-                            commentAdapter.notifyItemInserted(commentInfoList.size() - 1);
-                            getCommentCount();
-
-                            et_story_detail_write_comment.setText("");
-                            NestedScrollView nsv = (NestedScrollView) findViewById(R.id.ns_story_detail);
-                            nsv.fullScroll(NestedScrollView.FOCUS_DOWN);
+                                et_story_detail_write_comment.setText("");
+                                NestedScrollView nsv = (NestedScrollView) findViewById(R.id.ns_story_detail);
+                                nsv.fullScroll(NestedScrollView.FOCUS_DOWN);
+                            } else {
+                                Toast.makeText(StoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
-                        public void onFailure(Call<ArrayList<Comment>> call, Throwable t) {
+                        public void onFailure(Call<Comment> call, Throwable t) {
                             log(t);
                             Toast.makeText(StoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
@@ -370,17 +371,21 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
     private void getCommentCount() {
         tv_story_detail_comment_count = (TextView) findViewById(R.id.tv_story_detail_comment_count);
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<CommentCount>> call_comment_count = server_connection.family_comment_Count(story_id);
-        call_comment_count.enqueue(new Callback<ArrayList<CommentCount>>() {
+        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        Call<Integer> call_comment_count = storyServerConnection.family_comment_Count(story_id);
+        call_comment_count.enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(Call<ArrayList<CommentCount>> call, Response<ArrayList<CommentCount>> response) {
-                int comment_count = response.body().get(0).getComment_count();
-                tv_story_detail_comment_count.setText(String.valueOf(comment_count));
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful()) {
+                    int comment_count = response.body();
+                    tv_story_detail_comment_count.setText(String.valueOf(comment_count));
+                } else {
+                    Toast.makeText(StoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
+            public void onFailure(Call<Integer> call, Throwable t) {
                 log(t);
                 Toast.makeText(StoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
@@ -391,17 +396,21 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
         rv_story_comments = (RecyclerView) findViewById(R.id.rv_story_comments);
         //comment count
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<CommentInfo>> call_family = server_connection.family_detail_comment_List(story_id);
+        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        Call<ArrayList<CommentInfo>> call_family = storyServerConnection.family_detail_comment_List(story_id);
         call_family.enqueue(new Callback<ArrayList<CommentInfo>>() {
             @Override
             public void onResponse(Call<ArrayList<CommentInfo>> call, Response<ArrayList<CommentInfo>> response) {
-                commentInfoList = response.body();
-                commentAdapter = new CommentAdapter(StoryDetailActivity.this, commentInfoList, R.layout.item_comment);
-                rv_story_comments.setLayoutManager(new LinearLayoutManager(StoryDetailActivity.this, LinearLayoutManager.VERTICAL, false));
-                rv_story_comments.setAdapter(commentAdapter);
-                int spacing = getResources().getDimensionPixelSize(R.dimen.comment_divider_height);
-                rv_story_comments.addItemDecoration(new StoryDetailActivity.SpaceItemDecoration(spacing));
+                if (response.isSuccessful()) {
+                    commentInfoList = response.body();
+                    commentAdapter = new CommentAdapter(StoryDetailActivity.this, commentInfoList, R.layout.item_comment);
+                    rv_story_comments.setLayoutManager(new LinearLayoutManager(StoryDetailActivity.this, LinearLayoutManager.VERTICAL, false));
+                    rv_story_comments.setAdapter(commentAdapter);
+                    int spacing = getResources().getDimensionPixelSize(R.dimen.comment_divider_height);
+                    rv_story_comments.addItemDecoration(new StoryDetailActivity.SpaceItemDecoration(spacing));
+                } else {
+                    Toast.makeText(StoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -464,7 +473,7 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                         intent.putExtra("position", position);
                         intent.putExtra("act_flag", 1);
                         startActivityForResult(intent, COMMENT_EDIT_REQUEST);
-                    }else{
+                    } else {
                         Intent intent = new Intent(StoryDetailActivity.this, CommentPopupActivity.class);
                         intent.putExtra("comment_id", commentInfoList.get(position).getComment_id());
                         intent.putExtra("comment_user_name", commentInfoList.get(position).getUser_name());
@@ -503,18 +512,22 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
         rv_content_detail = (RecyclerView) findViewById(R.id.rv_content_detail);
         photoList = new ArrayList<>();
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<Photo>> call_photo = server_connection.family_content_photo_List(story_id);
+        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        Call<ArrayList<Photo>> call_photo = storyServerConnection.family_content_photo_List(story_id);
         call_photo.enqueue(new Callback<ArrayList<Photo>>() {
             @Override
             public void onResponse(Call<ArrayList<Photo>> call, Response<ArrayList<Photo>> response) {
-                photoList = response.body();
-                if (photoList.size() == 0) {
-                    rv_content_detail.setVisibility(View.GONE);
+                if (response.isSuccessful()) {
+                    photoList = response.body();
+                    if (photoList.size() == 0) {
+                        rv_content_detail.setVisibility(View.GONE);
+                    } else {
+                        photoAdapter = new PhotoAdapter(StoryDetailActivity.this, photoList, R.layout.item_detail_photo);
+                        rv_content_detail.setAdapter(photoAdapter);
+                        rv_content_detail.setLayoutManager(new LinearLayoutManager(StoryDetailActivity.this, LinearLayoutManager.VERTICAL, false));
+                    }
                 } else {
-                    photoAdapter = new PhotoAdapter(StoryDetailActivity.this, photoList, R.layout.item_detail_photo);
-                    rv_content_detail.setAdapter(photoAdapter);
-                    rv_content_detail.setLayoutManager(new LinearLayoutManager(StoryDetailActivity.this, LinearLayoutManager.VERTICAL, false));
+                    Toast.makeText(StoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -589,17 +602,21 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
         //like count
         tv_story_detail_like_count = (TextView) findViewById(R.id.tv_story_detail_like_count);
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<LikeCount>> call_like_count = server_connection.family_like_Count(story_id);
-        call_like_count.enqueue(new Callback<ArrayList<LikeCount>>() {
+        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        Call<Integer> call_like_count = storyServerConnection.family_like_Count(story_id);
+        call_like_count.enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(Call<ArrayList<LikeCount>> call, Response<ArrayList<LikeCount>> response) {
-                int like_count = response.body().get(0).getLike_count();
-                tv_story_detail_like_count.setText(String.valueOf(like_count));
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful()) {
+                    int like_count = response.body();
+                    tv_story_detail_like_count.setText(String.valueOf(like_count));
+                } else {
+                    Toast.makeText(StoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<LikeCount>> call, Throwable t) {
+            public void onFailure(Call<Integer> call, Throwable t) {
                 log(t);
                 Toast.makeText(StoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
@@ -655,16 +672,20 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (first_checked) {
             if (isChecked) {
-                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_id", String.valueOf(user_id));
 
-                Call<ResponseBody> call_like = server_connection.family_content_like_up(story_id, map);
+                Call<ResponseBody> call_like = storyServerConnection.family_content_like_up(story_id, map);
                 call_like.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        tv_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_story_detail_like_count.getText().toString()) + 1));
-                        like_checked = !like_checked;
+                        if (response.isSuccessful()) {
+                            tv_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_story_detail_like_count.getText().toString()) + 1));
+                            like_checked = !like_checked;
+                        } else {
+                            Toast.makeText(StoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -675,16 +696,17 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                 });
 
             } else {
-                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                HashMap<String, String> map = new HashMap<>();
-                map.put("user_id", String.valueOf(user_id));
-
-                Call<ResponseBody> call_dislike = server_connection.family_content_like_down(story_id, map);
+                storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+                Call<ResponseBody> call_dislike = storyServerConnection.family_content_like_down(story_id, user_id);
                 call_dislike.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        tv_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_story_detail_like_count.getText().toString()) - 1));
-                        like_checked = !like_checked;
+                        if(response.isSuccessful()) {
+                            tv_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_story_detail_like_count.getText().toString()) - 1));
+                            like_checked = !like_checked;
+                        } else {
+                            Toast.makeText(StoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -716,7 +738,7 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                     int position = data.getIntExtra("position", -1);
                     commentAdapter.commentInfoList.remove(position);
                     commentAdapter.notifyItemRemoved(position);
-                    commentAdapter.notifyItemRangeChanged(position,commentAdapter.getItemCount());
+                    commentAdapter.notifyItemRangeChanged(position, commentAdapter.getItemCount());
 
                 }
             }

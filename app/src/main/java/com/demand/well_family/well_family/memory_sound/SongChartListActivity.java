@@ -29,12 +29,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.connection.SongServerConnection;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.settings.SettingActivity;
-import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Song;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +62,7 @@ public class SongChartListActivity extends Activity {
     private RecyclerView rv_song_list;
     private TextView toolbar_title;
 
-    private Server_Connection server_connection;
+    private SongServerConnection songServerConnection;
     private ArrayList<Song> songList;
 
     //user_info
@@ -71,6 +73,7 @@ public class SongChartListActivity extends Activity {
     private String user_email;
     private String user_phone;
     private String user_birth;
+    private String access_token;
 
     //toolbar
     private DrawerLayout dl;
@@ -100,6 +103,7 @@ public class SongChartListActivity extends Activity {
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
         setToolbar(this.getWindow().getDecorView(), this, "추억소리");
     }
 
@@ -192,11 +196,6 @@ public class SongChartListActivity extends Activity {
                         intent = new Intent(SongChartListActivity.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
-
-                        break;
-
-                    case R.id.menu_search:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
                         break;
 
                     case R.id.menu_market:
@@ -225,6 +224,7 @@ public class SongChartListActivity extends Activity {
                         editor.remove("user_avatar");
                         editor.remove("user_phone");
                         editor.remove("user_level");
+                        editor.remove("access_token");
                         editor.commit();
 
                         intent = new Intent(SongChartListActivity.this, LoginActivity.class);
@@ -284,24 +284,28 @@ public class SongChartListActivity extends Activity {
             ll_item_song.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ResponseBody> call_insert_song_hit = server_connection.Insert_Song_hit(songList.get(getAdapterPosition()).getId());
+                    songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+                    Call<ResponseBody> call_insert_song_hit = songServerConnection.Insert_Song_hit(songList.get(getAdapterPosition()).getId());
                     call_insert_song_hit.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            Intent intent = new Intent(SongChartListActivity.this, SongPlayer.class);
+                            if(response.isSuccessful()) {
+                                Intent intent = new Intent(SongChartListActivity.this, SongPlayer.class);
 
-                            //song info
-                            intent.putExtra("song_id", songList.get(getAdapterPosition()).getId());
-                            intent.putExtra("song_name", songList.get(getAdapterPosition()).getName());
-                            intent.putExtra("song_ext", songList.get(getAdapterPosition()).getExt());
-                            intent.putExtra("song_title", songList.get(getAdapterPosition()).getTitle());
-                            intent.putExtra("song_singer", songList.get(getAdapterPosition()).getSinger());
-                            intent.putExtra("song_avatar", songList.get(getAdapterPosition()).getAvatar());
-                            intent.putExtra("song_category_id", songList.get(getAdapterPosition()).getCategory_id());
-                            intent.putExtra("song_created_at", songList.get(getAdapterPosition()).getCreated_at());
+                                //song info
+                                intent.putExtra("song_id", songList.get(getAdapterPosition()).getId());
+                                intent.putExtra("song_name", songList.get(getAdapterPosition()).getName());
+                                intent.putExtra("song_ext", songList.get(getAdapterPosition()).getExt());
+                                intent.putExtra("song_title", songList.get(getAdapterPosition()).getTitle());
+                                intent.putExtra("song_singer", songList.get(getAdapterPosition()).getSinger());
+                                intent.putExtra("song_avatar", songList.get(getAdapterPosition()).getAvatar());
+                                intent.putExtra("song_category_id", songList.get(getAdapterPosition()).getCategory_id());
+                                intent.putExtra("song_created_at", songList.get(getAdapterPosition()).getCreated_at());
 
-                            startActivity(intent);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(SongChartListActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override

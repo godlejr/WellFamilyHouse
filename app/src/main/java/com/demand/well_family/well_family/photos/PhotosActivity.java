@@ -36,13 +36,15 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.connection.FamilyServerConnection;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.settings.SettingActivity;
-import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Photo;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,13 +85,14 @@ public class PhotosActivity extends Activity {
     private String user_phone;
     private int user_level;
     private String user_avatar;
+    private String access_token;
 
     // Handler
     private MainHandler mainHandler;
 
     private ProgressDialog progressDialog;
     private Message msg;
-    private Server_Connection server_connection;
+    private FamilyServerConnection familyServerConnection;
 
     private static final Logger logger = LoggerFactory.getLogger(PhotosActivity.class);
     private SharedPreferences loginInfo;
@@ -122,6 +125,7 @@ public class PhotosActivity extends Activity {
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
 
         setToolbar(this.getWindow().getDecorView(), this.getApplicationContext(), family_name + " 사진첩");
     }
@@ -214,11 +218,6 @@ public class PhotosActivity extends Activity {
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         break;
-
-                    case R.id.menu_search:
-                        Toast.makeText(view.getContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
-                        break;
-
                     case R.id.menu_market:
                         intent = new Intent(PhotosActivity.this, MarketMainActivity.class);
                         startActivity(intent);
@@ -244,6 +243,7 @@ public class PhotosActivity extends Activity {
                         editor.remove("user_avatar");
                         editor.remove("user_phone");
                         editor.remove("user_level");
+                        editor.remove("access_token");
                         editor.commit();
 
                         intent = new Intent(PhotosActivity.this, LoginActivity.class);
@@ -301,19 +301,23 @@ public class PhotosActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
 
-                Call<ArrayList<Photo>> call_photo = server_connection.family_photo_List(family_id);
+                Call<ArrayList<Photo>> call_photo = familyServerConnection.family_photo_List(family_id);
                 call_photo.enqueue(new Callback<ArrayList<Photo>>() {
                     @Override
                     public void onResponse(Call<ArrayList<Photo>> call, Response<ArrayList<Photo>> response) {
-                        photoList = response.body();
+                        if(response.isSuccessful()) {
+                            photoList = response.body();
 
-                        if (photoList.size() == 0) {
-                            //사진이 없습니다.
+                            if (photoList.size() == 0) {
+                                //사진이 없습니다.
+                            } else {
+                                msg = new Message();
+                                mainHandler.sendMessage(msg);
+                            }
                         } else {
-                            msg = new Message();
-                            mainHandler.sendMessage(msg);
+                            Toast.makeText(PhotosActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 

@@ -19,11 +19,15 @@ import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
-import com.demand.well_family.well_family.connection.Server_Connection;
+import com.demand.well_family.well_family.connection.MainServerConnection;
+import com.demand.well_family.well_family.connection.UserServerConnection;
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.flag.JoinFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.register.AgreementActivity;
 import com.demand.well_family.well_family.register.SNSRegisterActivity;
+import com.demand.well_family.well_family.util.ErrorUtils;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -65,7 +69,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private SharedPreferences loginInfo;
     private SharedPreferences.Editor editor;
-    private Server_Connection server_connection;
+
+    private MainServerConnection mainServerConnection;
+    private UserServerConnection userServerConnection;
 
     public static ArrayList<Activity> finishList = new ArrayList<Activity>();
 
@@ -83,6 +89,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private String client_id = "vX9icrhPpuwATfps78ce";
     private String client_secret = "YiBZjWpiNA";
     private String client_name = "웰패밀리 하우스";  // 네이버 앱의 로그인 화면에 표시할 애플리케이션 이름
+
+    // access_token
+    private String access_token;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,16 +209,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
                 GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         try {
-                            String id = object.getString("id");             //id
-                            String name = object.getString("name");         // 이름
-                            String email = object.getString("email");       // 이메일
+                            String id = object.getString("id");
+                            String name = object.getString("name");
+                            String email = object.getString("email");
 
-                            setSNSLogin(email, name, id, 3);
+                            setSNSLogin(email, name, id, JoinFlag.FACEBOOK);
                         } catch (JSONException e) {
                             log(e);
                         }
@@ -229,7 +238,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onError(FacebookException error) {
                 Log.e("facebookLogin", error.getMessage());
-
+                Toast.makeText(LoginActivity.this, "일시적인 서버장애 입니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -243,7 +252,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void run() {
                         String token = mOAuthLoginModule.getAccessToken(LoginActivity.this);
                         String response = mOAuthLoginModule.requestApi(LoginActivity.this, token, "https://openapi.naver.com/v1/nid/me");
-                        Log.e("Tt", response);
 
                         try {
                             JSONObject json = new JSONObject(response);
@@ -251,7 +259,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             String name = json.getJSONObject("response").getString("name");
                             String email = json.getJSONObject("response").getString("email");
 
-                            setSNSLogin(email, name, id, 2);
+                            setSNSLogin(email, name, id, JoinFlag.NAVER);
 
                         } catch (JSONException e) {
                             log(e);
@@ -269,34 +277,40 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     };
 
     private void setSNSLogin(final String email, final String name, final String id, final int login_category_id) {
+        mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
         HashMap<String, String> map = new HashMap<>();
         map.put("email", email);
         map.put("password", id);
-        Call<ArrayList<User>> call = server_connection.login(map);
+        Call<User> call = mainServerConnection.login(map);
 
-        call.enqueue(new Callback<ArrayList<User>>() {
+        call.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-                final ArrayList<User> userList = response.body();
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    final User userInfo = response.body();
+                    access_token = userInfo.getAccess_token();
+                    Log.e("ACCESS_TOKEN", userInfo.getAccess_token());
 
-                if (userList.size() == 0) {
-                    Intent intent = new Intent(LoginActivity.this, SNSRegisterActivity.class);
-                    intent.putExtra("email", email);
-                    intent.putExtra("password", id);
-                    intent.putExtra("name", name);
-                    intent.putExtra("login_category_id", login_category_id);
-                    startActivity(intent);
+                    if (userInfo == null) {
+                        Intent intent = new Intent(LoginActivity.this, SNSRegisterActivity.class);
+                        intent.putExtra("email", email);
+                        intent.putExtra("password", id);
+                        intent.putExtra("name", name);
+                        intent.putExtra("login_category_id", login_category_id);
+                        startActivity(intent);
+                    } else {
+                        setLogin(userInfo);
+                    }
                 } else {
-                    setLogin(userList);
+                    Toast.makeText(LoginActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 log(t);
-                Toast.makeText(LoginActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "네트워크가 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -308,71 +322,70 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 et_email = email.getText().toString();
                 et_pwd = pwd.getText().toString();
 
-                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
                 HashMap<String, String> map = new HashMap<>();
                 map.put("email", et_email);
-                map.put("password", et_pwd);
-                Call<ArrayList<User>> call = server_connection.login(map);
+                map.put("password", encrypt_SHA256(et_pwd));
 
-                call.enqueue(new Callback<ArrayList<User>>() {
+                mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
+                Call<User> call_login = mainServerConnection.login(map);
+
+                call_login.enqueue(new Callback<User>() {
                     @Override
-                    public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-                        final ArrayList<User> userList = response.body();
-
-                        if (userList.size() == 0) {
-                            Toast.makeText(LoginActivity.this, "ID / 패스워드를 확인해주세요.", Toast.LENGTH_LONG).show();
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if (response.isSuccessful()) {
+                            final User userInfo = response.body();
+                            if (userInfo == null) {
+                                Toast.makeText(LoginActivity.this, "ID / 패스워드를 확인해주세요.", Toast.LENGTH_LONG).show();
+                            } else {
+                                setLogin(userInfo);
+                            }
                         } else {
-                            setLogin(userList);
+                            Toast.makeText(LoginActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+                    public void onFailure(Call<User> call, Throwable t) {
                         log(t);
-                        Toast.makeText(LoginActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "네트워크가 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                     }
                 });
+
                 break;
 
             case R.id.btn_main_register:
                 Intent intent = new Intent(v.getContext(), AgreementActivity.class);
                 startActivity(intent);
                 break;
-
-//            case R.id.et_join_email:
-//            case R.id.et_login_pwd:
-//                Log.e("tttt","tttt");
-//                sv_login.smoothScrollTo(0, 380);
-//                break;
         }
     }
 
-    private void setLogin(final ArrayList<User> userList) {
+    private void setLogin(final User userInfo) {
         final String device_id = getDeviceId();
         final String token = FirebaseInstanceId.getInstance().getToken();
+        access_token = userInfo.getAccess_token();
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("device_id", device_id);
-        map.put("token", token);
-        Call<ResponseBody> call_update_deviceId_token = server_connection.update_deviceId_token(userList.get(0).getId(), map);
+        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+        Call<ResponseBody> call_update_deviceId_token = userServerConnection.update_deviceId_token(userInfo.getId(), token, device_id);
         call_update_deviceId_token.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+                    editor = loginInfo.edit();
+                    editor.putInt("user_id", userInfo.getId());
+                    editor.putString("device_id", device_id);
+                    editor.putString("token", token);
+                    editor.putInt("user_level", userInfo.getLevel());
+                    editor.putString("access_token", userInfo.getAccess_token());
+                    editor.commit();
 
-                loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
-                editor = loginInfo.edit();
-                editor.putInt("user_id", userList.get(0).getId());
-                editor.putString("device_id", device_id);
-                editor.putString("token", token);
-                editor.putInt("user_level", userList.get(0).getLevel());
-                editor.commit();
-
-
-
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(LoginActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -415,6 +428,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    public String encrypt_SHA256(String pwd) {
+        MessageDigest messageDigest = null;
+
+        try {
+            messageDigest = MessageDigest.getInstance("SHA-256");
+            messageDigest.update(pwd.getBytes(), 0, pwd.length());
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return String.format("%064x", new java.math.BigInteger(1, messageDigest.digest()));
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

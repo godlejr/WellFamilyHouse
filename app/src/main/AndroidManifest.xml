@@ -13,6 +13,7 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -31,7 +32,9 @@
         </activity>
         <activity android:name=".family.StoryDetailActivity" />
         <activity android:name=".photos.PhotosActivity" />
-        <activity android:name=".photos.PhotoPopupActivity" />
+        <activity
+            android:name=".photos.PhotoPopupActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
         <activity android:name=".photos.SongPhotoPopupActivity" />
 
         <activity android:name=".users.UserActivity" />

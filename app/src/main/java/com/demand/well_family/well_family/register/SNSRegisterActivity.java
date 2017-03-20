@@ -18,9 +18,13 @@ import android.widget.Toast;
 
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.connection.Server_Connection;
+import com.demand.well_family.well_family.connection.MainServerConnection;
+import com.demand.well_family.well_family.connection.UserServerConnection;
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.flag.JoinFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.util.ErrorUtils;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.slf4j.Logger;
@@ -28,7 +32,6 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,8 +56,10 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
     private String password;
     private String name;
     private int login_category_id;
+    private String access_token;
 
-    private Server_Connection server_connection;
+    private MainServerConnection mainServerConnection;
+    private UserServerConnection userServerConnection;
 
     private static final Logger logger = LoggerFactory.getLogger(SNSRegisterActivity.class);
     private SharedPreferences loginInfo;
@@ -73,7 +78,7 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
         email = getIntent().getStringExtra("email");
         password = getIntent().getStringExtra("password");
         name = getIntent().getStringExtra("name");
-        login_category_id = getIntent().getIntExtra("login_category_id",1);
+        login_category_id = getIntent().getIntExtra("login_category_id", JoinFlag.DEMAND);
 
         btn_sns_register = (Button) findViewById(R.id.btn_sns_register);
         et_sns_birth = (EditText) findViewById(R.id.et_sns_birth);
@@ -109,7 +114,7 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
         switch (v.getId()) {
             case R.id.et_sns_birth:
                 Calendar calendar = Calendar.getInstance();
-                DatePickerDialog datePicker = new DatePickerDialog(v.getContext(), android.R.style.Theme_Holo_Light_Dialog_MinWidth,new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePicker = new DatePickerDialog(v.getContext(), android.R.style.Theme_Holo_Light_Dialog_MinWidth, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -145,67 +150,80 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
                     map.put("name", name);
                     map.put("birth", birth);
                     map.put("phone", phone);
+                    map.put("login_category_id", String.valueOf(login_category_id));
 
-                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ResponseBody> call_join = server_connection.join(login_category_id,map);
+                    mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
+                    Call<ResponseBody> call_join = mainServerConnection.join(map);
                     call_join.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                            HashMap<String, String> map = new HashMap<>();
-                            map.put("email", email);
-                            map.put("password", password);
-                            Call<ArrayList<User>> call_login = server_connection.login(map);
-                            call_login.enqueue(new Callback<ArrayList<User>>() {
-                                @Override
-                                public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-                                    final ArrayList<User> userList = response.body();
+                            if (response.isSuccessful()) {
+                                HashMap<String, String> map = new HashMap<>();
+                                map.put("email", email);
+                                map.put("password", password);
 
-                                    final String device_id = getDeviceId();
-                                    final String token = FirebaseInstanceId.getInstance().getToken();
+                                mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
+                                Call<User> call_login = mainServerConnection.login(map);
+                                call_login.enqueue(new Callback<User>() {
+                                    @Override
+                                    public void onResponse(Call<User> call, Response<User> response) {
+                                        if (response.isSuccessful()) {
+                                            final User userInfo = response.body();
 
-                                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                    HashMap<String, String> map = new HashMap<>();
-                                    map.put("device_id", device_id);
-                                    map.put("token", token);
-                                    Call<ResponseBody> call_update_deviceId_token = server_connection.update_deviceId_token(userList.get(0).getId(), map);
+                                            final String device_id = getDeviceId();
+                                            final String token = FirebaseInstanceId.getInstance().getToken();
 
-                                    call_update_deviceId_token.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            access_token = userInfo.getAccess_token();
+                                            userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                                            Call<ResponseBody> call_update_deviceId_token = userServerConnection.update_deviceId_token(userInfo.getId(), token, device_id);
 
-                                            loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
-                                            editor = loginInfo.edit();
-                                            editor.putInt("user_id", userList.get(0).getId());
-                                            editor.putString("user_name", userList.get(0).getName());
-                                            editor.putString("user_email", userList.get(0).getEmail());
-                                            editor.putString("user_birth", userList.get(0).getBirth());
-                                            editor.putString("user_avatar", userList.get(0).getAvatar());
-                                            editor.putString("user_phone", userList.get(0).getPhone());
-                                            editor.putString("device_id", device_id);
-                                            editor.putString("token", token);
-                                            editor.putInt("user_level", userList.get(0).getLevel());
-                                            editor.commit();
+                                            call_update_deviceId_token.enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    if (response.isSuccessful()) {
+                                                        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+                                                        editor = loginInfo.edit();
+                                                        editor.putInt("user_id", userInfo.getId());
+                                                        editor.putString("user_name", userInfo.getName());
+                                                        editor.putString("user_email", userInfo.getEmail());
+                                                        editor.putString("user_birth", userInfo.getBirth());
+                                                        editor.putString("user_avatar", userInfo.getAvatar());
+                                                        editor.putString("user_phone", userInfo.getPhone());
+                                                        editor.putString("device_id", device_id);
+                                                        editor.putString("token", token);
+                                                        editor.putInt("user_level", userInfo.getLevel());
+                                                        editor.putString("access_token", access_token);
 
-                                            Intent intent = new Intent(SNSRegisterActivity.this, MainActivity.class);
-                                            startActivity(intent);
-                                            finish();
+                                                        editor.commit();
+
+                                                        Intent intent = new Intent(SNSRegisterActivity.this, MainActivity.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    } else {
+                                                        Toast.makeText(SNSRegisterActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    log(t);
+                                                    Toast.makeText(SNSRegisterActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+                                        } else {
+                                            Toast.makeText(SNSRegisterActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                         }
+                                    }
 
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            log(t);
-                                            Toast.makeText(SNSRegisterActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onFailure(Call<ArrayList<User>> call, Throwable t) {
-                                    log(t);
-                                    Toast.makeText(SNSRegisterActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                }
-                            });
+                                    @Override
+                                    public void onFailure(Call<User> call, Throwable t) {
+                                        log(t);
+                                        Toast.makeText(SNSRegisterActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            } else {
+                                Toast.makeText(SNSRegisterActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override

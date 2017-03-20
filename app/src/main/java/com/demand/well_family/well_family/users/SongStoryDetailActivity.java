@@ -43,20 +43,20 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.settings.SettingActivity;
-import com.demand.well_family.well_family.connection.Server_Connection;
+import com.demand.well_family.well_family.connection.SongServerConnection;
+import com.demand.well_family.well_family.connection.SongStoryServerConnection;
 import com.demand.well_family.well_family.dialog.CommentPopupActivity;
-import com.demand.well_family.well_family.dto.CommentCount;
 import com.demand.well_family.well_family.dto.CommentInfo;
-import com.demand.well_family.well_family.dto.LikeCount;
 import com.demand.well_family.well_family.dto.SongPhoto;
-import com.demand.well_family.well_family.dto.SongStoryAvatar;
 import com.demand.well_family.well_family.dto.SongStoryComment;
 import com.demand.well_family.well_family.dto.SongStoryEmotionData;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.photos.SongPhotoPopupActivity;
+import com.demand.well_family.well_family.settings.SettingActivity;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +84,7 @@ import static com.demand.well_family.well_family.LoginActivity.finishList;
 public class SongStoryDetailActivity extends Activity implements CompoundButton.OnCheckedChangeListener {
     private TextView tv_sound_story_detail_title;
     private TextView tv_sound_story_detail_singer;
-    private TextView  tv_sound_story_detail_writer_name;
+    private TextView tv_sound_story_detail_writer_name;
     private TextView tv_sound_story_detail_play;
     private TextView tv_sound_story_detail_end;
     private TextView tv_sound_story_detail_content;
@@ -151,8 +151,8 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     private int user_level;
     private String user_email;
     private ImageView iv_sound_detail_song_img;
-    private Server_Connection server_connection;
-
+    private SongStoryServerConnection songStoryServerConnection;
+    private SongServerConnection songServerConnection;
     //emotion
     private RecyclerView rv_detail_emotion;
     private EmotionAdapter emotionAdapter;
@@ -165,6 +165,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
 
     //
     private String song_avatar;
+    private String access_token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,6 +213,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
         setToolbar(this.getWindow().getDecorView(), this.getApplicationContext(), "추억 소리");
     }
 
@@ -334,6 +336,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                         editor.remove("user_avatar");
                         editor.remove("user_phone");
                         editor.remove("user_level");
+                        editor.remove("access_token");
                         editor.commit();
 
                         intent = new Intent(SongStoryDetailActivity.this, LoginActivity.class);
@@ -366,13 +369,6 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
 
                     case R.id.menu_memory_sound:
                         startLink = new Intent(getApplicationContext(), SongMainActivity.class);
-                        startLink.putExtra("user_id", user_id);
-                        startLink.putExtra("user_level", user_level);
-                        startLink.putExtra("user_email", user_email);
-                        startLink.putExtra("user_phone", user_phone);
-                        startLink.putExtra("user_name", user_name);
-                        startLink.putExtra("user_avatar", user_avatar);
-                        startLink.putExtra("user_birth", user_birth);
                         startActivity(startLink);
                         break;
                 }
@@ -393,17 +389,21 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     private void getCommentCount() {
         tv_sound_story_detail_comment_count = (TextView) findViewById(R.id.tv_sound_story_detail_comment_count);
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<CommentCount>> call_comment_count = server_connection.song_story_comment_Count(story_id);
-        call_comment_count.enqueue(new Callback<ArrayList<CommentCount>>() {
+        songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+        Call<Integer> call_comment_count = songStoryServerConnection.song_story_comment_Count(story_id);
+        call_comment_count.enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(Call<ArrayList<CommentCount>> call, Response<ArrayList<CommentCount>> response) {
-                int comment_count = response.body().get(0).getComment_count();
-                tv_sound_story_detail_comment_count.setText(String.valueOf(comment_count));
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful()) {
+                    int comment_count = response.body();
+                    tv_sound_story_detail_comment_count.setText(String.valueOf(comment_count));
+                } else {
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
+            public void onFailure(Call<Integer> call, Throwable t) {
                 log(t);
                 Toast.makeText(SongStoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
@@ -438,25 +438,29 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         tv_sound_story_detail_title.setText(song_title);
         tv_sound_story_detail_singer.setText(song_singer);
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("song_id", String.valueOf(song_id));
 
-        Call<ArrayList<SongStoryAvatar>> call_avatar = server_connection.song_story_avatar(story_id, map);
-        call_avatar.enqueue(new Callback<ArrayList<SongStoryAvatar>>() {
+        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        Call<String> call_song_avatar = songServerConnection.song_story_avatar(song_id);
+        call_song_avatar.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<ArrayList<SongStoryAvatar>> call, Response<ArrayList<SongStoryAvatar>> response) {
-                song_avatar = response.body().get(0).getAvatar();
-                Glide.with(SongStoryDetailActivity.this).load(getString(R.string.cloud_front_songs_avatar) + song_avatar)
-                        .thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_detail_song_img);
+            public void onResponse(Call<String> call, Response<String> response) {
+
+                if (response.isSuccessful()) {
+                    song_avatar = response.body().toString();
+                    Glide.with(SongStoryDetailActivity.this).load(getString(R.string.cloud_front_songs_avatar) + song_avatar)
+                            .thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_detail_song_img);
+                } else {
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<SongStoryAvatar>> call, Throwable t) {
+            public void onFailure(Call<String> call, Throwable t) {
                 log(t);
                 Toast.makeText(SongStoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
+
 
         // user info
         Glide.with(this).load(getString(R.string.cloud_front_user_avatar) + story_user_avatar)
@@ -482,17 +486,21 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         // like
         tv_sound_story_detail_like_count = (TextView) findViewById(R.id.tv_sound_story_detail_like_count);
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<LikeCount>> call_like_count = server_connection.song_story_like_Count(story_id);
-        call_like_count.enqueue(new Callback<ArrayList<LikeCount>>() {
+        songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+        Call<Integer> call_like_count = songStoryServerConnection.song_story_like_Count(story_id);
+        call_like_count.enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(Call<ArrayList<LikeCount>> call, Response<ArrayList<LikeCount>> response) {
-                int like_count = response.body().get(0).getLike_count();
-                tv_sound_story_detail_like_count.setText(String.valueOf(like_count));
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful()) {
+                    int like_count = response.body();
+                    tv_sound_story_detail_like_count.setText(String.valueOf(like_count));
+                } else {
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<LikeCount>> call, Throwable t) {
+            public void onFailure(Call<Integer> call, Throwable t) {
                 log(t);
                 Toast.makeText(SongStoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
@@ -624,12 +632,10 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                         isPaused = true;
 
                         Glide.with(SongStoryDetailActivity.this).load(R.drawable.play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
-
                     } else {
                         if (isPaused) {  // 일시정지 -> 재생
                             mp.seekTo(pausePos);
                             mp.start();
-
                         } else { // 처음 재생 or 끝까지 갔다가 다시 재생
                             try {
                                 mp = new MediaPlayer();
@@ -647,7 +653,6 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                                         player.start();
                                     }
                                 });
-
                                 mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                                     @Override
                                     public void onCompletion(MediaPlayer mp) {
@@ -660,7 +665,6 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                                         mp.reset();
                                     }
                                 });
-
                                 mp.prepareAsync();
                             } catch (IOException e) {
                                 log(e);
@@ -683,20 +687,24 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         rv_sound_story_detail = (RecyclerView) findViewById(R.id.rv_sound_story_detail);
 
         //images
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<SongPhoto>> call_song_photo = server_connection.song_story_photo_List(story_id);
+        songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+        Call<ArrayList<SongPhoto>> call_song_photo = songStoryServerConnection.song_story_photo_List(story_id);
         call_song_photo.enqueue(new Callback<ArrayList<SongPhoto>>() {
             @Override
             public void onResponse(Call<ArrayList<SongPhoto>> call, Response<ArrayList<SongPhoto>> response) {
-                photoList = response.body();
-                if (photoList.size() == 0) {
-                    rv_sound_story_detail.setVisibility(View.GONE);
-                    ll_sound_story_detail_image.setVisibility(View.GONE);
+                if (response.isSuccessful()) {
+                    photoList = response.body();
+                    if (photoList.size() == 0) {
+                        rv_sound_story_detail.setVisibility(View.GONE);
+                        ll_sound_story_detail_image.setVisibility(View.GONE);
+                    } else {
+                        photoAdapter = new PhotoAdapter(SongStoryDetailActivity.this, photoList, R.layout.item_detail_photo);
+                        rv_sound_story_detail.setAdapter(photoAdapter);
+                        rv_sound_story_detail.setLayoutManager(new LinearLayoutManager(SongStoryDetailActivity.this, LinearLayoutManager.VERTICAL, false));
+                        rv_sound_story_detail.addItemDecoration(new SpaceItemDecoration(16));
+                    }
                 } else {
-                    photoAdapter = new PhotoAdapter(SongStoryDetailActivity.this, photoList, R.layout.item_detail_photo);
-                    rv_sound_story_detail.setAdapter(photoAdapter);
-                    rv_sound_story_detail.setLayoutManager(new LinearLayoutManager(SongStoryDetailActivity.this, LinearLayoutManager.VERTICAL, false));
-                    rv_sound_story_detail.addItemDecoration(new SpaceItemDecoration(16));
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -712,15 +720,19 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     private void getEmotionData() {
         rv_detail_emotion = (RecyclerView) findViewById(R.id.rv_detail_emotion);
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<SongStoryEmotionData>> call_emotion_data = server_connection.song_story_emotion_List(story_id);
+        songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+        Call<ArrayList<SongStoryEmotionData>> call_emotion_data = songStoryServerConnection.song_story_emotion_List(story_id);
         call_emotion_data.enqueue(new Callback<ArrayList<SongStoryEmotionData>>() {
             @Override
             public void onResponse(Call<ArrayList<SongStoryEmotionData>> call, Response<ArrayList<SongStoryEmotionData>> response) {
-                //emotion
-                emotionAdapter = new EmotionAdapter(response.body(), SongStoryDetailActivity.this, R.layout.item_emotion);
-                rv_detail_emotion.setAdapter(emotionAdapter);
-                rv_detail_emotion.setLayoutManager(new GridLayoutManager(SongStoryDetailActivity.this, 2));
+                if (response.isSuccessful()) {
+                    //emotion
+                    emotionAdapter = new EmotionAdapter(response.body(), SongStoryDetailActivity.this, R.layout.item_emotion);
+                    rv_detail_emotion.setAdapter(emotionAdapter);
+                    rv_detail_emotion.setLayoutManager(new GridLayoutManager(SongStoryDetailActivity.this, 2));
+                } else {
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -786,28 +798,33 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
             public void onClick(View v) {
                 final String content = et_sound_story_comment.getText().toString();
                 if (content.length() != 0) {
-                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    HashMap<String, String> map = new HashMap<>();
+                    songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                    final HashMap<String, String> map = new HashMap<>();
                     map.put("user_id", String.valueOf(user_id));
                     map.put("content", content);
-                    Call<ArrayList<SongStoryComment>> call_insert_comment = server_connection.insert_song_story_comment(story_id, map);
-                    call_insert_comment.enqueue(new Callback<ArrayList<SongStoryComment>>() {
+                    Call<SongStoryComment> call_insert_comment = songStoryServerConnection.insert_song_story_comment(story_id, map);
+                    call_insert_comment.enqueue(new Callback<SongStoryComment>() {
                         @Override
-                        public void onResponse(Call<ArrayList<SongStoryComment>> call, Response<ArrayList<SongStoryComment>> response) {
-                            int comment_id = response.body().get(0).getId();
-                            String created_at = response.body().get(0).getCreated_at();
-                            commentInfoList.add(new CommentInfo(comment_id, user_id, user_name, user_avatar, content, created_at));
-                            commentAdapter.notifyItemInserted(commentInfoList.size() - 1);
-                            getCommentCount();
+                        public void onResponse(Call<SongStoryComment> call, Response<SongStoryComment> response) {
+                            if (response.isSuccessful()) {
+                                SongStoryComment songStoryComment = response.body();
+                                int comment_id = songStoryComment.getId();
+                                String created_at = songStoryComment.getCreated_at();
+                                commentInfoList.add(new CommentInfo(comment_id, user_id, user_name, user_avatar, content, created_at));
+                                commentAdapter.notifyItemInserted(commentInfoList.size() - 1);
+                                getCommentCount();
 
-                            et_sound_story_comment.setText("");
+                                et_sound_story_comment.setText("");
 
-                            NestedScrollView nsv = (NestedScrollView) findViewById(R.id.nsv_sound_story_detail);
-                            nsv.fullScroll(NestedScrollView.FOCUS_DOWN);
+                                NestedScrollView nsv = (NestedScrollView) findViewById(R.id.nsv_sound_story_detail);
+                                nsv.fullScroll(NestedScrollView.FOCUS_DOWN);
+                            } else {
+                                Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
-                        public void onFailure(Call<ArrayList<SongStoryComment>> call, Throwable t) {
+                        public void onFailure(Call<SongStoryComment> call, Throwable t) {
                             log(t);
                             Toast.makeText(SongStoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
@@ -820,15 +837,19 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     private void getCommentData() {
         rv_sound_story_detail_comments = (RecyclerView) findViewById(R.id.rv_sound_story_detail_comments);
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<CommentInfo>> call_family = server_connection.song_story_comment_List(story_id);
+        songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+        Call<ArrayList<CommentInfo>> call_family = songStoryServerConnection.song_story_comment_List(story_id);
         call_family.enqueue(new Callback<ArrayList<CommentInfo>>() {
             @Override
             public void onResponse(Call<ArrayList<CommentInfo>> call, Response<ArrayList<CommentInfo>> response) {
-                commentInfoList = response.body();
-                commentAdapter = new CommentAdapter(SongStoryDetailActivity.this, commentInfoList, R.layout.item_comment);
-                rv_sound_story_detail_comments.setAdapter(commentAdapter);
-                rv_sound_story_detail_comments.setLayoutManager(new LinearLayoutManager(SongStoryDetailActivity.this, LinearLayoutManager.VERTICAL, false));
+                if (response.isSuccessful()) {
+                    commentInfoList = response.body();
+                    commentAdapter = new CommentAdapter(SongStoryDetailActivity.this, commentInfoList, R.layout.item_comment);
+                    rv_sound_story_detail_comments.setAdapter(commentAdapter);
+                    rv_sound_story_detail_comments.setLayoutManager(new LinearLayoutManager(SongStoryDetailActivity.this, LinearLayoutManager.VERTICAL, false));
+                } else {
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -892,7 +913,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                         intent.putExtra("position", position);
                         intent.putExtra("act_flag", 3);
                         startActivityForResult(intent, COMMENT_EDIT_REQUEST);
-                    }else{
+                    } else {
                         Intent intent = new Intent(SongStoryDetailActivity.this, CommentPopupActivity.class);
                         intent.putExtra("comment_id", commentInfoList.get(position).getComment_id());
                         intent.putExtra("comment_user_name", commentInfoList.get(position).getUser_name());
@@ -930,7 +951,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                     int position = data.getIntExtra("position", -1);
                     commentAdapter.commentInfoList.remove(position);
                     commentAdapter.notifyItemRemoved(position);
-                    commentAdapter.notifyItemRangeChanged(position,commentAdapter.getItemCount());
+                    commentAdapter.notifyItemRangeChanged(position, commentAdapter.getItemCount());
 
                 }
             }
@@ -1007,6 +1028,9 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         String msg = null;
 
         if (diffTime < 60) {
+            if (diffTime < 0) {
+                diffTime = 0;
+            }
             msg = diffTime + "초전";
         } else if ((diffTime /= 60) < 60) {
             System.out.println(diffTime);
@@ -1027,17 +1051,20 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (first_checked) {
             if (isChecked) {
-
-                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_id", String.valueOf(user_id));
 
-                Call<ResponseBody> call_like = server_connection.song_story_like_up(story_id, map);
+                Call<ResponseBody> call_like = songStoryServerConnection.song_story_like_up(story_id, map);
                 call_like.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        tv_sound_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_sound_story_detail_like_count.getText().toString()) + 1));
-                        like_checked = !like_checked;
+                        if (response.isSuccessful()) {
+                            tv_sound_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_sound_story_detail_like_count.getText().toString()) + 1));
+                            like_checked = !like_checked;
+                        } else {
+                            Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -1047,16 +1074,20 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                     }
                 });
             } else {
-                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_id", String.valueOf(user_id));
 
-                Call<ResponseBody> call_dislike = server_connection.song_story_like_down(story_id, map);
+                Call<ResponseBody> call_dislike = songStoryServerConnection.song_story_like_down(story_id, user_id);
                 call_dislike.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        tv_sound_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_sound_story_detail_like_count.getText().toString()) - 1));
-                        like_checked = !like_checked;
+                        if (response.isSuccessful()) {
+                            tv_sound_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_sound_story_detail_like_count.getText().toString()) - 1));
+                            like_checked = !like_checked;
+                        } else {
+                            Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override

@@ -28,14 +28,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.connection.Server_Connection;
+import com.demand.well_family.well_family.connection.SongServerConnection;
 import com.demand.well_family.well_family.dialog.CommentPopupActivity;
-import com.demand.well_family.well_family.dto.Check;
-import com.demand.well_family.well_family.dto.CommentCount;
 import com.demand.well_family.well_family.dto.CommentInfo;
-import com.demand.well_family.well_family.dto.LikeCount;
 import com.demand.well_family.well_family.dto.SongComment;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,18 +58,24 @@ import retrofit2.Response;
 public class SongPlayer extends Activity implements CompoundButton.OnCheckedChangeListener {
     private MediaPlayer mp;
     private SeekBar sb_sound;
-    private Boolean isPlaying = false, isPaused = false;
+    private Boolean isPlaying = false;
+    private Boolean isPaused = false;
     private int pausePos, endMinute, endSecond;
     private CheckBox cb_sound_player_like;
-    private TextView tv_sound_player_start, tv_sound_player_end;
+    private TextView tv_sound_player_start;
+    private TextView tv_sound_player_end;
     private RecyclerView rv_sound_player_comment;
     private LinearLayout ll_sound_player_info;
 
-    private ImageView iv_sound_player_album, iv_sound_player_record, iv_sound_player_start, iv_sound_player_close;
+    private ImageView iv_sound_player_album;
+    private ImageView iv_sound_player_record;
+    private ImageView iv_sound_player_start;
+    private ImageView iv_sound_player_close;
     private TextView tv_sound_player_title;
     private TextView tv_sound_player_singer;
 
-    private TextView tv_sound_comment_count, tv_sound_like_count;
+    private TextView tv_sound_comment_count;
+    private TextView tv_sound_like_count;
 
     private EditText et_sound_comment;
 
@@ -83,6 +88,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
     private String user_email;
     private String user_phone;
     private String user_birth;
+    private String access_token;
 
     //song info
     private int song_id;
@@ -94,7 +100,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
     private int song_category_id;
     private String song_created_at;
 
-    private Server_Connection server_connection;
+    private SongServerConnection songServerConnection;
     private static final int COMMENT_EDIT_REQUEST = 1;
 
     //first like check
@@ -144,6 +150,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
     }
 
     private void setCommentData() {
@@ -159,24 +166,29 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                     map.put("user_id", String.valueOf(user_id));
                     map.put("content", content);
 
-                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ArrayList<SongComment>> call_insert_Song_comment = server_connection.insert_song_comment(song_id, map);
-                    call_insert_Song_comment.enqueue(new Callback<ArrayList<SongComment>>() {
+                    songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+                    Call<SongComment> call_insert_Song_comment = songServerConnection.insert_song_comment(song_id, map);
+                    call_insert_Song_comment.enqueue(new Callback<SongComment>() {
                         @Override
-                        public void onResponse(Call<ArrayList<SongComment>> call, Response<ArrayList<SongComment>> response) {
-                            int comment_id = response.body().get(0).getId();
-                            String created_at = response.body().get(0).getCreated_at();
+                        public void onResponse(Call<SongComment> call, Response<SongComment> response) {
+                            if (response.isSuccessful()) {
+                                SongComment songComment = response.body();
+                                int comment_id = songComment.getId();
+                                String created_at = songComment.getCreated_at();
 
-                            commentInfoList.add(new CommentInfo(comment_id, user_id, user_name, user_avatar, content, created_at));
-                            commentAdapter.notifyItemInserted(commentInfoList.size() - 1);
-                            getCommentCount();
-                            et_sound_comment.setText("");
-                            NestedScrollView nsv = (NestedScrollView) findViewById(R.id.nsv_player);
-                            nsv.fullScroll(NestedScrollView.FOCUS_DOWN);
+                                commentInfoList.add(new CommentInfo(comment_id, user_id, user_name, user_avatar, content, created_at));
+                                commentAdapter.notifyItemInserted(commentInfoList.size() - 1);
+                                getCommentCount();
+                                et_sound_comment.setText("");
+                                NestedScrollView nsv = (NestedScrollView) findViewById(R.id.nsv_player);
+                                nsv.fullScroll(NestedScrollView.FOCUS_DOWN);
+                            } else {
+                                Toast.makeText(SongPlayer.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
-                        public void onFailure(Call<ArrayList<SongComment>> call, Throwable t) {
+                        public void onFailure(Call<SongComment> call, Throwable t) {
                             log(t);
                             Toast.makeText(SongPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
@@ -293,14 +305,18 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         HashMap<String, String> map = new HashMap<>();
         map.put("user_id", String.valueOf(user_id));
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
         if (first_checked) {
             if (isChecked) {
-                Call<ResponseBody> call_song_like_up = server_connection.song_like_up(song_id, map);
+                Call<ResponseBody> call_song_like_up = songServerConnection.song_like_up(song_id, map);
                 call_song_like_up.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        tv_sound_like_count.setText(String.valueOf(Integer.parseInt(tv_sound_like_count.getText().toString()) + 1));
+                        if (response.isSuccessful()) {
+                            tv_sound_like_count.setText(String.valueOf(Integer.parseInt(tv_sound_like_count.getText().toString()) + 1));
+                        } else {
+                            Toast.makeText(SongPlayer.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -311,11 +327,15 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                 });
 
             } else {
-                Call<ResponseBody> call_song_like_down = server_connection.song_like_down(song_id, map);
+                Call<ResponseBody> call_song_like_down = songServerConnection.song_like_down(song_id, user_id);
                 call_song_like_down.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        tv_sound_like_count.setText(String.valueOf(Integer.parseInt(tv_sound_like_count.getText().toString()) - 1));
+                        if (response.isSuccessful()) {
+                            tv_sound_like_count.setText(String.valueOf(Integer.parseInt(tv_sound_like_count.getText().toString()) - 1));
+                        } else {
+                            Toast.makeText(SongPlayer.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -369,17 +389,21 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
         Glide.with(this).load(getString(R.string.cloud_front_songs_avatar) + song_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_player_album_bg);
 
         //like
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<LikeCount>> call_song_like_count = server_connection.song_like_Count(song_id);
-        call_song_like_count.enqueue(new Callback<ArrayList<LikeCount>>() {
+        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        Call<Integer> call_song_like_count = songServerConnection.song_like_Count(song_id);
+        call_song_like_count.enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(Call<ArrayList<LikeCount>> call, Response<ArrayList<LikeCount>> response) {
-                int like_count = response.body().get(0).getLike_count();
-                tv_sound_like_count.setText(String.valueOf(like_count));
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful()) {
+                    int like_count = response.body();
+                    tv_sound_like_count.setText(String.valueOf(like_count));
+                } else {
+                    Toast.makeText(SongPlayer.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<LikeCount>> call, Throwable t) {
+            public void onFailure(Call<Integer> call, Throwable t) {
                 log(t);
                 Toast.makeText(SongPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
@@ -387,24 +411,27 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
 
         //like
         cb_sound_player_like = (CheckBox) findViewById(R.id.cb_sound_player_like);
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("user_id", String.valueOf(user_id));
-        Call<ArrayList<Check>> call_song_like_check = server_connection.song_like_check(song_id, map);
-        call_song_like_check.enqueue(new Callback<ArrayList<Check>>() {
+        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+
+        Call<Integer> call_song_like_check = songServerConnection.song_like_check(song_id, user_id);
+        call_song_like_check.enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {
-                int checked = response.body().get(0).getChecked();
-                if (checked == 1) {
-                    cb_sound_player_like.setChecked(true);
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful()) {
+                    int checked = response.body();
+                    if (checked == 1) {
+                        cb_sound_player_like.setChecked(true);
+                    } else {
+                        cb_sound_player_like.setChecked(false);
+                    }
+                    first_checked = true;
                 } else {
-                    cb_sound_player_like.setChecked(false);
+                    Toast.makeText(SongPlayer.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
-                first_checked = true;
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Check>> call, Throwable t) {
+            public void onFailure(Call<Integer> call, Throwable t) {
                 log(t);
                 Toast.makeText(SongPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
@@ -454,36 +481,43 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
     }
 
     private void getCommentCount() {
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<CommentCount>> call_song_comment_count = server_connection.song_comment_count(song_id);
-        call_song_comment_count.enqueue(new Callback<ArrayList<CommentCount>>() {
+        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        Call<Integer> call_song_comment_count = songServerConnection.song_comment_Count(song_id);
+        call_song_comment_count.enqueue(new Callback<Integer>() {
             @Override
-            public void onResponse(Call<ArrayList<CommentCount>> call, Response<ArrayList<CommentCount>> response) {
-                int comment_count = response.body().get(0).getComment_count();
-                tv_sound_comment_count.setText(String.valueOf(comment_count));
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful()) {
+                    int comment_count = response.body();
+                    tv_sound_comment_count.setText(String.valueOf(comment_count));
+                } else {
+                    Toast.makeText(SongPlayer.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
+            public void onFailure(Call<Integer> call, Throwable t) {
                 log(t);
                 Toast.makeText(SongPlayer.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
     private void getCommentData() {
         rv_sound_player_comment = (RecyclerView) findViewById(R.id.rv_sound_player_comment);
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<CommentInfo>> call_song_comment_List = server_connection.song_comment_List(song_id);
+        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        Call<ArrayList<CommentInfo>> call_song_comment_List = songServerConnection.song_comment_List(song_id);
         call_song_comment_List.enqueue(new Callback<ArrayList<CommentInfo>>() {
             @Override
             public void onResponse(Call<ArrayList<CommentInfo>> call, Response<ArrayList<CommentInfo>> response) {
-                commentInfoList = response.body();
-                commentAdapter = new CommentAdapter(SongPlayer.this, commentInfoList, R.layout.item_comment);
-                rv_sound_player_comment.setLayoutManager(new LinearLayoutManager(SongPlayer.this, LinearLayoutManager.VERTICAL, false));
-                rv_sound_player_comment.setAdapter(commentAdapter);
+                if (response.isSuccessful()) {
+                    commentInfoList = response.body();
+                    commentAdapter = new CommentAdapter(SongPlayer.this, commentInfoList, R.layout.item_comment);
+                    rv_sound_player_comment.setLayoutManager(new LinearLayoutManager(SongPlayer.this, LinearLayoutManager.VERTICAL, false));
+                    rv_sound_player_comment.setAdapter(commentAdapter);
+                } else {
+                    Toast.makeText(SongPlayer.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -548,12 +582,12 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                         intent.putExtra("position", position);
                         intent.putExtra("act_flag", 2);
                         startActivityForResult(intent, COMMENT_EDIT_REQUEST);
-                    }else{
+                    } else {
                         Intent intent = new Intent(SongPlayer.this, CommentPopupActivity.class);
                         intent.putExtra("comment_id", commentInfoList.get(position).getComment_id());
                         intent.putExtra("comment_user_name", commentInfoList.get(position).getUser_name());
                         intent.putExtra("comment_content", commentInfoList.get(position).getContent());
-                        intent.putExtra("act_flag",4);
+                        intent.putExtra("act_flag", 4);
                         intent.putExtra("comment_category_id", 2);
                         startActivity(intent);
                     }
@@ -587,7 +621,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                     int position = data.getIntExtra("position", -1);
                     commentAdapter.commentInfoList.remove(position);
                     commentAdapter.notifyItemRemoved(position);
-                    commentAdapter.notifyItemRangeChanged(position,commentAdapter.getItemCount());
+                    commentAdapter.notifyItemRangeChanged(position, commentAdapter.getItemCount());
 
                 }
             }

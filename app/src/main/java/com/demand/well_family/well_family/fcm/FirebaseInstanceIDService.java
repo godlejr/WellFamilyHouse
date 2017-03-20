@@ -4,16 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
-import com.demand.well_family.well_family.connection.Server_Connection;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.connection.UserServerConnection;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.util.ErrorUtils;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -22,7 +23,7 @@ import retrofit2.Response;
 
 public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
 
-    private Server_Connection server_connection;
+    private UserServerConnection userServerConnection;
     private SharedPreferences loginInfo;
 
     private static final Logger logger = LoggerFactory.getLogger(FirebaseInstanceIdService.class);
@@ -36,6 +37,7 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
     private int user_level;
     private String user_avatar;
     private String device_id;
+    private String access_token;
 
     private Context context;
 
@@ -52,6 +54,7 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
         device_id = loginInfo.getString("device_id", null);
+        access_token = loginInfo.getString("access_token", null);
 
         Log.e("service user",user_id+"");
         Log.e("service",user_id+"");
@@ -67,16 +70,18 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
 
     private void sendRegistrationToServer(String token) {
         Log.e("service",3+"");
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        HashMap<String,String> map = new HashMap<>();
-        map.put("token",token);
+        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
 
-        Call<ResponseBody> call_update_token = server_connection.update_token(user_id,map);
+        Call<ResponseBody> call_update_token = userServerConnection.update_token(user_id, token);
         call_update_token.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
 //                Intent intent = new Intent(context, FirebaseInstanceIDService.class);
 //                startService(intent);
+                } else {
+                    Toast.makeText(context, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override

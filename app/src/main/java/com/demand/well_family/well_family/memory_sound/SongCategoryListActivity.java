@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,12 +30,14 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.connection.SongServerConnection;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.settings.SettingActivity;
-import com.demand.well_family.well_family.connection.Server_Connection;
 import com.demand.well_family.well_family.dto.Song;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +63,7 @@ public class SongCategoryListActivity extends Activity {
     private int category_id;
     private String category_name;
 
-    private Server_Connection server_connection;
+    private SongServerConnection songServerConnection;
     private ArrayList<Song> songList;
     private RecyclerView rv_song_list;
 
@@ -72,6 +75,7 @@ public class SongCategoryListActivity extends Activity {
     private String user_email;
     private String user_phone;
     private String user_birth;
+    private String access_token;
 
     //toolbar
     private DrawerLayout dl;
@@ -104,6 +108,7 @@ public class SongCategoryListActivity extends Activity {
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
         setToolbar(this.getWindow().getDecorView(), this, "추억소리");
     }
 
@@ -200,11 +205,6 @@ public class SongCategoryListActivity extends Activity {
                         startActivity(intent);
 
                         break;
-
-                    case R.id.menu_search:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
-                        break;
-
                     case R.id.menu_market:
                         intent = new Intent(SongCategoryListActivity.this, MarketMainActivity.class);
                         startActivity(intent);
@@ -231,6 +231,7 @@ public class SongCategoryListActivity extends Activity {
                         editor.remove("user_avatar");
                         editor.remove("user_phone");
                         editor.remove("user_level");
+                        editor.remove("access_token");
                         editor.commit();
 
                         intent = new Intent(SongCategoryListActivity.this, LoginActivity.class);
@@ -289,11 +290,14 @@ public class SongCategoryListActivity extends Activity {
             ll_item_song.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ResponseBody> call_insert_song_hit = server_connection.Insert_Song_hit(songList.get(getAdapterPosition()).getId());
+                    songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+                    Call<ResponseBody> call_insert_song_hit = songServerConnection.Insert_Song_hit(songList.get(getAdapterPosition()).getId());
                     call_insert_song_hit.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if(!response.isSuccessful()){
+                                Toast.makeText(SongCategoryListActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
                             //scess
                         }
 
@@ -318,7 +322,6 @@ public class SongCategoryListActivity extends Activity {
                     intent.putExtra("song_created_at", songList.get(getAdapterPosition()).getCreated_at());
 
                     startActivity(intent);
-
                 }
             });
         }
@@ -359,14 +362,18 @@ public class SongCategoryListActivity extends Activity {
     private void getSongsData() {
         rv_song_list = (RecyclerView) findViewById(R.id.rv_song_list);
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<Song>> call_song_list_by_Category = server_connection.song_list_by_Category(category_id);
+        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        Call<ArrayList<Song>> call_song_list_by_Category = songServerConnection.song_list_by_Category(category_id);
         call_song_list_by_Category.enqueue(new Callback<ArrayList<Song>>() {
             @Override
             public void onResponse(Call<ArrayList<Song>> call, Response<ArrayList<Song>> response) {
-                songList = response.body();
-                rv_song_list.setAdapter(new SongAdapter(SongCategoryListActivity.this, songList, R.layout.item_song));
-                rv_song_list.setLayoutManager(new LinearLayoutManager(SongCategoryListActivity.this, LinearLayoutManager.VERTICAL, false));
+                if(response.isSuccessful()) {
+                    songList = response.body();
+                    rv_song_list.setAdapter(new SongAdapter(SongCategoryListActivity.this, songList, R.layout.item_song));
+                    rv_song_list.setLayoutManager(new LinearLayoutManager(SongCategoryListActivity.this, LinearLayoutManager.VERTICAL, false));
+                } else {
+                    Toast.makeText(SongCategoryListActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override

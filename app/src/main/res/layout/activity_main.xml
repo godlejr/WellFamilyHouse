@@ -165,32 +165,6 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView21"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="#f7f5f0"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="7dp"
-                        android:text="가족알림"
-                        android:textColor="#542920"
-                        android:paddingBottom="7dp"
-                        android:textStyle="normal|bold" />
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:scaleType="fitXY"
-                        android:layout_height="390dp"
-                        android:id="@+id/iv_img_alarm" />
-                </LinearLayout>
-
             </LinearLayout>
         </ScrollView>
 

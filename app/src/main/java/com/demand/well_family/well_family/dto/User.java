@@ -12,8 +12,9 @@ public class User {
     private String phone;
     private String avatar;
     private int level;
+    private String access_token;
 
-    public User(int id, String email, String name, String birth, String phone, String avatar, int level) {
+    public User(int id, String email, String name, String birth, String phone, String avatar, int level, String access_token) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -21,6 +22,7 @@ public class User {
         this.phone = phone;
         this.avatar = avatar;
         this.level = level;
+        this.access_token = access_token;
     }
 
     public int getId() {
@@ -77,5 +79,13 @@ public class User {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public String getAccess_token() {
+        return access_token;
+    }
+
+    public void setAccess_token(String access_token) {
+        this.access_token = access_token;
     }
 }

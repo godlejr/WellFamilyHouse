@@ -2,6 +2,7 @@ package com.demand.well_family.well_family.dialog;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -9,8 +10,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.connection.Server_Connection;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.connection.CommentServerConnection;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,11 +34,13 @@ public class CommentDeleteActivity extends Activity{
 
     private TextView tv_comment_delete_confirm;
     private TextView tv_comment_delete_cancel;
-    private Server_Connection server_connection;
+    private CommentServerConnection commentServerConnection;
 
     private static final Logger logger = LoggerFactory.getLogger(CommentDeleteActivity.class);
     private int act_flag;
 
+    private String access_token;
+    private SharedPreferences loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +62,11 @@ public class CommentDeleteActivity extends Activity{
 
     private void init() {
         act_flag = getIntent().getIntExtra("act_flag", 0);
-
         comment_id = getIntent().getIntExtra("comment_id",0);
+
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        access_token = loginInfo.getString("access_token", null);
+
 
         tv_comment_delete_confirm =  (TextView)findViewById(R.id.tv_comment_delete_confirm);
         tv_comment_delete_cancel = (TextView)findViewById(R.id.tv_comment_delete_cancel);
@@ -75,19 +83,23 @@ public class CommentDeleteActivity extends Activity{
         tv_comment_delete_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                commentServerConnection = new HeaderInterceptor(access_token).getClientForCommentServer().create(CommentServerConnection.class);
                 HashMap<String, String> map = new HashMap<>();
-                map.put("comment_id", String.valueOf(comment_id));
+//                map.put("comment_id", String.valueOf(comment_id));
                 map.put("flag",String.valueOf(act_flag));
-                Call<ResponseBody> call_delete_comment = server_connection.delete_comment(map);
+                Call<ResponseBody> call_delete_comment = commentServerConnection.delete_comment(comment_id, map);
                 call_delete_comment.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         //scss
-                        Toast.makeText(CommentDeleteActivity.this, "댓글이 삭제되었습니다.", Toast.LENGTH_LONG).show();
-                        Intent intent = getIntent();
-                        setResult(Activity.RESULT_OK, intent);
-                        finish();
+                        if(response.isSuccessful()) {
+                            Toast.makeText(CommentDeleteActivity.this, "댓글이 삭제되었습니다.", Toast.LENGTH_LONG).show();
+                            Intent intent = getIntent();
+                            setResult(Activity.RESULT_OK, intent);
+                            finish();
+                        }else{
+                            Toast.makeText(CommentDeleteActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -109,7 +121,8 @@ public class CommentDeleteActivity extends Activity{
 
         if (LogFlag.printFlag) {
             if (logger.isInfoEnabled()) {
-                logger.info("Exception: " + throwable.getMessage());
+                logger.info("Exception: "
+                        + throwable.getMessage());
                 logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
             }
         }

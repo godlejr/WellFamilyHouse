@@ -3,6 +3,7 @@ package com.demand.well_family.well_family.memory_sound;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -21,9 +22,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.connection.Server_Connection;
+import com.demand.well_family.well_family.connection.SongServerConnection;
 import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +48,13 @@ public class EmotionActivity extends Activity {
 
     private EmotionAdapter emotionAdapter;
     private HashMap<Integer, Integer> map;  // key : id , value : category_id
-    private Server_Connection server_connection;
+    private SongServerConnection songServerConnection;
     private ArrayList<SongStoryEmotionInfo> emotionList;
 
     private static final Logger logger = LoggerFactory.getLogger(EmotionActivity.class);
+
+    private SharedPreferences loginInfo;
+    private String access_token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,10 @@ public class EmotionActivity extends Activity {
     }
 
     private void init() {
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        access_token = loginInfo.getString("access_token", null);
+
+
         map = new HashMap<>();
 
         btn_emotion = (Button) findViewById(R.id.btn_emotion);
@@ -78,15 +88,20 @@ public class EmotionActivity extends Activity {
 
         rv_emotion = (RecyclerView) findViewById(R.id.rv_emotion);
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<SongStoryEmotionInfo>> call_emotions = server_connection.song_story_emotion_List();
+//        songServerConnection = SongServerConnection.retrofit.create(SongServerConnection.class);
+        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        Call<ArrayList<SongStoryEmotionInfo>> call_emotions = songServerConnection.song_story_emotion_List();
         call_emotions.enqueue(new Callback<ArrayList<SongStoryEmotionInfo>>() {
             @Override
             public void onResponse(Call<ArrayList<SongStoryEmotionInfo>> call, Response<ArrayList<SongStoryEmotionInfo>> response) {
-                emotionList = response.body();
-                emotionAdapter = new EmotionAdapter(emotionList, EmotionActivity.this, R.layout.item_emotion);
-                rv_emotion.setAdapter(emotionAdapter);
-                rv_emotion.setLayoutManager(new LinearLayoutManager(EmotionActivity.this, LinearLayoutManager.VERTICAL, false));
+                if(response.isSuccessful()) {
+                    emotionList = response.body();
+                    emotionAdapter = new EmotionAdapter(emotionList, EmotionActivity.this, R.layout.item_emotion);
+                    rv_emotion.setAdapter(emotionAdapter);
+                    rv_emotion.setLayoutManager(new LinearLayoutManager(EmotionActivity.this, LinearLayoutManager.VERTICAL, false));
+                } else {
+                    Toast.makeText(EmotionActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override

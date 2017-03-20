@@ -32,18 +32,21 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.demand.well_family.well_family.connection.Server_Connection;
+import com.demand.well_family.well_family.connection.MainServerConnection;
+import com.demand.well_family.well_family.connection.UserServerConnection;
 import com.demand.well_family.well_family.create_family.CreateFamilyActivity;
 import com.demand.well_family.well_family.dto.App;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.family.FamilyActivity;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.notification.NotificationActivity;
 import com.demand.well_family.well_family.settings.SettingActivity;
 import com.demand.well_family.well_family.users.UserActivity;
+import com.demand.well_family.well_family.util.ErrorUtils;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.slf4j.Logger;
@@ -53,7 +56,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -88,23 +90,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
     //toolbar_main & menu
     private DrawerLayout dl;
     private ActionBarDrawerToggle toggle;
-    private Server_Connection server_connection;
+
+    private UserServerConnection userServerConnection;
 
     private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
 
-
     //
     private SharedPreferences pref;
-
+    private String access_token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        ImageView iv_img_alarm = (ImageView) findViewById(R.id.iv_img_alarm);
-        Glide.with(MainActivity.this).load(getString(R.string.cloud_front_banners) + "notification.jpg").thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_img_alarm);
 
         finishList.add(this);
 
@@ -120,44 +118,47 @@ public class MainActivity extends Activity implements View.OnClickListener {
         SharedPreferences loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
         user_id = loginInfo.getInt("user_id", 0);
         user_level = loginInfo.getInt("user_level", 0);
-
+        access_token = loginInfo.getString("access_token", null);
+        Log.e("Access Token", access_token);
         resetUserInfo();
-
     }
 
     private void resetUserInfo() {
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("user_id", String.valueOf(user_id));
+//        userServerConnection = UserServerConnection.retrofit.create(UserServerConnection.class);
+        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
 
-
-            Call<ArrayList<User>> call_user_info = server_connection.user_Info(map);
-        call_user_info.enqueue(new Callback<ArrayList<User>>() {
+        Call<User> call_user_info = userServerConnection.user_Info(user_id);
+        call_user_info.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-                ArrayList<User> user = response.body();
-                SharedPreferences loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
-                SharedPreferences.Editor editor = loginInfo.edit();
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    User userInfo = response.body();
+                    SharedPreferences loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = loginInfo.edit();
 
-                editor.putString("user_name", user.get(0).getName());
-                editor.putString("user_email", user.get(0).getEmail());
-                editor.putString("user_birth", user.get(0).getBirth());
-                editor.putString("user_avatar", user.get(0).getAvatar());
-                editor.putString("user_phone", user.get(0).getPhone());
+                    user_name = userInfo.getName();
+                    user_email = userInfo.getEmail();
+                    user_birth = userInfo.getBirth();
+                    user_avatar = userInfo.getAvatar();
+                    user_phone = userInfo.getPhone();
 
-                editor.apply();
+                    editor.putString("user_name", user_name);
+                    editor.putString("user_email", user_email);
+                    editor.putString("user_birth", user_birth);
+                    editor.putString("user_avatar", user_avatar);
+                    editor.putString("user_phone", user_phone);
+                    editor.putString("access_token", access_token);
 
-                user_name = user.get(0).getName();
-                user_email = user.get(0).getEmail();
-                user_birth = user.get(0).getBirth();
-                user_avatar = user.get(0).getAvatar();
-                user_phone = user.get(0).getPhone();
+                    editor.apply();
 
-                setToolbar(MainActivity.this.getWindow().getDecorView());
+                    setToolbar(MainActivity.this.getWindow().getDecorView());
+                } else {
+                    Toast.makeText(MainActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 log(t);
                 Toast.makeText(MainActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
@@ -167,7 +168,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void setFCMService() {
         //FirebaseMessaging.getInstance().subscribeToTopic("news");
         String token = FirebaseInstanceId.getInstance().getToken();
-        Log.e("ttt", token);
+        Log.e("Firebase Token", token);
     }
 
     private class ViewPageAdapter extends PagerAdapter {
@@ -195,7 +196,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 Glide.with(MainActivity.this).load(getString(R.string.cloud_front_banners) + "demand_banner3.jpg").thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(img);
             }
 
-            TextView tv_viewPager_position = (TextView)view.findViewById(R.id.tv_viewPager_position);
+            TextView tv_viewPager_position = (TextView) view.findViewById(R.id.tv_viewPager_position);
             tv_viewPager_position.setText("");
 
             container.addView(view);
@@ -240,30 +241,35 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         btn_family_add_exist = (ImageButton) findViewById(R.id.btn_family_add_exist);
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<Family>> call = server_connection.family_Info(user_id);
+//        userServerConnection = UserServerConnection.retrofit.create(UserServerConnection.class);
+        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+        Call<ArrayList<Family>> call = userServerConnection.family_Info(user_id);
         call.enqueue(new Callback<ArrayList<Family>>() {
             @Override
             public void onResponse(Call<ArrayList<Family>> call, Response<ArrayList<Family>> response) {
-                familyList = response.body();
-                if (familyList.size() == 0) {
-                    //가족이 없습니다.
-                    btn_family_add_exist.setVisibility(View.GONE);
-                    layoutInflater.inflate(R.layout.item_family_make, ll_family_container_family, true);
-                    View ll_family_make = findViewById(R.id.ll_family_make);
-                    ll_family_make.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(v.getContext(), CreateFamilyActivity.class);
-                            startActivity(intent);
-                        }
-                    });
+                if(response.isSuccessful()) {
+                    familyList = response.body();
+                    if (familyList.size() == 0) {
+                        //가족이 없습니다.
+                        btn_family_add_exist.setVisibility(View.GONE);
+                        layoutInflater.inflate(R.layout.item_family_make, ll_family_container_family, true);
+                        View ll_family_make = findViewById(R.id.ll_family_make);
+                        ll_family_make.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(v.getContext(), CreateFamilyActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+                    } else {
+                        btn_family_add_exist.setVisibility(View.VISIBLE);
+                        layoutInflater.inflate(R.layout.item_family_list, ll_family_container_family, true);
+                        rv_family = (RecyclerView) ll_family_container_family.findViewById(R.id.rv_family);
+                        rv_family.setAdapter(new FamilyAdapter(MainActivity.this, familyList, R.layout.item_users_familys));
+                        rv_family.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                    }
                 } else {
-                    btn_family_add_exist.setVisibility(View.VISIBLE);
-                    layoutInflater.inflate(R.layout.item_family_list, ll_family_container_family, true);
-                    rv_family = (RecyclerView) ll_family_container_family.findViewById(R.id.rv_family);
-                    rv_family.setAdapter(new FamilyAdapter(MainActivity.this, familyList, R.layout.item_users_familys));
-                    rv_family.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
+                    Toast.makeText(MainActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -446,10 +452,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
         pref = getApplicationContext().getSharedPreferences("badge", Activity.MODE_PRIVATE);
-        final TextView toolbar_noti_count = (TextView)toolbar.findViewById(R.id.toolbar_noti_count);
-        toolbar_noti_count.setText(String.valueOf(pref.getInt("badge_count",0)));
+        final TextView toolbar_noti_count = (TextView) toolbar.findViewById(R.id.toolbar_noti_count);
+        toolbar_noti_count.setText(String.valueOf(pref.getInt("badge_count", 0)));
 
-        ImageView toolbar_notification = (ImageView)toolbar.findViewById(R.id.toolbar_notification);
+        ImageView toolbar_notification = (ImageView) toolbar.findViewById(R.id.toolbar_notification);
         toolbar_notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -565,6 +571,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         editor.remove("user_avatar");
                         editor.remove("user_phone");
                         editor.remove("user_level");
+                        editor.remove("access_token");
                         editor.commit();
 
                         intent = new Intent(MainActivity.this, LoginActivity.class);

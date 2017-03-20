@@ -31,11 +31,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.connection.Server_Connection;
+import com.demand.well_family.well_family.connection.FamilyServerConnection;
+import com.demand.well_family.well_family.connection.UserServerConnection;
 import com.demand.well_family.well_family.dto.Family;
-import com.demand.well_family.well_family.dto.Identification;
 import com.demand.well_family.well_family.family.FamilyActivity;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.register.RegisterActivity;
+import com.demand.well_family.well_family.util.APIError;
+import com.demand.well_family.well_family.util.ErrorUtils;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
 import org.slf4j.Logger;
@@ -43,7 +47,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.MediaType;
@@ -52,6 +55,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * Created by ㅇㅇ on 2017-02-12.
@@ -73,13 +77,16 @@ public class CreateFamilyActivity extends Activity {
     private String user_phone;
     private int user_level;
     private String user_avatar;
-    private Server_Connection server_connection;
     private ProgressDialog progressDialog;
+
+    private UserServerConnection userServerConnection;
+    private FamilyServerConnection familyServerConnection;
 
     private final int READ_EXTERNAL_STORAGE_PERMISSION = 10001;
 
     private static final Logger logger = LoggerFactory.getLogger(CreateFamilyActivity.class);
     private SharedPreferences loginInfo;
+    private String access_token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +98,7 @@ public class CreateFamilyActivity extends Activity {
         setUserInfo();
         init();
     }
+
     private void setUserInfo() {
         loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
         user_id = loginInfo.getInt("user_id", 0);
@@ -100,6 +108,8 @@ public class CreateFamilyActivity extends Activity {
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
+
         setToolbar(getWindow().getDecorView());
     }
 
@@ -149,11 +159,11 @@ public class CreateFamilyActivity extends Activity {
                     Toast.makeText(CreateFamilyActivity.this, "가족 소개를 입력하세요.", Toast.LENGTH_SHORT).show();
                 } else {
                     String family_name = et_create_family_name.getText().toString();
-                    String family_introfuce = et_create_family_introduce.getText().toString();
+                    String family_introduce = et_create_family_introduce.getText().toString();
 
                     HashMap<String, String> map = new HashMap<>();
                     map.put("family_name", family_name);
-                    map.put("family_content", family_introfuce);
+                    map.put("family_content", family_introduce);
 
                     progressDialog = new ProgressDialog(CreateFamilyActivity.this);
                     progressDialog.show();
@@ -162,96 +172,111 @@ public class CreateFamilyActivity extends Activity {
                     progressDialog.setContentView(R.layout.progress_dialog);
 
 
-                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ArrayList<Identification>> call = server_connection.insert_family(user_id, map);
-                    call.enqueue(new Callback<ArrayList<Identification>>() {
+                    userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                    Call<Integer> call = userServerConnection.insert_family(user_id, map);
+                    call.enqueue(new Callback<Integer>() {
                         @Override
-                        public void onResponse(Call<ArrayList<Identification>> call, Response<ArrayList<Identification>> response) {
-                            ArrayList<Identification> identificationList = response.body();
-                            final int family_id = identificationList.get(0).getId();
+                        public void onResponse(Call<Integer> call, Response<Integer> response) {
+                            if (response.isSuccessful()) {
+                                final int family_id = response.body();
 
-                            if (family_photo_uri != null) {
-                                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(family_photo_uri)));
+                                if (family_photo_uri != null) {
+                                    familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
+                                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(family_photo_uri)));
 
-                                Call<ResponseBody> call_photo = server_connection.update_family_avatar(family_id, requestBody);
-                                call_photo.enqueue(new Callback<ResponseBody>() {
-                                    @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                        Call<ArrayList<Family>> call_family = server_connection.family_info_by_creator(family_id);
-                                        call_family.enqueue(new Callback<ArrayList<Family>>() {
-                                            @Override
-                                            public void onResponse(Call<ArrayList<Family>> call, Response<ArrayList<Family>> response) {
-                                                ArrayList<Family> familyList = response.body();
+                                    Call<ResponseBody> call_photo = familyServerConnection.update_family_avatar(family_id, requestBody);
+                                    call_photo.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            if (response.isSuccessful()) {
+                                                familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
+                                                Call<Family> call_family = familyServerConnection.family(family_id);
+                                                call_family.enqueue(new Callback<Family>() {
+                                                    @Override
+                                                    public void onResponse(Call<Family> call, Response<Family> response) {
+                                                        if (response.isSuccessful()) {
+                                                            Family familyInfo = response.body();
+                                                            Intent intent = new Intent(CreateFamilyActivity.this, FamilyActivity.class);
+
+                                                            //family info
+                                                            intent.putExtra("family_id", familyInfo.getId());
+                                                            intent.putExtra("family_name", familyInfo.getName());
+                                                            intent.putExtra("family_content", familyInfo.getContent());
+                                                            intent.putExtra("family_avatar", familyInfo.getAvatar());
+                                                            intent.putExtra("family_user_id", familyInfo.getUser_id());
+                                                            intent.putExtra("family_created_at", familyInfo.getCreated_at());
+
+                                                            try {
+                                                                Thread.sleep(200);
+                                                            } catch (InterruptedException e) {
+                                                                log(e);
+                                                            }
+
+                                                            progressDialog.dismiss();
+                                                            startActivity(intent);
+
+                                                            finish();
+                                                        } else {
+                                                            Toast.makeText(CreateFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<Family> call, Throwable t) {
+                                                        log(t);
+                                                        Toast.makeText(CreateFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                            } else {
+                                                Toast.makeText(CreateFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            log(t);
+                                            Toast.makeText(CreateFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                } else {
+                                    familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
+                                    Call<Family> call_family = familyServerConnection.family(family_id);
+                                    call_family.enqueue(new Callback<Family>() {
+                                        @Override
+                                        public void onResponse(Call<Family> call, Response<Family> response) {
+                                            if (response.isSuccessful()) {
+                                                Family familyInfo = response.body();
                                                 Intent intent = new Intent(CreateFamilyActivity.this, FamilyActivity.class);
 
                                                 //family info
-                                                intent.putExtra("family_id", familyList.get(0).getId());
-                                                intent.putExtra("family_name", familyList.get(0).getName());
-                                                intent.putExtra("family_content", familyList.get(0).getContent());
-                                                intent.putExtra("family_avatar", familyList.get(0).getAvatar());
-                                                intent.putExtra("family_user_id", familyList.get(0).getUser_id());
-                                                intent.putExtra("family_created_at", familyList.get(0).getCreated_at());
+                                                intent.putExtra("family_id", familyInfo.getId());
+                                                intent.putExtra("family_name", familyInfo.getName());
+                                                intent.putExtra("family_content", familyInfo.getContent());
+                                                intent.putExtra("family_avatar", familyInfo.getAvatar());
+                                                intent.putExtra("family_user_id", familyInfo.getUser_id());
+                                                intent.putExtra("family_created_at", familyInfo.getCreated_at());
 
-                                                try {
-                                                    Thread.sleep(200);
-                                                } catch (InterruptedException e) {
-                                                    log(e);
-                                                }
-
-                                                progressDialog.dismiss();
                                                 startActivity(intent);
-
                                                 finish();
+                                            } else {
+                                                Toast.makeText(CreateFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                             }
+                                        }
 
-                                            @Override
-                                            public void onFailure(Call<ArrayList<Family>> call, Throwable t) {
-                                                log(t);
-                                                Toast.makeText(CreateFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                        log(t);
-                                        Toast.makeText(CreateFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                    }
-                                });
+                                        @Override
+                                        public void onFailure(Call<Family> call, Throwable t) {
+                                            log(t);
+                                            Toast.makeText(CreateFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
                             } else {
-                                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                Call<ArrayList<Family>> call_family = server_connection.family(family_id);
-                                call_family.enqueue(new Callback<ArrayList<Family>>() {
-                                    @Override
-                                    public void onResponse(Call<ArrayList<Family>> call, Response<ArrayList<Family>> response) {
-                                        ArrayList<Family> familyList = response.body();
-                                        Intent intent = new Intent(CreateFamilyActivity.this, FamilyActivity.class);
-
-                                        //family info
-                                        intent.putExtra("family_id", familyList.get(0).getId());
-                                        intent.putExtra("family_name", familyList.get(0).getName());
-                                        intent.putExtra("family_content", familyList.get(0).getContent());
-                                        intent.putExtra("family_avatar", familyList.get(0).getAvatar());
-                                        intent.putExtra("family_user_id", familyList.get(0).getUser_id());
-                                        intent.putExtra("family_created_at", familyList.get(0).getCreated_at());
-
-                                        startActivity(intent);
-                                        finish();
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<ArrayList<Family>> call, Throwable t) {
-                                        log(t);
-                                        Toast.makeText(CreateFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                    }
-                                });
+                                Toast.makeText(CreateFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<ArrayList<Identification>> call, Throwable t) {
+                        public void onFailure(Call<Integer> call, Throwable t) {
                             log(t);
                             Toast.makeText(CreateFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
@@ -261,7 +286,6 @@ public class CreateFamilyActivity extends Activity {
         });
 
     }
-
 
     private void checkPermission() {
         int readPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -354,6 +378,7 @@ public class CreateFamilyActivity extends Activity {
                     }
                     Glide.with(CreateFamilyActivity.this).load(family_photo_uri).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_create_family_img);
                 } else {
+                    Toast.makeText(this, "사진을 다시 선택해주세요.", Toast.LENGTH_SHORT).show();
                     Log.e("갤러리 이미지 선택 오류", "");
                 }
             }

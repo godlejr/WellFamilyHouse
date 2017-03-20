@@ -5,15 +5,15 @@
     android:layout_marginRight="5dp">
 
     <TextView
-        android:text="OPTION"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/tv_option"
-        android:textColor="#000"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/round_corner_border_gray"
+        android:gravity="center"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:gravity="center" />
+        android:text="OPTION"
+        android:textColor="#000" />
 </LinearLayout>

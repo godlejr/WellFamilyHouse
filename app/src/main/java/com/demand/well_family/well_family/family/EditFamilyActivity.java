@@ -31,9 +31,11 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.connection.Server_Connection;
+import com.demand.well_family.well_family.connection.FamilyServerConnection;
 import com.demand.well_family.well_family.dto.Family;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.util.ErrorUtils;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
 import org.slf4j.Logger;
@@ -41,7 +43,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.MediaType;
@@ -84,8 +85,9 @@ public class EditFamilyActivity extends Activity {
 
     private final int READ_EXTERNAL_STORAGE_PERMISSION = 10001;
     private SharedPreferences loginInfo;
-    private Server_Connection server_connection;
+    private FamilyServerConnection familyServerConnection;
     private ProgressDialog progressDialog;
+    private String access_token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +111,8 @@ public class EditFamilyActivity extends Activity {
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
+
         setToolbar(getWindow().getDecorView());
     }
 
@@ -227,44 +231,51 @@ public class EditFamilyActivity extends Activity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                            familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
                             HashMap<String, String> map = new HashMap<String, String>();
                             map.put("name", familyName);
                             map.put("content", familyIntroduce);
-                            Call<ResponseBody> call_update_family_info = server_connection.update_family_info(family_id, map);
+                            Call<ResponseBody> call_update_family_info = familyServerConnection.update_family_info(family_id, map);
                             call_update_family_info.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    if (family_photo_uri != null) {
-                                        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(family_photo_uri)));
-                                        Call<ResponseBody> call_update_family_avatar = server_connection.update_family_avatar(family_id, requestBody);
+                                    if (response.isSuccessful()) {
+                                        if (family_photo_uri != null) {
+                                            familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
+                                            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(family_photo_uri)));
+                                            Call<ResponseBody> call_update_family_avatar = familyServerConnection.update_family_avatar(family_id, requestBody);
 
-                                        call_update_family_avatar.enqueue(new Callback<ResponseBody>() {
-                                            @Override
-                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                //scss
-                                                resetFamilyInfo();
-                                            }
+                                            call_update_family_avatar.enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    if (response.isSuccessful()) {
+                                                        //scss
+                                                        resetFamilyInfo();
+                                                    } else {
+                                                        Toast.makeText(EditFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
 
-                                            @Override
-                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                log(t);
-                                                Toast.makeText(EditFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    log(t);
+                                                    Toast.makeText(EditFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+                                        } else {
+                                            resetFamilyInfo();
+                                        }
+
+                                        try {
+                                            Thread.sleep(1000);
+                                        } catch (InterruptedException e) {
+                                            log(e);
+                                        }
+
+                                        progressDialog.dismiss();
                                     } else {
-                                        resetFamilyInfo();
+                                        Toast.makeText(EditFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                     }
-
-
-                                    try {
-                                        Thread.sleep(1000);
-                                    } catch (InterruptedException e) {
-                                        log(e);
-                                    }
-
-                                    progressDialog.dismiss();
                                 }
 
                                 @Override
@@ -283,21 +294,25 @@ public class EditFamilyActivity extends Activity {
     private void resetFamilyInfo() {
         final Intent intent = getIntent();
 
-        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-        Call<ArrayList<Family>> call_get_family_info = server_connection.family_info_by_creator(family_id);
-        call_get_family_info.enqueue(new Callback<ArrayList<Family>>() {
+        familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
+        Call<Family> call_get_family_info = familyServerConnection.family(family_id);
+        call_get_family_info.enqueue(new Callback<Family>() {
             @Override
-            public void onResponse(Call<ArrayList<Family>> call, Response<ArrayList<Family>> response) {
-                ArrayList<Family> familyList = response.body();
-                intent.putExtra("avatar", familyList.get(0).getAvatar());
-                intent.putExtra("name", familyList.get(0).getName());
-                intent.putExtra("content", familyList.get(0).getContent());
-                setResult(Activity.RESULT_OK, intent);
-                finish();
+            public void onResponse(Call<Family> call, Response<Family> response) {
+                if (response.isSuccessful()) {
+                    Family familyInfo = response.body();
+                    intent.putExtra("avatar", familyInfo.getAvatar());
+                    intent.putExtra("name", familyInfo.getName());
+                    intent.putExtra("content", familyInfo.getContent());
+                    setResult(Activity.RESULT_OK, intent);
+                    finish();
+                } else {
+                    Toast.makeText(EditFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Family>> call, Throwable t) {
+            public void onFailure(Call<Family> call, Throwable t) {
                 log(t);
                 Toast.makeText(EditFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }

@@ -25,14 +25,15 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.connection.UserServerConnection;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.settings.SettingActivity;
-import com.demand.well_family.well_family.connection.Server_Connection;
-import com.demand.well_family.well_family.dto.Check;
 import com.demand.well_family.well_family.dto.Photo;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.photos.PhotoPopupActivity;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +44,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -71,6 +71,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
     private String story_user_email;
     private String story_user_phone;
     private String story_user_birth;
+    private String access_token;
 
     private ImageView iv_family_activity_avatar;
     private TextView tv_family_activity_name;
@@ -85,7 +86,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
 
     //toolbar
     private DrawerLayout dl;
-    private Server_Connection server_connection;
+    private UserServerConnection userServerConnection;
 
     private static final Logger logger = LoggerFactory.getLogger(UserActivity.class);
     private SharedPreferences loginInfo;
@@ -120,6 +121,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
         setToolbar(this.getWindow().getDecorView(), this, story_user_name);
     }
 
@@ -141,6 +143,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
             }
         });
         ImageView toolbar_menu = (ImageView) toolbar.findViewById(R.id.toolbar_menu);
+
         toolbar_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -248,6 +251,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
                         editor.remove("user_avatar");
                         editor.remove("user_phone");
                         editor.remove("user_level");
+                        editor.remove("access_token");
                         editor.commit();
 
                         intent = new Intent(UserActivity.this, LoginActivity.class);
@@ -302,26 +306,28 @@ public class UserActivity extends Activity implements View.OnClickListener {
             //me
             ll_user_phone_info.setVisibility(View.GONE);
         } else {
-            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            HashMap<String, String> map = new HashMap<>();
-            map.put("user_id", String.valueOf(user_id));
+            userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
 
-            Call<ArrayList<Check>> call_family_check = server_connection.family_check(story_user_id, map);
-            call_family_check.enqueue(new Callback<ArrayList<Check>>() {
+            Call<Integer> call_family_check = userServerConnection.family_check(story_user_id, user_id);
+            call_family_check.enqueue(new Callback<Integer>() {
                 @Override
-                public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {
-                    if (response.body().get(0).getChecked() > 0) {
-                        //family
-                        tv_family_activity_phone.setOnClickListener(UserActivity.this);
-                        iv_user_call.setOnClickListener(UserActivity.this);
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body() > 0) {
+                            //family
+                            tv_family_activity_phone.setOnClickListener(UserActivity.this);
+                            iv_user_call.setOnClickListener(UserActivity.this);
+                        } else {
+                            //public
+                            ll_user_phone_info.setVisibility(View.GONE);
+                        }
                     } else {
-                        //public
-                        ll_user_phone_info.setVisibility(View.GONE);
+                        Toast.makeText(UserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ArrayList<Check>> call, Throwable t) {
+                public void onFailure(Call<Integer> call, Throwable t) {
                     log(t);
                     Toast.makeText(UserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
@@ -339,7 +345,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
 
                 String[] filename = story_user_avatar.split("\\.");
                 ArrayList<Photo> photo = new ArrayList<Photo>();
-                photo.add(new Photo(0,0, 0, filename[0], filename[1]));
+                photo.add(new Photo(0, 0, 0, filename[0], filename[1]));
 
                 intent.putExtra("photoList", photo);
                 intent.putExtra("from", "UserActivity");
@@ -373,13 +379,13 @@ public class UserActivity extends Activity implements View.OnClickListener {
     }
 
     private void init() {
-        if(user_id != story_user_id){
-            ll_user_edit = (LinearLayout)findViewById(R.id.ll_user_edit);
+        if (user_id != story_user_id) {
+            ll_user_edit = (LinearLayout) findViewById(R.id.ll_user_edit);
             ll_user_edit.setVisibility(View.GONE);
         }
 
 
-        ll_edit_profile = (LinearLayout)findViewById(R.id.ll_edit_profile);
+        ll_edit_profile = (LinearLayout) findViewById(R.id.ll_edit_profile);
         ll_edit_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

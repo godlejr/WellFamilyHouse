@@ -6,7 +6,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,19 +20,19 @@ import android.widget.Toast;
 
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.connection.Server_Connection;
-import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.connection.MainServerConnection;
+import com.demand.well_family.well_family.flag.JoinFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private String et_email;
     private boolean email_duplicate_check = false;
 
-    private Server_Connection server_connection;
+    private MainServerConnection mainServerConnection;
 
     private static final Logger logger = LoggerFactory.getLogger(RegisterActivity.class);
 
@@ -92,6 +93,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         btn_join.setOnClickListener(this);
         btn_email_check.setOnClickListener(this);
 
+        et_join_name.setFilters(new InputFilter[]{characterFilter});
     }
 
     // toolbar_main & menu
@@ -161,24 +163,33 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     Toast.makeText(v.getContext(), "비밀번호는 6~20자 대소문자, 숫자/특수문자를 포함해야합니다.", Toast.LENGTH_SHORT).show();
                 } else {
                     String encrypt_password = encrypt_SHA256(et_join_pwd.getText().toString());
-                    Log.e("비밀번호", encrypt_password);
-
+                    Log.e("비번", encrypt_password + " / " + encrypt_password.length());
                     HashMap<String, String> map = new HashMap<>();
                     map.put("email", et_join_email.getText().toString());
                     map.put("password", encrypt_password);
                     map.put("name", et_join_name.getText().toString());
                     map.put("birth", et_join_birthday.getText().toString());
                     map.put("phone", et_join_phone.getText().toString());
+                    map.put("login_category_id", String.valueOf(JoinFlag.DEMAND));
 
-                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    Call<ResponseBody> call = server_connection.join(1, map);
-                    call.enqueue(new Callback<ResponseBody>() {
+
+                    mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
+                    Call<ResponseBody> call_join = mainServerConnection.join(map);
+                    call_join.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                            startActivity(intent);
-                            Toast.makeText(RegisterActivity.this, "회원가입이 되었습니다.", Toast.LENGTH_LONG).show();
-                            finish();
+                            if (response.isSuccessful()) {
+                                if (response.isSuccessful()) {
+                                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    Toast.makeText(RegisterActivity.this, "회원가입이 되었습니다.", Toast.LENGTH_LONG).show();
+                                    finish();
+                                } else {
+                                    Toast.makeText(RegisterActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(RegisterActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
@@ -197,26 +208,31 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     Toast.makeText(v.getContext(), "올바른 이메일 형식을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 } else {
                     if (setNotiVisible(et_join_email, noti_email)) {
+                        String email = et_join_email.getText().toString();
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("email", email);
 
-                        HashMap<String, String> mapEmail = new HashMap<>();
-                        mapEmail.put("email", et_join_email.getText().toString());
-
-                        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                        Call<ArrayList<User>> call_email_check = server_connection.email_check(mapEmail);
-                        call_email_check.enqueue(new Callback<ArrayList<User>>() {
+                        mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
+                        Call<Integer> call_email_check = mainServerConnection.email_check(map);
+                        call_email_check.enqueue(new Callback<Integer>() {
                             @Override
-                            public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-                                if (response.body().size() == 0) {
-                                    Toast.makeText(RegisterActivity.this, "사용가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
-                                    email_duplicate_check = true;
+                            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                                if (response.isSuccessful()) {
+                                    if (response.body() != 1) {
+                                        Toast.makeText(RegisterActivity.this, "사용가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
+                                        email_duplicate_check = true;
+                                    } else {
+                                        Toast.makeText(RegisterActivity.this, "사용중인 아이디입니다.", Toast.LENGTH_SHORT).show();
+                                        email_duplicate_check = false;
+                                    }
                                 } else {
-                                    Toast.makeText(RegisterActivity.this, "사용중인 아이디입니다.", Toast.LENGTH_SHORT).show();
-                                    email_duplicate_check = false;
+                                    Toast.makeText(RegisterActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
+
                             }
 
                             @Override
-                            public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+                            public void onFailure(Call<Integer> call, Throwable t) {
                                 log(t);
                                 Toast.makeText(RegisterActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                             }
@@ -254,7 +270,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         return isNormal;
     }
 
-    public String encrypt_SHA256(String pwd)  {
+    public String encrypt_SHA256(String pwd) {
         MessageDigest messageDigest = null;
 
         try {
@@ -269,12 +285,28 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    InputFilter characterFilter = new InputFilter() {
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            int length = source.length();
+            for (int i = 0; i < length; i++) {
+                Pattern pattern = Pattern.compile("^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\\u318D\\u119E\\u11A2\\u2022\\u2025a\\u00B7\\uFE55]+$");
+                if (!pattern.matcher(source).matches()) {
+                    Toast.makeText(RegisterActivity.this, "특수문자는 입력이 불가합니다.", Toast.LENGTH_SHORT).show();
+                    return "";
+                }
+            }
+            return null;
+        }
+    };
+
     private static void log(Throwable throwable) {
         StackTraceElement[] ste = throwable.getStackTrace();
         String className = ste[0].getClassName();
         String methodName = ste[0].getMethodName();
         int lineNumber = ste[0].getLineNumber();
         String fileName = ste[0].getFileName();
+
 
         if (LogFlag.printFlag) {
             if (logger.isInfoEnabled()) {

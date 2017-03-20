@@ -21,6 +21,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,18 +41,18 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.connection.SongStoryServerConnection;
+import com.demand.well_family.well_family.connection.UserServerConnection;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.settings.SettingActivity;
-import com.demand.well_family.well_family.connection.Server_Connection;
-import com.demand.well_family.well_family.dto.Check;
-import com.demand.well_family.well_family.dto.CommentCount;
-import com.demand.well_family.well_family.dto.LikeCount;
 import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStory;
 import com.demand.well_family.well_family.dto.SongStoryEmotionData;
 import com.demand.well_family.well_family.dto.SongStoryInfo;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,6 +85,7 @@ public class SongStoryActivity extends Activity {
     private String user_email;
     private String user_phone;
     private String user_birth;
+    private String access_token;
 
     //story user info
     private int story_user_id;
@@ -94,7 +96,8 @@ public class SongStoryActivity extends Activity {
     private String story_user_phone;
     private String story_user_birth;
 
-    private Server_Connection server_connection;
+    private UserServerConnection userServerConnection;
+    private SongStoryServerConnection songStoryServerConnection;
 
     private RecyclerView rv_user_activity_sound;
     private ArrayList<SongStoryInfo> storyList;
@@ -160,6 +163,7 @@ public class SongStoryActivity extends Activity {
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
         setToolbar(this.getWindow().getDecorView(), this.getApplicationContext(), "추억 소리");
     }
 
@@ -252,14 +256,6 @@ public class SongStoryActivity extends Activity {
                 switch (item.getItemId()) {
                     case R.id.menu_home:
                         intent = new Intent(SongStoryActivity.this, MainActivity.class);
-                        intent.putExtra("user_id", user_id);
-                        intent.putExtra("user_email", user_email);
-                        intent.putExtra("user_birth", user_birth);
-                        intent.putExtra("user_phone", user_phone);
-                        intent.putExtra("user_name", user_name);
-                        intent.putExtra("user_level", user_level);
-                        intent.putExtra("user_avatar", user_avatar);
-
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         break;
@@ -293,6 +289,7 @@ public class SongStoryActivity extends Activity {
                         editor.remove("user_avatar");
                         editor.remove("user_phone");
                         editor.remove("user_level");
+                        editor.remove("access_token");
                         editor.commit();
 
                         intent = new Intent(SongStoryActivity.this, LoginActivity.class);
@@ -325,13 +322,6 @@ public class SongStoryActivity extends Activity {
 
                     case R.id.menu_memory_sound:
                         startLink = new Intent(getApplicationContext(), SongMainActivity.class);
-                        startLink.putExtra("user_id", getIntent().getStringExtra("user_id"));
-                        startLink.putExtra("user_level", getIntent().getStringExtra("user_level"));
-                        startLink.putExtra("user_email", getIntent().getStringExtra("user_email"));
-                        startLink.putExtra("user_phone", getIntent().getStringExtra("user_phone"));
-                        startLink.putExtra("user_name", getIntent().getStringExtra("user_name"));
-                        startLink.putExtra("user_avatar", getIntent().getStringExtra("user_avatar"));
-                        startLink.putExtra("user_birth", getIntent().getStringExtra("user_birth"));
                         startActivity(startLink);
                         break;
                 }
@@ -363,54 +353,58 @@ public class SongStoryActivity extends Activity {
             public void run() {
                 if (user_id == story_user_id) {
                     //me
-                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    call_content = server_connection.song_story_List_Me(story_user_id);
+                    userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                    call_content = userServerConnection.song_story_List_Me(story_user_id);
 
                     call_content.enqueue(new Callback<ArrayList<SongStory>>() {
                         @Override
                         public void onResponse(Call<ArrayList<SongStory>> call, Response<ArrayList<SongStory>> response) {
-                            contentList = response.body();
-                            content_size = contentList.size();
+                            if (response.isSuccessful()) {
+                                contentList = response.body();
+                                content_size = contentList.size();
 
-                            if (content_size == 0) {
-                                //contents  비워 있음
-                            } else {
-//                                content_size = contentList.size();
-                                int loopSize = 0;
-
-                                if (content_size <= CONTENTS_OFFSET) {
-                                    loopSize = content_size;
-                                    content_isFinished = true;
+                                if (content_size == 0) {
+                                    //contents  비워 있음
                                 } else {
-                                    loopSize = CONTENTS_OFFSET;
-                                    content_size -= loopSize;
-                                }
+//                                content_size = contentList.size();
+                                    int loopSize = 0;
 
-                                for (int i = 0; i < loopSize; i++) {
-                                    storyList.add(new SongStoryInfo(story_user_id, story_user_name, story_user_avatar, contentList.get(i).getId(), contentList.get(i).getRange_id(),
-                                            contentList.get(i).getSong_id(), contentList.get(i).getSong_title(), contentList.get(i).getSong_singer(),
-                                            contentList.get(i).getRecord_file(), contentList.get(i).getCreated_at(), contentList.get(i).getContent(), contentList.get(i).getLocation(), contentList.get(i).getHits()));
-                                }
-                            }
-                            contentAdapter = new ContentAdapter(SongStoryActivity.this, storyList, R.layout.item_activity_sound);
+                                    if (content_size <= CONTENTS_OFFSET) {
+                                        loopSize = content_size;
+                                        content_isFinished = true;
+                                    } else {
+                                        loopSize = CONTENTS_OFFSET;
+                                        content_size -= loopSize;
+                                    }
 
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("contentAdapter", contentAdapter);
-
-                            msg = new Message();
-                            msg.setData(bundle);
-                            mainHandler.sendMessage(msg);
-
-                            mainHandler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        progressDialog.dismiss();
-                                    } catch (Exception e) {
-                                        log(e);
+                                    for (int i = 0; i < loopSize; i++) {
+                                        storyList.add(new SongStoryInfo(story_user_id, story_user_name, story_user_avatar, contentList.get(i).getId(), contentList.get(i).getRange_id(),
+                                                contentList.get(i).getSong_id(), contentList.get(i).getSong_title(), contentList.get(i).getSong_singer(),
+                                                contentList.get(i).getRecord_file(), contentList.get(i).getCreated_at(), contentList.get(i).getContent(), contentList.get(i).getLocation(), contentList.get(i).getHits()));
                                     }
                                 }
-                            }, 200);
+                                contentAdapter = new ContentAdapter(SongStoryActivity.this, storyList, R.layout.item_activity_sound);
+
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("contentAdapter", contentAdapter);
+
+                                msg = new Message();
+                                msg.setData(bundle);
+                                mainHandler.sendMessage(msg);
+
+                                mainHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            progressDialog.dismiss();
+                                        } catch (Exception e) {
+                                            log(e);
+                                        }
+                                    }
+                                }, 200);
+                            } else {
+                                Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
                         }
 
                         @Override
@@ -420,134 +414,143 @@ public class SongStoryActivity extends Activity {
                         }
                     });
                 } else {
-                    server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("user_id", String.valueOf(user_id));
+                    userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
 
-
-                    Call<ArrayList<Check>> call_family_check = server_connection.family_check(story_user_id, map);
-                    call_family_check.enqueue(new Callback<ArrayList<Check>>() {
+                    Call<Integer> call_family_check = userServerConnection.family_check(story_user_id, user_id);
+                    call_family_check.enqueue(new Callback<Integer>() {
                         @Override
-                        public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {
-                            if (response.body().get(0).getChecked() > 0) {
-                                //family
-                                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                call_content = server_connection.song_story_List_Family(story_user_id);
-                                call_content.enqueue(new Callback<ArrayList<SongStory>>() {
-                                    @Override
-                                    public void onResponse(Call<ArrayList<SongStory>> call, Response<ArrayList<SongStory>> response) {
-                                        contentList = response.body();
-                                        content_size = contentList.size();
+                        public void onResponse(Call<Integer> call, Response<Integer> response) {
+                            if (response.isSuccessful()) {
+                                if (response.body() > 0) {
+                                    //family
+                                    userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                                    call_content = userServerConnection.song_story_List_Family(story_user_id);
+                                    call_content.enqueue(new Callback<ArrayList<SongStory>>() {
+                                        @Override
+                                        public void onResponse(Call<ArrayList<SongStory>> call, Response<ArrayList<SongStory>> response) {
+                                            if (response.isSuccessful()) {
+                                                contentList = response.body();
+                                                content_size = contentList.size();
 
-                                        if (content_size == 0) {
-                                            //contents  비워 있음
-                                        } else {
+                                                if (content_size == 0) {
+                                                    //contents  비워 있음
+                                                } else {
 //                                            content_size = contentList.size();
-                                            int loopSize = 0;
+                                                    int loopSize = 0;
 
-                                            if (content_size <= CONTENTS_OFFSET) {
-                                                loopSize = content_size;
-                                                content_isFinished = true;
+                                                    if (content_size <= CONTENTS_OFFSET) {
+                                                        loopSize = content_size;
+                                                        content_isFinished = true;
+                                                    } else {
+                                                        loopSize = CONTENTS_OFFSET;
+                                                        content_size -= loopSize;
+                                                    }
+
+                                                    for (int i = 0; i < loopSize; i++) {
+                                                        storyList.add(new SongStoryInfo(story_user_id, story_user_name, story_user_avatar, contentList.get(i).getId(), contentList.get(i).getRange_id(),
+                                                                contentList.get(i).getSong_id(), contentList.get(i).getSong_title(), contentList.get(i).getSong_singer(),
+                                                                contentList.get(i).getRecord_file(), contentList.get(i).getCreated_at(), contentList.get(i).getContent(), contentList.get(i).getLocation(), contentList.get(i).getHits()));
+                                                    }
+                                                }
+                                                contentAdapter = new ContentAdapter(SongStoryActivity.this, storyList, R.layout.item_activity_sound);
+
+                                                Bundle bundle = new Bundle();
+                                                bundle.putSerializable("contentAdapter", contentAdapter);
+
+                                                msg = new Message();
+                                                msg.setData(bundle);
+                                                mainHandler.sendMessage(msg);
+
+                                                mainHandler.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        try {
+                                                            progressDialog.dismiss();
+                                                        } catch (Exception e) {
+                                                            log(e);
+                                                        }
+                                                    }
+                                                }, 200);
                                             } else {
-                                                loopSize = CONTENTS_OFFSET;
-                                                content_size -= loopSize;
-                                            }
-
-                                            for (int i = 0; i < loopSize; i++) {
-                                                storyList.add(new SongStoryInfo(story_user_id, story_user_name, story_user_avatar, contentList.get(i).getId(), contentList.get(i).getRange_id(),
-                                                        contentList.get(i).getSong_id(), contentList.get(i).getSong_title(), contentList.get(i).getSong_singer(),
-                                                        contentList.get(i).getRecord_file(), contentList.get(i).getCreated_at(), contentList.get(i).getContent(), contentList.get(i).getLocation(), contentList.get(i).getHits()));
+                                                Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                             }
                                         }
-                                        contentAdapter = new ContentAdapter(SongStoryActivity.this, storyList, R.layout.item_activity_sound);
 
-                                        Bundle bundle = new Bundle();
-                                        bundle.putSerializable("contentAdapter", contentAdapter);
+                                        @Override
+                                        public void onFailure(Call<ArrayList<SongStory>> call, Throwable t) {
+                                            log(t);
+                                            Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                } else {
+                                    //public
+                                    userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                                    call_content = userServerConnection.song_story_List_Public(story_user_id);
+                                    call_content.enqueue(new Callback<ArrayList<SongStory>>() {
+                                        @Override
+                                        public void onResponse(Call<ArrayList<SongStory>> call, Response<ArrayList<SongStory>> response) {
+                                            if (response.isSuccessful()) {
+                                                contentList = response.body();
+                                                content_size = contentList.size();
 
-                                        msg = new Message();
-                                        msg.setData(bundle);
-                                        mainHandler.sendMessage(msg);
+                                                if (content_size == 0) {
+                                                    //contents  비워 있음
+                                                } else {
+//                                            content_size = contentList.size();
+                                                    int loopSize = 0;
 
-                                        mainHandler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                try {
-                                                    progressDialog.dismiss();
-                                                } catch (Exception e) {
-                                                    log(e);
+                                                    if (content_size <= CONTENTS_OFFSET) {
+                                                        loopSize = content_size;
+                                                        content_isFinished = true;
+                                                    } else {
+                                                        loopSize = CONTENTS_OFFSET;
+                                                        content_size -= loopSize;
+                                                    }
+
+                                                    for (int i = 0; i < loopSize; i++) {
+                                                        storyList.add(new SongStoryInfo(story_user_id, story_user_name, story_user_avatar, contentList.get(i).getId(), contentList.get(i).getRange_id(),
+                                                                contentList.get(i).getSong_id(), contentList.get(i).getSong_title(), contentList.get(i).getSong_singer(),
+                                                                contentList.get(i).getRecord_file(), contentList.get(i).getCreated_at(), contentList.get(i).getContent(), contentList.get(i).getLocation(), contentList.get(i).getHits()));
+                                                    }
                                                 }
-                                            }
-                                        }, 200);
-                                    }
+                                                contentAdapter = new ContentAdapter(SongStoryActivity.this, storyList, R.layout.item_activity_sound);
 
-                                    @Override
-                                    public void onFailure(Call<ArrayList<SongStory>> call, Throwable t) {
-                                        log(t);
-                                        Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                    }
-                                });
+                                                Bundle bundle = new Bundle();
+                                                bundle.putSerializable("contentAdapter", contentAdapter);
+
+                                                msg = new Message();
+                                                msg.setData(bundle);
+                                                mainHandler.sendMessage(msg);
+
+                                                mainHandler.postDelayed(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        try {
+                                                            progressDialog.dismiss();
+                                                        } catch (Exception e) {
+                                                            log(e);
+                                                        }
+                                                    }
+                                                }, 200);
+                                            } else {
+                                                Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ArrayList<SongStory>> call, Throwable t) {
+                                            log(t);
+                                            Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
                             } else {
-                                //public
-                                server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                call_content = server_connection.song_story_List_Public(story_user_id);
-                                call_content.enqueue(new Callback<ArrayList<SongStory>>() {
-                                    @Override
-                                    public void onResponse(Call<ArrayList<SongStory>> call, Response<ArrayList<SongStory>> response) {
-                                        contentList = response.body();
-                                        content_size = contentList.size();
-
-                                        if (content_size == 0) {
-                                            //contents  비워 있음
-                                        } else {
-//                                            content_size = contentList.size();
-                                            int loopSize = 0;
-
-                                            if (content_size <= CONTENTS_OFFSET) {
-                                                loopSize = content_size;
-                                                content_isFinished = true;
-                                            } else {
-                                                loopSize = CONTENTS_OFFSET;
-                                                content_size -= loopSize;
-                                            }
-
-                                            for (int i = 0; i < loopSize; i++) {
-                                                storyList.add(new SongStoryInfo(story_user_id, story_user_name, story_user_avatar, contentList.get(i).getId(), contentList.get(i).getRange_id(),
-                                                        contentList.get(i).getSong_id(), contentList.get(i).getSong_title(), contentList.get(i).getSong_singer(),
-                                                        contentList.get(i).getRecord_file(), contentList.get(i).getCreated_at(), contentList.get(i).getContent(), contentList.get(i).getLocation(), contentList.get(i).getHits()));
-                                            }
-                                        }
-                                        contentAdapter = new ContentAdapter(SongStoryActivity.this, storyList, R.layout.item_activity_sound);
-
-                                        Bundle bundle = new Bundle();
-                                        bundle.putSerializable("contentAdapter", contentAdapter);
-
-                                        msg = new Message();
-                                        msg.setData(bundle);
-                                        mainHandler.sendMessage(msg);
-
-                                        mainHandler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                try {
-                                                    progressDialog.dismiss();
-                                                } catch (Exception e) {
-                                                    log(e);
-                                                }
-                                            }
-                                        }, 200);
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<ArrayList<SongStory>> call, Throwable t) {
-                                        log(t);
-                                        Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                    }
-                                });
+                                Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<ArrayList<Check>> call, Throwable t) {
+                        public void onFailure(Call<Integer> call, Throwable t) {
                             log(t);
                             Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
@@ -684,16 +687,20 @@ public class SongStoryActivity extends Activity {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (storyList.get(getAdapterPosition()).getFirst_checked()) {
                         if (isChecked) {
-                            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
+                            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
                             HashMap<String, String> map = new HashMap<>();
                             map.put("user_id", String.valueOf(user_id));
 
-                            Call<ResponseBody> call_like = server_connection.song_story_like_up(storyList.get(getAdapterPosition()).getStory_id(), map);
+                            Call<ResponseBody> call_like = songStoryServerConnection.song_story_like_up(storyList.get(getAdapterPosition()).getStory_id(), map);
                             call_like.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    tv_sound_story_like.setText(String.valueOf(Integer.parseInt(tv_sound_story_like.getText().toString()) + 1));
-                                    storyList.get(getAdapterPosition()).setChecked(true);
+                                    if (response.isSuccessful()) {
+                                        tv_sound_story_like.setText(String.valueOf(Integer.parseInt(tv_sound_story_like.getText().toString()) + 1));
+                                        storyList.get(getAdapterPosition()).setChecked(true);
+                                    } else {
+                                        Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    }
                                 }
 
                                 @Override
@@ -703,16 +710,17 @@ public class SongStoryActivity extends Activity {
                                 }
                             });
                         } else {
-                            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                            HashMap<String, String> map = new HashMap<>();
-                            map.put("user_id", String.valueOf(user_id));
-
-                            Call<ResponseBody> call_dislike = server_connection.song_story_like_down(storyList.get(getAdapterPosition()).getStory_id(), map);
+                            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                            Call<ResponseBody> call_dislike = songStoryServerConnection.song_story_like_down(storyList.get(getAdapterPosition()).getStory_id(), user_id);
                             call_dislike.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    tv_sound_story_like.setText(String.valueOf(Integer.parseInt(tv_sound_story_like.getText().toString()) - 1));
-                                    storyList.get(getAdapterPosition()).setChecked(false);
+                                    if (response.isSuccessful()) {
+                                        tv_sound_story_like.setText(String.valueOf(Integer.parseInt(tv_sound_story_like.getText().toString()) - 1));
+                                        storyList.get(getAdapterPosition()).setChecked(false);
+                                    } else {
+                                        Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    }
                                 }
 
                                 @Override
@@ -814,17 +822,19 @@ public class SongStoryActivity extends Activity {
             }
 
             // emotion
-            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            Call<ArrayList<SongStoryEmotionData>> call_emotion_data = server_connection.song_story_emotion_List(storyList.get(position).getStory_id());
+            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+            Call<ArrayList<SongStoryEmotionData>> call_emotion_data = songStoryServerConnection.song_story_emotion_List(storyList.get(position).getStory_id());
             call_emotion_data.enqueue(new Callback<ArrayList<SongStoryEmotionData>>() {
                 @Override
                 public void onResponse(Call<ArrayList<SongStoryEmotionData>> call, Response<ArrayList<SongStoryEmotionData>> response) {
-                    emotionAdapter = new EmotionAdapter(response.body(), SongStoryActivity.this, R.layout.item_emotion);
+                    if (response.isSuccessful()) {
+                        emotionAdapter = new EmotionAdapter(response.body(), SongStoryActivity.this, R.layout.item_emotion);
 
-                    holder.rv_song_story_emotion.setAdapter(emotionAdapter);
-                    holder.rv_song_story_emotion.setLayoutManager(new GridLayoutManager(SongStoryActivity.this, 2));
-
-
+                        holder.rv_song_story_emotion.setAdapter(emotionAdapter);
+                        holder.rv_song_story_emotion.setLayoutManager(new GridLayoutManager(SongStoryActivity.this, 2));
+                    } else {
+                        Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
@@ -836,51 +846,54 @@ public class SongStoryActivity extends Activity {
 
 
             //images
-            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            Call<ArrayList<SongPhoto>> call_song_photo = server_connection.song_story_photo_List(storyList.get(position).getStory_id());
+            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+            Call<ArrayList<SongPhoto>> call_song_photo = songStoryServerConnection.song_story_photo_List(storyList.get(position).getStory_id());
             call_song_photo.enqueue(new Callback<ArrayList<SongPhoto>>() {
                 @Override
                 public void onResponse(Call<ArrayList<SongPhoto>> call, Response<ArrayList<SongPhoto>> response) {
-                    photoList = response.body();
-                    int photoListSize = photoList.size();
+                    if (response.isSuccessful()) {
+                        photoList = response.body();
+                        int photoListSize = photoList.size();
 
-                    if (photoListSize == 0) {
-                        holder.ll_sound_story_images_container.setVisibility(View.GONE);
-                        holder.tv_sound_story_content.setMaxLines(15);
+                        if (photoListSize == 0) {
+                            holder.ll_sound_story_images_container.setVisibility(View.GONE);
+                            holder.tv_sound_story_content.setMaxLines(15);
+                        }
+                        if (photoListSize == 1) {
+                            holder.ll_sound_story_images_container.removeAllViews();
+                            holder.ll_sound_story_images_container.setVisibility(View.VISIBLE);
+                            holder.ll_sound_story_images_container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1200));
+                            holder.story_images_inflater.inflate(R.layout.item_main_story_image_one, holder.ll_sound_story_images_container, true);
+                            ImageView iv_item_main_story_image = (ImageView) holder.ll_sound_story_images_container.findViewById(R.id.iv_item_main_story_image);
+                            Glide.with(context).load(getString(R.string.cloud_front_song_stories_images) + photoList.get(0).getName() + "." + photoList.get(0).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image);
+                        }
+                        if (photoListSize == 2) {
+                            holder.ll_sound_story_images_container.removeAllViews();
+                            holder.ll_sound_story_images_container.setVisibility(View.VISIBLE);
+                            holder.ll_sound_story_images_container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 800));
 
-                    }
-                    if (photoListSize == 1) {
-                        holder.ll_sound_story_images_container.removeAllViews();
-                        holder.ll_sound_story_images_container.setVisibility(View.VISIBLE);
-                        holder.ll_sound_story_images_container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1200));
-                        holder.story_images_inflater.inflate(R.layout.item_main_story_image_one, holder.ll_sound_story_images_container, true);
-                        ImageView iv_item_main_story_image = (ImageView) holder.ll_sound_story_images_container.findViewById(R.id.iv_item_main_story_image);
-                        Glide.with(context).load(getString(R.string.cloud_front_song_stories_images) + photoList.get(0).getName() + "." + photoList.get(0).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image);
-                    }
-                    if (photoListSize == 2) {
-                        holder.ll_sound_story_images_container.removeAllViews();
-                        holder.ll_sound_story_images_container.setVisibility(View.VISIBLE);
-                        holder.ll_sound_story_images_container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 800));
-
-                        holder.story_images_inflater.inflate(R.layout.item_main_story_image_two, holder.ll_sound_story_images_container, true);
-                        ImageView iv_item_main_story_image_two1 = (ImageView) holder.ll_sound_story_images_container.findViewById(R.id.iv_item_main_story_image_two1);
-                        Glide.with(context).load(getString(R.string.cloud_front_song_stories_images) + photoList.get(0).getName() + "." + photoList.get(0).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image_two1);
-                        ImageView iv_item_main_story_image_two2 = (ImageView) holder.ll_sound_story_images_container.findViewById(R.id.iv_item_main_story_image_two2);
-                        Glide.with(context).load(getString(R.string.cloud_front_song_stories_images) + photoList.get(1).getName() + "." + photoList.get(1).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image_two2);
-                    }
-                    if (photoListSize > 2) {
-                        holder.ll_sound_story_images_container.removeAllViews();
-                        holder.ll_sound_story_images_container.setVisibility(View.VISIBLE);
-                        holder.ll_sound_story_images_container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 600));
+                            holder.story_images_inflater.inflate(R.layout.item_main_story_image_two, holder.ll_sound_story_images_container, true);
+                            ImageView iv_item_main_story_image_two1 = (ImageView) holder.ll_sound_story_images_container.findViewById(R.id.iv_item_main_story_image_two1);
+                            Glide.with(context).load(getString(R.string.cloud_front_song_stories_images) + photoList.get(0).getName() + "." + photoList.get(0).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image_two1);
+                            ImageView iv_item_main_story_image_two2 = (ImageView) holder.ll_sound_story_images_container.findViewById(R.id.iv_item_main_story_image_two2);
+                            Glide.with(context).load(getString(R.string.cloud_front_song_stories_images) + photoList.get(1).getName() + "." + photoList.get(1).getExt()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_main_story_image_two2);
+                        }
+                        if (photoListSize > 2) {
+                            holder.ll_sound_story_images_container.removeAllViews();
+                            holder.ll_sound_story_images_container.setVisibility(View.VISIBLE);
+                            holder.ll_sound_story_images_container.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 600));
 
 
-                        holder.story_images_inflater.inflate(R.layout.item_main_story_image_list, holder.ll_sound_story_images_container, true);
-                        RecyclerView rv_main_story = (RecyclerView) holder.ll_sound_story_images_container.findViewById(R.id.rv_main_story_images);
-                        PhotoAdapter photoAdapter = new PhotoAdapter(context, photoList, R.layout.item_main_story_image, position);
-                        rv_main_story.setAdapter(photoAdapter);
-                        rv_main_story.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-                        photoAdapter.notifyDataSetChanged();
-                        rv_main_story.setHasFixedSize(true);
+                            holder.story_images_inflater.inflate(R.layout.item_main_story_image_list, holder.ll_sound_story_images_container, true);
+                            RecyclerView rv_main_story = (RecyclerView) holder.ll_sound_story_images_container.findViewById(R.id.rv_main_story_images);
+                            PhotoAdapter photoAdapter = new PhotoAdapter(context, photoList, R.layout.item_main_story_image, position);
+                            rv_main_story.setAdapter(photoAdapter);
+                            rv_main_story.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                            photoAdapter.notifyDataSetChanged();
+                            rv_main_story.setHasFixedSize(true);
+                        }
+                    } else {
+                        Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -891,58 +904,68 @@ public class SongStoryActivity extends Activity {
                 }
             });
 
-            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            Call<ArrayList<LikeCount>> call_like_count = server_connection.song_story_like_Count(storyList.get(position).getStory_id());
-            call_like_count.enqueue(new Callback<ArrayList<LikeCount>>() {
+            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+            Call<Integer> call_like_count = songStoryServerConnection.song_story_like_Count(storyList.get(position).getStory_id());
+            call_like_count.enqueue(new Callback<Integer>() {
                 @Override
-                public void onResponse(Call<ArrayList<LikeCount>> call, Response<ArrayList<LikeCount>> response) {
-                    int like_count = response.body().get(0).getLike_count();
-                    holder.tv_sound_story_like.setText(String.valueOf(like_count));
-                }
-
-                @Override
-                public void onFailure(Call<ArrayList<LikeCount>> call, Throwable t) {
-                    log(t);
-                    Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                }
-            });
-
-            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            Call<ArrayList<CommentCount>> call_comment_count = server_connection.song_story_comment_Count(storyList.get(position).getStory_id());
-            call_comment_count.enqueue(new Callback<ArrayList<CommentCount>>() {
-                @Override
-                public void onResponse(Call<ArrayList<CommentCount>> call, Response<ArrayList<CommentCount>> response) {
-                    int comment_count = response.body().get(0).getComment_count();
-                    holder.tv_sound_story_comment.setText(String.valueOf(comment_count));
-                }
-
-                @Override
-                public void onFailure(Call<ArrayList<CommentCount>> call, Throwable t) {
-                    log(t);
-                    Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                }
-            });
-
-            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-            HashMap<String, String> map = new HashMap<>();
-            map.put("user_id", String.valueOf(user_id));
-            Call<ArrayList<Check>> call_like_check = server_connection.song_story_like_check(storyList.get(position).getStory_id(), map);
-            call_like_check.enqueue(new Callback<ArrayList<Check>>() {
-                @Override
-                public void onResponse(Call<ArrayList<Check>> call, Response<ArrayList<Check>> response) {
-                    int checked = response.body().get(0).getChecked();
-                    if (checked == 1) {
-                        holder.cb_item_sound_story_like.setChecked(true);
-                        storyList.get(position).setFirst_checked(true);
-                        storyList.get(position).setChecked(true);
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                    if (response.isSuccessful()) {
+                        int like_count = response.body();
+                        holder.tv_sound_story_like.setText(String.valueOf(like_count));
                     } else {
-                        holder.cb_item_sound_story_like.setChecked(false);
-                        storyList.get(position).setFirst_checked(true);
+                        Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<ArrayList<Check>> call, Throwable t) {
+                public void onFailure(Call<Integer> call, Throwable t) {
+                    log(t);
+                    Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+            Call<Integer> call_comment_count = songStoryServerConnection.song_story_comment_Count(storyList.get(position).getStory_id());
+            call_comment_count.enqueue(new Callback<Integer>() {
+                @Override
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                    if (response.isSuccessful()) {
+                        int comment_count = response.body();
+                        holder.tv_sound_story_comment.setText(String.valueOf(comment_count));
+                    } else {
+                        Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Integer> call, Throwable t) {
+                    log(t);
+                    Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+            Call<Integer> call_like_check = songStoryServerConnection.song_story_like_check(storyList.get(position).getStory_id(), user_id);
+            call_like_check.enqueue(new Callback<Integer>() {
+                @Override
+                public void onResponse(Call<Integer> call, Response<Integer> response) {
+                    if (response.isSuccessful()) {
+                        int checked = response.body();
+                        if (checked == 1) {
+                            holder.cb_item_sound_story_like.setChecked(true);
+                            storyList.get(position).setFirst_checked(true);
+                            storyList.get(position).setChecked(true);
+                        } else {
+                            holder.cb_item_sound_story_like.setChecked(false);
+                            storyList.get(position).setFirst_checked(true);
+                        }
+                    } else {
+                        Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Integer> call, Throwable t) {
                     log(t);
                     Toast.makeText(SongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                 }
@@ -1134,6 +1157,4 @@ public class SongStoryActivity extends Activity {
             }
         }
     }
-
-
 }

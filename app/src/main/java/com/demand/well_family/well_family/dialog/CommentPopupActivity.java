@@ -38,6 +38,7 @@ public class CommentPopupActivity extends Activity {
     private String user_email;
     private String user_phone;
     private String user_birth;
+    private String access_token;
 
     private int comment_id;
     private String comment_content;
@@ -71,6 +72,7 @@ public class CommentPopupActivity extends Activity {
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
     }
 
     private void init() {

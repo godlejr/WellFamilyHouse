@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -64,9 +65,9 @@ public class PhotoPopupActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.popup_photo);
-//        getWindow().setLayout(android.view.WindowManager.LayoutParams.MATCH_PARENT, android.view.WindowManager.LayoutParams.MATCH_PARENT);
+        getWindow().setLayout(android.view.WindowManager.LayoutParams.MATCH_PARENT, android.view.WindowManager.LayoutParams.MATCH_PARENT);
 
 //        photo_id = getIntent().getIntExtra("photo_id", 0);
 //        story_id = getIntent().getIntExtra("story_id", 0);

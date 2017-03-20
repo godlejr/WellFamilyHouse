@@ -43,14 +43,16 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.demand.well_family.well_family.connection.Server_Connection;
+import com.demand.well_family.well_family.connection.StoryServerConnection;
 import com.demand.well_family.well_family.dto.Story;
 import com.demand.well_family.well_family.dto.StoryInfo;
-import com.demand.well_family.well_family.log.LogFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.settings.SettingActivity;
 import com.demand.well_family.well_family.users.UserActivity;
+import com.demand.well_family.well_family.util.ErrorUtils;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
 import org.slf4j.Logger;
@@ -106,6 +108,7 @@ public class WriteActivity extends Activity {
     private String user_phone;
     private int user_level;
     private String user_avatar;
+    private String access_token;
 
     private ProgressDialog progressDialog;
 
@@ -115,7 +118,7 @@ public class WriteActivity extends Activity {
 
     //toolbar
     private DrawerLayout dl;
-    private Server_Connection server_connection;
+    private StoryServerConnection storyServerConnection;
 
     private int sleepTime;
     private final int UPLOADONEPIC = 950;
@@ -158,6 +161,7 @@ public class WriteActivity extends Activity {
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
         setToolbar(this.getWindow().getDecorView(), this, "글쓰기");
     }
 
@@ -243,10 +247,6 @@ public class WriteActivity extends Activity {
                         startActivity(intent);
                         break;
 
-                    case R.id.menu_search:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
-                        break;
-
                     case R.id.menu_market:
                         intent = new Intent(WriteActivity.this, MarketMainActivity.class);
                         startActivity(intent);
@@ -273,6 +273,7 @@ public class WriteActivity extends Activity {
                         editor.remove("user_avatar");
                         editor.remove("user_phone");
                         editor.remove("user_level");
+                        editor.remove("access_token");
                         editor.commit();
 
                         intent = new Intent(WriteActivity.this, LoginActivity.class);
@@ -419,54 +420,63 @@ public class WriteActivity extends Activity {
                         public void run() {
 
                             HashMap<String, String> map = new HashMap<>();
+                            map.put("user_id", String.valueOf(user_id));
                             map.put("family_id", String.valueOf(family_id));
                             map.put("family_name", family_name);
-
                             map.put("content", et_content.getText().toString());
 
-                            server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                            Call<ArrayList<Story>> call_write_story = server_connection.insert_story(user_id, map);
-                            call_write_story.enqueue(new Callback<ArrayList<Story>>() {
+                            storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+                            Call<Story> call_write_story = storyServerConnection.insert_story(map);
+                            call_write_story.enqueue(new Callback<Story>() {
                                 @Override
-                                public void onResponse(Call<ArrayList<Story>> call, Response<ArrayList<Story>> response) {
-                                    int story_id = response.body().get(0).getId();
-                                    StoryInfo storyInfo = new StoryInfo(user_id, user_name, user_avatar, response.body().get(0).getId(), response.body().get(0).getCreated_at(), response.body().get(0).getContent());
+                                public void onResponse(Call<Story> call, Response<Story> response) {
+                                    if (response.isSuccessful()) {
+                                        Story story = response.body();
+                                        int story_id = story.getId();
+                                        StoryInfo storyInfo = new StoryInfo(user_id, user_name, user_avatar, story.getId(), story.getCreated_at(), story.getContent());
 
-                                    for (int i = 0; i < photoListSize; i++) {
-                                        progressDialog.setProgress(i + 1);
-                                        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-                                        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(photoList.get(i), i)));
-                                        Call<ResponseBody> call_write_photo = server_connection.insert_photos(story_id, requestBody);
-                                        call_write_photo.enqueue(new Callback<ResponseBody>() {
-                                            @Override
-                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                //성공
-                                            }
+                                        for (int i = 0; i < photoListSize; i++) {
+                                            progressDialog.setProgress(i + 1);
+                                            storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+                                            final RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(photoList.get(i), i)));
+                                            Call<ResponseBody> call_write_photo = storyServerConnection.insert_photos(story_id, requestBody);
+                                            call_write_photo.enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    if (response.isSuccessful()) {
+                                                        //성공
+                                                    } else {
+                                                        Toast.makeText(WriteActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
 
-                                            @Override
-                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                log(t);
-                                                Toast.makeText(WriteActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    log(t);
+                                                    Toast.makeText(WriteActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                }
+                                            });
 
+                                        }
+
+                                        try {
+                                            Thread.sleep(sleepTime);
+                                        } catch (InterruptedException e) {
+                                            log(e);
+                                        }
+
+                                        progressDialog.dismiss();
+                                        Intent intent = getIntent();
+                                        intent.putExtra("storyInfo", storyInfo);
+                                        setResult(Activity.RESULT_OK, intent);
+                                        finish();
+                                    } else {
+                                        Toast.makeText(WriteActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                     }
-
-                                    try {
-                                        Thread.sleep(sleepTime);
-                                    } catch (InterruptedException e) {
-                                        log(e);
-                                    }
-
-                                    progressDialog.dismiss();
-                                    Intent intent = getIntent();
-                                    intent.putExtra("storyInfo", storyInfo);
-                                    setResult(Activity.RESULT_OK, intent);
-                                    finish();
                                 }
 
                                 @Override
-                                public void onFailure(Call<ArrayList<Story>> call, Throwable t) {
+                                public void onFailure(Call<Story> call, Throwable t) {
                                     log(t);
                                     Toast.makeText(WriteActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                 }
