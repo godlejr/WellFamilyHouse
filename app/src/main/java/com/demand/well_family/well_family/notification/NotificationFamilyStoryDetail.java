@@ -41,9 +41,10 @@ import com.demand.well_family.well_family.dialog.CommentPopupActivity;
 import com.demand.well_family.well_family.dto.Comment;
 import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.Photo;
+import com.demand.well_family.well_family.dto.StoryInfoForNotification;
 import com.demand.well_family.well_family.family.StoryDetailActivity;
-import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.photos.PhotoPopupActivity;
@@ -91,7 +92,6 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
 
     //like check
     private Boolean first_checked = false;
-    private Boolean like_checked;
 
     private ImageView iv_item_story_avatar;
     private TextView tv_item_story_name;
@@ -131,7 +131,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_detail);
-
+        story_id = getIntent().getIntExtra("story_id", 0);
         setUserInfo();
         init();
     }
@@ -162,34 +162,62 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         tv_story_detail_like_count.setTextColor(Color.parseColor("#424242"));
         finishList.add(this);
 
+        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        Call<StoryInfoForNotification> call_story_info = storyServerConnection.storyDetailForNotification(story_id);
+        call_story_info.enqueue(new Callback<StoryInfoForNotification>() {
+            @Override
+            public void onResponse(Call<StoryInfoForNotification> call, Response<StoryInfoForNotification> response) {
+                if (response.isSuccessful()) {
+                    StoryInfoForNotification storyInfoForNotification = response.body();
 
+                    tv_item_story_name.setText(storyInfoForNotification.getUser_name());
+                    tv_item_story_date.setText(calculateTime(storyInfoForNotification.getCreated_at()));
+                    tv_story_detail_content.setText(storyInfoForNotification.getContent());
 
-        story_id = 254;
-        story_user_name = "박혜연";
-        story_user_created_at = "2017-03-20 15:58:25";
-        content ="새로운 소식";
-        like_checked = false;
-        story_user_avatar = "1489654152720.jpg";
+                    storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+                    Call<Integer> call_like_check = storyServerConnection.family_content_like_check(story_id, user_id);
+                    call_like_check.enqueue(new Callback<Integer>() {
+                        @Override
+                        public void onResponse(Call<Integer> call, Response<Integer> response) {
+                            if (response.isSuccessful()) {
+                                int checked = response.body();
+                                if (checked == 1) {
+                                    btn_item_main_story_detail_like.setChecked(true);
+                                } else {
+                                    btn_item_main_story_detail_like.setChecked(false);
+                                }
+                                first_checked = true;
+                            } else {
+                                Toast.makeText(NotificationFamilyStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
 
+                        @Override
+                        public void onFailure(Call<Integer> call, Throwable t) {
+                            log(t);
+                            Toast.makeText(NotificationFamilyStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        }
+                    });
 
+                    Glide.with(NotificationFamilyStoryDetail.this).load(getString(R.string.cloud_front_user_avatar) + storyInfoForNotification.getUser_avatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_story_avatar);
 
-        // set story data
-        tv_item_story_name.setText(story_user_name);
-        tv_item_story_date.setText(calculateTime(story_user_created_at));
-        tv_story_detail_content.setText(content);
-        if (like_checked) {
-            btn_item_main_story_detail_like.setChecked(true);
-        } else {
-            btn_item_main_story_detail_like.setChecked(false);
-        }
-        Glide.with(this).load(getString(R.string.cloud_front_user_avatar) + story_user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_story_avatar);
+                    getContentData();
+                    getCommentCount();
+                    getCommentData();
+                    setCommentData();
+                } else {
+                    Toast.makeText(NotificationFamilyStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<StoryInfoForNotification> call, Throwable t) {
+                log(t);
+                Toast.makeText(NotificationFamilyStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
+        btn_item_main_story_detail_like.setOnCheckedChangeListener(NotificationFamilyStoryDetail.this);
 
-        btn_item_main_story_detail_like.setOnCheckedChangeListener(this);
-        getContentData();
-        getCommentCount();
-        getCommentData();
-        setCommentData();
     }
 
     private void getCommentCount() {
@@ -686,7 +714,6 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.isSuccessful()) {
                             tv_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_story_detail_like_count.getText().toString()) + 1));
-                            like_checked = !like_checked;
                         } else {
                             Toast.makeText(NotificationFamilyStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
@@ -710,7 +737,6 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.isSuccessful()) {
                             tv_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_story_detail_like_count.getText().toString()) - 1));
-                            like_checked = !like_checked;
                         } else {
                             Toast.makeText(NotificationFamilyStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
@@ -751,8 +777,6 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
             }
         }
     }
-
-
 
 
     // etc

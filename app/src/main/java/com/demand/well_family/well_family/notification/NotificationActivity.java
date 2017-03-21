@@ -185,6 +185,7 @@ public class NotificationActivity extends Activity {
             final int behavior_id = notificationList.get(position).getBehavior_id();
             final int intent_id = notificationList.get(position).getIntent_id();
             final int intent_flag = notificationList.get(position).getIntent_flag();
+            final int checked = notificationList.get(position).getChecked();
 
             if (behavior_id == NotificationBEHAVIORFlag.CREATING_THE_FAMILY) {
                 //creating family
@@ -275,7 +276,7 @@ public class NotificationActivity extends Activity {
                                 if (notificationInfo.getPhoto() != null) {
                                     holder.ll_noti_photo.setVisibility(View.VISIBLE);
                                     Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_stories_images) + notificationInfo.getPhoto()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_noti_photo);
-                                }else{
+                                } else {
                                     holder.ll_noti_photo.setVisibility(View.GONE);
                                 }
                             } else {
@@ -306,7 +307,7 @@ public class NotificationActivity extends Activity {
                                 if (notificationInfo.getPhoto() != null) {
                                     holder.ll_noti_photo.setVisibility(View.VISIBLE);
                                     Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_song_stories_images) + notificationInfo.getPhoto()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_noti_photo);
-                                }else{
+                                } else {
                                     holder.ll_noti_photo.setVisibility(View.GONE);
                                 }
                             } else {
@@ -324,7 +325,7 @@ public class NotificationActivity extends Activity {
 
             }
 
-            if (notificationList.get(position).getChecked() == 1) {
+            if (checked == 1) {
                 holder.ll_notification.setBackgroundColor(Color.parseColor("#ffffff"));
             }
 
@@ -341,13 +342,15 @@ public class NotificationActivity extends Activity {
                             public void onResponse(Call<Family> call, Response<Family> response) {
                                 if (response.isSuccessful()) {
                                     final Family familyInfo = response.body();
-
                                     notificationServerConnection = new HeaderInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
                                     Call<ResponseBody> call_update_check = notificationServerConnection.notificationInfo(id);
                                     call_update_check.enqueue(new Callback<ResponseBody>() {
                                         @Override
                                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                             if (response.isSuccessful()) {
+                                                if (checked == 0) {
+                                                    holder.ll_notification.setBackgroundColor(Color.parseColor("#ffffff"));
+                                                }
                                                 Intent intent = new Intent(NotificationActivity.this, FamilyActivity.class);
                                                 //family info
                                                 intent.putExtra("family_id", familyInfo.getId());
@@ -389,20 +392,16 @@ public class NotificationActivity extends Activity {
                         call_update_check.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                if (!response.isSuccessful()) {
+                                if (response.isSuccessful()) {
+                                    if (checked == 0) {
+                                        holder.ll_notification.setBackgroundColor(Color.parseColor("#ffffff"));
+                                    }
+                                    Intent intent = new Intent(NotificationActivity.this, NotificationFamilyStoryDetail.class);
+                                    intent.putExtra("story_id", intent_id);
+                                    startActivity(intent);
+                                } else {
                                     Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
-//                                Intent intent = new Intent(NotificationActivity.this, FamilyActivity.class);
-//                                //family info
-//                                intent.putExtra("family_id", familyList.get(0).getId());
-//                                intent.putExtra("family_name", familyList.get(0).getName());
-//                                intent.putExtra("family_content", familyList.get(0).getContent());
-//                                intent.putExtra("family_avatar", familyList.get(0).getAvatar());
-//                                intent.putExtra("family_user_id", familyList.get(0).getUser_id());
-//                                intent.putExtra("family_created_at", familyList.get(0).getCreated_at());
-//                                intent.putExtra("notification_flag", 1);
-//
-//                                startActivity(intent);
                             }
 
                             @Override

@@ -4,6 +4,7 @@ import com.demand.well_family.well_family.dto.Comment;
 import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.Story;
+import com.demand.well_family.well_family.dto.StoryInfoForNotification;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,7 +62,8 @@ public interface StoryServerConnection {
     @POST("{story_id}/comments")
     Call<Comment> insert_comment(@Path("story_id") int story_id, @QueryMap HashMap<String, String> map);
 
-
+    @GET("{story_id}")
+    Call<StoryInfoForNotification> storyDetailForNotification(@Path("story_id") int story_id);
 
     @POST("./") // (*) user_id는 POST로 던지기
     Call<Story> insert_story(@QueryMap HashMap<String, String> map);
