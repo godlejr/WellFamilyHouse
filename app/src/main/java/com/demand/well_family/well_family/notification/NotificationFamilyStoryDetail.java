@@ -65,11 +65,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.demand.well_family.well_family.LoginActivity.finishList;
+
 /**
  * Created by ㅇㅇ on 2017-03-07.
  */
 
-public class NotificationFamilyStoryDetail extends Activity implements CompoundButton.OnCheckedChangeListener{
+public class NotificationFamilyStoryDetail extends Activity implements CompoundButton.OnCheckedChangeListener {
     //user_info
     private int user_id;
     private String user_name;
@@ -82,9 +84,6 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
     private SharedPreferences loginInfo;
 
     private static final Logger logger = LoggerFactory.getLogger(StoryDetailActivity.class);
-
-    //story_info
-    private int story_id;
 
     //comment
     private EditText et_story_detail_write_comment;
@@ -120,15 +119,20 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
     private StoryServerConnection storyServerConnection;
     private static final int COMMENT_EDIT_REQUEST = 1;
 
+    //story_info
+    private int content_user_id;
+    private String content;
+    private int story_id;
+    private String story_user_name;
+    private String story_user_avatar;
+    private String story_user_created_at;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_story_detail);
 
-        story_id = getIntent().getIntExtra("story_id", 0);
         setUserInfo();
-        setToolbar(getWindow().getDecorView());
         init();
     }
 
@@ -142,6 +146,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
         access_token = loginInfo.getString("access_token", null);
+        setToolbar(getWindow().getDecorView());
     }
 
     private void init() {
@@ -150,34 +155,88 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         tv_item_story_date = (TextView) findViewById(R.id.tv_item_story_date);
         tv_story_detail_content = (TextView) findViewById(R.id.tv_story_detail_content);
         btn_item_main_story_detail_like = (CheckBox) findViewById(R.id.btn_item_main_story_detail_like);
-        tv_story_detail_comment_count = (TextView) findViewById(R.id.tv_story_detail_comment_count);
         tv_story_detail_like_count = (TextView) findViewById(R.id.tv_story_detail_like_count);
-        et_story_detail_write_comment = (EditText) findViewById(R.id.et_story_detail_write_comment);
-        btn_story_detail_send_comment = (Button) findViewById(R.id.btn_story_detail_send_comment);
-
+        tv_story_detail_comment_count = (TextView) findViewById(R.id.tv_story_detail_comment_count);
+        tv_story_detail_comment_count = (TextView) findViewById(R.id.tv_story_detail_comment_count);
         tv_story_detail_comment_count.setTextColor(Color.parseColor("#424242"));
         tv_story_detail_like_count.setTextColor(Color.parseColor("#424242"));
+        finishList.add(this);
+
+
+
+        story_id = 254;
+        story_user_name = "박혜연";
+        story_user_created_at = "2017-03-20 15:58:25";
+        content ="새로운 소식";
+        like_checked = false;
+        story_user_avatar = "1489654152720.jpg";
+
+
+
+        // set story data
+        tv_item_story_name.setText(story_user_name);
+        tv_item_story_date.setText(calculateTime(story_user_created_at));
+        tv_story_detail_content.setText(content);
+        if (like_checked) {
+            btn_item_main_story_detail_like.setChecked(true);
+        } else {
+            btn_item_main_story_detail_like.setChecked(false);
+        }
+        Glide.with(this).load(getString(R.string.cloud_front_user_avatar) + story_user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_story_avatar);
+
+
+        btn_item_main_story_detail_like.setOnCheckedChangeListener(this);
+        getContentData();
+        getCommentCount();
+        getCommentData();
+        setCommentData();
+    }
+
+    private void getCommentCount() {
+        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        Call<Integer> call_comment_count = storyServerConnection.family_comment_Count(story_id);
+        call_comment_count.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful()) {
+                    int comment_count = response.body();
+                    tv_story_detail_comment_count.setText(String.valueOf(comment_count));
+                } else {
+                    Toast.makeText(NotificationFamilyStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                log(t);
+                Toast.makeText(NotificationFamilyStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    // comment
+    private void setCommentData() {
+        et_story_detail_write_comment = (EditText) findViewById(R.id.et_story_detail_write_comment);
+        btn_story_detail_send_comment = (Button) findViewById(R.id.btn_story_detail_send_comment);
 
         btn_story_detail_send_comment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String comment_content = et_story_detail_write_comment.getText().toString();
-
-                if (comment_content.length() != 0) {
+                final String content = et_story_detail_write_comment.getText().toString();
+                if (content.length() != 0) {
                     HashMap<String, String> map = new HashMap<>();
                     map.put("user_id", String.valueOf(user_id));
-                    map.put("content", comment_content);
+                    map.put("content", content);
 
                     storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
                     Call<Comment> call_insert_comment = storyServerConnection.insert_comment(story_id, map);
                     call_insert_comment.enqueue(new Callback<Comment>() {
                         @Override
                         public void onResponse(Call<Comment> call, Response<Comment> response) {
-                            if(response.isSuccessful()) {
-                                Comment comment = response.body();
-                                int comment_id = comment.getId();
-                                String created_at = comment.getCreated_at();
-                                commentInfoList.add(new CommentInfo(comment_id, user_id, user_name, user_avatar, comment_content, created_at));
+                            if (response.isSuccessful()) {
+                                int comment_id = response.body().getId();
+                                String created_at = response.body().getCreated_at();
+                                commentInfoList.add(new CommentInfo(comment_id, user_id, user_name, user_avatar, content, created_at));
                                 commentAdapter.notifyItemInserted(commentInfoList.size() - 1);
                                 getCommentCount();
 
@@ -195,13 +254,41 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
                             Toast.makeText(NotificationFamilyStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
+
                 }
             }
         });
-
-        btn_item_main_story_detail_like.setOnCheckedChangeListener(this);
-        getContentData();
     }
+
+    private void getCommentData() {
+        rv_story_comments = (RecyclerView) findViewById(R.id.rv_story_comments);
+        //comment count
+
+        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        Call<ArrayList<CommentInfo>> call_family = storyServerConnection.family_detail_comment_List(story_id);
+        call_family.enqueue(new Callback<ArrayList<CommentInfo>>() {
+            @Override
+            public void onResponse(Call<ArrayList<CommentInfo>> call, Response<ArrayList<CommentInfo>> response) {
+                if (response.isSuccessful()) {
+                    commentInfoList = response.body();
+                    commentAdapter = new CommentAdapter(NotificationFamilyStoryDetail.this, commentInfoList, R.layout.item_comment);
+                    rv_story_comments.setLayoutManager(new LinearLayoutManager(NotificationFamilyStoryDetail.this, LinearLayoutManager.VERTICAL, false));
+                    rv_story_comments.setAdapter(commentAdapter);
+                    int spacing = getResources().getDimensionPixelSize(R.dimen.comment_divider_height);
+                    rv_story_comments.addItemDecoration(new SpaceItemDecoration(spacing));
+                } else {
+                    Toast.makeText(NotificationFamilyStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<CommentInfo>> call, Throwable t) {
+                log(t);
+                Toast.makeText(NotificationFamilyStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 
     // toolbar & menu
     public void setToolbar(View view) {
@@ -367,45 +454,13 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         rv_content_detail = (RecyclerView) findViewById(R.id.rv_content_detail);
         rv_story_comments = (RecyclerView) findViewById(R.id.rv_story_comments);
 
-        //story_info + content
-//        server_connection = Server_Connection.retrofit.create(Server_Connection.class);
-//        Call<ArrayList<StoryInfo>> call_story = server_connection.family_content_List(story_id);
-//        call_story.enqueue(new Callback<ArrayList<StoryInfo>>() {
-//            @Override
-//            public void onResponse(Call<ArrayList<StoryInfo>> call, Response<ArrayList<StoryInfo>> response) {
-//                StoryInfo storyInfo = response.body().get(0);
-//
-//                tv_item_story_date.setText(storyInfo.getCreated_at());
-//                tv_item_story_name.setText(storyInfo.getName());
-//                tv_story_detail_content.setText(storyInfo.getContent());
-//                like_checked = storyInfo.getChecked();
-//                Glide.with(NotificationFamilyStoryDetail.this).load(getString(R.string.cloud_front_user_avatar) + storyInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_story_avatar);
-//
-//               if (like_checked) {
-//                   btn_item_main_story_detail_like.setChecked(true);
-//                  first_checked = !first_checked;
-//                } else {
-//                    btn_item_main_story_detail_like.setChecked(false);
-//                   first_checked = !first_checked;
-//                }
-//
-//              }
-//
-//            @Override
-//            public void onFailure(Call<ArrayList<StoryInfo>> call, Throwable t) {
-//                log(t);
-//                Toast.makeText(NotificationFamilyStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-//            }
-//        });
-
-        // photo
         photoList = new ArrayList<>();
         storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
         Call<ArrayList<Photo>> call_photo = storyServerConnection.family_content_photo_List(story_id);
         call_photo.enqueue(new Callback<ArrayList<Photo>>() {
             @Override
             public void onResponse(Call<ArrayList<Photo>> call, Response<ArrayList<Photo>> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     photoList = response.body();
                     if (photoList.size() == 0) {
                         rv_content_detail.setVisibility(View.GONE);
@@ -432,7 +487,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         call_family.enqueue(new Callback<ArrayList<CommentInfo>>() {
             @Override
             public void onResponse(Call<ArrayList<CommentInfo>> call, Response<ArrayList<CommentInfo>> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     commentInfoList = response.body();
                     commentAdapter = new CommentAdapter(NotificationFamilyStoryDetail.this, commentInfoList, R.layout.item_comment);
                     rv_story_comments.setLayoutManager(new LinearLayoutManager(NotificationFamilyStoryDetail.this, LinearLayoutManager.VERTICAL, false));
@@ -457,7 +512,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         call_comment_count.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     int comment_count = response.body();
                     tv_story_detail_comment_count.setText(String.valueOf(comment_count));
                 } else {
@@ -478,7 +533,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         call_like_count.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     int like_count = response.body();
                     tv_story_detail_like_count.setText(String.valueOf(like_count));
                 } else {
@@ -494,27 +549,6 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         });
     }
 
-    private void getCommentCount() {
-        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
-        Call<Integer> call_comment_count = storyServerConnection.family_comment_Count(story_id);
-        call_comment_count.enqueue(new Callback<Integer>() {
-            @Override
-            public void onResponse(Call<Integer> call, Response<Integer> response) {
-                if(response.isSuccessful()) {
-                    int comment_count = response.body();
-                    tv_story_detail_comment_count.setText(String.valueOf(comment_count));
-                } else {
-                    Toast.makeText(NotificationFamilyStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Integer> call, Throwable t) {
-                log(t);
-                Toast.makeText(NotificationFamilyStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
 
     // content
     private class PhotoViewHolder extends RecyclerView.ViewHolder {
@@ -637,7 +671,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         }
     }
 
-    //like check
+    // like check
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (first_checked) {
@@ -650,7 +684,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
                 call_like.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.isSuccessful()) {
+                        if (response.isSuccessful()) {
                             tv_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_story_detail_like_count.getText().toString()) + 1));
                             like_checked = !like_checked;
                         } else {
@@ -674,7 +708,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
                 call_dislike.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.isSuccessful()) {
+                        if (response.isSuccessful()) {
                             tv_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_story_detail_like_count.getText().toString()) - 1));
                             like_checked = !like_checked;
                         } else {
@@ -691,6 +725,35 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
             }
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == COMMENT_EDIT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                int flag = data.getIntExtra("flag", 0);
+                if (flag == 1) {
+                    //modify
+                    int position = data.getIntExtra("position", -1);
+                    commentAdapter.commentInfoList.get(position).setContent(data.getStringExtra("content"));
+                    commentAdapter.notifyItemChanged(position);
+                }
+
+                if (flag == 2) {
+                    //delete
+                    int position = data.getIntExtra("position", -1);
+                    commentAdapter.commentInfoList.remove(position);
+                    commentAdapter.notifyItemRemoved(position);
+                    commentAdapter.notifyItemRangeChanged(position, commentAdapter.getItemCount());
+
+                }
+            }
+        }
+    }
+
+
+
 
     // etc
     private class SpaceItemDecoration extends RecyclerView.ItemDecoration {
@@ -738,6 +801,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
 
         return msg;
     }
+
 
     private static void log(Throwable throwable) {
         StackTraceElement[] ste = throwable.getStackTrace();

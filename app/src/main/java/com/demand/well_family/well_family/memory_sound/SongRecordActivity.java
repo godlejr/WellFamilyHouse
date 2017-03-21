@@ -873,17 +873,19 @@ public class SongRecordActivity extends Activity {
                         } else {
                             sleepTime = 850 * photoListSize;
                         }
+
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 HashMap<String, String> map = new HashMap<String, String>();
+                                map.put("user_id", String.valueOf(user_id));
                                 map.put("range_id", String.valueOf(range_id));
                                 map.put("song_id", String.valueOf(song_id));
                                 map.put("song_title", song_title);
                                 map.put("song_singer", song_singer);
                                 map.put("content", et_sound_record_memory.getText().toString());
                                 map.put("location", location);
-                                map.put("user_id", String.valueOf(user_id));
+
 
                                 songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
                                 Log.e("range_id", range_id + "");

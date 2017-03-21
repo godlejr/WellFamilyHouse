@@ -27,16 +27,6 @@
             android:text="@string/account_disable" />
 
         <Button
-            android:id="@+id/btn_close"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:background="@drawable/round_corner_btn"
-            android:text="닫기"
-            android:textColor="#fff" />
-
-        <Button
             android:id="@+id/btn_account_disable"
             android:layout_width="match_parent"
             android:layout_height="45dp"

@@ -100,7 +100,8 @@ public class SettingActivity extends Activity{
         ll_setting_disable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(v.getContext(), AccountDisableActivity.class);
+                startActivity(intent);
             }
         });
 
