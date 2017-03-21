@@ -27,10 +27,10 @@ import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.Notification;
 import com.demand.well_family.well_family.dto.NotificationInfo;
 import com.demand.well_family.well_family.family.FamilyActivity;
+import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.flag.NotificationBEHAVIORFlag;
 import com.demand.well_family.well_family.flag.NotificationINTENTFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
-import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
@@ -272,8 +272,12 @@ public class NotificationActivity extends Activity {
                                 NotificationInfo notificationInfo = response.body();
                                 Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
                                 holder.tv_notification_content.setText(notificationInfo.getName() + "님이 <" + notificationInfo.getContent() + "> 에 게시글을 남겼습니다. : \"" + notificationInfo.getTitle() + "\"");
-                                holder.ll_noti_photo.setVisibility(View.VISIBLE);
-                                Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_stories_images) + notificationInfo.getPhoto()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_noti_photo);
+                                if (notificationInfo.getPhoto() != null) {
+                                    holder.ll_noti_photo.setVisibility(View.VISIBLE);
+                                    Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_stories_images) + notificationInfo.getPhoto()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_noti_photo);
+                                }else{
+                                    holder.ll_noti_photo.setVisibility(View.GONE);
+                                }
                             } else {
                                 Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
@@ -287,6 +291,36 @@ public class NotificationActivity extends Activity {
                     });
                 }
 
+                if (intent_flag == NotificationINTENTFlag.SONG_STORY_DETAIL) {
+                    //song story
+                    notificationServerConnection = new HeaderInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
+                    Call<NotificationInfo> call_notificationInfoForWritingSongStory = notificationServerConnection.NotificationForWritingSongStory(id);
+                    call_notificationInfoForWritingSongStory.enqueue(new Callback<NotificationInfo>() {
+                        @Override
+                        public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {
+                            if (response.isSuccessful()) {
+                                NotificationInfo notificationInfo = response.body();
+                                Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
+                                holder.tv_notification_content.setText(notificationInfo.getName() + "님이 <" + notificationInfo.getContent() + "> 에 게시글을 남겼습니다. : \"" + notificationInfo.getTitle() + "\"");
+
+                                if (notificationInfo.getPhoto() != null) {
+                                    holder.ll_noti_photo.setVisibility(View.VISIBLE);
+                                    Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_song_stories_images) + notificationInfo.getPhoto()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_noti_photo);
+                                }else{
+                                    holder.ll_noti_photo.setVisibility(View.GONE);
+                                }
+                            } else {
+                                Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<NotificationInfo> call, Throwable t) {
+                            log(t);
+                            Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
 
             }
 
