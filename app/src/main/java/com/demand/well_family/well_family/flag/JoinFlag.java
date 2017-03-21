@@ -5,7 +5,7 @@ package com.demand.well_family.well_family.flag;
  */
 
 public class JoinFlag {
-    public static int DEMAND = 1;
-    public static int NAVER = 2;
-    public static int FACEBOOK = 3;
+    public static final int DEMAND = 1;
+    public static final int NAVER = 2;
+    public static final int FACEBOOK = 3;
 }

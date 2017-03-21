@@ -27,6 +27,8 @@ import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.Notification;
 import com.demand.well_family.well_family.dto.NotificationInfo;
 import com.demand.well_family.well_family.family.FamilyActivity;
+import com.demand.well_family.well_family.flag.NotificationBEHAVIORFlag;
+import com.demand.well_family.well_family.flag.NotificationINTENTFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.util.ErrorUtils;
@@ -112,12 +114,12 @@ public class NotificationActivity extends Activity {
     private void init() {
         rv_notification = (RecyclerView) findViewById(R.id.rv_notification);
 
-        userServerConnection =new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
         Call<ArrayList<Notification>> call_notifications = userServerConnection.notifications(user_id);
         call_notifications.enqueue(new Callback<ArrayList<Notification>>() {
             @Override
             public void onResponse(Call<ArrayList<Notification>> call, Response<ArrayList<Notification>> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     notiList = response.body();
 
                     rv_notification.setLayoutManager(new LinearLayoutManager(NotificationActivity.this, LinearLayoutManager.VERTICAL, false));
@@ -184,14 +186,14 @@ public class NotificationActivity extends Activity {
             final int intent_id = notificationList.get(position).getIntent_id();
             final int intent_flag = notificationList.get(position).getIntent_flag();
 
-            if (behavior_id == 1) {
+            if (behavior_id == NotificationBEHAVIORFlag.CREATING_THE_FAMILY) {
                 //creating family
                 notificationServerConnection = new HeaderInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
                 Call<NotificationInfo> call_notificationInfoForCreatingFamily = notificationServerConnection.NotificationForCreatingFamily(id);
                 call_notificationInfoForCreatingFamily.enqueue(new Callback<NotificationInfo>() {
                     @Override
                     public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {
-                        if(response.isSuccessful()) {
+                        if (response.isSuccessful()) {
                             NotificationInfo notificationInfo = response.body();
                             Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
                             holder.tv_notification_content.setText(notificationInfo.getName() + "님! <" + notificationInfo.getContent() + "> 가족 페이지 개설을 축하합니다.");
@@ -201,7 +203,7 @@ public class NotificationActivity extends Activity {
                         } else {
                             Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
-                        }
+                    }
 
                     @Override
                     public void onFailure(Call<NotificationInfo> call, Throwable t) {
@@ -211,16 +213,62 @@ public class NotificationActivity extends Activity {
                 });
             }
 
-            if (behavior_id == 5) {
+            if (behavior_id == NotificationBEHAVIORFlag.WRITING_THE_COMMENT) {
+                notificationServerConnection = new HeaderInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
+                Call<NotificationInfo> call_notificationInfoForWritingComment = notificationServerConnection.NotificationForWritingComment(id);
+                call_notificationInfoForWritingComment.enqueue(new Callback<NotificationInfo>() {
+                    @Override
+                    public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {
+                        if (response.isSuccessful()) {
+                            NotificationInfo notificationInfo = response.body();
+                            Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
+                            holder.tv_notification_content.setText(notificationInfo.getName() + "님이 " + notificationInfo.getContent() + "에 댓글을 남겼습니다.");
+                        } else {
+                            Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<NotificationInfo> call, Throwable t) {
+                        log(t);
+                        Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            if (behavior_id == NotificationBEHAVIORFlag.LIKE) {
+                notificationServerConnection = new HeaderInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
+                Call<NotificationInfo> call_notificationInfoForLike = notificationServerConnection.NotificationForLike(id);
+                call_notificationInfoForLike.enqueue(new Callback<NotificationInfo>() {
+                    @Override
+                    public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {
+                        if (response.isSuccessful()) {
+                            NotificationInfo notificationInfo = response.body();
+                            Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
+                            holder.tv_notification_content.setText(notificationInfo.getName() + "님이 " + notificationInfo.getContent() + "을 좋아합니다.");
+                        } else {
+                            Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<NotificationInfo> call, Throwable t) {
+                        log(t);
+                        Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            if (behavior_id == NotificationBEHAVIORFlag.WRITING_THE_STORY) {
                 //writing the story
-                if (intent_flag == 2) {
+                if (intent_flag == NotificationINTENTFlag.STORY_DETAIL) {
                     //family story
                     notificationServerConnection = new HeaderInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
-                    Call<NotificationInfo> call_notificationInfoForWritingStory= notificationServerConnection.NotificationForWritingStory(id);
+                    Call<NotificationInfo> call_notificationInfoForWritingStory = notificationServerConnection.NotificationForWritingStory(id);
                     call_notificationInfoForWritingStory.enqueue(new Callback<NotificationInfo>() {
                         @Override
                         public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {
-                            if(response.isSuccessful()) {
+                            if (response.isSuccessful()) {
                                 NotificationInfo notificationInfo = response.body();
                                 Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
                                 holder.tv_notification_content.setText(notificationInfo.getName() + "님이 <" + notificationInfo.getContent() + "> 에 게시글을 남겼습니다. : \"" + notificationInfo.getTitle() + "\"");
@@ -229,7 +277,7 @@ public class NotificationActivity extends Activity {
                             } else {
                                 Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
-                            }
+                        }
 
                         @Override
                         public void onFailure(Call<NotificationInfo> call, Throwable t) {
@@ -237,8 +285,9 @@ public class NotificationActivity extends Activity {
                             Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
-
                 }
+
+
             }
 
             if (notificationList.get(position).getChecked() == 1) {
@@ -248,7 +297,7 @@ public class NotificationActivity extends Activity {
             holder.ll_notification.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (intent_flag == 1) {
+                    if (intent_flag == NotificationINTENTFlag.FAMILY) {
                         //familyActivity
                         familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
                         final Call<Family> call_family = familyServerConnection.family(intent_id);
@@ -256,19 +305,15 @@ public class NotificationActivity extends Activity {
                         call_family.enqueue(new Callback<Family>() {
                             @Override
                             public void onResponse(Call<Family> call, Response<Family> response) {
-                                if(response.isSuccessful()) {
+                                if (response.isSuccessful()) {
                                     final Family familyInfo = response.body();
 
                                     notificationServerConnection = new HeaderInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
-
-//                                HashMap<String, String> map = new HashMap<String, String>();
-//                                map.put("notification_id", String.valueOf(id));
-
                                     Call<ResponseBody> call_update_check = notificationServerConnection.notificationInfo(id);
                                     call_update_check.enqueue(new Callback<ResponseBody>() {
                                         @Override
                                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            if(response.isSuccessful()) {
+                                            if (response.isSuccessful()) {
                                                 Intent intent = new Intent(NotificationActivity.this, FamilyActivity.class);
                                                 //family info
                                                 intent.putExtra("family_id", familyInfo.getId());
@@ -304,17 +349,13 @@ public class NotificationActivity extends Activity {
                         });
                     }
 
-                    if(intent_flag == 2){
+                    if (intent_flag == NotificationINTENTFlag.STORY_DETAIL) {
                         notificationServerConnection = new HeaderInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
-
-//                        HashMap<String, String> map = new HashMap<String, String>();
-//                        map.put("notification_id", String.valueOf(id));
-
                         Call<ResponseBody> call_update_check = notificationServerConnection.notificationInfo(id);
                         call_update_check.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                if(!response.isSuccessful()){
+                                if (!response.isSuccessful()) {
                                     Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
 //                                Intent intent = new Intent(NotificationActivity.this, FamilyActivity.class);
