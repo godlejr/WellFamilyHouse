@@ -411,6 +411,32 @@ public class NotificationActivity extends Activity {
                             }
                         });
                     }
+
+                    if (intent_flag == NotificationINTENTFlag.SONG_STORY_DETAIL) {
+                        notificationServerConnection = new HeaderInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
+                        Call<ResponseBody> call_update_check = notificationServerConnection.notificationInfo(id);
+                        call_update_check.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()) {
+                                    if (checked == 0) {
+                                        holder.ll_notification.setBackgroundColor(Color.parseColor("#ffffff"));
+                                    }
+                                    Intent intent = new Intent(NotificationActivity.this, NotificationSongStoryDetail.class);
+                                    intent.putExtra("story_id", intent_id);
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                log(t);
+                                Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
                 }
             });
 

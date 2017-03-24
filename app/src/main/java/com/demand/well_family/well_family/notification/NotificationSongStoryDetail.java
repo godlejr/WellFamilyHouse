@@ -45,17 +45,16 @@ import com.demand.well_family.well_family.connection.SongStoryServerConnection;
 import com.demand.well_family.well_family.connection.StoryServerConnection;
 import com.demand.well_family.well_family.dialog.CommentPopupActivity;
 import com.demand.well_family.well_family.dto.CommentInfo;
-import com.demand.well_family.well_family.dto.Notification;
 import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStoryComment;
 import com.demand.well_family.well_family.dto.SongStoryEmotionData;
-import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.dto.SongStoryInfoForNotification;
 import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.photos.SongPhotoPopupActivity;
 import com.demand.well_family.well_family.settings.SettingActivity;
-import com.demand.well_family.well_family.users.SongStoryDetailActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 import com.demand.well_family.well_family.util.ErrorUtils;
 
@@ -150,9 +149,16 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
     private String record_file;
     private LinearLayout ll_sound_story_detail_location;
     private String song_avatar;
+
+    //writer info
     private int story_user_id;
     private String story_user_name;
     private String story_user_avatar;
+    private int story_user_level;
+    private String story_user_email;
+    private String story_user_phone;
+    private String story_user_birth;
+
     private int story_id;
     private int range_id;
     private int song_id;
@@ -187,27 +193,80 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sound_acivity_story_detail);
 
-
-        story_user_id = 67;
-        story_user_name = "박혜연";
-        story_user_avatar = "1489985867740.jpg";
-
-        story_id = 205;
-        range_id = 1;
-        song_id = 206;
-
-        song_title = "유달산아 말해다오";
-        song_singer = "이미자";
-        record_file = "1489993046156.mp3";
-        created_at = "2017-03-20 15:57:24";
-        content = "추억소리 추억소리 추억소리";
-        location = "추억의위치";
-        hits = 0;
-        like_checked = false;
-
+        story_id = getIntent().getIntExtra("story_id", 0);
 
         setUserInfo();
         init();
+    }
+
+    private void init() {
+        songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+        Call<SongStoryInfoForNotification> call_song_story_info = songStoryServerConnection.storyDetailForNotification(story_id);
+        call_song_story_info.enqueue(new Callback<SongStoryInfoForNotification>() {
+            @Override
+            public void onResponse(Call<SongStoryInfoForNotification> call, Response<SongStoryInfoForNotification> response) {
+                if (response.isSuccessful()) {
+                    SongStoryInfoForNotification songStoryInfoForNotification = response.body();
+                    //writer info
+                    story_user_id = songStoryInfoForNotification.getUser_id();
+                    story_user_name = songStoryInfoForNotification.getUser_name();
+                    story_user_avatar = songStoryInfoForNotification.getUser_avatar();
+                    story_user_level = songStoryInfoForNotification.getUser_level();
+                    story_user_email = songStoryInfoForNotification.getUser_email();
+                    story_user_phone = songStoryInfoForNotification.getUser_phone();
+                    story_user_birth = songStoryInfoForNotification.getUser_phone();
+
+                    range_id = songStoryInfoForNotification.getRange_id();
+                    song_id = songStoryInfoForNotification.getSong_id();
+
+                    song_title = songStoryInfoForNotification.getSong_title();
+                    song_singer = songStoryInfoForNotification.getSong_singer();
+                    record_file = songStoryInfoForNotification.getRecord_file();
+                    content = songStoryInfoForNotification.getContent();
+                    location = songStoryInfoForNotification.getLocation();
+                    hits = songStoryInfoForNotification.getHits();
+
+                    created_at = songStoryInfoForNotification.getCreated_at();
+
+                    songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                    Call<Integer> call_like_check = songStoryServerConnection.song_story_like_check(story_id, user_id);
+                    call_like_check.enqueue(new Callback<Integer>() {
+                        @Override
+                        public void onResponse(Call<Integer> call, Response<Integer> response) {
+                            if (response.isSuccessful()) {
+                                int checked = response.body();
+                                if (checked == 1) {
+                                    cb_sound_story_detail_like.setChecked(true);
+                                } else {
+                                    cb_sound_story_detail_like.setChecked(false);
+                                }
+                                first_checked =true;
+                            } else {
+                                Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Integer> call, Throwable t) {
+                            log(t);
+                            Toast.makeText(NotificationSongStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                    setContent();
+                } else {
+                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SongStoryInfoForNotification> call, Throwable t) {
+                log(t);
+                Toast.makeText(NotificationSongStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
     }
 
     private void setUserInfo() {
@@ -223,12 +282,12 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
         setToolbar(this.getWindow().getDecorView());
     }
 
-    private void init() {
+    private void setContent() {
         tv_sound_story_detail_title = (TextView) findViewById(R.id.tv_sound_story_detail_title);
         tv_sound_story_detail_singer = (TextView) findViewById(R.id.tv_sound_story_detail_singer);
         tv_sound_story_detail_writer_name = (TextView) findViewById(R.id.tv_sound_story_detail_writer_name);
         iv_sound_detail_song_img = (ImageView) findViewById(R.id.iv_sound_detail_song_img);
-        tv_sound_story_detail_like_count = (TextView)findViewById(R.id.tv_sound_story_detail_like_count);
+        tv_sound_story_detail_like_count = (TextView) findViewById(R.id.tv_sound_story_detail_like_count);
 
         tv_sound_story_detail_date = (TextView) findViewById(R.id.tv_sound_story_detail_date);
         tv_sound_story_detail_play = (TextView) findViewById(R.id.tv_sound_story_detail_play);
@@ -248,6 +307,28 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
         ll_sound_story_detail_play = (LinearLayout) findViewById(R.id.ll_sound_story_detail_play);
 
         finishList.add(this);
+        //song avatar
+        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        Call<String> call_song_avatar = songServerConnection.song_story_avatar(song_id);
+        call_song_avatar.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+
+                if (response.isSuccessful()) {
+                    song_avatar = response.body().toString();
+                    Glide.with(NotificationSongStoryDetail.this).load(getString(R.string.cloud_front_songs_avatar) + song_avatar)
+                            .thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_detail_song_img);
+                } else {
+                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                log(t);
+                Toast.makeText(NotificationSongStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
 
         // set story data
         // user_info
@@ -256,14 +337,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
         tv_sound_story_detail_writer_name.setText(story_user_name);
         tv_sound_story_detail_date.setText(calculateTime(created_at));
 
-        // like
-        if (like_checked) {
-            cb_sound_story_detail_like.setChecked(true);
-            first_checked = !first_checked;
-        } else {
-            cb_sound_story_detail_like.setChecked(false);
-            first_checked = !first_checked;
-        }
+
         cb_sound_story_detail_like.setOnCheckedChangeListener(this);
 
         //like_count
@@ -335,27 +409,6 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
         tv_sound_story_detail_title.setText(song_title);
         tv_sound_story_detail_singer.setText(song_singer);
 
-        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
-        Call<String> call_song_avatar = songServerConnection.song_story_avatar(song_id);
-        call_song_avatar.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-
-                if (response.isSuccessful()) {
-                    song_avatar = response.body().toString();
-                    Glide.with(NotificationSongStoryDetail.this).load(getString(R.string.cloud_front_songs_avatar) + song_avatar)
-                            .thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_detail_song_img);
-                } else {
-                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                log(t);
-                Toast.makeText(NotificationSongStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-            }
-        });
 
         getCommentCount();
         getContentData();
@@ -1112,7 +1165,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
         String msg = null;
 
         if (diffTime < 60) {
-            if(diffTime < 0){
+            if (diffTime < 0) {
                 diffTime = 0;
             }
             msg = diffTime + "초전";
