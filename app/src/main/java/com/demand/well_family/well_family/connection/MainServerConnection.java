@@ -22,16 +22,6 @@ import retrofit2.http.QueryMap;
  */
 
 public interface MainServerConnection {
-//
-//    Retrofit retrofit = new Retrofit.Builder()
-//            .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/main/")
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build();
-//
-//    Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-//            .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/main/")
-//            .addConverterFactory(GsonConverterFactory.create());
-
 
     @POST("login")
     Call<User> login(@QueryMap HashMap<String, String> map);
@@ -44,4 +34,12 @@ public interface MainServerConnection {
 
     @GET("report_categories") // token 필요
     Call<ArrayList<Category>> report_category_List();
+
+
+    @POST("find_password")  // token 불필요
+    Call<ResponseBody> findPassword( @QueryMap HashMap<String, String> map);
+
+    @GET("find_email")  // token 불필요
+    Call<User> findEmail(@QueryMap HashMap<String, String> map);
+
 }

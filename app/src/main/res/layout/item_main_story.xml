@@ -12,7 +12,8 @@
     android:paddingLeft="2dp"
     android:paddingRight="2dp">
 
-    <include layout="@layout/detail_top"
+    <include
+        layout="@layout/detail_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -114,12 +115,12 @@
         android:layout_height="50dp">
 
         <CheckBox
-            android:layout_width="1dp"
             android:id="@+id/btn_item_main_story_like"
-            android:button="@null"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/checkbox_like"
-            android:layout_height="match_parent" />
+            android:button="@null" />
 
         <ImageButton
             android:layout_width="1dp"

@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="tint">#6F020202</color>
+    <color name="wellfamilyhouseColor">#542920</color>
+    <color name="gray">#999999</color>
+
 </resources>

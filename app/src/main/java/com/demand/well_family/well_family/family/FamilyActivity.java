@@ -44,6 +44,7 @@ import com.demand.well_family.well_family.WriteActivity;
 import com.demand.well_family.well_family.connection.FamilyServerConnection;
 import com.demand.well_family.well_family.connection.StoryServerConnection;
 import com.demand.well_family.well_family.connection.UserServerConnection;
+import com.demand.well_family.well_family.dialog.StoryPopupActivity;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
@@ -591,6 +592,7 @@ public class FamilyActivity extends Activity {
         private TextView tv_item_main_story_like;
         private TextView tv_item_main_comment_story_count;
         private ImageButton btn_item_main_story_comment;
+        private ImageView iv_item_story_menu;
 
         private LinearLayout ll_item_main_story_like_comment_info;
         private LinearLayout story_images_container;
@@ -612,6 +614,7 @@ public class FamilyActivity extends Activity {
 
             ll_item_main_story_like_comment_info = (LinearLayout) itemView.findViewById(R.id.ll_item_main_story_like_comment_info);
             btn_item_main_story_comment = (ImageButton) itemView.findViewById(R.id.btn_item_main_story_comment);
+            iv_item_story_menu = (ImageView)itemView.findViewById(R.id.iv_item_story_menu);
 
             //like
             btn_item_main_story_like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -667,6 +670,20 @@ public class FamilyActivity extends Activity {
                     }
                 }
             });
+
+            iv_item_story_menu.setOnClickListener(new View.OnClickListener() { // 여기
+                @Override
+                public void onClick(View v) {
+                    Intent popupIntent = new Intent(v.getContext(), StoryPopupActivity.class);
+                    popupIntent.putExtra("story_id", storyList.get(getAdapterPosition()).getStory_id());
+                    popupIntent.putExtra("story_user_id", storyList.get(getAdapterPosition()).getUser_id());
+                    popupIntent.putExtra("story_content", storyList.get(getAdapterPosition()).getContent());
+
+                    startActivity(popupIntent);
+                }
+            });
+
+
             iv_writer_avatar.setOnClickListener(this);
             tv_writer_name.setOnClickListener(this);
 
@@ -674,6 +691,7 @@ public class FamilyActivity extends Activity {
             story_images_container.setOnClickListener(this);
             ll_item_main_story_like_comment_info.setOnClickListener(this);
             btn_item_main_story_comment.setOnClickListener(this);
+
 
         }
 
@@ -1015,7 +1033,7 @@ public class FamilyActivity extends Activity {
 
         //my info
         userList = new ArrayList<>();
-        userList.add(new User(user_id, user_email, user_name, user_birth, user_phone, user_avatar, user_level, null)); // 토큰
+        userList.add(new User(user_id, user_email, user_name, user_birth, user_phone, user_avatar, user_level)); // 토큰
 
 //        familyServerConnection = FamilyServerConnection.retrofit.create(FamilyServerConnection.class);
         familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
@@ -1031,7 +1049,7 @@ public class FamilyActivity extends Activity {
                     } else {
                         for (int i = 0; i < responseBodySize; i++) {
                             userList.add(new User(response.body().get(i).getId(), response.body().get(i).getEmail(), response.body().get(i).getName(), response.body().get(i).getBirth(),
-                                    response.body().get(i).getPhone(), response.body().get(i).getAvatar(), response.body().get(i).getLevel(), null)); // 토큰
+                                    response.body().get(i).getPhone(), response.body().get(i).getAvatar(), response.body().get(i).getLevel()));
                         }
                     }
                     userAdapter = new UserAdapter(FamilyActivity.this, userList, R.layout.item_users_familys);
