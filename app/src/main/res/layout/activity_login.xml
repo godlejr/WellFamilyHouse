@@ -122,11 +122,7 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <LinearLayout
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical"></LinearLayout>
+
 
                     <LinearLayout
                         android:layout_width="1dp"
@@ -159,8 +155,33 @@
                     <LinearLayout
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
+                        android:layout_weight="0.5"
                         android:orientation="vertical"></LinearLayout>
+                    <LinearLayout
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/btn_main_find_pwd"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="30dp"
+                            android:layout_gravity="right"
+                            android:layout_marginTop="5dp"
+                            android:background="#00ffffff"
+                            android:gravity="center_vertical|center"
+                            android:text="비밀번호 찾기"
+                            android:textColor="#999999"
+                            android:textSize="15sp" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#999999" />
+
+                    </LinearLayout>
 
 
                 </LinearLayout>

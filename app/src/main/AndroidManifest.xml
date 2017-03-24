@@ -89,8 +89,6 @@
         <activity android:name=".settings.SearchAccountActivity" />
         <activity android:name=".settings.ConfirmAccountActivity" />
         <activity android:name=".notification.NotificationFamilyStoryDetail"/>
-        <activity android:name=".notification.NotificationSongStoryDetail"/>
-
 
         <service android:name=".fcm.FirebaseMessageService">
             <intent-filter>

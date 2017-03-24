@@ -12,9 +12,10 @@ public class User {
     private String phone;
     private String avatar;
     private int level;
+    private int login_category_id;
     private String access_token;
 
-    public User(int id, String email, String name, String birth, String phone, String avatar, int level, String access_token) {
+    public User(int id, String email, String name, String birth, String phone, String avatar, int level) {
         this.id = id;
         this.email = email;
         this.name = name;
@@ -22,6 +23,17 @@ public class User {
         this.phone = phone;
         this.avatar = avatar;
         this.level = level;
+    }
+
+    public User(int id, String email, String name, String birth, String phone, String avatar, int level, int login_category_id, String access_token) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.birth = birth;
+        this.phone = phone;
+        this.avatar = avatar;
+        this.level = level;
+        this.login_category_id = login_category_id;
         this.access_token = access_token;
     }
 
@@ -87,5 +99,13 @@ public class User {
 
     public void setAccess_token(String access_token) {
         this.access_token = access_token;
+    }
+
+    public int getLogin_category_id() {
+        return login_category_id;
+    }
+
+    public void setLogin_category_id(int login_category_id) {
+        this.login_category_id = login_category_id;
     }
 }

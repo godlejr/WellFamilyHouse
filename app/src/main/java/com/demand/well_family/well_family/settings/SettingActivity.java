@@ -13,6 +13,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.connection.UserServerConnection;
 
 /**
  * Created by ㅇㅇ on 2017-03-06.
@@ -54,6 +55,7 @@ public class SettingActivity extends Activity{
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        setToolbar(getWindow().getDecorView());
     }
 
     private void  setToolbar(View view){
@@ -112,6 +114,8 @@ public class SettingActivity extends Activity{
                 startActivity(intent);
             }
         });
+
+
     }
 
 }

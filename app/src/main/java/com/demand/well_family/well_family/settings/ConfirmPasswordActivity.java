@@ -16,6 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.connection.MainServerConnection;
+import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by ㅇㅇ on 2017-03-06.
@@ -36,6 +42,9 @@ public class ConfirmPasswordActivity extends Activity {
     private String user_phone;
     private int user_level;
     private SharedPreferences loginInfo;
+    private static final Logger logger = LoggerFactory.getLogger(ConfirmPasswordActivity.class);
+
+    private MainServerConnection mainServerConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +89,7 @@ public class ConfirmPasswordActivity extends Activity {
         btn_confirm_pwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                mainServerConnection = new HeaderInterceptor()
                 if(et_confirm_email.getText().length() == 0 || et_confirm_pwd.getText().length() == 0){
                     Toast.makeText(ConfirmPasswordActivity.this, "이메일과 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show();
                 } else {
@@ -96,6 +106,7 @@ public class ConfirmPasswordActivity extends Activity {
                 // 비밀번호 찾기
                 Intent intent = new Intent(v.getContext(), SearchAccountActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -120,5 +131,20 @@ public class ConfirmPasswordActivity extends Activity {
             }
         });
 
+    }
+
+    private static void log(Throwable throwable) {
+        StackTraceElement[] ste = throwable.getStackTrace();
+        String className = ste[0].getClassName();
+        String methodName = ste[0].getMethodName();
+        int lineNumber = ste[0].getLineNumber();
+        String fileName = ste[0].getFileName();
+
+        if (LogFlag.printFlag) {
+            if (logger.isInfoEnabled()) {
+                logger.info("Exception: " + throwable.getMessage());
+                logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
+            }
+        }
     }
 }

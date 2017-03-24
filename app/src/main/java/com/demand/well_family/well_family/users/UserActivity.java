@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -77,11 +79,12 @@ public class UserActivity extends Activity implements View.OnClickListener {
     private TextView tv_family_activity_name;
     private TextView tv_family_activity_birth;
     private TextView tv_family_activity_phone;
+    private TextView tv_family_activity_phone2;
     private TextView tv_family_activity_email;
     private LinearLayout ll_memory_sound_story_list;
     private LinearLayout ll_user_edit;
     private LinearLayout ll_edit_profile;
-    private LinearLayout ll_user_phone_info;
+    private RelativeLayout ll_user_phone_info;
     private ImageView iv_user_call;
 
     //toolbar
@@ -299,8 +302,21 @@ public class UserActivity extends Activity implements View.OnClickListener {
     private void setUserFunc() {
         tv_family_activity_phone = (TextView) findViewById(R.id.tv_family_activity_phone);
         tv_family_activity_phone.setText(story_user_phone);
+
+        RelativeLayout rl_call_phone = (RelativeLayout)findViewById(R.id.rl_call_phone);
+        rl_call_phone.bringToFront();
+        tv_family_activity_phone2 = (TextView) findViewById(R.id.tv_family_activity_phone2);
+        String phone="";
+        int phone_length = story_user_phone.length();
+        if(phone_length == 11){
+            phone = story_user_phone.substring(0, 3) + "-" + story_user_phone.substring(3,7) + "-" + story_user_phone.substring(7,11);
+        } else if(phone_length == 10){
+            phone = story_user_phone.substring(0, 3) + "-" + story_user_phone.substring(3,6) + "-" + story_user_phone.substring(6,10);
+        }
+        tv_family_activity_phone2.setText(phone);
+
         iv_user_call = (ImageView) findViewById(R.id.iv_user_call);
-        ll_user_phone_info = (LinearLayout) findViewById(R.id.ll_user_phone_info);
+        ll_user_phone_info = (RelativeLayout) findViewById(R.id.ll_user_phone_info);
 
         if (user_id == story_user_id) {
             //me

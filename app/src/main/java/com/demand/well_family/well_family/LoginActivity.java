@@ -27,6 +27,7 @@ import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.register.AgreementActivity;
 import com.demand.well_family.well_family.register.SNSRegisterActivity;
+import com.demand.well_family.well_family.settings.SearchAccountActivity;
 import com.demand.well_family.well_family.util.ErrorUtils;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -62,6 +63,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ImageButton login;
     private EditText email, pwd;
     private Button register;
+    private Button btn_main_find_pwd;
     private ScrollView sv_login;
 
     private String et_email;
@@ -156,6 +158,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void init() {
         login = (ImageButton) findViewById(R.id.btn_main_login);
         register = (Button) findViewById(R.id.btn_main_register);
+        btn_main_find_pwd = (Button)findViewById(R.id.btn_main_find_pwd);
         email = (EditText) findViewById(R.id.et_login_email);
         pwd = (EditText) findViewById(R.id.et_login_pwd);
         sv_login = (ScrollView) findViewById(R.id.sv_login);
@@ -196,6 +199,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     handler.postDelayed(r, 200);
                 }
+            }
+        });
+
+        btn_main_find_pwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), SearchAccountActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -289,8 +300,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     final User userInfo = response.body();
-                    access_token = userInfo.getAccess_token();
-                    Log.e("ACCESS_TOKEN", userInfo.getAccess_token());
 
                     if (userInfo == null) {
                         Intent intent = new Intent(LoginActivity.this, SNSRegisterActivity.class);
@@ -300,6 +309,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         intent.putExtra("login_category_id", login_category_id);
                         startActivity(intent);
                     } else {
+//                        access_token = userInfo.getAccess_token();
+//                        Log.e("ACCESS_TOKEN", userInfo.getAccess_token());
+
                         setLogin(userInfo);
                     }
                 } else {

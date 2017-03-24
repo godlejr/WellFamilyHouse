@@ -31,6 +31,8 @@ import retrofit2.http.QueryMap;
 
 public interface UserServerConnection {
 
+
+
 //    Retrofit retrofit = new Retrofit.Builder()
 //            .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/users/")
 //            .addConverterFactory(GsonConverterFactory.create())
@@ -113,11 +115,6 @@ public interface UserServerConnection {
 
     @GET("{user_id}/notifications")
     Call<ArrayList<Notification>> notifications(@Path("user_id") int user_id);
-
-
-
-
-
 
 
 }
