@@ -26,16 +26,16 @@
             android:id="@+id/et_write"
             android:layout_width="match_parent"
             android:layout_height="250dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/round_corner"
             android:ems="10"
             android:gravity="top"
             android:hint="새로운 소식을 들려주세요"
-            android:inputType="textPersonName"
+            android:inputType="textMultiLine|textPersonName"
             android:padding="10dp"
             android:textColor="#414141"
             android:textColorHint="#bdbdbd"
-            android:textSize="16sp"
-            android:layout_marginTop="10dp" />
+            android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"

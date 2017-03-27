@@ -69,7 +69,8 @@
         <activity
             android:name=".memory_sound.EmotionActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
-        <activity android:name=".users.EditUserActivity" />
+        <activity android:name=".users.EditUserActivity"
+            android:theme="@style/CustomAppTheme"/>
         <activity
             android:name=".family.EditFamilyActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
@@ -87,8 +88,18 @@
         <activity android:name=".notification.NotificationActivity" />
         <activity android:name=".settings.ConfirmPasswordActivity" />
         <activity android:name=".settings.SearchAccountActivity" />
-        <activity android:name=".settings.ConfirmAccountActivity" />
-        <activity android:name=".notification.NotificationFamilyStoryDetail"/>
+        <activity android:name=".settings.ConfirmAccountActivity"
+            android:theme="@style/CustomAppTheme"/>
+        <activity android:name=".notification.NotificationFamilyStoryDetail" />
+        <activity android:name=".notification.NotificationSongStoryDetail" />
+
+        <activity android:name=".settings.AccountDisableActivity"/>
+        <activity android:name=".settings.AccountDisableSelectActivity"
+            android:theme="@style/CustomAppTheme"/>
+
+        <activity
+            android:name=".dialog.StoryPopupActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
 
         <service android:name=".fcm.FirebaseMessageService">
             <intent-filter>
