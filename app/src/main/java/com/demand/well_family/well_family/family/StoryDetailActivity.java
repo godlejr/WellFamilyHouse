@@ -117,9 +117,15 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
     //toolbar
     private DrawerLayout dl;
     private StoryServerConnection storyServerConnection;
+
+    //request code
     private static final int COMMENT_EDIT_REQUEST = 1;
     private static final int DETAIL_REQUEST = 2;
     private static final int POPUP_REQUEST = 3;
+
+    //result code
+    private static final int DELETE = 5;
+
 
 
     private static final Logger logger = LoggerFactory.getLogger(StoryDetailActivity.class);
@@ -751,7 +757,6 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
         if (requestCode == POPUP_REQUEST) {
             if (resultCode == RESULT_OK) {
                 String content = data.getStringExtra("content");
-
                 Intent intent = getIntent();
                 intent.putExtra("position", position);
                 intent.putExtra("content", content);
@@ -759,7 +764,16 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                 finish();
             }
 
-        } else if (requestCode == COMMENT_EDIT_REQUEST) {
+            if (resultCode == DELETE) {
+                Intent intent = getIntent();
+                intent.putExtra("position", position);
+                setResult(DELETE, intent);
+                finish();
+            }
+
+        }
+
+        if (requestCode == COMMENT_EDIT_REQUEST) {
             int flag = data.getIntExtra("flag", 0);
 
             if (resultCode == RESULT_OK) {

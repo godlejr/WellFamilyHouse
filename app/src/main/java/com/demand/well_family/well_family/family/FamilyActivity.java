@@ -115,10 +115,13 @@ public class FamilyActivity extends Activity {
     private UserAdapter userAdapter;
     private ContentAdapter contentAdapter;
 
-    //intent code
+    //request code
     private static final int WRITE_REQUEST = 1;
     private static final int DETAIL_REQUEST = 2;
     private static final int EDIT_REQUEST = 3;
+
+    //result code
+    private static final int DELETE = 5;
 
     private static final int CONTENTS_OFFSET = 20;
     private boolean content_isFinished = false;
@@ -428,7 +431,7 @@ public class FamilyActivity extends Activity {
                 call.enqueue(new Callback<ArrayList<StoryInfo>>() {
                     @Override
                     public void onResponse(Call<ArrayList<StoryInfo>> call, Response<ArrayList<StoryInfo>> response) {
-                        if(response.isSuccessful()) {
+                        if (response.isSuccessful()) {
                             contentList = response.body();
                             content_size = contentList.size();
 
@@ -457,7 +460,7 @@ public class FamilyActivity extends Activity {
                             msg = new Message();
                             msg.setData(bundle);
                             mainHanlder.sendMessage(msg);
-                        }else {
+                        } else {
                             Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -607,7 +610,7 @@ public class FamilyActivity extends Activity {
             tv_content_text = (TextView) itemView.findViewById(R.id.tv_item_main_story_content);
             btn_item_main_story_like = (CheckBox) itemView.findViewById(R.id.btn_item_main_story_like);
 
-            iv_item_story_menu = (ImageView)itemView.findViewById(R.id.iv_item_story_menu);
+            iv_item_story_menu = (ImageView) itemView.findViewById(R.id.iv_item_story_menu);
             iv_item_story_menu.setVisibility(View.GONE);
 
             tv_item_main_story_like = (TextView) itemView.findViewById(R.id.tv_item_main_story_like);
@@ -635,7 +638,7 @@ public class FamilyActivity extends Activity {
                             call_like.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    if(response.isSuccessful()) {
+                                    if (response.isSuccessful()) {
                                         tv_item_main_story_like.setText(String.valueOf(Integer.parseInt(tv_item_main_story_like.getText().toString()) + 1));
                                         storyList.get(getAdapterPosition()).setChecked(true);
                                     } else {
@@ -656,10 +659,10 @@ public class FamilyActivity extends Activity {
                             call_dislike.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    if(response.isSuccessful()) {
+                                    if (response.isSuccessful()) {
                                         tv_item_main_story_like.setText(String.valueOf(Integer.parseInt(tv_item_main_story_like.getText().toString()) - 1));
                                         storyList.get(getAdapterPosition()).setChecked(false);
-                                    } else{
+                                    } else {
                                         Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -674,7 +677,6 @@ public class FamilyActivity extends Activity {
                     }
                 }
             });
-
 
 
             iv_writer_avatar.setOnClickListener(this);
@@ -699,7 +701,7 @@ public class FamilyActivity extends Activity {
                     call_user.enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
-                            if(response.isSuccessful()) {
+                            if (response.isSuccessful()) {
                                 User userInfo = response.body();
 
                                 if (userInfo == null) {
@@ -787,7 +789,7 @@ public class FamilyActivity extends Activity {
             call_photo.enqueue(new Callback<ArrayList<Photo>>() {
                 @Override
                 public void onResponse(Call<ArrayList<Photo>> call, Response<ArrayList<Photo>> response) {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         ArrayList<Photo> photoList = response.body();
                         int photoListSize = photoList.size();
 
@@ -844,10 +846,10 @@ public class FamilyActivity extends Activity {
             call_like_count.enqueue(new Callback<Integer>() {
                 @Override
                 public void onResponse(Call<Integer> call, Response<Integer> response) {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         int like_count = response.body();
                         holder.tv_item_main_story_like.setText(String.valueOf(like_count));
-                    }else {
+                    } else {
                         Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -864,7 +866,7 @@ public class FamilyActivity extends Activity {
             call_comment_count.enqueue(new Callback<Integer>() {
                 @Override
                 public void onResponse(Call<Integer> call, Response<Integer> response) {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         int comment_count = response.body();
                         holder.tv_item_main_comment_story_count.setText(String.valueOf(comment_count));
                     } else {
@@ -884,7 +886,7 @@ public class FamilyActivity extends Activity {
             call_like_check.enqueue(new Callback<Integer>() {
                 @Override
                 public void onResponse(Call<Integer> call, Response<Integer> response) {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         int checked = response.body();
                         if (checked == 1) {
                             holder.btn_item_main_story_like.setChecked(true);
@@ -1034,7 +1036,7 @@ public class FamilyActivity extends Activity {
         call_users.enqueue(new Callback<ArrayList<User>>() {
             @Override
             public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     int responseBodySize = response.body().size();
 
                     if (responseBodySize == 0) {
@@ -1222,11 +1224,15 @@ public class FamilyActivity extends Activity {
 
                 storyList.get(position).setFirst_checked(false); //like sync
                 storyList.get(position).setChecked(like_checked); //like sync
-                if(content !=null){
+                if (content != null) {
                     storyList.get(position).setContent(content);
                 }
                 contentAdapter.notifyItemChanged(position);
+            }
 
+            if(resultCode == DELETE){
+                int position = data.getIntExtra("position", 0);
+                contentAdapter.notifyItemRemoved(position);
             }
         }
 

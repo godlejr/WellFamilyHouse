@@ -67,10 +67,16 @@ public class StoryPopupActivity extends Activity {
     private ArrayList<String> popupList;
     private PopupAdapter popupAdapter;
 
+    //request code
     private static final int MODIFY_REQUEST = 1;
+
+    //result code
+    private static final int DELETE = 5;
+
     private String content;
     private StoryServerConnection storyServerConnection;
     private static final Logger logger = LoggerFactory.getLogger(StoryPopupActivity.class);
+    private static final int DELETE_REQUEST = 4;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -184,6 +190,10 @@ public class StoryPopupActivity extends Activity {
                                 public void onResponse(Call<Void> call, Response<Void> response) {
                                     if(response.isSuccessful()){
                                         Toast.makeText(context, "게시물이 삭제되었습니다." , Toast.LENGTH_SHORT).show();
+
+                                        Intent intent = getIntent();
+                                        intent.putExtra("position",position);
+                                        setResult(DELETE, intent);
                                         finish();
                                     } else {
                                         Toast.makeText(context, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
@@ -195,7 +205,6 @@ public class StoryPopupActivity extends Activity {
                                     log(t);
                                 }
                             });
-
 
                         } else {
                             finish();
