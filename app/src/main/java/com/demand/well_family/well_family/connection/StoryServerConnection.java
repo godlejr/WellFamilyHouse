@@ -18,6 +18,7 @@ import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
@@ -68,5 +69,9 @@ public interface StoryServerConnection {
     @POST("./") // (*) user_id는 POST로 던지기
     Call<Story> insert_story(@QueryMap HashMap<String, String> map);
 
+    @PUT("{story_id}")
+    Call<Void> update_story(@Path("story_id") int story_id, @QueryMap HashMap<String, String> map);
 
+    @DELETE("{story_id}")
+    Call<Void> delete_story(@Path("story_id") int story_id);
 }

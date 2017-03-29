@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +21,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -75,7 +77,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.demand.well_family.well_family.LoginActivity.finishList;
-
 
 /**
  * Created by Dev-0 on 2017-01-19.
@@ -606,6 +607,9 @@ public class FamilyActivity extends Activity {
             tv_content_text = (TextView) itemView.findViewById(R.id.tv_item_main_story_content);
             btn_item_main_story_like = (CheckBox) itemView.findViewById(R.id.btn_item_main_story_like);
 
+            iv_item_story_menu = (ImageView)itemView.findViewById(R.id.iv_item_story_menu);
+            iv_item_story_menu.setVisibility(View.GONE);
+
             tv_item_main_story_like = (TextView) itemView.findViewById(R.id.tv_item_main_story_like);
             tv_item_main_comment_story_count = (TextView) itemView.findViewById(R.id.tv_item_main_comment_story_count);
 
@@ -614,7 +618,7 @@ public class FamilyActivity extends Activity {
 
             ll_item_main_story_like_comment_info = (LinearLayout) itemView.findViewById(R.id.ll_item_main_story_like_comment_info);
             btn_item_main_story_comment = (ImageButton) itemView.findViewById(R.id.btn_item_main_story_comment);
-            iv_item_story_menu = (ImageView)itemView.findViewById(R.id.iv_item_story_menu);
+
 
             //like
             btn_item_main_story_like.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -671,17 +675,6 @@ public class FamilyActivity extends Activity {
                 }
             });
 
-            iv_item_story_menu.setOnClickListener(new View.OnClickListener() { // 여기
-                @Override
-                public void onClick(View v) {
-                    Intent popupIntent = new Intent(v.getContext(), StoryPopupActivity.class);
-                    popupIntent.putExtra("story_id", storyList.get(getAdapterPosition()).getStory_id());
-                    popupIntent.putExtra("story_user_id", storyList.get(getAdapterPosition()).getUser_id());
-                    popupIntent.putExtra("story_content", storyList.get(getAdapterPosition()).getContent());
-
-                    startActivity(popupIntent);
-                }
-            });
 
 
             iv_writer_avatar.setOnClickListener(this);
@@ -1189,6 +1182,7 @@ public class FamilyActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == WRITE_REQUEST) { //글쓰기
             if (resultCode == RESULT_OK) {
                 progressDialog = new ProgressDialog(FamilyActivity.this);
@@ -1222,11 +1216,17 @@ public class FamilyActivity extends Activity {
 
         if (requestCode == DETAIL_REQUEST) { //디테일
             if (resultCode == RESULT_OK) {
+                String content = data.getStringExtra("content");
                 int position = data.getIntExtra("position", 0);
                 Boolean like_checked = data.getBooleanExtra("like_checked", false);
+
                 storyList.get(position).setFirst_checked(false); //like sync
                 storyList.get(position).setChecked(like_checked); //like sync
+                if(content !=null){
+                    storyList.get(position).setContent(content);
+                }
                 contentAdapter.notifyItemChanged(position);
+
             }
         }
 

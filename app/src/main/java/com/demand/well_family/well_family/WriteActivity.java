@@ -82,11 +82,12 @@ import static com.demand.well_family.well_family.LoginActivity.finishList;
 public class WriteActivity extends Activity {
     private RecyclerView rv_write_image_upload;
     private EditText et_content;
-    private Button btn_write_image_upload;
+    private Button btn_write_photo_upload;
     private Button btn_write;
     private ArrayList<Uri> photoList;
     private ArrayList<String> pathList;
-
+    private TextView tv_write_user_name;
+    private ImageView iv_write_user_avatar;
 
     private PhotoViewAdapter photoViewAdapter;
     private static final int PICK_PHOTO = 1;
@@ -385,13 +386,18 @@ public class WriteActivity extends Activity {
     }
 
     private void init() {
-        photoViewAdapter = new PhotoViewAdapter(photoList, this, R.layout.item_write_upload_image);
-
         et_content = (EditText) findViewById(R.id.et_write);
         btn_write = (Button) findViewById(R.id.btn_write);
-        btn_write_image_upload = (Button) findViewById(R.id.btn_write_upload);
-
+        btn_write_photo_upload = (Button) findViewById(R.id.btn_write_photo_upload);
+        photoViewAdapter = new PhotoViewAdapter(photoList, this, R.layout.item_write_upload_image);
         rv_write_image_upload.setAdapter(photoViewAdapter);
+
+        tv_write_user_name = (TextView)findViewById(R.id.tv_write_user_name);
+        iv_write_user_avatar = (ImageView)findViewById(R.id.iv_write_user_avatar);
+        tv_write_user_name.setText(user_name);
+        Glide.with(this).load(getString(R.string.cloud_front_user_avatar) +user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_write_user_avatar);
+
+
 
         btn_write.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -487,7 +493,7 @@ public class WriteActivity extends Activity {
             }
         });
 
-        btn_write_image_upload.setOnClickListener(new View.OnClickListener() {
+        btn_write_photo_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 사진 업로드
@@ -538,6 +544,8 @@ public class WriteActivity extends Activity {
                             pathList.add(path);
                             photoList.add(uri);
                             photoViewAdapter.notifyDataSetChanged();
+
+
                         } else { // 여러개
                             int clipDataSize = clipdata.getItemCount();
 

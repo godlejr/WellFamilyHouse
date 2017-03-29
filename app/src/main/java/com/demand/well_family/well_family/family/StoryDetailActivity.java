@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,6 +37,7 @@ import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.StoryServerConnection;
+import com.demand.well_family.well_family.dialog.StoryPopupActivity;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.settings.SettingActivity;
 import com.demand.well_family.well_family.dialog.CommentPopupActivity;
@@ -116,10 +118,16 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
     private DrawerLayout dl;
     private StoryServerConnection storyServerConnection;
     private static final int COMMENT_EDIT_REQUEST = 1;
+    private static final int DETAIL_REQUEST = 2;
+    private static final int POPUP_REQUEST = 3;
+
 
     private static final Logger logger = LoggerFactory.getLogger(StoryDetailActivity.class);
     private SharedPreferences loginInfo;
     private String access_token;
+
+    private ImageView iv_item_story_menu;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +144,7 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
         story_user_avatar = getIntent().getStringExtra("story_user_avatar");
         story_user_created_at = getIntent().getStringExtra("story_user_created_at");
         like_checked = getIntent().getBooleanExtra("like_checked", false);
+        position = getIntent().getIntExtra("position", 0);
         finishList.add(this);
 
         init();
@@ -316,7 +325,8 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
 
     public void setBack() {
         Intent intent = getIntent();
-        intent.putExtra("position", getIntent().getIntExtra("position", 0));
+        intent.putExtra("content", content);
+        intent.putExtra("position", position);
         intent.putExtra("like_checked", like_checked);
         setResult(Activity.RESULT_OK, intent);
         finish();
@@ -595,6 +605,21 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
         tv_item_story_date = (TextView) findViewById(R.id.tv_item_story_date);
         tv_item_story_date.setText(calculateTime(story_user_created_at));
 
+        //menu
+        iv_item_story_menu = (ImageView) findViewById(R.id.iv_item_story_menu);
+        iv_item_story_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), StoryPopupActivity.class);
+                intent.putExtra("story_id", story_id);
+                intent.putExtra("content", content);
+                intent.putExtra("photoList", photoList);
+                intent.putExtra("content_user_id", content_user_id);
+                intent.putExtra("position", position);
+                startActivityForResult(intent, POPUP_REQUEST);
+            }
+        });
+
         //content
         tv_story_detail_content = (TextView) findViewById(R.id.tv_story_detail_content);
         tv_story_detail_content.setText(content);
@@ -701,7 +726,7 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                 call_dislike.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.isSuccessful()) {
+                        if (response.isSuccessful()) {
                             tv_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_story_detail_like_count.getText().toString()) - 1));
                             like_checked = !like_checked;
                         } else {
@@ -723,9 +748,22 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == COMMENT_EDIT_REQUEST) {
+        if (requestCode == POPUP_REQUEST) {
             if (resultCode == RESULT_OK) {
-                int flag = data.getIntExtra("flag", 0);
+                String content = data.getStringExtra("content");
+
+                Intent intent = getIntent();
+                intent.putExtra("position", position);
+                intent.putExtra("content", content);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+
+        } else if (requestCode == COMMENT_EDIT_REQUEST) {
+            int flag = data.getIntExtra("flag", 0);
+
+            if (resultCode == RESULT_OK) {
+
                 if (flag == 1) {
                     //modify
                     int position = data.getIntExtra("position", -1);
@@ -741,16 +779,20 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                     commentAdapter.notifyItemRangeChanged(position, commentAdapter.getItemCount());
 
                 }
+
             }
         }
+
     }
 
     @Override
     public void onBackPressed() {
         Intent intent = getIntent();
-        intent.putExtra("position", getIntent().getIntExtra("position", 0));
+        intent.putExtra("position", position);
         intent.putExtra("like_checked", like_checked);
+        intent.putExtra("content", content);
         setResult(Activity.RESULT_OK, intent);
+
         finish();
         super.onBackPressed();
     }
