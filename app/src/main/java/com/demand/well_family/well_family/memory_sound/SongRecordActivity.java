@@ -139,7 +139,7 @@ public class SongRecordActivity extends Activity {
     private Button btn_sound_record_image_upload;
     private Button btn_sound_record_submit;
     private Button btn_sound_record_select_emotion;
-    private RecyclerView rv_sound_record_image_upload;
+    private RecyclerView rv_sound_record_image_upload_gallery;
     private ArrayList<Uri> photoList;
     private ArrayList<String> pathList;
     private Intent intent;
@@ -786,9 +786,8 @@ public class SongRecordActivity extends Activity {
         et_sound_record_location = (EditText) findViewById(R.id.et_sound_record_location);
         ll_sound_record_location = (LinearLayout) findViewById(R.id.ll_sound_record_location);
         btn_sound_record_image_upload = (Button) findViewById(R.id.btn_sound_record_image_upload);
-        rv_sound_record_image_upload = (RecyclerView) findViewById(R.id.rv_sound_record_image_upload);
         btn_sound_record_select_emotion = (Button) findViewById(R.id.btn_sound_record_select_emotion);
-
+        rv_sound_record_image_upload_gallery = (RecyclerView)findViewById(R.id.rv_sound_record_image_upload_gallery);
         et_sound_record_memory.clearFocus();
 
         photoList = new ArrayList<>();
@@ -802,10 +801,10 @@ public class SongRecordActivity extends Activity {
         folder.mkdirs();
 
         int spacing = getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin) / 2;
-        rv_sound_record_image_upload.addItemDecoration(new SpaceItemDecoration(spacing));
-        rv_sound_record_image_upload.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rv_sound_record_image_upload_gallery.addItemDecoration(new SpaceItemDecoration(spacing));
+        rv_sound_record_image_upload_gallery.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         photoViewAdapter = new PhotoViewAdapter(photoList, this, R.layout.item_write_upload_image);
-        rv_sound_record_image_upload.setAdapter(photoViewAdapter);
+        rv_sound_record_image_upload_gallery.setAdapter(photoViewAdapter);
 
         recordInflate();
 

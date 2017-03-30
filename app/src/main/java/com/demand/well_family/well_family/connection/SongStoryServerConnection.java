@@ -71,4 +71,12 @@ public interface SongStoryServerConnection {
 
     @GET("{song_story_id}/emotions")
     Call<ArrayList<SongStoryEmotionData>> song_story_emotion_List(@Path("song_story_id") int song_story_id);
+
+    @PUT("{song_story_id}")
+    Call<Void> update_story(@Path("song_story_id") int song_story_id, @QueryMap HashMap<String, String> map);
+
+    @DELETE("{song_story_id}")
+    Call<Void> delete_story(@Path("song_story_id") int song_story_id);
+
+
 }

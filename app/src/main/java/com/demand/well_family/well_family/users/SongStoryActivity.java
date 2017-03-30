@@ -112,8 +112,12 @@ public class SongStoryActivity extends Activity {
     private static final int CONTENTS_OFFSET = 20;
 
 
-    //intent code
+    //request code
     private static final int DETAIL_REQUEST = 2;
+
+    //result code
+    private static final int EDIT = 4;
+    private static final int DELETE = 5;
 
     //toolbar
     private DrawerLayout dl;
@@ -1139,6 +1143,17 @@ public class SongStoryActivity extends Activity {
                 storyList.get(position).setFirst_checked(false); //like sync
                 storyList.get(position).setChecked(like_checked); //like sync
                 contentAdapter.notifyItemChanged(position);
+            }
+
+            if (resultCode == EDIT) {
+                int position = data.getIntExtra("position", 0);
+                storyList.get(position).setContent(data.getStringExtra("content"));
+                contentAdapter.notifyItemChanged(position);
+            }
+
+            if(resultCode == DELETE){
+                int position = data.getIntExtra("position", 0);
+                contentAdapter.notifyItemRemoved(position);
             }
         }
     }

@@ -47,13 +47,13 @@
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/iv_item_story_menu"
             android:layout_width="1dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/memu"
-            android:id="@+id/iv_item_story_menu"
+            android:layout_marginRight="5dp"
             android:layout_weight="0.5"
-            android:tint="#7e7e7e"
-            android:layout_marginRight="5dp" />
+            android:src="@drawable/story_memu"
+            android:tint="#7e7e7e" />
     </LinearLayout>
 
 </LinearLayout>

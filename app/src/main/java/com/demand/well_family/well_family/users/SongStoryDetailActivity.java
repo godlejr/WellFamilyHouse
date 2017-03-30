@@ -45,7 +45,9 @@ import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.SongServerConnection;
 import com.demand.well_family.well_family.connection.SongStoryServerConnection;
+import com.demand.well_family.well_family.connection.UserServerConnection;
 import com.demand.well_family.well_family.dialog.CommentPopupActivity;
+import com.demand.well_family.well_family.dialog.SongStoryPopup;
 import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStoryComment;
@@ -97,6 +99,8 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     private CircleImageView iv_sound_story_detail_avatar;
     private SeekBar sb_sound_story_detail;
     private ImageView iv_sound_story_detail_play;
+    private ImageView iv_sound_story_menu;
+
     private RecyclerView rv_sound_story_detail;
     private RecyclerView rv_sound_story_detail_comments;
     private LinearLayout ll_sound_story_detail_location;
@@ -151,8 +155,12 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     private int user_level;
     private String user_email;
     private ImageView iv_sound_detail_song_img;
+
+    //server_connection
     private SongStoryServerConnection songStoryServerConnection;
     private SongServerConnection songServerConnection;
+    private UserServerConnection userServerConnection;
+
     //emotion
     private RecyclerView rv_detail_emotion;
     private EmotionAdapter emotionAdapter;
@@ -162,10 +170,19 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     private static final Logger logger = LoggerFactory.getLogger(SongStoryDetailActivity.class);
     private SharedPreferences loginInfo;
 
-
-    //
     private String song_avatar;
     private String access_token;
+
+    private ArrayList<SongStoryEmotionData> emotionList;
+
+    //request_code
+    private static final int POPUP_REQUEST = 3;
+
+    //result code
+    private static final int EDIT = 4;
+    private static final int DELETE = 5;
+
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,8 +209,8 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         location = getIntent().getStringExtra("location");
         hits = getIntent().getIntExtra("hits", 0);
         like_checked = getIntent().getBooleanExtra("like_checked", false);
+        position = getIntent().getIntExtra("position", 0);
 
-        Log.e("tt", story_id + "");
         init();
 
         getCommentCount();
@@ -377,10 +394,9 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         });
     }
 
-
     public void setBack() {
         Intent intent = getIntent();
-        intent.putExtra("position", getIntent().getIntExtra("position", 0));
+        intent.putExtra("position", position);
         intent.putExtra("like_checked", like_checked);
         setResult(Activity.RESULT_OK, intent);
         finish();
@@ -546,6 +562,54 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                 startActivity(chooser);
             }
         });
+
+        iv_sound_story_menu = (ImageView) findViewById(R.id.iv_sound_story_menu);
+        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+        Call<Integer> call_family_check = userServerConnection.family_check(story_user_id, user_id);
+        call_family_check.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() > 0) { // 가족
+                        iv_sound_story_menu.setVisibility(View.VISIBLE);
+                        iv_sound_story_menu.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(SongStoryDetailActivity.this, SongStoryPopup.class);
+                                intent.putExtra("story_id", story_id);
+                                intent.putExtra("content", content);
+                                intent.putExtra("photoList", photoList);
+                                intent.putExtra("position", position);
+                                intent.putExtra("song_id", song_id);
+                                intent.putExtra("song_avatar", song_avatar);
+                                intent.putExtra("song_title", song_title);
+                                intent.putExtra("song_singer", song_singer);
+                                intent.putExtra("emotionList", emotionList);
+                                intent.putExtra("location", location);
+                                if(story_user_id ==  user_id){
+                                    intent.putExtra("story_user_is_me", true);
+                                }
+
+                                startActivityForResult(intent, POPUP_REQUEST);
+
+                            }
+                        });
+                    } else {
+                        iv_sound_story_menu.setVisibility(View.GONE);
+                    }
+
+                } else {
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+                log(t);
+                Toast.makeText(SongStoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
+
 
     }
 
@@ -726,8 +790,9 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
             @Override
             public void onResponse(Call<ArrayList<SongStoryEmotionData>> call, Response<ArrayList<SongStoryEmotionData>> response) {
                 if (response.isSuccessful()) {
+                    emotionList = response.body();
                     //emotion
-                    emotionAdapter = new EmotionAdapter(response.body(), SongStoryDetailActivity.this, R.layout.item_emotion);
+                    emotionAdapter = new EmotionAdapter(emotionList, SongStoryDetailActivity.this, R.layout.item_emotion);
                     rv_detail_emotion.setAdapter(emotionAdapter);
                     rv_detail_emotion.setLayoutManager(new GridLayoutManager(SongStoryDetailActivity.this, 2));
                 } else {
@@ -936,6 +1001,23 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if (requestCode == POPUP_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Intent intent = getIntent();
+                intent.putExtra("position", position);
+                intent.putExtra("content", data.getStringExtra("content"));
+
+                setResult(EDIT, intent);
+                finish();
+            }
+
+            if (resultCode == DELETE) {
+                Intent intent = getIntent();
+                intent.putExtra("position", position);
+                setResult(DELETE, intent);
+                finish();
+            }
+        }
         if (requestCode == COMMENT_EDIT_REQUEST) {
             if (resultCode == RESULT_OK) {
                 int flag = data.getIntExtra("flag", 0);
@@ -956,6 +1038,8 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                 }
             }
         }
+
+
     }
 
     private class EmotionViewHolder extends RecyclerView.ViewHolder {
@@ -1119,6 +1203,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                 sb_sound_story_detail.setProgress(mp.getCurrentPosition());
             }
         }
+
     }
 
 

@@ -1,8 +1,6 @@
 package com.demand.well_family.well_family.dialog;
 
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,27 +21,29 @@ import android.widget.Toast;
 
 import com.demand.well_family.well_family.ModifyStoryActivity;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.connection.SongStoryServerConnection;
 import com.demand.well_family.well_family.connection.StoryServerConnection;
 import com.demand.well_family.well_family.dto.Photo;
+import com.demand.well_family.well_family.dto.SongStoryEmotionData;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.memory_sound.ModifySongStoryActivity;
 import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by ㅇㅇ on 2017-03-21.
+ * Created by ㅇㅇ on 2017-03-29.
  */
 
-public class StoryPopupActivity extends Activity {
+public class SongStoryPopup extends Activity {
     // user_info
     private SharedPreferences loginInfo;
     private int user_id;
@@ -58,10 +58,16 @@ public class StoryPopupActivity extends Activity {
 
     // story_info
     private int story_id;
-    private int story_user_id;
-    private String story_content;
+    private int content_user_id;
+    private String content;
     private String story_user_name;
+    private String location;
     private ArrayList<Photo> photoList;
+    private int song_id;
+    private String song_avatar;
+    private String song_title;
+    private String song_singer;
+    private int story_position;
 
     private RecyclerView rv_popup_comment;
     private ArrayList<String> popupList;
@@ -73,10 +79,11 @@ public class StoryPopupActivity extends Activity {
     //result code
     private static final int DELETE = 5;
 
-    private String content;
-    private StoryServerConnection storyServerConnection;
-    private static final Logger logger = LoggerFactory.getLogger(StoryPopupActivity.class);
+    private SongStoryServerConnection songStoryServerConnection;
+    private static final Logger logger = LoggerFactory.getLogger(SongStoryPopup.class);
     private static final int DELETE_REQUEST = 4;
+    private ArrayList<SongStoryEmotionData> emotionList;
+    private boolean story_user_is_me;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,20 +110,31 @@ public class StoryPopupActivity extends Activity {
     }
 
     private void init() {
+        emotionList = (ArrayList<SongStoryEmotionData>) getIntent().getSerializableExtra("emotionList");
+
+        story_position = getIntent().getIntExtra("position", 0);
         rv_popup_comment = (RecyclerView) findViewById(R.id.rv_popup_comment);
 
         story_id = getIntent().getIntExtra("story_id", 0);
-        story_user_id = getIntent().getIntExtra("content_user_id", 0);
-        story_content = getIntent().getStringExtra("story_content");
+        content_user_id = getIntent().getIntExtra("content_user_id", 0);
+        content = getIntent().getStringExtra("content");
+        Log.e("tt2", content);
+
+        location = getIntent().getStringExtra("location");
         position = getIntent().getIntExtra("position", 0);
+        photoList = (ArrayList<Photo>) getIntent().getSerializableExtra("photoList");
+
+        song_id = getIntent().getIntExtra("song_id", 0);
+        song_avatar = getIntent().getStringExtra("song_avatar");
+        song_title = getIntent().getStringExtra("song_title");
+        song_singer = getIntent().getStringExtra("song_singer");
+        story_user_is_me = getIntent().getBooleanExtra("story_user_is_me", false);
 
         popupList = new ArrayList<>();
         popupList.add("본문 복사");
-        if (user_id == story_user_id) {
-            popupList.add("수정");
+        popupList.add("수정");
+        if (story_user_is_me) {
             popupList.add("삭제");
-        } else {
-            popupList.add("신고하기");
         }
         popupList.add("취소");
 
@@ -164,35 +182,34 @@ public class StoryPopupActivity extends Activity {
                 public void onClick(View v) {
                     Intent intent;
 
-                    if (position == 0) { // 복사
-                        ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(context.CLIPBOARD_SERVICE);
-                        ClipData clipData = ClipData.newPlainText("label", story_content);
-                        clipboardManager.setPrimaryClip(clipData);
-                        Toast.makeText(context, " 클립보드에 복사되었습니다.", Toast.LENGTH_LONG).show();
-                        finish();
+                    if (position == 1) { // 수정
+                        intent = new Intent(v.getContext(), ModifySongStoryActivity.class);
+                        intent.putExtra("story_id", story_id);
+                        intent.putExtra("content", content);
+                        intent.putExtra("photoList", photoList);
+                        intent.putExtra("position", story_position);
+                        intent.putExtra("location", getIntent().getStringExtra("location"));
+
+                        intent.putExtra("song_id", song_id);
+                        intent.putExtra("song_avatar", song_avatar);
+                        intent.putExtra("song_title", song_title);
+                        intent.putExtra("song_singer", song_singer);
+                        intent.putExtra("emotionList", emotionList);
+
+                        startActivityForResult(intent, MODIFY_REQUEST);
                     }
-
-                    if (user_id == story_user_id) { // 본인
-                        if (position == 1) { // 수정
-                            intent = new Intent(v.getContext(), ModifyStoryActivity.class);
-                            intent.putExtra("story_id", getIntent().getIntExtra("story_id", 0));
-                            intent.putExtra("content", getIntent().getStringExtra("content"));
-                            intent.putExtra("photoList", getIntent().getSerializableExtra("photoList"));
-                            intent.putExtra("position", position);
-
-                            startActivityForResult(intent, MODIFY_REQUEST);
-
-                        } else if (position == 2) { // 삭제
-                            storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
-                            Call<Void> call_delete_story = storyServerConnection.delete_story(story_id);
+                    if(story_user_is_me) {
+                        if (position == 2) { // 삭제
+                            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                            Call<Void> call_delete_story = songStoryServerConnection.delete_story(story_id);
                             call_delete_story.enqueue(new Callback<Void>() {
                                 @Override
                                 public void onResponse(Call<Void> call, Response<Void> response) {
-                                    if(response.isSuccessful()){
-                                        Toast.makeText(context, "게시물이 삭제되었습니다." , Toast.LENGTH_SHORT).show();
+                                    if (response.isSuccessful()) {
+                                        Toast.makeText(context, "게시물이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
 
                                         Intent intent = getIntent();
-                                        intent.putExtra("position",position);
+                                        intent.putExtra("position", position);
                                         setResult(DELETE, intent);
                                         finish();
                                     } else {
@@ -205,18 +222,16 @@ public class StoryPopupActivity extends Activity {
                                     log(t);
                                 }
                             });
+                        }
 
-                        } else {
+                        if (position == 3) { // 취소
                             finish();
                         }
-                    } else {
-                        if (position == 1) { // 신고
-
-                        } else { // 취소
+                    }else{
+                        if (position == 2) { // 취소
                             finish();
                         }
                     }
-
                 }
             });
         }
@@ -226,11 +241,11 @@ public class StoryPopupActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == MODIFY_REQUEST) {
-            content = data.getStringExtra("content");
             if (resultCode == RESULT_OK) {
+                content = data.getStringExtra("content");
                 Intent intent = getIntent();
                 intent.putExtra("content", content);
-                intent.putExtra("position", position);
+                intent.putExtra("position", story_position);
                 setResult(RESULT_OK, intent);
 
                 finish();
@@ -243,7 +258,7 @@ public class StoryPopupActivity extends Activity {
         if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
             Intent intent = getIntent();
             intent.putExtra("content", content);
-            intent.putExtra("position", position);
+            intent.putExtra("position", story_position);
             setResult(RESULT_CANCELED, intent);
 
             finish();
@@ -255,7 +270,7 @@ public class StoryPopupActivity extends Activity {
     public void onBackPressed() {
         Intent intent = getIntent();
         intent.putExtra("content", content);
-        intent.putExtra("position", position);
+        intent.putExtra("position", story_position);
         setResult(RESULT_CANCELED, intent);
 
         finish();

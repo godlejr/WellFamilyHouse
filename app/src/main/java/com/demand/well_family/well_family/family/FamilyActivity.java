@@ -46,10 +46,11 @@ import com.demand.well_family.well_family.WriteActivity;
 import com.demand.well_family.well_family.connection.FamilyServerConnection;
 import com.demand.well_family.well_family.connection.StoryServerConnection;
 import com.demand.well_family.well_family.connection.UserServerConnection;
-import com.demand.well_family.well_family.dialog.StoryPopupActivity;
+
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
+import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
@@ -1032,10 +1033,10 @@ public class FamilyActivity extends Activity {
 
 //        familyServerConnection = FamilyServerConnection.retrofit.create(FamilyServerConnection.class);
         familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
-        Call<ArrayList<User>> call_users = familyServerConnection.family_user_Info(family_id, user_id);
-        call_users.enqueue(new Callback<ArrayList<User>>() {
+        Call<ArrayList<UserInfoForFamilyJoin>> call_users = familyServerConnection.family_user_Info(family_id, user_id);
+        call_users.enqueue(new Callback<ArrayList<UserInfoForFamilyJoin>>() {
             @Override
-            public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
+            public void onResponse(Call<ArrayList<UserInfoForFamilyJoin>> call, Response<ArrayList<UserInfoForFamilyJoin>> response) {
                 if (response.isSuccessful()) {
                     int responseBodySize = response.body().size();
 
@@ -1056,7 +1057,7 @@ public class FamilyActivity extends Activity {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<UserInfoForFamilyJoin>> call, Throwable t) {
                 Toast.makeText(FamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });

@@ -229,6 +229,7 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/ll_sound_record_emotion"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
@@ -363,16 +364,38 @@
                         android:layout_height="1dp"
                         android:background="#eaeaea" />
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/rv_sound_record_image_upload"
+                    <HorizontalScrollView
                         android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:columnWidth="100dp"
-                        android:numColumns="auto_fit"
-                        android:padding="5dp"
-                        android:scrollbars="horizontal"
-                        android:stretchMode="columnWidth"
-                        android:verticalSpacing="10dp" />
+                        android:layout_height="100dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal" >
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/rv_sound_record_image_upload_server"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:columnWidth="100dp"
+                                android:numColumns="auto_fit"
+                                android:padding="5dp"
+                                android:scrollbars="horizontal"
+                                android:stretchMode="columnWidth"
+                                android:verticalSpacing="10dp" />
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/rv_sound_record_image_upload_gallery"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:columnWidth="100dp"
+                                android:numColumns="auto_fit"
+                                android:padding="5dp"
+                                android:scrollbars="horizontal"
+                                android:stretchMode="columnWidth"
+                                android:verticalSpacing="10dp" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
 
                 </LinearLayout>
 

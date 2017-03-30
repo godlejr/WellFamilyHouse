@@ -1,6 +1,5 @@
-package com.demand.well_family.well_family;
+package com.demand.well_family.well_family.memory_sound;
 
-import android.*;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ClipData;
@@ -14,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.media.ExifInterface;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +24,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -45,13 +46,21 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.demand.well_family.well_family.LoginActivity;
+import com.demand.well_family.well_family.MainActivity;
+import com.demand.well_family.well_family.ModifyStoryActivity;
+import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.connection.SongStoryServerConnection;
 import com.demand.well_family.well_family.connection.StoryServerConnection;
 import com.demand.well_family.well_family.dto.Photo;
+import com.demand.well_family.well_family.dto.SongPhoto;
+import com.demand.well_family.well_family.dto.SongStoryEmotionData;
+import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.market.MarketMainActivity;
-import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.settings.SettingActivity;
+import com.demand.well_family.well_family.users.SongStoryDetailActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 import com.demand.well_family.well_family.util.ErrorUtils;
 import com.demand.well_family.well_family.util.RealPathUtil;
@@ -79,10 +88,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by ㅇㅇ on 2017-03-28.
+ * Created by ㅇㅇ on 2017-03-29.
  */
 
-public class ModifyActivity extends Activity {
+public class ModifySongStoryActivity extends Activity {
     //user_info
     private int user_id;
     private String user_email;
@@ -99,22 +108,26 @@ public class ModifyActivity extends Activity {
     private ArrayList<String> pathList;
     private String content;
     private int story_id;
+    private int song_id;
+    private String song_avatar;
+    private String song_title;
+    private String song_singer;
+    private String location;
+
 
     private static final Logger logger = LoggerFactory.getLogger(MainActivity.class);
     private SharedPreferences loginInfo;
-
-    private RecyclerView rv_write_image_upload;
-    private RecyclerView rv_write_image_upload2;
-    private EditText et_write;
+    private RecyclerView rv_write_image_upload_server;
+    private RecyclerView rv_write_image_upload_gallery;
     private Button btn_write_photo_upload;
-    private Button btn_write;
+
 
     private PhotoViewAdapter photoViewAdapter;
     private RealPathUtil realPathUtil;
     public final static int READ_EXTERNAL_STORAGE_PERMISSION = 2;
     public final static int PICK_PHOTO = 1;
 
-    private StoryServerConnection storyServerConnection;
+    private SongStoryServerConnection songStoryServerConnection;
     private ProgressDialog progressDialog;
     private int sleepTime;
     private final int UPLOADONEPIC = 950;
@@ -124,10 +137,35 @@ public class ModifyActivity extends Activity {
 
     private int position;
 
+    //
+    private TextView tv_record_song_title;
+    private TextView tv_record_song_singer;
+    private ImageView iv_record_user_avatar;
+    private ImageView iv_sound_record_location;
+    private TextView tv_record_user_name;
+    private EditText et_sound_record_memory;
+    private ImageView iv_sound_record_avatar;
+    private LinearLayout ll_sound_record_container;
+    private LinearLayout ll_sound_record_location_btn;
+    private EditText et_sound_record_location;
+    private Button btn_sound_record_image_upload;
+    private ImageView iv_sound_record_location_btn;
+    private LinearLayout ll_sound_record_location;
+    private RecyclerView rv_write_image_upload;
+    private RecyclerView rv_write_image_upload2;
+    private LinearLayout ll_sound_record_emotion;
+
+    // request_code
+    private final int RECORD_EXTERNAL_STORAGE_PERMISSION = 10003;
+    private RecyclerView rv_sound_record_image_upload_gallery;
+    private RecyclerView rv_sound_record_image_upload_server;
+    private Button btn_sound_record_submit;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modify_story);
+        setContentView(R.layout.sound_activity_record);
 
         checkPermission();
         setUserInfo();
@@ -149,27 +187,56 @@ public class ModifyActivity extends Activity {
     }
 
     private void init() {
-
-        bitmapPhotos = new ArrayList<>();
+        song_id = getIntent().getIntExtra("song_id", 0);
+        song_avatar = getIntent().getStringExtra("song_avatar");
+        song_singer = getIntent().getStringExtra("song_singer");
+        song_title = getIntent().getStringExtra("song_title");
+        location = getIntent().getStringExtra("location");
         story_id = getIntent().getIntExtra("story_id", 0);
         content = getIntent().getStringExtra("content");
         position = getIntent().getIntExtra("position", 0);
 
-        realPathUtil = new RealPathUtil();
-        rv_write_image_upload = (RecyclerView) findViewById(R.id.rv_write_image_upload);
-        rv_write_image_upload2 = (RecyclerView) findViewById(R.id.rv_write_image_upload2);
+        bitmapPhotos = new ArrayList<>();
+        ll_sound_record_container = (LinearLayout) findViewById(R.id.ll_sound_record_container);
+        ll_sound_record_location_btn = (LinearLayout) findViewById(R.id.ll_sound_record_location_btn);
+        ll_sound_record_location = (LinearLayout) findViewById(R.id.ll_sound_record_location);
+        et_sound_record_location = (EditText) findViewById(R.id.et_sound_record_location);
+        getLayoutInflater().inflate(R.layout.sound_item_record, ll_sound_record_container, true);
+        ImageView iv_sound_record = (ImageView) ll_sound_record_container.findViewById(R.id.iv_sound_record);
+        TextView tv_sound_record = (TextView) ll_sound_record_container.findViewById(R.id.tv_sound_record);
+        tv_record_song_title = (TextView) ll_sound_record_container.findViewById(R.id.tv_record_song_title);
+        tv_record_song_singer = (TextView) ll_sound_record_container.findViewById(R.id.tv_record_song_singer);
+        iv_sound_record_avatar = (ImageView) ll_sound_record_container.findViewById(R.id.iv_sound_record_avatar);
+        iv_sound_record_location = (ImageView) findViewById(R.id.iv_sound_record_location);
+        iv_sound_record_location_btn = (ImageView) findViewById(R.id.iv_sound_record_location_btn);
+        et_sound_record_memory = (EditText) findViewById(R.id.et_sound_record_memory);
+        rv_sound_record_image_upload_server = (RecyclerView) findViewById(R.id.rv_sound_record_image_upload_server);
+        rv_sound_record_image_upload_gallery = (RecyclerView) findViewById(R.id.rv_sound_record_image_upload_gallery);
+        btn_sound_record_image_upload = (Button) findViewById(R.id.btn_sound_record_image_upload);
+        iv_record_user_avatar = (ImageView) findViewById(R.id.iv_record_user_avatar);
+        ll_sound_record_emotion = (LinearLayout) findViewById(R.id.ll_sound_record_emotion);
+        ll_sound_record_emotion.setVisibility(View.GONE);
+        iv_sound_record.setVisibility(View.GONE);
+        tv_sound_record.setVisibility(View.GONE);
 
-        et_write = (EditText) findViewById(R.id.et_write);
-        btn_write = (Button) findViewById(R.id.btn_write);
-        btn_write_photo_upload = (Button) findViewById(R.id.btn_write_photo_upload);
 
-        btn_write_photo_upload.setOnClickListener(new View.OnClickListener() {
+        // story_info
+        Glide.with(this).load(getString(R.string.cloud_front_songs_avatar) + song_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_record_avatar);
+        Glide.with(this).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_record_user_avatar);
+
+        tv_record_song_singer.setText(song_singer);
+        tv_record_song_title.setText(song_title);
+        et_sound_record_memory.setText(content);
+        et_sound_record_location.setText(location);
+
+        btn_sound_record_submit = (Button) findViewById(R.id.btn_sound_record_submit);
+        btn_sound_record_image_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 사진 업로드
                 Intent intent;
                 if (photoList.size() >= 10) {
-                    Toast.makeText(ModifyActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ModifySongStoryActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
                 } else {
                     intent = new Intent();
                     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
@@ -188,13 +255,35 @@ public class ModifyActivity extends Activity {
             }
         });
 
-        btn_write.setOnClickListener(new View.OnClickListener() {
+
+        ll_sound_record_location_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ll_sound_record_location.getVisibility() == View.VISIBLE) {
+                    ll_sound_record_location.setVisibility(View.GONE);
+                    iv_sound_record_location_btn.setImageResource(R.drawable.arrow_bottom);
+                } else {
+                    ll_sound_record_location.setVisibility(View.VISIBLE);
+                    iv_sound_record_location_btn.setImageResource(R.drawable.arrow_top);
+                }
+                location = et_sound_record_location.getText().toString();
+            }
+        });
+
+        iv_sound_record_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                et_sound_record_location.setText("");
+            }
+        });
+
+        btn_sound_record_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final int photoListSize = photoList.size();
 
-                if (photoListSize != 0 || et_write.getText().toString().length() != 0) {
-                    progressDialog = new ProgressDialog(ModifyActivity.this);
+                if (photoListSize != 0 || et_sound_record_memory.getText().toString().length() != 0) {
+                    progressDialog = new ProgressDialog(ModifySongStoryActivity.this);
                     progressDialog.show();
                     progressDialog.getWindow().setBackgroundDrawable(new
                             ColorDrawable(Color.TRANSPARENT));
@@ -213,9 +302,12 @@ public class ModifyActivity extends Activity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            final String content = et_write.getText().toString();
+                            final String content = et_sound_record_memory.getText().toString();
+                            String location = et_sound_record_location.getText().toString();
+
                             HashMap<String, String> map = new HashMap<>();
                             map.put("content", content);
+                            map.put("location", location);
 
                             final int photoSize = photoViewAdapter.getItemCount() + photoViewAdapter2.getItemCount();
                             if (photoSize != 0) {
@@ -229,35 +321,36 @@ public class ModifyActivity extends Activity {
                                 }
 
                             }
-                            storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
-                            Call<Void> call_write_story = storyServerConnection.update_story(story_id, map);
+                            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                            final int bitmapPhotosSize = bitmapPhotos.size();
+
+                            Call<Void> call_write_story = songStoryServerConnection.update_story(story_id, map);
                             call_write_story.enqueue(new Callback<Void>() {
                                 @Override
                                 public void onResponse(Call<Void> call, Response<Void> response) {
                                     if (response.isSuccessful()) {
+                                        if (bitmapPhotosSize != 0) {
 
-                                        if (photoSize != 0) {
-
-                                            for (int i = 0; i < photoSize; i++) {
+                                            for (int i = 0; i < bitmapPhotosSize; i++) {
                                                 progressDialog.setProgress(i + 1);
-                                                storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+                                                songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
 
                                                 final RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(bitmapPhotos.get(i)));
-                                                Call<ResponseBody> call_write_photo = storyServerConnection.insert_photos(story_id, requestBody);
-                                                call_write_photo.enqueue(new Callback<ResponseBody>() {
+                                                Call<ResponseBody> call_insert_song_photo = songStoryServerConnection.insert_song_photos(story_id, requestBody);
+                                                call_insert_song_photo.enqueue(new Callback<ResponseBody>() {
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                         if (response.isSuccessful()) {
 
                                                         } else {
-                                                            Toast.makeText(ModifyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(ModifySongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                                         }
                                                     }
 
                                                     @Override
                                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                                                         log(t);
-                                                        Toast.makeText(ModifyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(ModifySongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                                     }
                                                 });
 
@@ -269,6 +362,7 @@ public class ModifyActivity extends Activity {
                                                 log(e);
                                             }
                                         }
+
                                         progressDialog.dismiss();
                                         Intent intent = getIntent();
                                         intent.putExtra("content", content);
@@ -279,14 +373,14 @@ public class ModifyActivity extends Activity {
                                         finish();
 
                                     } else {
-                                        Toast.makeText(ModifyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ModifySongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
                                 @Override
                                 public void onFailure(Call<Void> call, Throwable t) {
                                     log(t);
-                                    Toast.makeText(ModifyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(ModifySongStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                 }
                             });
                         }
@@ -295,6 +389,7 @@ public class ModifyActivity extends Activity {
             }
         });
     }
+
 
     private Bitmap urlToBitmap(final URL url) {
 
@@ -327,13 +422,27 @@ public class ModifyActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case PICK_PHOTO:
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        ClipData clipdata = data.getClipData();
-                        if (clipdata == null) { // 1개
-                            Uri uri = data.getData();
+        if (requestCode == PICK_PHOTO) {
+            if (resultCode == RESULT_OK) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    ClipData clipdata = data.getClipData();
+                    if (clipdata == null) { // 1개
+                        Uri uri = data.getData();
+                        String path = null;
+                        try {
+                            path = realPathUtil.getRealPathFromURI_API19(this, uri);
+                        } catch (RuntimeException e) {
+                            log(e);
+                            path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
+                        }
+                        pathList.add(path);
+                        photoList.add(uri);
+                        photoViewAdapter.notifyDataSetChanged();
+                    } else { // 여러개
+                        int clipDataSize = clipdata.getItemCount();
+
+                        for (int i = 0; i < clipDataSize; i++) {
+                            Uri uri = clipdata.getItemAt(i).getUri();
                             String path = null;
                             try {
                                 path = realPathUtil.getRealPathFromURI_API19(this, uri);
@@ -344,66 +453,51 @@ public class ModifyActivity extends Activity {
                             pathList.add(path);
                             photoList.add(uri);
                             photoViewAdapter.notifyDataSetChanged();
-                        } else { // 여러개
-                            int clipDataSize = clipdata.getItemCount();
-
-                            for (int i = 0; i < clipDataSize; i++) {
-                                Uri uri = clipdata.getItemAt(i).getUri();
-                                String path = null;
-                                try {
-                                    path = realPathUtil.getRealPathFromURI_API19(this, uri);
-                                } catch (RuntimeException e) {
-                                    log(e);
-                                    path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
-                                }
-                                pathList.add(path);
-                                photoList.add(uri);
-                                photoViewAdapter.notifyDataSetChanged();
-                            }
                         }
-                    } else {
-                        Uri uri = data.getData();
-                        String path = null;
-                        try {
-                            path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
-                        } catch (RuntimeException e) {
-                            log(e);
-                            path = realPathUtil.getRealPathFromURI_API19(this, uri);
-                        }
-                        pathList.add(path);
-                        photoList.add(uri);
-                        photoViewAdapter.notifyDataSetChanged();
                     }
-                    break;
+                } else {
+                    Uri uri = data.getData();
+                    String path = null;
+                    try {
+                        path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
+                    } catch (RuntimeException e) {
+                        log(e);
+                        path = realPathUtil.getRealPathFromURI_API19(this, uri);
+                    }
+                    pathList.add(path);
+                    photoList.add(uri);
+                    photoViewAdapter.notifyDataSetChanged();
+                }
+
             }
         }
     }
 
     private void getContentData() {
-        et_write.setText(content);
+        et_sound_record_memory.setText(content);
 
         //photoList
         pathList = new ArrayList<>();
         photoList = new ArrayList<>(); // 갤러리 이미지
         cdnPhotoList = new ArrayList<>(); // 서버 이미지
-        ArrayList<Photo> photos = (ArrayList<Photo>) getIntent().getSerializableExtra("photoList");
+        ArrayList<SongPhoto> photos = (ArrayList<SongPhoto>) getIntent().getSerializableExtra("photoList");
         int photosSize = photos.size();
         for (int i = 0; i < photosSize; i++) {
 //            cdnPhotoList.add(Uri.parse(getString(R.string.cloud_front_stories_images) + photos.get(i).getName() + "." + photos.get(i).getExt()));
             try {
-                cdnPhotoList.add(new URL(getString(R.string.cloud_front_stories_images) + photos.get(i).getName() + "." + photos.get(i).getExt()));
+                cdnPhotoList.add(new URL(getString(R.string.cloud_front_song_stories_images) + photos.get(i).getName() + "." + photos.get(i).getExt()));
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
         }
 
         photoViewAdapter = new PhotoViewAdapter(photoList, this, R.layout.item_write_upload_image);
-        rv_write_image_upload.setAdapter(photoViewAdapter);
-        rv_write_image_upload.setLayoutManager(new LinearLayoutManager(ModifyActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        rv_sound_record_image_upload_server.setAdapter(photoViewAdapter);
+        rv_sound_record_image_upload_server.setLayoutManager(new LinearLayoutManager(ModifySongStoryActivity.this, LinearLayoutManager.HORIZONTAL, false));
 
         photoViewAdapter2 = new PhotoViewAdapter2(cdnPhotoList, this, R.layout.item_write_upload_image);
-        rv_write_image_upload2.setAdapter(photoViewAdapter2);
-        rv_write_image_upload2.setLayoutManager(new LinearLayoutManager(ModifyActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        rv_sound_record_image_upload_gallery.setAdapter(photoViewAdapter2);
+        rv_sound_record_image_upload_gallery.setLayoutManager(new LinearLayoutManager(ModifySongStoryActivity.this, LinearLayoutManager.HORIZONTAL, false));
     }
 
     private class PhotoViewHolder extends RecyclerView.ViewHolder {
@@ -424,7 +518,7 @@ public class ModifyActivity extends Activity {
                 public void onClick(View v) {
                     photoList.remove(getAdapterPosition());
                     photoViewAdapter.notifyDataSetChanged();
-                    Toast.makeText(ModifyActivity.this, "사진이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ModifySongStoryActivity.this, "사진이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -448,7 +542,7 @@ public class ModifyActivity extends Activity {
                 public void onClick(View v) {
                     cdnPhotoList.remove(getAdapterPosition());
                     photoViewAdapter2.notifyDataSetChanged();
-                    Toast.makeText(ModifyActivity.this, "사진이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ModifySongStoryActivity.this, "사진이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -579,13 +673,12 @@ public class ModifyActivity extends Activity {
     }
 
     public String addBase64Bitmap(Bitmap bm) {
-        Log.e("ㅇㅇㅇㅇ", bm.toString());
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, 40, baos);
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b, Base64.NO_WRAP | Base64.URL_SAFE);
     }
-
 
     // toolbar & menu
     public void setToolbar(View view, Context context, String title) {
@@ -604,140 +697,14 @@ public class ModifyActivity extends Activity {
                 setBack();
             }
         });
+
         ImageView toolbar_menu = (ImageView) toolbar.findViewById(R.id.toolbar_menu);
-        toolbar_menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dl.openDrawer(GravityCompat.START);
-            }
-        });
+        toolbar_menu.setVisibility(View.GONE);
 
-        // header
-        View nv_header_view = nv.getHeaderView(0);
-        LinearLayout ll_menu_mypage = (LinearLayout) nv_header_view.findViewById(R.id.ll_menu_mypage);
-        ll_menu_mypage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dl.closeDrawers();
-
-                Intent intent = new Intent(ModifyActivity.this, UserActivity.class);
-                startActivity(intent);
-
-            }
-        });
-        TextView tv_menu_name = (TextView) nv_header_view.findViewById(R.id.tv_menu_name);
-        tv_menu_name.setText(user_name);
-
-        TextView tv_menu_birth = (TextView) nv_header_view.findViewById(R.id.tv_menu_birth);
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = dateFormat.parse(user_birth);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일생");
-            tv_menu_birth.setText(sdf.format(date));
-        } catch (ParseException e) {
-            log(e);
-        }
-
-        ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
-        Glide.with(context).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_menu_avatar);
-
-
-        // menu
-        Menu menu = nv.getMenu();
-        MenuItem menu_all = menu.findItem(R.id.menu_all);
-        SpannableString s = new SpannableString(menu_all.getTitle());
-        s.setSpan(new TextAppearanceSpan(view.getContext(), R.style.NavigationDrawer), 0, s.length(), 0);
-        menu_all.setTitle(s);
-
-        MenuItem menu_apps = menu.findItem(R.id.menu_apps);
-        s = new SpannableString(menu_apps.getTitle());
-        s.setSpan(new TextAppearanceSpan(view.getContext(), R.style.NavigationDrawer), 0, s.length(), 0);
-        menu_apps.setTitle(s);
-
-        nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                item.setChecked(true);
-                dl.closeDrawers();
-
-                Intent startLink;
-                Intent intent;
-                switch (item.getItemId()) {
-                    case R.id.menu_home:
-                        intent = new Intent(ModifyActivity.this, MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        break;
-
-                    case R.id.menu_market:
-                        intent = new Intent(ModifyActivity.this, MarketMainActivity.class);
-                        startActivity(intent);
-
-                        break;
-
-                    case R.id.menu_setting:
-                        Intent settingIntent = new Intent(getApplicationContext(), SettingActivity.class);
-                        startActivity(settingIntent);
-                        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
-                        break;
-
-                    case R.id.menu_help:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case R.id.menu_logout:
-                        SharedPreferences loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = loginInfo.edit();
-                        editor.remove("user_id");
-                        editor.remove("user_name");
-                        editor.remove("user_email");
-                        editor.remove("user_birth");
-                        editor.remove("user_avatar");
-                        editor.remove("user_phone");
-                        editor.remove("user_level");
-                        editor.remove("access_token");
-                        editor.commit();
-
-                        intent = new Intent(ModifyActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                        break;
-
-//                    App 이용하기
-                    case R.id.menu_selffeet:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
-
-                        break;
-                    case R.id.menu_bubblefeet:
-                        startLink = getPackageManager().getLaunchIntentForPackage(getString(R.string.bubblefeet));
-                        if (startLink == null) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.market_front) + getString(R.string.bubblefeet))));
-                        } else {
-                            startActivity(startLink);
-                        }
-                        break;
-
-                    case R.id.menu_happyfeet:
-                        startLink = getPackageManager().getLaunchIntentForPackage(getString(R.string.happyfeet));
-                        if (startLink == null) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.market_front) + getString(R.string.happyfeet))));
-                        } else {
-                            startActivity(startLink);
-                        }
-                        break;
-
-                    case R.id.menu_memory_sound:
-                        startLink = new Intent(getApplicationContext(), SongMainActivity.class);
-                        startActivity(startLink);
-                        break;
-                }
-                return true;
-            }
-        });
     }
 
     private void setBack() {
-        String content = et_write.getText().toString();
+        String content = et_sound_record_memory.getText().toString();
         Intent intent = getIntent();
         intent.putExtra("content", content);
         intent.putExtra("position", position);
@@ -764,4 +731,5 @@ public class ModifyActivity extends Activity {
     public void onBackPressed() {
         setBack();
     }
+
 }
