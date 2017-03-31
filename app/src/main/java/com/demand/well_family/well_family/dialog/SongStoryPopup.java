@@ -243,8 +243,10 @@ public class SongStoryPopup extends Activity {
         if (requestCode == MODIFY_REQUEST) {
             if (resultCode == RESULT_OK) {
                 content = data.getStringExtra("content");
+                location = data.getStringExtra("location");
                 Intent intent = getIntent();
                 intent.putExtra("content", content);
+                intent.putExtra("location", location);
                 intent.putExtra("position", story_position);
                 setResult(RESULT_OK, intent);
 

@@ -303,7 +303,7 @@ public class ModifySongStoryActivity extends Activity {
                         @Override
                         public void run() {
                             final String content = et_sound_record_memory.getText().toString();
-                            String location = et_sound_record_location.getText().toString();
+                            final String location = et_sound_record_location.getText().toString();
 
                             HashMap<String, String> map = new HashMap<>();
                             map.put("content", content);
@@ -366,6 +366,7 @@ public class ModifySongStoryActivity extends Activity {
                                         progressDialog.dismiss();
                                         Intent intent = getIntent();
                                         intent.putExtra("content", content);
+                                        intent.putExtra("location", location);
                                         intent.putExtra("position", position);
 
 

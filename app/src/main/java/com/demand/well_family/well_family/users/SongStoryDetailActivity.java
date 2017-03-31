@@ -1006,6 +1006,8 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                 Intent intent = getIntent();
                 intent.putExtra("position", position);
                 intent.putExtra("content", data.getStringExtra("content"));
+                intent.putExtra("location",  data.getStringExtra("location"));
+
 
                 setResult(EDIT, intent);
                 finish();

@@ -1148,6 +1148,7 @@ public class SongStoryActivity extends Activity {
             if (resultCode == EDIT) {
                 int position = data.getIntExtra("position", 0);
                 storyList.get(position).setContent(data.getStringExtra("content"));
+                storyList.get(position).setLocation(data.getStringExtra("location"));
                 contentAdapter.notifyItemChanged(position);
             }
 
