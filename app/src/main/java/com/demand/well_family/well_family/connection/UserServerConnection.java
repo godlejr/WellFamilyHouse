@@ -6,8 +6,6 @@ import com.demand.well_family.well_family.dto.FavoriteCategory;
 import com.demand.well_family.well_family.dto.Notification;
 import com.demand.well_family.well_family.dto.SongStory;
 import com.demand.well_family.well_family.dto.User;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,8 +13,6 @@ import java.util.HashMap;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -63,9 +59,6 @@ public interface UserServerConnection {
 
     @GET("{story_user_id}/me_songstories")
     Call<ArrayList<SongStory>> song_story_List_Me(@Path("story_user_id") int story_user_id);
-
-    @GET("{user_id}/find_user")
-    Call<ArrayList<User>> find_user(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
 
     @POST("{user_id}/families")

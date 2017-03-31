@@ -22,11 +22,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.FamilyServerConnection;
-import com.demand.well_family.well_family.connection.UserServerConnection;
-import com.demand.well_family.well_family.dto.User;
+import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
 import com.demand.well_family.well_family.family.FamilyActivity;
-import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.flag.FamilyJoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.users.UserActivity;
 import com.demand.well_family.well_family.util.ErrorUtils;
 
@@ -71,9 +71,8 @@ public class SearchUserActivity extends Activity {
     private int family_user_id;
     private String family_created_at;
 
-    private UserServerConnection userServerConnection;
     private FamilyServerConnection familyServerConnection;
-    private ArrayList<User> userList;
+    private ArrayList<UserInfoForFamilyJoin> userList;
 
     private static final Logger logger = LoggerFactory.getLogger(SearchUserActivity.class);
     private SharedPreferences loginInfo;
@@ -122,12 +121,12 @@ public class SearchUserActivity extends Activity {
                     HashMap<String, String> map = new HashMap<String, String>();
                     map.put("search", search);
 
-                    userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
-                    Call<ArrayList<User>> call_user = userServerConnection.find_user(user_id, map); // 여기
-                    call_user.enqueue(new Callback<ArrayList<User>>() {
+                    familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
+                    Call<ArrayList<UserInfoForFamilyJoin>> call_user = familyServerConnection.find_user(family_id, map); // 여기
+                    call_user.enqueue(new Callback<ArrayList<UserInfoForFamilyJoin>>() {
                         @Override
-                        public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
-                            if(response.isSuccessful()) {
+                        public void onResponse(Call<ArrayList<UserInfoForFamilyJoin>> call, Response<ArrayList<UserInfoForFamilyJoin>> response) {
+                            if (response.isSuccessful()) {
                                 userList = response.body();
                                 rv_search_user = (RecyclerView) findViewById(R.id.rv_search_user);
                                 userAdapter = new UserAdapter(userList, SearchUserActivity.this, R.layout.item_search_user);
@@ -139,7 +138,7 @@ public class SearchUserActivity extends Activity {
                         }
 
                         @Override
-                        public void onFailure(Call<ArrayList<User>> call, Throwable t) {
+                        public void onFailure(Call<ArrayList<UserInfoForFamilyJoin>> call, Throwable t) {
                             log(t);
                             Toast.makeText(SearchUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
@@ -224,12 +223,11 @@ public class SearchUserActivity extends Activity {
     }
 
     private class UserAdapter extends RecyclerView.Adapter<UserViewHolder> {
-        private ArrayList<User> userList;
+        private ArrayList<UserInfoForFamilyJoin> userList;
         private Context context;
         private int layout;
 
-        public UserAdapter(ArrayList<User> userList, Context context, int layout) {
-
+        public UserAdapter(ArrayList<UserInfoForFamilyJoin> userList, Context context, int layout) {
             this.userList = userList;
             this.context = context;
             this.layout = layout;
@@ -246,107 +244,101 @@ public class SearchUserActivity extends Activity {
             Glide.with(SearchUserActivity.this).load(getString(R.string.cloud_front_user_avatar) + userList.get(position).getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_search_user_avatar);
             holder.tv_search_user_name.setText(userList.get(position).getName());
             holder.tv_search_user_birth.setText(userList.get(position).getBirth());
+            int join_flag = userList.get(position).getJoin_flag();
+            final int found_user_id = userList.get(position).getId();
+            final String found_user_name = userList.get(position).getName();
 
+            if (join_flag == FamilyJoinFlag.FAMILY) {
+                //family
+                holder.btn_search_user.setText("가족");
+                holder.btn_search_user.setTextColor(Color.parseColor("#999999"));
+                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray);
+            }
 
-            userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
-            HashMap<String, String> map = new HashMap<>();
-            map.put("family_id", String.valueOf(family_id));
-//            map.put("user_id", String.valueOf(user_id));
-
-            Call<Integer> call_family_check = userServerConnection.family_user_check(userList.get(position).getId(), user_id, map);
-            call_family_check.enqueue(new Callback<Integer>() {
-                @Override
-                public void onResponse(Call<Integer> call, Response<Integer> response) {
-                    if(response.isSuccessful()) {
-                        if (response.body() > 0) {
-                            //family
-                            holder.btn_search_user.setText("가족 취소");
-                            holder.btn_search_user.setTextColor(Color.parseColor("#999999"));
-                            holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray);
-                            holder.btn_search_user.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
-                                    HashMap<String, String> map = new HashMap<>();
-                                    map.put("user_id", String.valueOf(userList.get(position).getId()));
-                                    Call<ResponseBody> call_invite = familyServerConnection.delete_user_from_family(family_id, map);
-                                    call_invite.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            if(response.isSuccessful()) {
-                                                Toast.makeText(SearchUserActivity.this, userList.get(position).getName() + "님이 가족에서 탈퇴되었습니다.", Toast.LENGTH_LONG).show();
-                                                userAdapter.notifyItemChanged(position);
-                                            } else {
-                                                Toast.makeText(SearchUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            log(t);
-                                            Toast.makeText(SearchUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                        }
-                                    });
+            if (join_flag == FamilyJoinFlag.USER_TO_FAMILY) {
+                //family
+                holder.btn_search_user.setText("가입 승인");
+                holder.btn_search_user.setTextColor(Color.parseColor("#999999"));
+                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray);
+                holder.btn_search_user.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
+                        Call<Void> call_update_user_for_familyjoin = familyServerConnection.update_user_for_familyjoin(family_id, found_user_id); // 여기
+                        call_update_user_for_familyjoin.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(SearchUserActivity.this, found_user_name +"님의 요청을 승인하였습니다.", Toast.LENGTH_LONG).show();
+                                    holder.btn_search_user.setText("가족");
+                                    userList.get(position).setJoin_flag(FamilyJoinFlag.FAMILY);
+                                    userAdapter.notifyItemChanged(position);
+                                } else {
+                                    Toast.makeText(SearchUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
-                            });
-
-                        } else {
-                            if (user_id == userList.get(position).getId()) {
-                                //Me
-                                holder.btn_search_user.setText("나");
-                                holder.btn_search_user.setTextColor(Color.parseColor("#542920"));
-                                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray);
-
-                                holder.btn_search_user.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-
-                                    }
-                                });
-                            } else {
-                                //public
-                                holder.btn_search_user.setText("초대하기");
-                                holder.btn_search_user.setTextColor(Color.parseColor("#542920"));
-                                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_brown);
-                                holder.btn_search_user.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
-                                        HashMap<String, String> map = new HashMap<>();
-                                        map.put("user_id", String.valueOf(userList.get(position).getId()));
-                                        Call<ResponseBody> call_invite = familyServerConnection.insert_user_into_family(family_id, map);
-                                        call_invite.enqueue(new Callback<ResponseBody>() {
-                                            @Override
-                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                if(response.isSuccessful()) {
-                                                    Toast.makeText(SearchUserActivity.this, userList.get(position).getName() + "님이 가족이 되었습니다.", Toast.LENGTH_LONG).show();
-                                                    userAdapter.notifyItemChanged(position);
-                                                } else {
-                                                    Toast.makeText(SearchUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                log(t);
-                                                Toast.makeText(SearchUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-                                });
                             }
-                        }
-                    } else {
-                        Toast.makeText(SearchUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                log(t);
+                                Toast.makeText(SearchUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
-                }
+                });
+            }
 
-                @Override
-                public void onFailure(Call<Integer> call, Throwable t) {
-                    log(t);
-                    Toast.makeText(SearchUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                }
-            });
+
+            if (join_flag == FamilyJoinFlag.FAMILY_TO_USER) {
+                //family
+                holder.btn_search_user.setText("요청 대기");
+                holder.btn_search_user.setTextColor(Color.parseColor("#999999"));
+                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray);
+            }
+
+            if (user_id == userList.get(position).getId()) {
+                //Me
+                holder.btn_search_user.setText("나");
+                holder.btn_search_user.setTextColor(Color.parseColor("#542920"));
+                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray);
+
+            }
+            if( join_flag == FamilyJoinFlag.USERS){
+                //public
+                holder.btn_search_user.setText("초대하기");
+                holder.btn_search_user.setTextColor(Color.parseColor("#542920"));
+                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_brown);
+                holder.btn_search_user.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("user_id", String.valueOf(userList.get(position).getId()));
+                        Call<ResponseBody> call_invite = familyServerConnection.insert_user_into_family(family_id, map);
+                        call_invite.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(SearchUserActivity.this, userList.get(position).getName() + "님을 가족으로 초대하였습니다.", Toast.LENGTH_LONG).show();
+                                    holder.btn_search_user.setText("요청 대기");
+                                    userList.get(position).setJoin_flag(FamilyJoinFlag.FAMILY_TO_USER);
+                                    userAdapter.notifyItemChanged(position);
+
+                                } else {
+                                    Toast.makeText(SearchUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                log(t);
+                                Toast.makeText(SearchUserActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                });
+
+            }
+
 
         }
 
