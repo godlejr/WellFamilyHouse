@@ -466,7 +466,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_weight="0.6"
-                    android:background="@drawable/round_corner_btn"
+                    android:background="@drawable/round_corner_btn_brown"
                     android:text="전송"
                     android:textColor="#fff" />
             </LinearLayout>

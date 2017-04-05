@@ -408,7 +408,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
                         startActivity(intent);
                         break;
 
-                    case R.id.menu_search:
+                    case R.id.menu_family:
                         Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
                         break;
 

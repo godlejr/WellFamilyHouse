@@ -37,8 +37,6 @@ import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.family.FamilyActivity;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.register.RegisterActivity;
-import com.demand.well_family.well_family.util.APIError;
 import com.demand.well_family.well_family.util.ErrorUtils;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
@@ -55,7 +53,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 /**
  * Created by ㅇㅇ on 2017-02-12.
@@ -92,7 +89,7 @@ public class CreateFamilyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_create_family);
+        setContentView(R.layout.popup_create_family);
         getWindow().setLayout(android.view.WindowManager.LayoutParams.MATCH_PARENT, android.view.WindowManager.LayoutParams.MATCH_PARENT);
 
         setUserInfo();

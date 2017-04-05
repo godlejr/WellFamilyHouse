@@ -27,13 +27,6 @@ import retrofit2.http.QueryMap;
 
 public interface UserServerConnection {
 
-
-
-//    Retrofit retrofit = new Retrofit.Builder()
-//            .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/users/")
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build();
-
     @GET("{user_id}")
     Call<User> user_Info(@Path("user_id") int user_id);
 

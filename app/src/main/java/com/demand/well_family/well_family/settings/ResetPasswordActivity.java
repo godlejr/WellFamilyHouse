@@ -3,7 +3,6 @@ package com.demand.well_family.well_family.settings;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -98,7 +97,7 @@ public class ResetPasswordActivity extends Activity{
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(et_reset_pwd1.getText().length() != 0 && s.length() != 0){
-                    btn_reset_pwd.setBackgroundResource(R.drawable.round_corner_btn);
+                    btn_reset_pwd.setBackgroundResource(R.drawable.round_corner_btn_brown);
                 }else {
                     btn_reset_pwd.setBackgroundResource(R.drawable.round_corner_btn_gray);
                 }

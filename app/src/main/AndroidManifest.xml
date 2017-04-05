@@ -96,7 +96,8 @@
         <activity android:name=".notification.NotificationSongStoryDetail" />
         <activity android:name=".memory_sound.ModifySongStoryActivity" />
         <activity android:name=".settings.AccountDisableActivity" />
-        <activity android:name=".dialog.SongStoryPopup"
+        <activity
+            android:name=".dialog.SongStoryPopup"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
             android:name=".settings.AccountDisableSelectActivity"
@@ -107,6 +108,12 @@
             android:theme="@style/Theme.AppCompat.Dialog" />
 
         <activity android:name=".ModifyStoryActivity" />
+
+        <activity android:name=".family.ManageFamilyActivity" />
+        <activity android:name=".search.SearchFamilyActivity" />
+        <activity
+            android:name=".dialog.FamilyPopup"
+            android:theme="@style/Theme.AppCompat.Dialog"/>
 
         <service android:name=".fcm.FirebaseMessageService">
             <intent-filter>

@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,7 +41,7 @@ import retrofit2.Response;
  * Created by ㅇㅇ on 2017-03-21.
  */
 
-public class StoryPopupActivity extends Activity {
+public class StoryPopup extends Activity {
     // user_info
     private SharedPreferences loginInfo;
     private int user_id;
@@ -75,7 +73,7 @@ public class StoryPopupActivity extends Activity {
 
     private String content;
     private StoryServerConnection storyServerConnection;
-    private static final Logger logger = LoggerFactory.getLogger(StoryPopupActivity.class);
+    private static final Logger logger = LoggerFactory.getLogger(StoryPopup.class);
     private static final int DELETE_REQUEST = 4;
 
     @Override

@@ -1,7 +1,6 @@
 package com.demand.well_family.well_family.settings;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +14,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.MainServerConnection;
-import com.demand.well_family.well_family.connection.UserServerConnection;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtils;
@@ -104,7 +102,7 @@ public class ConfirmAccountActivity extends Activity {
                     Toast.makeText(ConfirmAccountActivity.this, "이메일로 발송", Toast.LENGTH_SHORT).show();
                 }
 
-                btn_confirm_account.setBackgroundResource(R.drawable.round_corner_btn);
+                btn_confirm_account.setBackgroundResource(R.drawable.round_corner_btn_brown);
                 btn_confirm_account.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

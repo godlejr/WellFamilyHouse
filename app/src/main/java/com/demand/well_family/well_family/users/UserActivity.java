@@ -87,8 +87,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
     private RelativeLayout ll_user_phone_info;
     private ImageView iv_user_call;
 
-    //toolbar
-    private DrawerLayout dl;
+
     private UserServerConnection userServerConnection;
 
     private static final Logger logger = LoggerFactory.getLogger(UserActivity.class);
@@ -128,13 +127,9 @@ public class UserActivity extends Activity implements View.OnClickListener {
         setToolbar(this.getWindow().getDecorView(), this, story_user_name);
     }
 
-    // toolbar & menu
-    public void setToolbar(View view, Context context, String title) {
-        NavigationView nv = (NavigationView) view.findViewById(R.id.nv);
-        nv.setItemIconTintList(null);
-        dl = (DrawerLayout) view.findViewById(R.id.dl);
 
-        // toolbar menu, title, back
+    public void setToolbar(View view, Context context, String title) {
+
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolBar);
         TextView toolbar_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
         toolbar_title.setText(title);
@@ -145,154 +140,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
                 setBack();
             }
         });
-        ImageView toolbar_menu = (ImageView) toolbar.findViewById(R.id.toolbar_menu);
 
-        toolbar_menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dl.openDrawer(GravityCompat.START);
-            }
-        });
-
-        // header
-        View nv_header_view = nv.getHeaderView(0);
-        LinearLayout ll_menu_mypage = (LinearLayout) nv_header_view.findViewById(R.id.ll_menu_mypage);
-
-        ll_menu_mypage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dl.closeDrawers();
-
-                Intent intent = new Intent(UserActivity.this, UserActivity.class);
-                //userinfo
-                intent.putExtra("story_user_id", user_id);
-                intent.putExtra("story_user_email", user_email);
-                intent.putExtra("story_user_birth", user_birth);
-                intent.putExtra("story_user_phone", user_phone);
-                intent.putExtra("story_user_name", user_name);
-                intent.putExtra("story_user_level", user_level);
-                intent.putExtra("story_user_avatar", user_avatar);
-
-                startActivity(intent);
-                if (user_id == story_user_id) {
-                    finish();
-                }
-            }
-        });
-
-        TextView tv_menu_name = (TextView) nv_header_view.findViewById(R.id.tv_menu_name);
-        tv_menu_name.setText(user_name);
-
-        TextView tv_menu_birth = (TextView) nv_header_view.findViewById(R.id.tv_menu_birth);
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = dateFormat.parse(user_birth);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일생");
-            tv_menu_birth.setText(sdf.format(date));
-        } catch (ParseException e) {
-            log(e);
-        }
-
-
-        ImageView iv_menu_avatar = (ImageView) nv_header_view.findViewById(R.id.iv_menu_avatar);
-        Glide.with(context).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_menu_avatar);
-
-
-        // menu
-        Menu menu = nv.getMenu();
-        MenuItem menu_all = menu.findItem(R.id.menu_all);
-        SpannableString s = new SpannableString(menu_all.getTitle());
-        s.setSpan(new TextAppearanceSpan(view.getContext(), R.style.NavigationDrawer), 0, s.length(), 0);
-        menu_all.setTitle(s);
-
-        MenuItem menu_apps = menu.findItem(R.id.menu_apps);
-        s = new SpannableString(menu_apps.getTitle());
-        s.setSpan(new TextAppearanceSpan(view.getContext(), R.style.NavigationDrawer), 0, s.length(), 0);
-        menu_apps.setTitle(s);
-
-        nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                item.setChecked(true);
-                dl.closeDrawers();
-
-                Intent startLink;
-                Intent intent;
-                switch (item.getItemId()) {
-                    case R.id.menu_home:
-                        intent = new Intent(UserActivity.this, MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        break;
-
-                    case R.id.menu_search:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case R.id.menu_market:
-                        intent = new Intent(UserActivity.this, MarketMainActivity.class);
-                        startActivity(intent);
-                        break;
-
-                    case R.id.menu_setting:
-                        Intent settingIntent = new Intent(getApplicationContext(), SettingActivity.class);
-                        startActivity(settingIntent);
-                        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
-                        break;
-
-                    case R.id.menu_help:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
-                        break;
-
-                    case R.id.menu_logout:
-                        SharedPreferences loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = loginInfo.edit();
-                        editor.remove("user_id");
-                        editor.remove("user_name");
-                        editor.remove("user_email");
-                        editor.remove("user_birth");
-                        editor.remove("user_avatar");
-                        editor.remove("user_phone");
-                        editor.remove("user_level");
-                        editor.remove("access_token");
-                        editor.commit();
-
-                        intent = new Intent(UserActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                        break;
-
-//                    App 이용하기
-                    case R.id.menu_selffeet:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
-
-                        break;
-                    case R.id.menu_bubblefeet:
-                        startLink = getPackageManager().getLaunchIntentForPackage(getString(R.string.bubblefeet));
-                        if (startLink == null) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.market_front) + getString(R.string.bubblefeet))));
-                        } else {
-                            startActivity(startLink);
-                        }
-                        break;
-
-                    case R.id.menu_happyfeet:
-                        startLink = getPackageManager().getLaunchIntentForPackage(getString(R.string.happyfeet));
-                        if (startLink == null) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.market_front) + getString(R.string.happyfeet))));
-                        } else {
-                            startActivity(startLink);
-                        }
-                        break;
-
-                    case R.id.menu_memory_sound:
-                        startLink = new Intent(getApplicationContext(), SongMainActivity.class);
-                        startActivity(startLink);
-                        break;
-                }
-                return true;
-            }
-        });
     }
 
     public void setBack() {
@@ -303,15 +151,15 @@ public class UserActivity extends Activity implements View.OnClickListener {
         tv_family_activity_phone = (TextView) findViewById(R.id.tv_family_activity_phone);
         tv_family_activity_phone.setText(story_user_phone);
 
-        RelativeLayout rl_call_phone = (RelativeLayout)findViewById(R.id.rl_call_phone);
+        RelativeLayout rl_call_phone = (RelativeLayout) findViewById(R.id.rl_call_phone);
         rl_call_phone.bringToFront();
         tv_family_activity_phone2 = (TextView) findViewById(R.id.tv_family_activity_phone2);
-        String phone="";
+        String phone = "";
         int phone_length = story_user_phone.length();
-        if(phone_length == 11){
-            phone = story_user_phone.substring(0, 3) + "-" + story_user_phone.substring(3,7) + "-" + story_user_phone.substring(7,11);
-        } else if(phone_length == 10){
-            phone = story_user_phone.substring(0, 3) + "-" + story_user_phone.substring(3,6) + "-" + story_user_phone.substring(6,10);
+        if (phone_length == 11) {
+            phone = story_user_phone.substring(0, 3) + "-" + story_user_phone.substring(3, 7) + "-" + story_user_phone.substring(7, 11);
+        } else if (phone_length == 10) {
+            phone = story_user_phone.substring(0, 3) + "-" + story_user_phone.substring(3, 6) + "-" + story_user_phone.substring(6, 10);
         }
         tv_family_activity_phone2.setText(phone);
 

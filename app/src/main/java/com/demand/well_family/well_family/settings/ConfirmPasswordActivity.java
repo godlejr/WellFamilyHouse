@@ -3,7 +3,6 @@ package com.demand.well_family.well_family.settings;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,7 +17,6 @@ import android.widget.Toast;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.MainServerConnection;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,7 +117,7 @@ public class ConfirmPasswordActivity extends Activity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(et_confirm_email.getText().length() != 0 && s.length() != 0){
-                    btn_confirm_pwd.setBackgroundResource(R.drawable.round_corner_btn);
+                    btn_confirm_pwd.setBackgroundResource(R.drawable.round_corner_btn_brown);
                 }else {
                     btn_confirm_pwd.setBackgroundResource(R.drawable.round_corner_btn_gray);
                 }

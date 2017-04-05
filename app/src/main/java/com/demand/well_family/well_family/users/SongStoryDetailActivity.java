@@ -324,7 +324,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                         startActivity(intent);
                         break;
 
-                    case R.id.menu_search:
+                    case R.id.menu_family:
                         Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
                         break;
 

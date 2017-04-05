@@ -69,11 +69,6 @@ public class PhotoPopupActivity extends Activity {
         setContentView(R.layout.popup_photo);
         getWindow().setLayout(android.view.WindowManager.LayoutParams.MATCH_PARENT, android.view.WindowManager.LayoutParams.MATCH_PARENT);
 
-//        photo_id = getIntent().getIntExtra("photo_id", 0);
-//        story_id = getIntent().getIntExtra("story_id", 0);
-//        photo_name = getIntent().getStringExtra("photo_name");
-//        photo_type = getIntent().getIntExtra("photo_type", 0);
-//        photo_ext = getIntent().getStringExtra("photo_ext");
         checkPermission();
         init();
     }
