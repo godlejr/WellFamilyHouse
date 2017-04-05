@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,9 +26,6 @@ import com.demand.well_family.well_family.flag.LogFlag;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ㅇㅇ on 2017-03-22.
@@ -193,7 +188,7 @@ public class AccountDisableSelectActivity extends Activity {
                     setVisible(7);
                 }
 
-                btn_account_disable.setBackgroundResource(R.drawable.round_corner_btn);
+                btn_account_disable.setBackgroundResource(R.drawable.round_corner_btn_brown);
             }
         });
 

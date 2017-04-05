@@ -327,7 +327,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.2"
             android:text="전송"
-            android:background="@drawable/round_corner_btn"
+            android:background="@drawable/round_corner_btn_brown"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"

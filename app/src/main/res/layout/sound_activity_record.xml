@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/dl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
@@ -10,23 +10,114 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical">
 
-    <LinearLayout
+    <include
+        layout="@layout/toolbar_register"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#fff"
-        android:fitsSystemWindows="false"
         android:orientation="vertical">
 
-        <include
-            layout="@layout/toolbar"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
-
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#fff"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginTop="2dp"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#eaeaea" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_record_user_avatar"
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="15dp"
+                        android:src="@drawable/camera" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp">
+
+                        <TextView
+                            android:id="@+id/tv_record_user_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_weight="1"
+                            android:gravity="bottom"
+                            android:text="유신재"
+                            android:textColor="#424242"
+                            android:textSize="16sp"
+                            android:textStyle="normal|bold" />
+
+                        <Spinner
+                            android:id="@+id/sp_sound"
+                            android:layout_width="wrap_content"
+                            android:layout_height="1dp"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_sound_record_container"
+                android:layout_width="match_parent"
+                android:layout_height="270dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#eaeaea" />
+
+                <EditText
+                    android:id="@+id/et_sound_record_memory"
+                    android:layout_width="match_parent"
+                    android:layout_height="178dp"
+                    android:background="@null"
+                    android:gravity="top"
+                    android:hint="어떤 추억들이 떠오르나요?"
+                    android:inputType="textMultiLine|textPersonName"
+                    android:maxLength="49"
+                    android:padding="10dp"
+                    android:singleLine="false"
+                    android:textColor="#424242"
+                    android:textColorHint="#7e7e7e" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#eaeaea" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,275 +125,109 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/ll_sound_record_location_btn"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:layout_marginTop="2dp"
-                    android:orientation="vertical">
+                    android:layout_height="50dp"
+                    android:orientation="horizontal">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eaeaea" />
+                    <ImageView
+                        android:layout_width="1dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.7"
+                        android:padding="12dp"
+                        android:src="@drawable/location" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:layout_weight="3"
+                        android:orientation="vertical">
 
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/iv_record_user_avatar"
-                            android:layout_width="62dp"
-                            android:layout_height="62dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="15dp"
-                            android:src="@drawable/camera" />
-
-                        <LinearLayout
+                        <TextView
+                            android:id="@+id/textView35"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:paddingLeft="15dp"
-                            android:paddingRight="15dp">
-
-                            <TextView
-                                android:id="@+id/tv_record_user_name"
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_weight="1"
-                                android:gravity="bottom"
-                                android:text="유신재"
-                                android:textColor="#424242"
-                                android:textSize="16sp"
-                                android:textStyle="normal|bold" />
-
-                            <Spinner
-                                android:id="@+id/sp_sound"
-                                android:layout_width="wrap_content"
-                                android:layout_height="1dp"
-                                android:layout_weight="1"
-                                android:gravity="center_vertical" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/ll_sound_record_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="270dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eaeaea" />
-
-                    <EditText
-                        android:id="@+id/et_sound_record_memory"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@null"
-                        android:ems="49"
-                        android:gravity="top"
-                        android:hint="어떤 추억들이 떠오르나요?"
-                        android:inputType="textMultiLine|textPersonName"
-                        android:padding="10dp"
-                        android:singleLine="false"
-                        android:textColor="#424242"
-                        android:textColorHint="#7e7e7e" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eaeaea" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/ll_sound_record_location_btn"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="1dp"
-                            android:layout_height="50dp"
-                            android:layout_weight="0.7"
-                            android:padding="12dp"
-                            android:src="@drawable/location" />
-
-                        <LinearLayout
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="3"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textView35"
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_weight="1"
-                                android:gravity="bottom"
-                                android:text="추억 위치 등록"
-                                android:textColor="#424242"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_weight="1"
-                                android:gravity="top"
-                                android:text="당신은 추억의 지금 어디에 있나요?"
-                                android:textColor="#7e7e7e"
-                                android:textSize="14sp" />
-                        </LinearLayout>
-
-                        <ImageView
-                            android:id="@+id/iv_sound_record_location_btn"
-                            android:layout_width="1dp"
-                            android:layout_height="50dp"
-                            android:layout_weight="0.7"
-                            android:padding="10dp"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/arrow_bottom"
-                            android:tint="#542920" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/ll_sound_record_location"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:orientation="horizontal"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="15dp"
-                        android:paddingRight="5dp"
-                        android:paddingTop="5dp"
-                        android:visibility="gone">
-
-                        <EditText
-                            android:id="@+id/et_sound_record_location"
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="4"
-                            android:background="@null"
-                            android:ems="10"
-                            android:hint="추억의 위치를 입력하세요"
-                            android:inputType="text"
-                            android:textColor="#542920"
-                            android:textColorHint="#7e7e7e"
+                            android:layout_height="1dp"
+                            android:layout_weight="1"
+                            android:gravity="bottom"
+                            android:text="추억 위치 등록"
+                            android:textColor="#424242"
                             android:textSize="16sp" />
 
-                        <ImageView
-                            android:id="@+id/iv_sound_record_location"
-                            android:layout_width="1dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.5"
-                            android:padding="8dp"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/close_dialog"
-                            android:tint="#949494" />
-
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:text="당신은 추억의 지금 어디에 있나요?"
+                            android:textColor="#7e7e7e"
+                            android:textSize="14sp" />
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eaeaea" />
+                    <ImageView
+                        android:id="@+id/iv_sound_record_location_btn"
+                        android:layout_width="1dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.7"
+                        android:padding="10dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/arrow_bottom"
+                        android:tint="#542920" />
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_sound_record_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:orientation="horizontal"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="5dp"
+                    android:visibility="gone">
+
+                    <EditText
+                        android:id="@+id/et_sound_record_location"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:background="@null"
+                        android:ems="10"
+                        android:hint="추억의 위치를 입력하세요"
+                        android:inputType="text"
+                        android:textColor="#542920"
+                        android:textColorHint="#7e7e7e"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_sound_record_location"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.5"
+                        android:padding="8dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/close_dialog"
+                        android:tint="#949494" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#eaeaea" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/ll_sound_record_emotion"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/ll_sound_record_emotion"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="1dp"
-                                android:layout_height="50dp"
-                                android:layout_weight="0.7"
-                                android:padding="12dp"
-                                android:src="@drawable/emotion" />
-
-                            <LinearLayout
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="3"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:layout_weight="1"
-                                    android:gravity="bottom"
-                                    android:text="추억 감정 기록"
-                                    android:textColor="#424242"
-                                    android:textSize="16sp" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:layout_weight="1"
-                                    android:gravity="top"
-                                    android:text="추억에서 느끼는 감정은 무엇인가요?"
-                                    android:textColor="#7e7e7e"
-                                    android:textSize="14sp" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="1dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="0.7"
-                                android:orientation="horizontal"
-                                android:paddingRight="10dp">
-
-                                <Button
-                                    android:id="@+id/btn_sound_record_select_emotion"
-                                    android:layout_width="1dp"
-                                    android:layout_height="30dp"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_weight="1"
-                                    android:background="#542920"
-                                    android:text="선택"
-                                    android:textColor="#fff" />
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/rv_record_emotion"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eaeaea" />
-
-                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
@@ -312,7 +237,7 @@
                             android:layout_height="50dp"
                             android:layout_weight="0.7"
                             android:padding="12dp"
-                            android:src="@drawable/camera" />
+                            android:src="@drawable/emotion" />
 
                         <LinearLayout
                             android:layout_width="1dp"
@@ -325,7 +250,7 @@
                                 android:layout_height="1dp"
                                 android:layout_weight="1"
                                 android:gravity="bottom"
-                                android:text="추억 사진 등록"
+                                android:text="추억 감정 기록"
                                 android:textColor="#424242"
                                 android:textSize="16sp" />
 
@@ -334,7 +259,7 @@
                                 android:layout_height="1dp"
                                 android:layout_weight="1"
                                 android:gravity="top"
-                                android:text="사진으로 추억을 생생하게 만들어 보세요"
+                                android:text="추억에서 느끼는 감정은 무엇인가요?"
                                 android:textColor="#7e7e7e"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -347,82 +272,137 @@
                             android:paddingRight="10dp">
 
                             <Button
-                                android:id="@+id/btn_sound_record_image_upload"
+                                android:id="@+id/btn_sound_record_select_emotion"
                                 android:layout_width="1dp"
                                 android:layout_height="30dp"
                                 android:layout_gravity="center_vertical"
                                 android:layout_weight="1"
                                 android:background="#542920"
-                                android:text="등록"
+                                android:text="선택"
                                 android:textColor="#fff" />
                         </LinearLayout>
 
                     </LinearLayout>
 
-                    <View
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_record_emotion"
                         android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eaeaea" />
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
 
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#eaeaea" />
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal" >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-                            <android.support.v7.widget.RecyclerView
-                                android:id="@+id/rv_sound_record_image_upload_server"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:columnWidth="100dp"
-                                android:numColumns="auto_fit"
-                                android:padding="5dp"
-                                android:scrollbars="horizontal"
-                                android:stretchMode="columnWidth"
-                                android:verticalSpacing="10dp" />
+                    <ImageView
+                        android:layout_width="1dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="0.7"
+                        android:padding="12dp"
+                        android:src="@drawable/camera" />
 
-                            <android.support.v7.widget.RecyclerView
-                                android:id="@+id/rv_sound_record_image_upload_gallery"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:columnWidth="100dp"
-                                android:numColumns="auto_fit"
-                                android:padding="5dp"
-                                android:scrollbars="horizontal"
-                                android:stretchMode="columnWidth"
-                                android:verticalSpacing="10dp" />
-                        </LinearLayout>
-                    </HorizontalScrollView>
+                    <LinearLayout
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_weight="1"
+                            android:gravity="bottom"
+                            android:text="추억 사진 등록"
+                            android:textColor="#424242"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_weight="1"
+                            android:gravity="top"
+                            android:text="사진으로 추억을 생생하게 만들어 보세요"
+                            android:textColor="#7e7e7e"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.7"
+                        android:orientation="horizontal"
+                        android:paddingRight="10dp">
+
+                        <Button
+                            android:id="@+id/btn_sound_record_image_upload"
+                            android:layout_width="1dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:background="#542920"
+                            android:text="등록"
+                            android:textColor="#fff" />
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/btn_sound_record_submit"
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="54dp"
-                    android:background="#542920"
-                    android:text="추억 저장"
-                    android:textColor="#fff"
-                    android:textSize="18sp"
-                    android:textStyle="normal|bold" />
+                    android:layout_height="1dp"
+                    android:background="#eaeaea" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rv_sound_record_image_upload_server"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:columnWidth="100dp"
+                            android:numColumns="auto_fit"
+                            android:padding="5dp"
+                            android:scrollbars="horizontal"
+                            android:stretchMode="columnWidth"
+                            android:verticalSpacing="10dp" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rv_sound_record_image_upload_gallery"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:columnWidth="100dp"
+                            android:numColumns="auto_fit"
+                            android:padding="5dp"
+                            android:scrollbars="horizontal"
+                            android:stretchMode="columnWidth"
+                            android:verticalSpacing="10dp" />
+                    </LinearLayout>
+                </HorizontalScrollView>
+
             </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
+
+            <Button
+                android:id="@+id/btn_sound_record_submit"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="#542920"
+                android:text="추억 저장"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:textStyle="normal|bold" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 
-    </LinearLayout>
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="#fff"
-        app:headerLayout="@layout/drawer_header"
-        app:itemTextColor="#424242"
-        app:menu="@menu/menu_main"
-        app:theme="@style/NavigationDrawer" />
-
-</android.support.v4.widget.DrawerLayout>
+</LinearLayout>

@@ -14,12 +14,12 @@
                     android:checked="false"
                     android:checkable="true" />
                 <item
-                    android:id="@+id/menu_search"
-                    android:icon="@drawable/search"
-                    android:title="가족 찾기"
-                    android:checked="false"
+                    android:id="@+id/menu_family"
                     android:checkable="true"
-                    android:visible="false"/>
+                    android:checked="false"
+                    android:icon="@drawable/search"
+                    android:title="가족 설정"
+                   />
                 <item
                     android:id="@+id/menu_market"
                     android:icon="@drawable/market"
@@ -34,10 +34,10 @@
                     android:checkable="true" />
                 <item
                     android:id="@+id/menu_help"
-                    android:icon="@drawable/help"
-                    android:title="고객센터/도움말"
+                    android:checkable="true"
                     android:checked="false"
-                    android:checkable="true" />
+                    android:icon="@drawable/help"
+                    android:title="고객센터/도움말" />
                 <item
                     android:id="@+id/menu_logout"
                     android:icon="@drawable/logout"

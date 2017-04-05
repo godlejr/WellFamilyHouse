@@ -39,6 +39,7 @@ import com.demand.well_family.well_family.dto.App;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.family.FamilyActivity;
+import com.demand.well_family.well_family.family.ManageFamilyActivity;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
@@ -541,8 +542,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     case R.id.menu_home:
                         break;
 
-                    case R.id.menu_search:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
+                    case R.id.menu_family:
+                        intent = new Intent(MainActivity.this, ManageFamilyActivity.class);
+
+
+
+                        startActivity(intent);
                         break;
 
                     case R.id.menu_market:

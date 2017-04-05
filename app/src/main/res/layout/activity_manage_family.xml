@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical"
+    android:focusableInTouchMode="true">
+
+    <include
+        layout="@layout/toolbar_register"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="가족 검색" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="#f5f5f5"
+        android:orientation="horizontal"
+        android:paddingBottom="7dp"
+        android:paddingTop="7dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+
+            <TextView
+                android:id="@+id/tv_find_family"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/round_corner"
+                android:gravity="center_vertical"
+                android:paddingLeft="45dp"
+                android:text="새로운 가족 페이지를 검색해보세요."
+                android:textColor="#999" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:src="@android:drawable/ic_menu_search" />
+
+
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:text="가족 관리"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:id="@+id/ll_manage_family_owner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="#888"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="내가 개설한 가족"
+            android:textColor="#fff" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_manage_family_owner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="#888"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="내가 회원인 가족"
+            android:textColor="#fff" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_manage_family_member"
+            android:layout_width="match_parent"
+            android:layout_height="180dp" />
+    </LinearLayout>
+</LinearLayout>

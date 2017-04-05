@@ -1,35 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/dl"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
     android:fitsSystemWindows="false"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
     <include
-        layout="@layout/toolbar"
+        layout="@layout/toolbar_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#bdbdbd" />
+        android:background="#e5e5e5" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v4.widget.NestedScrollView
+            android:id="@+id/ns_story_detail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/ns_story_detail">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -68,17 +64,17 @@
 
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:background="#f1f1f1"
+                        android:layout_height="1dp"
                         android:layout_weight="0.5"
-                        android:layout_height="1dp">
+                        android:background="#f1f1f1"
+                        android:orientation="horizontal">
 
 
                         <RelativeLayout
@@ -88,26 +84,26 @@
 
 
                             <ImageView
-                                android:src="@drawable/like_count"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:layout_gravity="right"
-                                android:layout_alignParentTop="true"
-                                android:layout_alignParentRight="true"
                                 android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_gravity="right"
+                                android:layout_marginEnd="30dp"
                                 android:layout_marginRight="30dp"
-                                android:layout_marginEnd="30dp" />
+                                android:src="@drawable/like_count" />
 
                             <TextView
                                 android:id="@+id/tv_story_detail_like_count"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:text="77"
-                                android:gravity="right|center_vertical"
-                                android:layout_alignParentTop="true"
-                                android:layout_alignParentRight="true"
                                 android:layout_alignParentEnd="true"
-                                android:layout_marginRight="10dp" />
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginRight="10dp"
+                                android:gravity="right|center_vertical"
+                                android:text="77" />
 
                         </RelativeLayout>
 
@@ -122,45 +118,45 @@
                                 android:id="@+id/tv_story_detail_comment_count"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:text="88"
-                                android:gravity="center"
-                                android:layout_alignParentTop="true"
-                                android:layout_alignParentRight="true"
                                 android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_marginEnd="15dp"
                                 android:layout_marginRight="15dp"
-                                android:layout_marginEnd="15dp" />
+                                android:gravity="center"
+                                android:text="88" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:src="@drawable/comment"
-                                android:layout_alignParentTop="true"
                                 android:layout_alignParentLeft="true"
-                                android:layout_alignParentStart="true" />
+                                android:layout_alignParentStart="true"
+                                android:layout_alignParentTop="true"
+                                android:src="@drawable/comment" />
 
                         </RelativeLayout>
 
                     </LinearLayout>
 
                     <LinearLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
+                        android:layout_height="1dp"
                         android:layout_weight="1"
-                        android:layout_height="1dp">
+                        android:orientation="horizontal">
 
                         <CheckBox
                             android:id="@+id/btn_item_main_story_detail_like"
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
+                            android:background="@drawable/checkbox_like"
                             android:button="@null"
-                            android:focusable="false"
-                            android:background="@drawable/checkbox_like" />
+                            android:focusable="false" />
 
                         <ImageView
+                            android:id="@+id/imageView11"
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
-                            android:id="@+id/imageView11"
                             android:layout_weight="1"
                             android:src="@drawable/share" />
                     </LinearLayout>
@@ -168,12 +164,10 @@
                 </LinearLayout>
 
 
-
-
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_story_comments"
@@ -183,14 +177,13 @@
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:nestedScrollingEnabled="false"
-                        android:scrollbars="vertical"
-                        >
+                        android:scrollbars="vertical">
 
                     </android.support.v7.widget.RecyclerView>
 
                     <TextView
-                        android:layout_width="match_parent"
                         android:id="@+id/textView22"
+                        android:layout_width="match_parent"
                         android:layout_height="50dp" />
                 </LinearLayout>
 
@@ -202,7 +195,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
-            android:background="#efeadd"
+            android:background="#e5e5e5"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:orientation="horizontal">
@@ -221,9 +214,9 @@
                 android:focusableInTouchMode="true"
 
                 android:inputType="textPersonName"
-                android:textColor="#424242"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp" />
+                android:paddingRight="10dp"
+                android:textColor="#424242" />
 
             <Button
                 android:id="@+id/btn_story_detail_send_comment"
@@ -234,21 +227,9 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="0.5"
-                android:background="@drawable/round_corner_btn"
+                android:background="@drawable/round_corner_btn_brown"
                 android:text="전송"
                 android:textColor="#fff" />
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/menu_main"
-        android:background="#fff"
-        app:itemTextColor="#424242"
-        app:theme="@style/NavigationDrawer"
-        />
-</android.support.v4.widget.DrawerLayout>
