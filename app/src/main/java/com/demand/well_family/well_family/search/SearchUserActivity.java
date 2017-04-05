@@ -269,7 +269,7 @@ public class SearchUserActivity extends Activity {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 if (response.isSuccessful()) {
-                                    Toast.makeText(SearchUserActivity.this, found_user_name +"님의 요청을 승인하였습니다.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(SearchUserActivity.this, found_user_name + "님의 요청을 승인하였습니다.", Toast.LENGTH_LONG).show();
                                     holder.btn_search_user.setText("가족");
                                     userList.get(position).setJoin_flag(FamilyJoinFlag.FAMILY);
                                     userAdapter.notifyItemChanged(position);
@@ -277,6 +277,7 @@ public class SearchUserActivity extends Activity {
                                     Toast.makeText(SearchUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
                             }
+
                             @Override
                             public void onFailure(Call<Void> call, Throwable t) {
                                 log(t);
@@ -286,7 +287,6 @@ public class SearchUserActivity extends Activity {
                     }
                 });
             }
-
 
             if (join_flag == FamilyJoinFlag.FAMILY_TO_USER) {
                 //family
@@ -302,7 +302,7 @@ public class SearchUserActivity extends Activity {
                 holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray);
 
             }
-            if( join_flag == FamilyJoinFlag.USERS){
+            if (join_flag == FamilyJoinFlag.USERS) {
                 //public
                 holder.btn_search_user.setText("초대하기");
                 holder.btn_search_user.setTextColor(Color.parseColor("#542920"));
@@ -336,12 +336,8 @@ public class SearchUserActivity extends Activity {
                         });
                     }
                 });
-
             }
-
-
         }
-
         @Override
         public int getItemCount() {
             return userList.size();
