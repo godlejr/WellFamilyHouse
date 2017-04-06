@@ -10,15 +10,13 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"
-        android:src="@drawable/bubblefeet" />
+        android:layout_marginTop="15dp" />
 
     <TextView
         android:id="@+id/tv_manage_family_member"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:gravity="center"
-        android:text="FAMILY" />
+        android:gravity="center" />
 
     <Button
         android:id="@+id/btn_manage_family_member"
@@ -28,6 +26,5 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:background="@drawable/round_corner_border_red"
-        android:text="탈퇴하기"
         android:textColor="#FF0000" />
 </LinearLayout>

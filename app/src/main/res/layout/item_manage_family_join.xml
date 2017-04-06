@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:background="#fff"
+    android:layout_height="70dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_manage_family_join_avatar"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_gravity="center_vertical"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/comment2" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:paddingLeft="15dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <TextView
+            android:id="@+id/iv_manage_family_join_name"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textColor="#000"
+            android:textStyle="normal|bold" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_manage_family_join"
+        android:layout_width="1dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_weight="1"
+        android:background="@drawable/round_corner_border_brown" />
+
+</LinearLayout>
