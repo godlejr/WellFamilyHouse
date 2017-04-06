@@ -1,6 +1,7 @@
 package com.demand.well_family.well_family.connection;
 
 import com.demand.well_family.well_family.dto.Family;
+import com.demand.well_family.well_family.dto.FamilyInfoForFamilyJoin;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
@@ -11,8 +12,6 @@ import java.util.HashMap;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -26,11 +25,6 @@ import retrofit2.http.QueryMap;
  */
 
 public interface FamilyServerConnection {
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/families/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-
     @GET("{family_id}")
     Call<Family> family(@Path("family_id") int family_id);
 
@@ -49,8 +43,8 @@ public interface FamilyServerConnection {
     @POST("{family_id}/users")
     Call<ResponseBody> insert_user_into_family(@Path("family_id") int family_id, @QueryMap HashMap<String, String> map);
 
-    @DELETE("{family_id}/users")
-    Call<ResponseBody> delete_user_from_family(@Path("family_id") int family_id, @QueryMap HashMap<String, String> map);
+    @DELETE("{family_id}/users/{user_id}")// 탈퇴 하기
+    Call<ResponseBody> delete_user_from_family(@Path("family_id") int family_id, @Path("user_id") int user_id);
 
     @PUT("{family_id}")
     Call<ResponseBody> update_family_info(@Path("family_id") int family_id, @QueryMap HashMap<String, String> map);
@@ -59,5 +53,7 @@ public interface FamilyServerConnection {
     Call<ArrayList<UserInfoForFamilyJoin>> find_user(@Path("family_id") int family_id, @QueryMap HashMap<String, String> map);
 
     @PUT(" {family_id}/users/{user_id}")
+        // 초대 승인, 가입 승인
     Call<Void> update_user_for_familyjoin(@Path("family_id") int family_id, @Path("user_id") int user_id);
+
 }

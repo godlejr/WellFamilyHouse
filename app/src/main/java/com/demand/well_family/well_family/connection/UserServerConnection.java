@@ -2,6 +2,7 @@ package com.demand.well_family.well_family.connection;
 
 
 import com.demand.well_family.well_family.dto.Family;
+import com.demand.well_family.well_family.dto.FamilyInfoForFamilyJoin;
 import com.demand.well_family.well_family.dto.FavoriteCategory;
 import com.demand.well_family.well_family.dto.Notification;
 import com.demand.well_family.well_family.dto.SongStory;
@@ -102,5 +103,16 @@ public interface UserServerConnection {
     @GET("{user_id}/notifications")
     Call<ArrayList<Notification>> notifications(@Path("user_id") int user_id);
 
+    @GET("{user_id}/manage_families")
+    Call<ArrayList<Family>> manage_families(@Path("user_id") int user_id);
+
+    @GET("{user_id}/join_families")
+    Call<ArrayList<FamilyInfoForFamilyJoin>> join_families(@Path("user_id") int user_id);
+
+    @POST("{user_id}/join_family")  // family_id, family_name
+    Call<ResponseBody> join_family(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
+
+    @GET("{user_id}/find_family")   // search
+    Call<ArrayList<FamilyInfoForFamilyJoin>> find_family(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
 }

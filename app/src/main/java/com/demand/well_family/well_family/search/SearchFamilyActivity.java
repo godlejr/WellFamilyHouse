@@ -25,21 +25,28 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.connection.FamilyServerConnection;
 import com.demand.well_family.well_family.connection.UserServerConnection;
 import com.demand.well_family.well_family.dialog.FamilyPopup;
 import com.demand.well_family.well_family.dto.Family;
+import com.demand.well_family.well_family.dto.FamilyInfoForFamilyJoin;
 import com.demand.well_family.well_family.family.FamilyActivity;
+import com.demand.well_family.well_family.family.ManageFamilyActivity;
+import com.demand.well_family.well_family.flag.FamilyJoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,13 +75,15 @@ public class SearchFamilyActivity extends Activity {
     private String search;
     private FamilyAdapter familyAdapter;
 
+    private ArrayList<FamilyInfoForFamilyJoin> familyList;
+    private UserServerConnection userServerConnection;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_family);
 
         setUserInfo();
-        getFamilyData();
         init();
     }
 
@@ -88,6 +97,28 @@ public class SearchFamilyActivity extends Activity {
                 search = et_find_family.getText().toString();
                 if (search.length() != 0) {
                     // 검색
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("search", search);
+
+                    userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                    Call<ArrayList<FamilyInfoForFamilyJoin>> call_find_family = userServerConnection.find_family(user_id, map);
+                    call_find_family.enqueue(new Callback<ArrayList<FamilyInfoForFamilyJoin>>() {
+                        @Override
+                        public void onResponse(Call<ArrayList<FamilyInfoForFamilyJoin>> call, Response<ArrayList<FamilyInfoForFamilyJoin>> response) {
+                            if (response.isSuccessful()) {
+                                familyList = response.body();
+                                getFamilyData(familyList);
+                            } else {
+                                Toast.makeText(SearchFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ArrayList<FamilyInfoForFamilyJoin>> call, Throwable t) {
+                            log(t);
+                            Toast.makeText(SearchFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        }
+                    });
 
 
                 } else {
@@ -127,26 +158,18 @@ public class SearchFamilyActivity extends Activity {
         toolbar.setBackgroundColor(Color.WHITE);
     }
 
-    private void getFamilyData() {
+    private void getFamilyData(ArrayList<FamilyInfoForFamilyJoin> familyList) {
         rv_find_family = (RecyclerView) findViewById(R.id.rv_find_family);
-
-        ArrayList<Family> familyList = new ArrayList<>();
-        familyList.add(new Family(2, "혜연댁", "내용1", "4.PNG", 67, "2017-01-18 20:08:05"));
-        familyList.add(new Family(2, "혜연댁", "내용1", "4.PNG", 67, "2017-01-18 20:08:05"));
-        familyList.add(new Family(2, "혜연댁", "내용1", "4.PNG", 67, "2017-01-18 20:08:05"));
-        familyList.add(new Family(2, "혜연댁", "내용1", "4.PNG", 67, "2017-01-18 20:08:05"));
-
         familyAdapter = new FamilyAdapter(familyList, R.layout.item_find_family, SearchFamilyActivity.this);
         rv_find_family.setAdapter(familyAdapter);
         rv_find_family.setLayoutManager(new LinearLayoutManager(SearchFamilyActivity.this, LinearLayoutManager.VERTICAL, false));
-
     }
 
     private class FamilyViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout ll_search_family;
         private TextView tv_search_family_name;
         private TextView tv_search_family_content;
-        private Button btn_search_family_remove;
+        private Button btn_search_family_commit;
         private CircleImageView iv_search_family_avatar;
 
         public FamilyViewHolder(View itemView) {
@@ -155,18 +178,17 @@ public class SearchFamilyActivity extends Activity {
             iv_search_family_avatar = (CircleImageView) itemView.findViewById(R.id.iv_search_family_avatar);
             tv_search_family_name = (TextView) itemView.findViewById(R.id.tv_search_family_name);
             tv_search_family_content = (TextView) itemView.findViewById(R.id.tv_search_family_content);
-            btn_search_family_remove = (Button) itemView.findViewById(R.id.btn_search_family_remove);
+            btn_search_family_commit = (Button) itemView.findViewById(R.id.btn_search_family_commit);
             ll_search_family = (LinearLayout) itemView.findViewById(R.id.ll_search_family);
-
         }
     }
 
     private class FamilyAdapter extends RecyclerView.Adapter<FamilyViewHolder> {
-        private ArrayList<Family> familyList;
+        private ArrayList<FamilyInfoForFamilyJoin> familyList;
         private int layout;
         private Context context;
 
-        public FamilyAdapter(ArrayList<Family> familyList, int layout, Context context) {
+        public FamilyAdapter(ArrayList<FamilyInfoForFamilyJoin> familyList, int layout, Context context) {
             this.familyList = familyList;
             this.layout = layout;
             this.context = context;
@@ -179,7 +201,7 @@ public class SearchFamilyActivity extends Activity {
         }
 
         @Override
-        public void onBindViewHolder(FamilyViewHolder holder, final int position) {
+        public void onBindViewHolder(final FamilyViewHolder holder, final int position) {
             Glide.with(context).load(getString(R.string.cloud_front_family_avatar) + familyList.get(position).getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_search_family_avatar);
             holder.tv_search_family_name.setText(familyList.get(position).getName());
             holder.tv_search_family_content.setText(familyList.get(position).getContent());
@@ -197,22 +219,74 @@ public class SearchFamilyActivity extends Activity {
                     intent.putExtra("family_created_at", familyList.get(position).getCreated_at());
 
                     startActivity(intent);
-
                 }
             });
 
-            holder.btn_search_family_remove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), FamilyPopup.class);
+            int join_flag = familyList.get(position).getJoin_flag();
 
-//                    intent.putExtra("avatar", );
-//                    intent.putExtra("flag", );
-
-                    startActivity(intent);
+            if (join_flag == FamilyJoinFlag.FAMILY) {
+                // 가족
+                if (user_id == familyList.get(position).getUser_id()) {
+                    holder.btn_search_family_commit.setText("가족");
+                    holder.btn_search_family_commit.setBackgroundResource(R.drawable.round_corner_green);
+                    holder.btn_search_family_commit.setTextColor(Color.parseColor("#ffffff"));
+                } else {
+                    holder.btn_search_family_commit.setText("가족");
+                    holder.btn_search_family_commit.setBackgroundResource(R.drawable.round_corner_green);
+                    holder.btn_search_family_commit.setTextColor(Color.parseColor("#ffffff"));
                 }
-            });
+            }
 
+            if (join_flag == FamilyJoinFlag.USER_TO_FAMILY) {
+                // 요청 대기
+                holder.btn_search_family_commit.setText("승인 대기");
+                holder.btn_search_family_commit.setBackgroundResource(R.drawable.round_corner_border_gray);
+                holder.btn_search_family_commit.setTextColor(Color.parseColor("#999999"));
+            }
+
+
+            if (join_flag == FamilyJoinFlag.USERS) {
+                // 가입 하기
+                holder.btn_search_family_commit.setText("가입하기");
+                holder.btn_search_family_commit.setBackgroundResource(R.drawable.round_corner_border_green);
+                holder.btn_search_family_commit.setTextColor(Color.parseColor("#1DDB16"));
+
+                holder.btn_search_family_commit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        HashMap<String, String> map = new HashMap<String, String>();
+                        map.put("creator_id", String.valueOf(familyList.get(position).getUser_id()));
+                        map.put("family_id", String.valueOf(familyList.get(position).getId()));
+                        map.put("family_name", String.valueOf(familyList.get(position).getName()));
+
+                        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                        Call<ResponseBody> call_join_family = userServerConnection.join_family(user_id, map);
+                        call_join_family.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(SearchFamilyActivity.this, "가입 신청이 완료되었습니다.", Toast.LENGTH_LONG).show();
+
+                                    holder.btn_search_family_commit.setText("승인 대기");
+                                    holder.btn_search_family_commit.setBackgroundResource(R.drawable.round_corner_border_gray);
+                                    holder.btn_search_family_commit.setTextColor(Color.parseColor("#999999"));
+
+                                    familyList.get(position).setJoin_flag(FamilyJoinFlag.USER_TO_FAMILY);
+                                    familyAdapter.notifyItemChanged(position);
+                                } else {
+                                    Toast.makeText(SearchFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                log(t);
+                                Toast.makeText(SearchFamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+                });
+            }
         }
 
         @Override

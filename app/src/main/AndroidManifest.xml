@@ -110,10 +110,12 @@
         <activity android:name=".ModifyStoryActivity" />
 
         <activity android:name=".family.ManageFamilyActivity" />
+        <activity android:name=".family.ManageFamilyListActivity" />
+
         <activity android:name=".search.SearchFamilyActivity" />
         <activity
             android:name=".dialog.FamilyPopup"
-            android:theme="@style/Theme.AppCompat.Dialog"/>
+            android:theme="@style/Theme.AppCompat.Dialog" />
 
         <service android:name=".fcm.FirebaseMessageService">
             <intent-filter>
