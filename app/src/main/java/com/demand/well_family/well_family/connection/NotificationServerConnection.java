@@ -4,8 +4,6 @@ import com.demand.well_family.well_family.dto.NotificationInfo;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -15,11 +13,6 @@ import retrofit2.http.Path;
  */
 
 public interface NotificationServerConnection {
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/notifications/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-
 
     @GET("{notification_id}/families")
     Call<NotificationInfo> NotificationForCreatingFamily(@Path("notification_id") int notification_id);
