@@ -72,7 +72,10 @@ public class FamilyPopup extends Activity {
     private FamilyServerConnection familyServerConnection;
 
     private Intent intent;
-    private int position;
+    private int family_position;
+    private String joiner_avatar;
+    private String joiner_name;
+
 
     //result code
     private static final int DELETE_USER_TO_FAMILY = 3;
@@ -90,8 +93,11 @@ public class FamilyPopup extends Activity {
         getWindow().getAttributes().height = (int) (display.getHeight() * 0.8);
 
         intent = getIntent();
-        position = intent.getIntExtra("position", 0);
+        joiner_name = intent.getStringExtra("joiner_name");
+        joiner_avatar = intent.getStringExtra("joiner_avatar");
+        family_position = intent.getIntExtra("position", 0);
         delete_flag = intent.getBooleanExtra("delete_flag", false);
+
         setUserInfo();
         setFamilyInfo();
         init();
@@ -160,8 +166,9 @@ public class FamilyPopup extends Activity {
                         public void onResponse(Call<Void> call, Response<Void> response) {
                             if (response.isSuccessful()) {
                                 Toast.makeText(FamilyPopup.this, "\"" + family_name + "\" 에 가입되었습니다.", Toast.LENGTH_SHORT).show();
-                                intent.putExtra("position", position);
-                                setResult(JOIN, intent);
+                                Intent manage_family = getIntent();
+                                manage_family.putExtra("position", family_position);
+                                setResult(JOIN, manage_family);
                                 finish();
                             } else {
                                 Toast.makeText(FamilyPopup.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
@@ -196,7 +203,7 @@ public class FamilyPopup extends Activity {
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if (response.isSuccessful()) {
                                 Toast.makeText(FamilyPopup.this, "\"" + family_name + "\" 에서 탈퇴하였습니다.", Toast.LENGTH_SHORT).show();
-                                intent.putExtra("position", position);
+                                intent.putExtra("position", family_position);
                                 setResult(DELETE_USER_TO_FAMILY, intent);
                                 finish();
                             } else {
@@ -214,18 +221,36 @@ public class FamilyPopup extends Activity {
             });
         }
 
-        if (join_flag == FamilyJoinFlag.FAMILY_TO_USER) {
+        if (join_flag == FamilyJoinFlag.USER_TO_FAMILY) {
             // 가입 승인
             tv_popup_family_title.setText("가족 승인하기");
-            tv_popup_family_content.setText(user_name + "회원님이 \'" + family_name + "\' 가족의 구성원이 되고싶어합니다.");
-            Glide.with(FamilyPopup.this).load(getString(R.string.cloud_front_user_avatar) + family_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_popup_family_avatar);
+            tv_popup_family_content.setText(joiner_name + "회원님이 \'" + family_name + "\' 가족의 구성원이 되고싶어합니다.");
+            Glide.with(FamilyPopup.this).load(getString(R.string.cloud_front_user_avatar) + joiner_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_popup_family_avatar);
             btn_popup_family_cancel.setText("거절");
             btn_popup_family_commit.setText("수락");
             btn_popup_family_commit.setBackgroundResource(R.drawable.round_corner_green);
             btn_popup_family_commit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
+                    Call<Void> call_update_user_for_familyjoin = familyServerConnection.update_user_for_familyjoin(family_id, user_id);
+                    call_update_user_for_familyjoin.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                setResult(JOIN, getIntent().putExtra("position", getIntent().getIntExtra("joiner_position", 0)));
+                                finish();
+                            } else {
+                                Toast.makeText(FamilyPopup.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
 
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            log(t);
+                            Toast.makeText(FamilyPopup.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        }
+                    });
 
                 }
             });
@@ -249,7 +274,7 @@ public class FamilyPopup extends Activity {
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if (response.isSuccessful()) {
                                 Toast.makeText(FamilyPopup.this, "가족이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
-                                intent.putExtra("position", position);
+                                intent.putExtra("position", family_position);
                                 setResult(DELETE_USER_TO_FAMILY, intent);
                                 finish();
                             } else {

@@ -76,7 +76,9 @@ public class ManageFamilyListActivity extends Activity {
     private FamilyServerConnection familyServerConnection;
     private int position;
 
-    // request code
+    //request code
+    private static final int POPUP = 1;
+    private static final int JOIN = 2;
     private static final int DELETE_FAMILY = 5;
 
     // result code
@@ -86,6 +88,7 @@ public class ManageFamilyListActivity extends Activity {
     private FamilyJoinAdapter familyJoinAdapter;
 
     private ArrayList<UserInfoForFamilyJoin> joiners;
+    private UserInfoForFamilyJoin joiner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,11 +227,15 @@ public class ManageFamilyListActivity extends Activity {
         }
 
         @Override
-        public void onBindViewHolder(FamilyJoinViewHolder holder, final int position) {
-            Glide.with(context).load(getString(R.string.cloud_front_user_avatar) + joinsList.get(position).getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_manage_family_join_avatar);
-            holder.tv_manage_family_join_name.setText(joinsList.get(position).getName());
+        public void onBindViewHolder(FamilyJoinViewHolder holder, final int joiner_position) {
+            Glide.with(context).load(getString(R.string.cloud_front_user_avatar) + joinsList.get(joiner_position).getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_manage_family_join_avatar);
+            holder.tv_manage_family_join_name.setText(joinsList.get(joiner_position).getName());
 
-            int flag = joinsList.get(position).getJoin_flag();
+            joiner = joinsList.get(joiner_position);
+            int flag = joiner.getJoin_flag();
+            final int joiner_id = joiner.getId();
+            final String joiner_avatar = joiner.getAvatar();
+            final String joiner_name = joiner.getName();
 
             if (flag == FamilyJoinFlag.USER_TO_FAMILY) {
                 // 가입 승인
@@ -240,16 +247,27 @@ public class ManageFamilyListActivity extends Activity {
                     @Override
                     public void onClick(View v) {
                         familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
-                        Call<Void> call_update_user_for_familyjoin = familyServerConnection.update_user_for_familyjoin(family_id, joinsList.get(position).getId());
+                        Call<Void> call_update_user_for_familyjoin = familyServerConnection.update_user_for_familyjoin(family_id, joiner_id);
                         call_update_user_for_familyjoin.enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 if (response.isSuccessful()) {
-                                    Toast.makeText(ManageFamilyListActivity.this, "가입을 승인하셨습니다.", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(ManageFamilyListActivity.this, FamilyPopup.class);
 
-                                    joinsList.remove(position);
-                                    notifyItemRemoved(position);
-                                    notifyItemRangeChanged(position, getItemCount());
+                                    intent.putExtra("family_id", family_id);
+                                    intent.putExtra("family_user_id", family_user_id);
+                                    intent.putExtra("family_name", family_name);
+                                    intent.putExtra("family_content", family_content);
+                                    intent.putExtra("family_avatar", family_avatar);
+                                    intent.putExtra("family_created_at", family_created_at);
+
+                                    intent.putExtra("joiner_name", joiner_name);
+                                    intent.putExtra("joiner_avatar", joiner_avatar);
+                                    intent.putExtra("join_flag", FamilyJoinFlag.USER_TO_FAMILY);
+                                    intent.putExtra("position", position);
+                                    intent.putExtra("joiner_position", joiner_position);
+
+                                    startActivityForResult(intent, POPUP);
                                 } else {
                                     Toast.makeText(ManageFamilyListActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
@@ -308,7 +326,18 @@ public class ManageFamilyListActivity extends Activity {
                 setResult(DELETE_FAMILY, intent);
                 finish();
             }
+        }
 
+        if (requestCode == POPUP) {
+            if (resultCode == JOIN) {
+                int joiner_position = data.getIntExtra("joiner_position", 0);
+
+                familyJoinAdapter.joinsList.remove(joiner_position);
+                familyJoinAdapter.notifyItemRemoved(joiner_position);
+                familyJoinAdapter.notifyItemRangeChanged(joiner_position, familyJoinAdapter.getItemCount());
+
+                Toast.makeText(this, "가입 요청을 승인하였습니다.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

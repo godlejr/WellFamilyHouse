@@ -228,11 +228,11 @@ public class SearchFamilyActivity extends Activity {
                 // 가족
                 if (user_id == familyList.get(position).getUser_id()) {
                     holder.btn_search_family_commit.setText("가족");
-                    holder.btn_search_family_commit.setBackgroundResource(R.drawable.round_corner_green);
+                    holder.btn_search_family_commit.setBackgroundResource(R.drawable.round_corner_green_r30);
                     holder.btn_search_family_commit.setTextColor(Color.parseColor("#ffffff"));
                 } else {
                     holder.btn_search_family_commit.setText("가족");
-                    holder.btn_search_family_commit.setBackgroundResource(R.drawable.round_corner_green);
+                    holder.btn_search_family_commit.setBackgroundResource(R.drawable.round_corner_green_r30);
                     holder.btn_search_family_commit.setTextColor(Color.parseColor("#ffffff"));
                 }
             }
