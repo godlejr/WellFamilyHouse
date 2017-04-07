@@ -132,7 +132,7 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
             android:layout_marginTop="40dp"
-            android:background="@drawable/round_corner_btn_gray"
+            android:background="@drawable/round_corner_btn_gray_r10"
             android:text="계속"
             android:textColor="#fff" />
     </RelativeLayout>

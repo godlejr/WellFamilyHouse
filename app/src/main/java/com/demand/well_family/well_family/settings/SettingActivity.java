@@ -19,10 +19,8 @@ import com.demand.well_family.well_family.connection.UserServerConnection;
  * Created by ㅇㅇ on 2017-03-06.
  */
 
-public class SettingActivity extends Activity{
+public class SettingActivity extends Activity {
     private Switch sw_setting_family;
-    private Switch sw_setting_popup;
-    private Switch sw_setting_sound;
     private LinearLayout ll_setting_disable;
     private LinearLayout ll_setting_pwd;
 
@@ -34,7 +32,9 @@ public class SettingActivity extends Activity{
     private String user_birth;
     private String user_phone;
     private int user_level;
+
     private SharedPreferences loginInfo;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class SettingActivity extends Activity{
         setToolbar(getWindow().getDecorView());
     }
 
-    private void  setToolbar(View view){
+    private void setToolbar(View view) {
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolBar);
         ImageView toolbar_back = (ImageView) toolbar.findViewById(R.id.toolbar_back);
         toolbar_back.setOnClickListener(new View.OnClickListener() {
@@ -72,30 +72,29 @@ public class SettingActivity extends Activity{
         toolbar_title.setText("설정");
     }
 
-    private void init(){
-        sw_setting_family = (Switch)findViewById(R.id.sw_setting_family);
-        sw_setting_popup = (Switch)findViewById(R.id.sw_setting_popup);
-        sw_setting_sound = (Switch)findViewById(R.id.sw_setting_sound);
-        ll_setting_disable = (LinearLayout)findViewById(R.id.ll_setting_disable);
-        ll_setting_pwd = (LinearLayout)findViewById(R.id.ll_setting_pwd);
+    private void init() {
+        sw_setting_family = (Switch) findViewById(R.id.sw_setting_family);
+        ll_setting_disable = (LinearLayout) findViewById(R.id.ll_setting_disable);
+        ll_setting_pwd = (LinearLayout) findViewById(R.id.ll_setting_pwd);
+
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        if(loginInfo.getBoolean("notification", true)){
+            sw_setting_family.setChecked(true);
+        } else {
+            sw_setting_family.setChecked(false);
+        }
 
         sw_setting_family.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                editor = loginInfo.edit();
+                if (buttonView.isChecked()) {
+                    editor.putBoolean("notification", true);
+                } else {
+                    editor.putBoolean("notification", false);
+                }
 
-
-            }
-        });
-        sw_setting_popup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-            }
-        });
-        sw_setting_sound.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
+                editor.apply();
             }
         });
 

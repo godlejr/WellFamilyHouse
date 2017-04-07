@@ -27,7 +27,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
             android:text="알림 설정"
-            android:textSize="14sp"
+            android:textSize="16dp"
             android:textStyle="normal|bold" />
 
         <View
@@ -56,62 +56,11 @@
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:checked="false"
+                android:checked="true"
                 android:gravity="center_vertical"
                 android:theme="@style/SCBSwitch" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#fff"
-            android:orientation="horizontal"
-            android:paddingLeft="15dp"
-            android:paddingRight="10dp">
-
-            <TextView
-                android:id="@+id/textView29"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_weight="4"
-                android:gravity="center_vertical"
-                android:text="팝업" />
-
-            <Switch
-                android:id="@+id/sw_setting_popup"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:checked="false"
-                android:gravity="center_vertical"
-                android:theme="@style/SCBSwitch" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#fff"
-            android:orientation="horizontal"
-            android:paddingLeft="15dp"
-            android:paddingRight="10dp"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/textView30"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:text="소리" />
-
-            <Switch
-                android:id="@+id/sw_setting_sound"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:checked="false"
-                android:gravity="center_vertical"
-                android:theme="@style/SCBSwitch" />
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -136,7 +85,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="15dp"
             android:text="계정 설정"
-            android:textSize="14sp"
+            android:textSize="16dp"
             android:textStyle="normal|bold" />
 
         <View

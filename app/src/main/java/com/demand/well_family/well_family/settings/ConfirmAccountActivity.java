@@ -102,7 +102,7 @@ public class ConfirmAccountActivity extends Activity {
                     Toast.makeText(ConfirmAccountActivity.this, "이메일로 발송", Toast.LENGTH_SHORT).show();
                 }
 
-                btn_confirm_account.setBackgroundResource(R.drawable.round_corner_btn_brown);
+                btn_confirm_account.setBackgroundResource(R.drawable.round_corner_btn_brown_r10);
                 btn_confirm_account.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

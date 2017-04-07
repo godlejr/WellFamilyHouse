@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -291,7 +290,7 @@ public class ManageFamilyActivity extends Activity {
             final int join_flag = familyList.get(position).getJoin_flag();
             if (join_flag == FamilyJoinFlag.FAMILY) {
                 // 탈퇴 하기
-                holder.btn_manage_family_member.setBackgroundResource(R.drawable.round_corner_border_red);
+                holder.btn_manage_family_member.setBackgroundResource(R.drawable.round_corner_border_red_r30);
                 holder.btn_manage_family_member.setText("탈퇴하기");
                 holder.btn_manage_family_member.setTextColor(Color.parseColor("#FF0000"));
 
@@ -299,14 +298,14 @@ public class ManageFamilyActivity extends Activity {
 
             if (join_flag == FamilyJoinFlag.USER_TO_FAMILY) {
                 // 승인 대기
-                holder.btn_manage_family_member.setBackgroundResource(R.drawable.round_corner_border_gray);
+                holder.btn_manage_family_member.setBackgroundResource(R.drawable.round_corner_border_gray_r30);
                 holder.btn_manage_family_member.setText("승인대기");
                 holder.btn_manage_family_member.setTextColor(Color.parseColor("#999999"));
             }
 
             if (join_flag == FamilyJoinFlag.FAMILY_TO_USER) {
                 // 초대 승인
-                holder.btn_manage_family_member.setBackgroundResource(R.drawable.round_corner_border_green);
+                holder.btn_manage_family_member.setBackgroundResource(R.drawable.round_corner_border_green_r30);
                 holder.btn_manage_family_member.setText("초대승인");
                 holder.btn_manage_family_member.setTextColor(Color.parseColor("#1DDB16"));
             }

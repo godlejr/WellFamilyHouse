@@ -227,7 +227,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
                 android:layout_weight="0.5"
-                android:background="@drawable/round_corner_btn_brown"
+                android:background="@drawable/round_corner_btn_brown_r10"
                 android:text="전송"
                 android:textColor="#fff" />
         </LinearLayout>

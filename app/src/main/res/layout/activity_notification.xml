@@ -10,6 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e5e5e5" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_notification"
         android:layout_width="match_parent"

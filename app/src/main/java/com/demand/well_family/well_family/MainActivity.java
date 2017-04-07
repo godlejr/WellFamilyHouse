@@ -248,7 +248,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         call.enqueue(new Callback<ArrayList<Family>>() {
             @Override
             public void onResponse(Call<ArrayList<Family>> call, Response<ArrayList<Family>> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     familyList = response.body();
                     if (familyList.size() == 0) {
                         //가족이 없습니다.

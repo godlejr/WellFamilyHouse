@@ -25,6 +25,6 @@
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:background="@drawable/round_corner_border_red"
+        android:background="@drawable/round_corner_border_red_r30"
         android:textColor="#FF0000" />
 </LinearLayout>

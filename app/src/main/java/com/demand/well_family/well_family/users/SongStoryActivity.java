@@ -43,6 +43,7 @@ import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.SongStoryServerConnection;
 import com.demand.well_family.well_family.connection.UserServerConnection;
+import com.demand.well_family.well_family.family.ManageFamilyActivity;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.settings.SettingActivity;
 import com.demand.well_family.well_family.dto.SongPhoto;
@@ -265,7 +266,8 @@ public class SongStoryActivity extends Activity {
                         break;
 
                     case R.id.menu_family:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(SongStoryActivity.this, ManageFamilyActivity.class);
+                        startActivity(intent);
                         break;
 
                     case R.id.menu_market:

@@ -89,7 +89,7 @@
                         android:text="중복 확인"
                         android:textColor="#fff"
                         android:textSize="13sp"
-                        android:background="@drawable/round_corner_btn_brown" />
+                        android:background="@drawable/round_corner_btn_brown_r10" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -609,7 +609,7 @@
                 android:layout_gravity="bottom"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
-                android:background="@drawable/round_corner_btn_brown"
+                android:background="@drawable/round_corner_btn_brown_r10"
                 android:gravity="center_horizontal|center"
                 android:text="회원가입"
                 android:textColor="#fff" />

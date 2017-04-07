@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -32,7 +31,6 @@ import com.demand.well_family.well_family.util.ErrorUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -240,8 +238,8 @@ public class ManageFamilyListActivity extends Activity {
             if (flag == FamilyJoinFlag.USER_TO_FAMILY) {
                 // 가입 승인
                 holder.btn_manage_family_join.setText("가입 승인");
-                holder.btn_manage_family_join.setBackgroundResource(R.drawable.round_corner_border_green);
-                holder.btn_manage_family_join.setTextColor(Color.parseColor("#1DDB16"));
+                holder.btn_manage_family_join.setBackgroundResource(R.drawable.round_corner_border_green_r30);
+                holder.btn_manage_family_join.setTextColor(Color.parseColor("#51BD86"));
 
                 holder.btn_manage_family_join.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -286,7 +284,7 @@ public class ManageFamilyListActivity extends Activity {
             if (flag == FamilyJoinFlag.FAMILY_TO_USER) {
                 // 요청 대기
                 holder.btn_manage_family_join.setText("요청 대기");
-                holder.btn_manage_family_join.setBackgroundResource(R.drawable.round_corner_border_gray);
+                holder.btn_manage_family_join.setBackgroundResource(R.drawable.round_corner_border_gray_r30);
                 holder.btn_manage_family_join.setTextColor(Color.parseColor("#999999"));
             }
 

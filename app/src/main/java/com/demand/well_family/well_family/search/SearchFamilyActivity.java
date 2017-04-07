@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,15 +21,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.connection.FamilyServerConnection;
 import com.demand.well_family.well_family.connection.UserServerConnection;
-import com.demand.well_family.well_family.dialog.FamilyPopup;
-import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.FamilyInfoForFamilyJoin;
 import com.demand.well_family.well_family.family.FamilyActivity;
-import com.demand.well_family.well_family.family.ManageFamilyActivity;
 import com.demand.well_family.well_family.flag.FamilyJoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
@@ -40,10 +33,8 @@ import com.demand.well_family.well_family.util.ErrorUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
@@ -240,7 +231,7 @@ public class SearchFamilyActivity extends Activity {
             if (join_flag == FamilyJoinFlag.USER_TO_FAMILY) {
                 // 요청 대기
                 holder.btn_search_family_commit.setText("승인 대기");
-                holder.btn_search_family_commit.setBackgroundResource(R.drawable.round_corner_border_gray);
+                holder.btn_search_family_commit.setBackgroundResource(R.drawable.round_corner_border_gray_r30);
                 holder.btn_search_family_commit.setTextColor(Color.parseColor("#999999"));
             }
 
@@ -248,8 +239,8 @@ public class SearchFamilyActivity extends Activity {
             if (join_flag == FamilyJoinFlag.USERS) {
                 // 가입 하기
                 holder.btn_search_family_commit.setText("가입하기");
-                holder.btn_search_family_commit.setBackgroundResource(R.drawable.round_corner_border_green);
-                holder.btn_search_family_commit.setTextColor(Color.parseColor("#1DDB16"));
+                holder.btn_search_family_commit.setBackgroundResource(R.drawable.round_corner_border_green_r30);
+                holder.btn_search_family_commit.setTextColor(Color.parseColor("#51BD86"));
 
                 holder.btn_search_family_commit.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -268,7 +259,7 @@ public class SearchFamilyActivity extends Activity {
                                     Toast.makeText(SearchFamilyActivity.this, "가입 신청이 완료되었습니다.", Toast.LENGTH_LONG).show();
 
                                     holder.btn_search_family_commit.setText("승인 대기");
-                                    holder.btn_search_family_commit.setBackgroundResource(R.drawable.round_corner_border_gray);
+                                    holder.btn_search_family_commit.setBackgroundResource(R.drawable.round_corner_border_gray_r30);
                                     holder.btn_search_family_commit.setTextColor(Color.parseColor("#999999"));
 
                                     familyList.get(position).setJoin_flag(FamilyJoinFlag.USER_TO_FAMILY);

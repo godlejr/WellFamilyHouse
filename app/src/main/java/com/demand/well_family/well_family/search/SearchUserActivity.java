@@ -252,14 +252,14 @@ public class SearchUserActivity extends Activity {
                 //family
                 holder.btn_search_user.setText("가족");
                 holder.btn_search_user.setTextColor(Color.parseColor("#999999"));
-                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray);
+                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray_r30);
             }
 
             if (join_flag == FamilyJoinFlag.USER_TO_FAMILY) {
                 //family
                 holder.btn_search_user.setText("가입 승인");
                 holder.btn_search_user.setTextColor(Color.parseColor("#999999"));
-                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray);
+                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray_r30);
                 holder.btn_search_user.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -292,21 +292,21 @@ public class SearchUserActivity extends Activity {
                 //family
                 holder.btn_search_user.setText("요청 대기");
                 holder.btn_search_user.setTextColor(Color.parseColor("#999999"));
-                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray);
+                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray_r30);
             }
 
             if (user_id == userList.get(position).getId()) {
                 //Me
                 holder.btn_search_user.setText("나");
                 holder.btn_search_user.setTextColor(Color.parseColor("#542920"));
-                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray);
+                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_gray_r30);
 
             }
             if (join_flag == FamilyJoinFlag.USERS) {
                 //public
                 holder.btn_search_user.setText("초대하기");
                 holder.btn_search_user.setTextColor(Color.parseColor("#542920"));
-                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_brown);
+                holder.btn_search_user.setBackgroundResource(R.drawable.round_corner_border_brown_r30);
                 holder.btn_search_user.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

@@ -155,7 +155,7 @@ public class FamilyPopup extends Activity {
             Glide.with(FamilyPopup.this).load(getString(R.string.cloud_front_family_avatar) + family_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_popup_family_avatar);
             btn_popup_family_cancel.setText("거절");
             btn_popup_family_commit.setText("수락");
-            btn_popup_family_commit.setBackgroundResource(R.drawable.round_corner_green);
+            btn_popup_family_commit.setBackgroundResource(R.drawable.round_corner_green_r10);
             btn_popup_family_commit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -192,7 +192,7 @@ public class FamilyPopup extends Activity {
             Glide.with(FamilyPopup.this).load(getString(R.string.cloud_front_family_avatar) + family_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_popup_family_avatar);
             btn_popup_family_cancel.setText("취소");
             btn_popup_family_commit.setText("탈퇴");
-            btn_popup_family_commit.setBackgroundResource(R.drawable.round_corner_red);
+            btn_popup_family_commit.setBackgroundResource(R.drawable.round_corner_red_r10);
             btn_popup_family_commit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -228,7 +228,7 @@ public class FamilyPopup extends Activity {
             Glide.with(FamilyPopup.this).load(getString(R.string.cloud_front_user_avatar) + joiner_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_popup_family_avatar);
             btn_popup_family_cancel.setText("거절");
             btn_popup_family_commit.setText("수락");
-            btn_popup_family_commit.setBackgroundResource(R.drawable.round_corner_green);
+            btn_popup_family_commit.setBackgroundResource(R.drawable.round_corner_green_r10);
             btn_popup_family_commit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -263,7 +263,7 @@ public class FamilyPopup extends Activity {
             Glide.with(FamilyPopup.this).load(getString(R.string.cloud_front_family_avatar) + family_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_popup_family_avatar);
             btn_popup_family_cancel.setText("취소");
             btn_popup_family_commit.setText("삭제");
-            btn_popup_family_commit.setBackgroundResource(R.drawable.round_corner_red);
+            btn_popup_family_commit.setBackgroundResource(R.drawable.round_corner_red_r10);
             btn_popup_family_commit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

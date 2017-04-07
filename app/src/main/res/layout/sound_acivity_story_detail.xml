@@ -431,7 +431,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_gravity="bottom"
-                android:background="@drawable/round_corner_comment"
+                android:background="@drawable/round_corner_bottom_light_gray_r5"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:orientation="horizontal">
@@ -466,7 +466,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_weight="0.6"
-                    android:background="@drawable/round_corner_btn_brown"
+                    android:background="@drawable/round_corner_btn_brown_r10"
                     android:text="전송"
                     android:textColor="#fff" />
             </LinearLayout>

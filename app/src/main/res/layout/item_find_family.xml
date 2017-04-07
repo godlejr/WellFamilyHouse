@@ -61,7 +61,7 @@
         android:layout_height="30dp"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_weight="1"
-        android:background="@drawable/round_corner_border_red"
+        android:background="@drawable/round_corner_border_red_r30"
         android:text="가족삭제"
         android:textColor="#FF0000" />
 

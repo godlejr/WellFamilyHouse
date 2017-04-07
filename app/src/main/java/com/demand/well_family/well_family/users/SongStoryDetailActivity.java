@@ -52,6 +52,7 @@ import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStoryComment;
 import com.demand.well_family.well_family.dto.SongStoryEmotionData;
+import com.demand.well_family.well_family.family.ManageFamilyActivity;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.market.MarketMainActivity;
@@ -325,7 +326,8 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                         break;
 
                     case R.id.menu_family:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
+                        intent = new Intent(SongStoryDetailActivity.this, ManageFamilyActivity.class);
+                        startActivity(intent);
                         break;
 
                     case R.id.menu_market:

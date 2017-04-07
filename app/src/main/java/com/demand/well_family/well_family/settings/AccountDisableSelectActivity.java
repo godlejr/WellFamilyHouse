@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.dialog.TextPopup;
 import com.demand.well_family.well_family.flag.LogFlag;
 
 import org.slf4j.Logger;
@@ -34,16 +35,6 @@ import org.slf4j.LoggerFactory;
 public class AccountDisableSelectActivity extends Activity {
     private Button btn_account_disable;
     private RadioGroup rg_account_disable;
-
-    private FrameLayout fl_account_disable1;
-    private FrameLayout fl_account_disable2;
-    private FrameLayout fl_account_disable3;
-    private FrameLayout fl_account_disable4;
-    private FrameLayout fl_account_disable5;
-    private FrameLayout fl_account_disable6;
-    private FrameLayout fl_account_disable7;
-    private FrameLayout fl_account_disable8;
-
     private FrameLayout[] frameLayouts;
     private Spinner sp_account_disable;
     private ArrayAdapter<String> spinnerAdapter;
@@ -59,6 +50,7 @@ public class AccountDisableSelectActivity extends Activity {
     private TextView tv_account_disable_invite;
     private Intent intent;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +59,6 @@ public class AccountDisableSelectActivity extends Activity {
         init();
     }
 
-    // toolbar_main & menu
     public void setToolbar(View view) {
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolBar);
         ImageView toolbar_back = (ImageView) toolbar.findViewById(R.id.toolbar_back);
@@ -102,6 +93,7 @@ public class AccountDisableSelectActivity extends Activity {
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 if (checkedId == R.id.rb_account_disable1) {
                     setVisible(0);
+
                     tv_account_disable_logout = (TextView) findViewById(R.id.tv_account_disable_logout);
                     tv_account_disable_logout.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -174,7 +166,7 @@ public class AccountDisableSelectActivity extends Activity {
                     });
                 } else if (checkedId == R.id.rb_account_disable7) {
                     setVisible(6);
-                    tv_account_disable_invite = (TextView)findViewById(R.id.tv_account_disable_invite);
+                    tv_account_disable_invite = (TextView) findViewById(R.id.tv_account_disable_invite);
                     tv_account_disable_invite.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -188,7 +180,7 @@ public class AccountDisableSelectActivity extends Activity {
                     setVisible(7);
                 }
 
-                btn_account_disable.setBackgroundResource(R.drawable.round_corner_btn_brown);
+                btn_account_disable.setBackgroundResource(R.drawable.round_corner_btn_brown_r10);
             }
         });
 
@@ -196,7 +188,8 @@ public class AccountDisableSelectActivity extends Activity {
         btn_account_disable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(AccountDisableSelectActivity.this, TextPopup.class);
+                startActivity(intent);
 
             }
         });
@@ -266,4 +259,5 @@ public class AccountDisableSelectActivity extends Activity {
             }
         }
     }
+
 }

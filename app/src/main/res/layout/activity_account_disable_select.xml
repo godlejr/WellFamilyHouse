@@ -20,35 +20,38 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="32dp"
+            android:layout_height="wrap_content"
+            android:background="#f5f5f5"
             android:orientation="vertical">
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#777" />
+                android:background="#e5e5e5" />
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
                 android:background="#f5f5f5"
                 android:gravity="center_vertical"
                 android:paddingLeft="12dp"
                 android:text="계정 비활성화 사유를 선택해주세요."
                 android:textColor="#444"
-                android:textSize="13sp" />
+                android:textSize="16dp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#777" />
+                android:background="#e5e5e5" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#999"
+            android:background="#e5e5e5"
             android:orientation="vertical">
 
             <RadioGroup
@@ -150,7 +153,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#999" />
+                    android:background="#e5e5e5" />
 
                 <RadioButton
                     android:id="@+id/rb_account_disable2"
@@ -209,7 +212,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#999" />
+                    android:background="#e5e5e5" />
 
                 <RadioButton
                     android:id="@+id/rb_account_disable3"
@@ -267,7 +270,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#999" />
+                    android:background="#e5e5e5" />
 
                 <RadioButton
                     android:id="@+id/rb_account_disable4"
@@ -326,7 +329,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#999" />
+                    android:background="#e5e5e5" />
 
                 <RadioButton
                     android:id="@+id/rb_account_disable5"
@@ -384,7 +387,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#999" />
+                    android:background="#e5e5e5" />
 
                 <RadioButton
                     android:id="@+id/rb_account_disable6"
@@ -441,7 +444,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#999" />
+                    android:background="#e5e5e5" />
 
                 <RadioButton
                     android:id="@+id/rb_account_disable7"
@@ -499,7 +502,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#999" />
+                    android:background="#e5e5e5" />
 
                 <RadioButton
                     android:id="@+id/rb_account_disable8"
@@ -516,7 +519,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#999" />
+                    android:background="#e5e5e5" />
 
                 <RadioButton
                     android:id="@+id/rb_account_disable9"
@@ -565,7 +568,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#999" />
+                    android:background="#e5e5e5" />
 
             </RadioGroup>
         </LinearLayout>
@@ -585,7 +588,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="26dp"
                 android:layout_marginRight="26dp"
-                android:background="@drawable/round_corner_btn_gray"
+                android:background="@drawable/round_corner_btn_gray_r10"
                 android:text="계정 비활성화 하기"
                 android:textColor="#fff"
                 android:textSize="15sp" />

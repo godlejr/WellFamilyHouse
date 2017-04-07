@@ -87,7 +87,6 @@ public class ConfirmPasswordActivity extends Activity {
         btn_confirm_pwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                mainServerConnection = new HeaderInterceptor()
                 if(et_confirm_email.getText().length() == 0 || et_confirm_pwd.getText().length() == 0){
                     Toast.makeText(ConfirmPasswordActivity.this, "이메일과 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show();
                 } else {
@@ -117,9 +116,9 @@ public class ConfirmPasswordActivity extends Activity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(et_confirm_email.getText().length() != 0 && s.length() != 0){
-                    btn_confirm_pwd.setBackgroundResource(R.drawable.round_corner_btn_brown);
+                    btn_confirm_pwd.setBackgroundResource(R.drawable.round_corner_btn_brown_r10);
                 }else {
-                    btn_confirm_pwd.setBackgroundResource(R.drawable.round_corner_btn_gray);
+                    btn_confirm_pwd.setBackgroundResource(R.drawable.round_corner_btn_gray_r10);
                 }
             }
 

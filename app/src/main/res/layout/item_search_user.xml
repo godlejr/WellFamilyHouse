@@ -52,7 +52,7 @@
         android:id="@+id/btn_search_user"
         android:layout_weight="1"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:background="@drawable/round_corner_border_brown"
+        android:background="@drawable/round_corner_border_brown_r30"
         android:layout_height="30dp" />
 
 </LinearLayout>

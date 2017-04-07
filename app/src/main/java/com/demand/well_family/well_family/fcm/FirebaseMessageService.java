@@ -21,6 +21,8 @@ import com.google.firebase.messaging.RemoteMessage;
 
 public class FirebaseMessageService extends com.google.firebase.messaging.FirebaseMessagingService {
     private int badge_count = 0;
+    private SharedPreferences loginInfo;
+    private boolean notification_flag;
 
     @Override
     public void onCreate() {
@@ -35,7 +37,13 @@ public class FirebaseMessageService extends com.google.firebase.messaging.Fireba
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         String message = remoteMessage.getData().get("body");
-        sendNotification(message);
+
+        loginInfo = getSharedPreferences("loginInfo", MODE_PRIVATE);
+        notification_flag = loginInfo.getBoolean("notification", true);
+        if (notification_flag) {
+            sendNotification(message);
+        }
+
         set_badge();
     }
 
@@ -44,8 +52,6 @@ public class FirebaseMessageService extends com.google.firebase.messaging.Fireba
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
-
-
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
