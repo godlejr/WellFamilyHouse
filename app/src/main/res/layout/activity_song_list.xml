@@ -5,11 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
-
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/dl"
         android:layout_width="match_parent"
@@ -19,10 +14,22 @@
         android:orientation="vertical">
 
 
-        <include
-            layout="@layout/item_song_list"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                layout="@layout/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
+
+            <include
+                layout="@layout/item_song_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
 
         <android.support.design.widget.NavigationView

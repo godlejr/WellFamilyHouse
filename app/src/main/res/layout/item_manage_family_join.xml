@@ -25,7 +25,7 @@
         android:paddingBottom="5dp">
 
         <TextView
-            android:id="@+id/iv_manage_family_join_name"
+            android:id="@+id/tv_manage_family_join_name"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_weight="1"

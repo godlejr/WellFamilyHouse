@@ -103,6 +103,16 @@ public class HeaderInterceptor implements Interceptor {
         return retrofit;
     }
 
+    public Retrofit getClientForFamilyServerAcessNull() {
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/families/").addConverterFactory(new NullOnEmptyConverterFactory())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(client)
+                .build();
+
+        return retrofit;
+    }
+
     public Retrofit getClientForCommentServer() {
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/comments/")

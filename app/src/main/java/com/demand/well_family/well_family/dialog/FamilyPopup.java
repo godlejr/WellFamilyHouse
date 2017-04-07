@@ -242,17 +242,27 @@ public class FamilyPopup extends Activity {
             btn_popup_family_commit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
+                    familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
+                    Call<ResponseBody> call_delete_family = familyServerConnection.delete_family(family_id);
+                    call_delete_family.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(FamilyPopup.this, "가족이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                                intent.putExtra("position", position);
+                                setResult(DELETE_USER_TO_FAMILY, intent);
+                                finish();
+                            } else {
+                                Toast.makeText(FamilyPopup.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
 
-
-
-
-
-
-
-
-//                    setResult(DELETE_USER_TO_FAMILY, intent);
-//                    finish();
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            log(t);
+                            Toast.makeText(FamilyPopup.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             });
         }

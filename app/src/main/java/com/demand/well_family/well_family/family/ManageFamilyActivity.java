@@ -330,6 +330,7 @@ public class ManageFamilyActivity extends Activity {
 
                     if (join_flag == FamilyJoinFlag.USER_TO_FAMILY) {
                         // 승인 대기
+
                     }
 
                 }
@@ -363,10 +364,12 @@ public class ManageFamilyActivity extends Activity {
 
         if (requestCode == DELETE_FAMILY) {
             if (resultCode == DELETE_FAMILY) {
-                int position = data.getIntExtra("position", 0);
-                ownerFamilyAdapter.ownerFamilyList.remove(position);
-                ownerFamilyAdapter.notifyItemRemoved(position);
-                ownerFamilyAdapter.notifyItemRangeChanged(position, ownerFamilyAdapter.getItemCount());
+                if (data.getBooleanExtra("delete", false)) {
+                    int position = data.getIntExtra("position", 0);
+                    ownerFamilyList.remove(position);
+                    ownerFamilyAdapter.notifyItemRemoved(position);
+                    ownerFamilyAdapter.notifyItemRangeChanged(position, ownerFamilyAdapter.getItemCount());
+                }
             }
         }
 

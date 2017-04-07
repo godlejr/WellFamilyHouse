@@ -56,4 +56,9 @@ public interface FamilyServerConnection {
         // 초대 승인, 가입 승인
     Call<Void> update_user_for_familyjoin(@Path("family_id") int family_id, @Path("user_id") int user_id);
 
+    @GET("{family_id}/family_joiners")
+    Call<ArrayList<UserInfoForFamilyJoin>> family_joiners(@Path("family_id") int family_id);
+
+    @DELETE("{family_id}")
+    Call<ResponseBody> delete_family(@Path("family_id") int family_id);
 }

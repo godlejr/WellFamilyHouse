@@ -158,7 +158,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void init() {
         login = (ImageButton) findViewById(R.id.btn_main_login);
         register = (Button) findViewById(R.id.btn_main_register);
-        btn_main_find_pwd = (Button)findViewById(R.id.btn_main_find_pwd);
+        btn_main_find_pwd = (Button) findViewById(R.id.btn_main_find_pwd);
         email = (EditText) findViewById(R.id.et_login_email);
         pwd = (EditText) findViewById(R.id.et_login_pwd);
         sv_login = (ScrollView) findViewById(R.id.sv_login);
@@ -309,9 +309,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         intent.putExtra("login_category_id", login_category_id);
                         startActivity(intent);
                     } else {
-//                        access_token = userInfo.getAccess_token();
-//                        Log.e("ACCESS_TOKEN", userInfo.getAccess_token());
-
+//                        editor = loginInfo.edit();
+//                        editor.putInt("user_id", userInfo.getId());
                         setLogin(userInfo);
                     }
                 } else {

@@ -47,6 +47,7 @@ import com.demand.well_family.well_family.connection.FamilyServerConnection;
 import com.demand.well_family.well_family.connection.StoryServerConnection;
 import com.demand.well_family.well_family.connection.UserServerConnection;
 
+import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
@@ -156,10 +157,13 @@ public class FamilyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_family_main);
-
         finishList.add(this);
 
+
+        setUserInfo();
         family_id = getIntent().getIntExtra("family_id", 0);
+        checkFamily();
+
         family_name = getIntent().getStringExtra("family_name");
         family_content = getIntent().getStringExtra("family_content");
         family_avatar = getIntent().getStringExtra("family_avatar");
@@ -168,12 +172,36 @@ public class FamilyActivity extends Activity {
         notification_flag = getIntent().getIntExtra("notification_flag", 0);
 
         setFamilyInfo();
-        setUserInfo();
 
         init();
         getUserData();
         getContentsData();
         editFamilyData();
+
+    }
+
+    private void checkFamily() {
+        familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServerAcessNull().create(FamilyServerConnection.class);
+        Call<Family> call_family = familyServerConnection.family(family_id);
+        call_family.enqueue(new Callback<Family>() {
+            @Override
+            public void onResponse(Call<Family> call, Response<Family> response) {
+                if (response.isSuccessful()) {
+                    if (response.body() == null) {
+                        Toast.makeText(FamilyActivity.this, "삭제된 가족입니다.", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                } else {
+                    Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Family> call, Throwable t) {
+                log(t);
+                Toast.makeText(FamilyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 
@@ -304,6 +332,12 @@ public class FamilyActivity extends Activity {
                         startActivity(intent);
 
                         break;
+
+                    case R.id.menu_family:
+                        intent = new Intent(FamilyActivity.this, ManageFamilyActivity.class);
+                        startActivity(intent);
+                        break;
+
                     case R.id.menu_market:
                         intent = new Intent(FamilyActivity.this, MarketMainActivity.class);
                         startActivity(intent);
@@ -1231,7 +1265,7 @@ public class FamilyActivity extends Activity {
                 contentAdapter.notifyItemChanged(position);
             }
 
-            if(resultCode == DELETE){
+            if (resultCode == DELETE) {
                 int position = data.getIntExtra("position", 0);
                 contentAdapter.notifyItemRemoved(position);
             }

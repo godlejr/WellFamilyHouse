@@ -297,6 +297,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         public FamilyViewHolder(View itemView) {
             super(itemView);
+
             iv_family_item = (ImageView) itemView.findViewById(R.id.iv_family_item);
             tv_family_name = (TextView) itemView.findViewById(R.id.tv_family_name);
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -337,7 +338,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         @Override
         public void onBindViewHolder(FamilyViewHolder holder, int position) {
-
             Glide.with(context).load(getString(R.string.cloud_front_family_avatar) + familyList.get(position).getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_family_item);
             holder.tv_family_name.setText(familyList.get(position).getName());
         }
@@ -544,9 +544,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                     case R.id.menu_family:
                         intent = new Intent(MainActivity.this, ManageFamilyActivity.class);
-
-
-
                         startActivity(intent);
                         break;
 

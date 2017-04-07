@@ -195,6 +195,10 @@ public class NotificationActivity extends Activity {
                     @Override
                     public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {
                         if (response.isSuccessful()) {
+
+
+
+
                             NotificationInfo notificationInfo = response.body();
                             String name = notificationInfo.getName();
                             String content = notificationInfo.getContent();

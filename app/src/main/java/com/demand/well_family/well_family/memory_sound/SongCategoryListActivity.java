@@ -31,6 +31,8 @@ import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.SongServerConnection;
+import com.demand.well_family.well_family.dto.SongCategory;
+import com.demand.well_family.well_family.family.ManageFamilyActivity;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.settings.SettingActivity;
 import com.demand.well_family.well_family.dto.Song;
@@ -205,6 +207,12 @@ public class SongCategoryListActivity extends Activity {
                         startActivity(intent);
 
                         break;
+
+                    case R.id.menu_family:
+                        intent = new Intent(SongCategoryListActivity.this, ManageFamilyActivity.class);
+                        startActivity(intent);
+                        break;
+
                     case R.id.menu_market:
                         intent = new Intent(SongCategoryListActivity.this, MarketMainActivity.class);
                         startActivity(intent);

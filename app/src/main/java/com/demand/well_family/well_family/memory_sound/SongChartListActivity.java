@@ -30,6 +30,7 @@ import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.SongServerConnection;
+import com.demand.well_family.well_family.family.ManageFamilyActivity;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.settings.SettingActivity;
 import com.demand.well_family.well_family.dto.Song;
@@ -195,6 +196,11 @@ public class SongChartListActivity extends Activity {
                     case R.id.menu_home:
                         intent = new Intent(SongChartListActivity.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        break;
+
+                    case R.id.menu_family:
+                        intent = new Intent(SongChartListActivity.this, ManageFamilyActivity.class);
                         startActivity(intent);
                         break;
 
