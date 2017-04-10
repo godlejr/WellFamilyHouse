@@ -109,18 +109,19 @@ public class SettingActivity extends Activity {
             }
         });
 
-        ll_setting_pwd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (login_category_id == 1) {
+
+        if (login_category_id != 1) {
+            ll_setting_pwd.setVisibility(View.GONE);
+        } else {
+            ll_setting_pwd.setVisibility(View.VISIBLE);
+            ll_setting_pwd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), ConfirmPasswordActivity.class);
                     startActivity(intent);
-                } else {
-                    Toast.makeText(SettingActivity.this, "SNS 계정은 로그인 변경이 불가합니다.", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
-
+            });
+        }
 
     }
 

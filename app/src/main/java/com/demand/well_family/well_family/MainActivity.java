@@ -456,7 +456,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         pref = getApplicationContext().getSharedPreferences("badge", Activity.MODE_PRIVATE);
         final TextView toolbar_noti_count = (TextView) toolbar.findViewById(R.id.toolbar_noti_count);
-        toolbar_noti_count.setText(String.valueOf(pref.getInt("badge_count", 0)));
+
+        if(pref.getInt("badge_count", 0) == 0) {
+            toolbar_noti_count.setText("");
+        } else {
+            toolbar_noti_count.setText(String.valueOf(pref.getInt("badge_count", 0)));
+        }
 
         ImageView toolbar_notification = (ImageView) toolbar.findViewById(R.id.toolbar_notification);
         toolbar_notification.setOnClickListener(new View.OnClickListener() {
@@ -473,7 +478,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 intent.putExtra("badge_count", 0);
                 getApplicationContext().sendBroadcast(intent);
 
-                toolbar_noti_count.setText("0");
+                toolbar_noti_count.setText("");
+
 
                 Intent notificationIntent = new Intent(v.getContext(), NotificationActivity.class);
                 startActivity(notificationIntent);

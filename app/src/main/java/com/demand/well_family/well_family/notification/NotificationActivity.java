@@ -595,6 +595,8 @@ public class NotificationActivity extends Activity {
         public int getItemCount() {
             return notificationList.size();
         }
+
+
     }
 
 
