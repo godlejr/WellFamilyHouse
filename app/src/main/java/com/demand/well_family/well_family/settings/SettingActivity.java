@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.UserServerConnection;
@@ -32,6 +33,7 @@ public class SettingActivity extends Activity {
     private String user_birth;
     private String user_phone;
     private int user_level;
+    private int login_category_id;
 
     private SharedPreferences loginInfo;
     private SharedPreferences.Editor editor;
@@ -55,6 +57,7 @@ public class SettingActivity extends Activity {
         user_birth = loginInfo.getString("user_birth", null);
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
+        login_category_id = loginInfo.getInt("login_category_id", 0);
         setToolbar(getWindow().getDecorView());
     }
 
@@ -78,7 +81,7 @@ public class SettingActivity extends Activity {
         ll_setting_pwd = (LinearLayout) findViewById(R.id.ll_setting_pwd);
 
         loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
-        if(loginInfo.getBoolean("notification", true)){
+        if (loginInfo.getBoolean("notification", true)) {
             sw_setting_family.setChecked(true);
         } else {
             sw_setting_family.setChecked(false);
@@ -109,8 +112,12 @@ public class SettingActivity extends Activity {
         ll_setting_pwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ConfirmPasswordActivity.class);
-                startActivity(intent);
+                if (login_category_id == 1) {
+                    Intent intent = new Intent(v.getContext(), ConfirmPasswordActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(SettingActivity.this, "SNS 계정은 로그인 변경이 불가합니다.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

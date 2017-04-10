@@ -389,6 +389,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     editor.putString("token", token);
                     editor.putInt("user_level", userInfo.getLevel());
                     editor.putString("access_token", userInfo.getAccess_token());
+                    editor.putInt("login_category_id", userInfo.getLogin_category_id());
                     editor.commit();
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);

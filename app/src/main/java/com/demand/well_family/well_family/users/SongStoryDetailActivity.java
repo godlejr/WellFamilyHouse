@@ -1043,7 +1043,6 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
             }
         }
 
-
     }
 
     private class EmotionViewHolder extends RecyclerView.ViewHolder {

@@ -14,12 +14,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.MainServerConnection;
+import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.util.ErrorUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by ㅇㅇ on 2017-03-06.
@@ -48,7 +58,7 @@ public class ConfirmPasswordActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_password);
-        
+
         setUserInfo();
         setToolbar(getWindow().getDecorView());
         init();
@@ -64,7 +74,8 @@ public class ConfirmPasswordActivity extends Activity {
         user_avatar = loginInfo.getString("user_avatar", null);
         user_phone = loginInfo.getString("user_phone", null);
     }
-    private void setToolbar(View view){
+
+    private void setToolbar(View view) {
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) view.findViewById(R.id.toolBar);
         ImageView toolbar_back = (ImageView) toolbar.findViewById(R.id.toolbar_back);
         toolbar_back.setOnClickListener(new View.OnClickListener() {
@@ -78,21 +89,52 @@ public class ConfirmPasswordActivity extends Activity {
         toolbar_title.setText("비밀번호 확인");
     }
 
-    private void init(){
-        et_confirm_email = (EditText)findViewById(R.id.et_confirm_email);
-        et_confirm_pwd = (EditText)findViewById(R.id.et_confirm_pwd);
-        btn_confirm_pwd = (Button)findViewById(R.id.btn_confirm_pwd);
-        ll_search_pwd = (LinearLayout)findViewById(R.id.ll_search_pwd);
+    private void init() {
+        et_confirm_email = (EditText) findViewById(R.id.et_confirm_email);
+        et_confirm_pwd = (EditText) findViewById(R.id.et_confirm_pwd);
+        btn_confirm_pwd = (Button) findViewById(R.id.btn_confirm_pwd);
+        ll_search_pwd = (LinearLayout) findViewById(R.id.ll_search_pwd);
 
         btn_confirm_pwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(et_confirm_email.getText().length() == 0 || et_confirm_pwd.getText().length() == 0){
+                String email = et_confirm_email.getText().toString();
+                String password = et_confirm_pwd.getText().toString();
+
+                if (email.length() == 0 || password.length() == 0) {
                     Toast.makeText(ConfirmPasswordActivity.this, "이메일과 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent intent = new Intent(v.getContext(), SearchAccountActivity.class);
-                    startActivity(intent);
-                    finish();
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    map.put("email", email);
+                    map.put("password", password);
+
+                    mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
+                    Call<User> call_login = mainServerConnection.login(map);
+                    call_login.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            if (response.isSuccessful()) {
+                                if (response.body() != null) {
+                                    Intent intent = new Intent(ConfirmPasswordActivity.this, SearchAccountActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else {
+                                    Toast.makeText(ConfirmPasswordActivity.this, "이메일과 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show();
+                                }
+
+                            } else {
+                                Toast.makeText(ConfirmPasswordActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            log(t);
+                            Toast.makeText(ConfirmPasswordActivity.this, "네트워크가 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+
                 }
             }
         });
@@ -115,9 +157,9 @@ public class ConfirmPasswordActivity extends Activity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(et_confirm_email.getText().length() != 0 && s.length() != 0){
+                if (et_confirm_email.getText().length() != 0 && s.length() != 0) {
                     btn_confirm_pwd.setBackgroundResource(R.drawable.round_corner_btn_brown_r10);
-                }else {
+                } else {
                     btn_confirm_pwd.setBackgroundResource(R.drawable.round_corner_btn_gray_r10);
                 }
             }

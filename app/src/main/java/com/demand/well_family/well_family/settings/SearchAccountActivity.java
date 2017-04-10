@@ -34,19 +34,43 @@ import retrofit2.Response;
  */
 
 public class SearchAccountActivity extends Activity {
+    //user_info
+    private int user_id;
+    private String user_email;
+    private String user_name;
+    private String user_birth;
+    private String user_phone;
+    private int user_level;
+    private String user_avatar;
+    private String access_token;
+
     private EditText et_reset_pwd;
     private Button btn_reset_pwd;
 
     private MainServerConnection mainServerConnection;
     private static final Logger logger = LoggerFactory.getLogger(SearchAccountActivity.class);
+    private SharedPreferences loginInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forget_password);
 
-        setToolbar(getWindow().getDecorView());
+        setUserInfo();
         init();
+    }
+
+    private void setUserInfo() {
+        loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
+        user_id = loginInfo.getInt("user_id", 0);
+        user_level = loginInfo.getInt("user_level", 0);
+        user_name = loginInfo.getString("user_name", null);
+        user_email = loginInfo.getString("user_email", null);
+        user_birth = loginInfo.getString("user_birth", null);
+        user_avatar = loginInfo.getString("user_avatar", null);
+        user_phone = loginInfo.getString("user_phone", null);
+        access_token = loginInfo.getString("access_token", null);
+        setToolbar(this.getWindow().getDecorView());
     }
 
     private void setToolbar(View view) {
@@ -106,22 +130,17 @@ public class SearchAccountActivity extends Activity {
                             if (user == null) {
                                 Toast.makeText(SearchAccountActivity.this, "이메일을 확인해주세요.", Toast.LENGTH_SHORT).show();
                             } else {
-                                if (user.getLogin_category_id() == 1) {
-                                    Intent intent = new Intent(SearchAccountActivity.this, ConfirmAccountActivity.class);
-                                    intent.putExtra("user_id", user.getId());
-                                    intent.putExtra("name", user.getName());
-                                    intent.putExtra("avatar", user.getAvatar());
-                                    intent.putExtra("email", user.getEmail());
+                                Intent intent = new Intent(SearchAccountActivity.this, ConfirmAccountActivity.class);
+                                intent.putExtra("user_id", user.getId());
+                                intent.putExtra("name", user.getName());
+                                intent.putExtra("avatar", user.getAvatar());
+                                intent.putExtra("email", user.getEmail());
 
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    Toast.makeText(SearchAccountActivity.this, "소셜로그인 계정은 비밀번호가 필요없습니다.", Toast.LENGTH_SHORT).show();
-                                }
+                                startActivity(intent);
+                                finish();
                             }
                         } else {
                             Toast.makeText(SearchAccountActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
-
                         }
                     }
 

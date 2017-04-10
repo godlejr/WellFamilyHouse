@@ -83,6 +83,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private String user_phone;
     private int user_level;
     private String user_avatar;
+    private int login_category_id;
 
     private ArrayList<Family> familyList;
 
@@ -119,6 +120,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         SharedPreferences loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
         user_id = loginInfo.getInt("user_id", 0);
         user_level = loginInfo.getInt("user_level", 0);
+        login_category_id = loginInfo.getInt("login_category_id", 1);
         access_token = loginInfo.getString("access_token", null);
         Log.e("Access Token", access_token);
         resetUserInfo();
