@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,7 +20,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,14 +44,13 @@ import com.demand.well_family.well_family.WriteActivity;
 import com.demand.well_family.well_family.connection.FamilyServerConnection;
 import com.demand.well_family.well_family.connection.StoryServerConnection;
 import com.demand.well_family.well_family.connection.UserServerConnection;
-
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
-import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.photos.PhotoPopupActivity;
@@ -150,7 +147,7 @@ public class FamilyActivity extends Activity {
 
     private static final Logger logger = LoggerFactory.getLogger(FamilyActivity.class);
     private SharedPreferences loginInfo;
-    private int notification_flag;
+    private boolean notification_flag;
     private String access_token;
 
     @Override
@@ -169,7 +166,7 @@ public class FamilyActivity extends Activity {
         family_avatar = getIntent().getStringExtra("family_avatar");
         family_user_id = getIntent().getIntExtra("family_user_id", 0);
         family_created_at = getIntent().getStringExtra("family_created_at");
-        notification_flag = getIntent().getIntExtra("notification_flag", 0);
+        notification_flag = getIntent().getBooleanExtra("notification_flag", false);
 
         setFamilyInfo();
 
@@ -408,7 +405,7 @@ public class FamilyActivity extends Activity {
 
     public void setBack() {
 
-        if (notification_flag == 1) {
+        if (notification_flag) {
             finish();
 
         } else {
@@ -1285,7 +1282,7 @@ public class FamilyActivity extends Activity {
     @Override
     public void onBackPressed() {
 
-        if (notification_flag == 1) {
+        if (notification_flag) {
             finish();
         } else {
             Intent intent = new Intent(FamilyActivity.this, MainActivity.class);
