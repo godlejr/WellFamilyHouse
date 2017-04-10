@@ -103,7 +103,7 @@ public class HeaderInterceptor implements Interceptor {
         return retrofit;
     }
 
-    public Retrofit getClientForFamilyServerAcessNull() {
+    public Retrofit getClientForFamilyServerAccessNull() {
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/families/").addConverterFactory(new NullOnEmptyConverterFactory())
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -125,7 +125,7 @@ public class HeaderInterceptor implements Interceptor {
 
     public Retrofit getClientForNotificationServer() {
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/notifications/")
+                .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/notifications/").addConverterFactory(new NullOnEmptyConverterFactory())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(client)
                 .build();

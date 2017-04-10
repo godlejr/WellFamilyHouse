@@ -16,11 +16,6 @@ import retrofit2.http.QueryMap;
  */
 
 public interface CommentServerConnection {
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/comments/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-
     @PUT("{comment_id}")
     Call<ResponseBody> update_comment(@Path("comment_id") int comment_id, @QueryMap HashMap<String, String> map);
 

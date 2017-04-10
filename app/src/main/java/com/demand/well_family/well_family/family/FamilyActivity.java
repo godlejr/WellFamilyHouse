@@ -178,7 +178,7 @@ public class FamilyActivity extends Activity {
     }
 
     private void checkFamily() {
-        familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServerAcessNull().create(FamilyServerConnection.class);
+        familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServerAccessNull().create(FamilyServerConnection.class);
         Call<Family> call_family = familyServerConnection.family(family_id);
         call_family.enqueue(new Callback<Family>() {
             @Override

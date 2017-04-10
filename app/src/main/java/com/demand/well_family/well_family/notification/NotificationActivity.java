@@ -189,7 +189,7 @@ public class NotificationActivity extends Activity {
             final int intent_flag = notificationList.get(position).getIntent_flag();
             final int checked = notificationList.get(position).getChecked();
 
-            if (behavior_id == NotificationBEHAVIORFlag.CREATING_THE_FAMILY ||  behavior_id == NotificationBEHAVIORFlag.JOIN ||  behavior_id == NotificationBEHAVIORFlag.WANT_TO_JOIN ||  behavior_id == NotificationBEHAVIORFlag.INVITED ) {
+            if (behavior_id == NotificationBEHAVIORFlag.CREATING_THE_FAMILY || behavior_id == NotificationBEHAVIORFlag.JOIN || behavior_id == NotificationBEHAVIORFlag.WANT_TO_JOIN || behavior_id == NotificationBEHAVIORFlag.INVITED) {
                 //creating family
                 notificationServerConnection = new HeaderInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
                 Call<NotificationInfo> call_notificationInfoForCreatingFamily = notificationServerConnection.NotificationForCreatingFamilyAndJoinAndWantToJoin(id);
@@ -197,36 +197,35 @@ public class NotificationActivity extends Activity {
                     @Override
                     public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {
                         if (response.isSuccessful()) {
-
-
-
-
                             NotificationInfo notificationInfo = response.body();
-                            String name = notificationInfo.getName();
-                            String content = notificationInfo.getContent();
 
-                            Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
+                            if (notificationInfo != null) {
+                                String name = notificationInfo.getName();
+                                String content = notificationInfo.getContent();
 
+                                Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
 
-                            if( behavior_id == NotificationBEHAVIORFlag.CREATING_THE_FAMILY) {
-                                holder.tv_notification_content.setText(name + "님! <" + content + "> 가족 페이지 개설을 축하합니다.");
+                                if (behavior_id == NotificationBEHAVIORFlag.CREATING_THE_FAMILY) {
+                                    holder.tv_notification_content.setText(name + "님! <" + content + "> 가족 페이지 개설을 축하합니다.");
+                                }
+
+                                if (behavior_id == NotificationBEHAVIORFlag.JOIN) {
+                                    holder.tv_notification_content.setText(name + "님이 <" + content + "> 에 가입되었습니다.");
+                                }
+
+                                if (behavior_id == NotificationBEHAVIORFlag.WANT_TO_JOIN) {
+                                    holder.tv_notification_content.setText(name + "님이 <" + content + "> 에 가입하고 싶어합니다.");
+                                }
+
+                                if (behavior_id == NotificationBEHAVIORFlag.INVITED) {
+                                    holder.tv_notification_content.setText(name + "님이 " + content + "님을 가족으로 초대하였습니다.");
+                                }
+
+                                holder.ll_noti_photo.setVisibility(View.VISIBLE);
+
+                                Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_family_avatar) + notificationInfo.getPhoto()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_noti_photo);
                             }
 
-                            if( behavior_id == NotificationBEHAVIORFlag.JOIN) {
-                                holder.tv_notification_content.setText(name + "님이 <" + content + "> 에 가입되었습니다.");
-                            }
-
-                            if( behavior_id == NotificationBEHAVIORFlag.WANT_TO_JOIN) {
-                                holder.tv_notification_content.setText(name + "님이 <" + content + "> 에 가입하고 싶어합니다.");
-                            }
-
-                            if( behavior_id == NotificationBEHAVIORFlag.INVITED) {
-                                holder.tv_notification_content.setText(name + "님이 " + content + "님을 가족으로 초대하였습니다.");
-                            }
-
-                            holder.ll_noti_photo.setVisibility(View.VISIBLE);
-
-                            Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_family_avatar) + notificationInfo.getPhoto()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_noti_photo);
                         } else {
                             Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
@@ -248,8 +247,11 @@ public class NotificationActivity extends Activity {
                     public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {
                         if (response.isSuccessful()) {
                             NotificationInfo notificationInfo = response.body();
-                            Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
-                            holder.tv_notification_content.setText(notificationInfo.getName() + "님이 " + notificationInfo.getContent() + "에 댓글을 남겼습니다.");
+
+                            if (notificationInfo != null) {
+                                Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
+                                holder.tv_notification_content.setText(notificationInfo.getName() + "님이 " + notificationInfo.getContent() + "에 댓글을 남겼습니다.");
+                            }
                         } else {
                             Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
@@ -271,8 +273,11 @@ public class NotificationActivity extends Activity {
                     public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {
                         if (response.isSuccessful()) {
                             NotificationInfo notificationInfo = response.body();
-                            Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
-                            holder.tv_notification_content.setText(notificationInfo.getName() + "님이 " + notificationInfo.getContent() + "을 좋아합니다.");
+
+                            if (notificationInfo != null) {
+                                Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
+                                holder.tv_notification_content.setText(notificationInfo.getName() + "님이 " + notificationInfo.getContent() + "을 좋아합니다.");
+                            }
                         } else {
                             Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
@@ -298,13 +303,15 @@ public class NotificationActivity extends Activity {
                         public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {
                             if (response.isSuccessful()) {
                                 NotificationInfo notificationInfo = response.body();
-                                Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
-                                holder.tv_notification_content.setText(notificationInfo.getName() + "님이 <" + notificationInfo.getContent() + "> 에 게시글을 남겼습니다. : \"" + notificationInfo.getTitle() + "\"");
-                                if (notificationInfo.getPhoto() != null) {
-                                    holder.ll_noti_photo.setVisibility(View.VISIBLE);
-                                    Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_stories_images) + notificationInfo.getPhoto()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_noti_photo);
-                                } else {
-                                    holder.ll_noti_photo.setVisibility(View.GONE);
+                                if (notificationInfo != null) {
+                                    Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
+                                    holder.tv_notification_content.setText(notificationInfo.getName() + "님이 <" + notificationInfo.getContent() + "> 에 게시글을 남겼습니다. : \"" + notificationInfo.getTitle() + "\"");
+                                    if (notificationInfo.getPhoto() != null) {
+                                        holder.ll_noti_photo.setVisibility(View.VISIBLE);
+                                        Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_stories_images) + notificationInfo.getPhoto()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_noti_photo);
+                                    } else {
+                                        holder.ll_noti_photo.setVisibility(View.GONE);
+                                    }
                                 }
                             } else {
                                 Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
@@ -328,14 +335,16 @@ public class NotificationActivity extends Activity {
                         public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {
                             if (response.isSuccessful()) {
                                 NotificationInfo notificationInfo = response.body();
-                                Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
-                                holder.tv_notification_content.setText(notificationInfo.getName() + "님이 <" + notificationInfo.getContent() + "> 에 게시글을 남겼습니다. : \"" + notificationInfo.getTitle() + "\"");
+                                if (notificationInfo != null) {
+                                    Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
+                                    holder.tv_notification_content.setText(notificationInfo.getName() + "님이 <" + notificationInfo.getContent() + "> 에 게시글을 남겼습니다. : \"" + notificationInfo.getTitle() + "\"");
 
-                                if (notificationInfo.getPhoto() != null) {
-                                    holder.ll_noti_photo.setVisibility(View.VISIBLE);
-                                    Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_song_stories_images) + notificationInfo.getPhoto()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_noti_photo);
-                                } else {
-                                    holder.ll_noti_photo.setVisibility(View.GONE);
+                                    if (notificationInfo.getPhoto() != null) {
+                                        holder.ll_noti_photo.setVisibility(View.VISIBLE);
+                                        Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_song_stories_images) + notificationInfo.getPhoto()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_noti_photo);
+                                    } else {
+                                        holder.ll_noti_photo.setVisibility(View.GONE);
+                                    }
                                 }
                             } else {
                                 Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
@@ -386,7 +395,7 @@ public class NotificationActivity extends Activity {
                                                 intent.putExtra("family_avatar", familyInfo.getAvatar());
                                                 intent.putExtra("family_user_id", familyInfo.getUser_id());
                                                 intent.putExtra("family_created_at", familyInfo.getCreated_at());
-                                                intent.putExtra("notification_flag",true);
+                                                intent.putExtra("notification_flag", true);
 
                                                 startActivity(intent);
                                             } else {
@@ -465,7 +474,7 @@ public class NotificationActivity extends Activity {
                         });
                     }
 
-                    if(intent_flag == NotificationINTENTFlag.MANAGE_FAMILY){
+                    if (intent_flag == NotificationINTENTFlag.MANAGE_FAMILY) {
                         notificationServerConnection = new HeaderInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
                         Call<ResponseBody> call_update_check = notificationServerConnection.notificationInfo(id);
                         call_update_check.enqueue(new Callback<ResponseBody>() {
@@ -490,7 +499,7 @@ public class NotificationActivity extends Activity {
                         });
                     }
 
-                    if(intent_flag == NotificationINTENTFlag.MANAGE_FAMILY_DETAIL){
+                    if (intent_flag == NotificationINTENTFlag.MANAGE_FAMILY_DETAIL) {
                         familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
                         final Call<Family> call_family = familyServerConnection.family(intent_id);
 
