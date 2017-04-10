@@ -186,6 +186,8 @@ public class FamilyActivity extends Activity {
                 if (response.isSuccessful()) {
                     if (response.body() == null) {
                         Toast.makeText(FamilyActivity.this, "삭제된 가족입니다.", Toast.LENGTH_SHORT).show();
+                        Intent intent_main = new Intent(FamilyActivity.this, MainActivity.class);
+                        startActivity(intent_main);
                         finish();
                     }
                 } else {
