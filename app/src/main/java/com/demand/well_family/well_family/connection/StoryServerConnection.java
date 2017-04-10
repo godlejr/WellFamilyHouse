@@ -12,8 +12,6 @@ import java.util.HashMap;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -27,10 +25,7 @@ import retrofit2.http.QueryMap;
  */
 
 public interface StoryServerConnection {
-    Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/stories/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
+
 
 
     @GET("{story_id}/comment_count")
