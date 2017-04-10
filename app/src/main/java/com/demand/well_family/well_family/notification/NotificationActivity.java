@@ -190,7 +190,7 @@ public class NotificationActivity extends Activity {
             if (behavior_id == NotificationBEHAVIORFlag.CREATING_THE_FAMILY ||  behavior_id == NotificationBEHAVIORFlag.JOIN ||  behavior_id == NotificationBEHAVIORFlag.WANT_TO_JOIN ||  behavior_id == NotificationBEHAVIORFlag.INVITED ) {
                 //creating family
                 notificationServerConnection = new HeaderInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
-                Call<NotificationInfo> call_notificationInfoForCreatingFamily = notificationServerConnection.NotificationForCreatingFamily(id);
+                Call<NotificationInfo> call_notificationInfoForCreatingFamily = notificationServerConnection.NotificationForCreatingFamilyAndJoinAndWantToJoin(id);
                 call_notificationInfoForCreatingFamily.enqueue(new Callback<NotificationInfo>() {
                     @Override
                     public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {

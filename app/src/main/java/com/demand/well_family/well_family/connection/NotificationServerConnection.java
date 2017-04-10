@@ -15,7 +15,7 @@ import retrofit2.http.Path;
 public interface NotificationServerConnection {
 
     @GET("{notification_id}/families")
-    Call<NotificationInfo> NotificationForCreatingFamily(@Path("notification_id") int notification_id);
+    Call<NotificationInfo> NotificationForCreatingFamilyAndJoinAndWantToJoin(@Path("notification_id") int notification_id);
 
     @GET("{notification_id}/comments")
     Call<NotificationInfo> NotificationForWritingComment(@Path("notification_id") int notification_id);
