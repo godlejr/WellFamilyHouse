@@ -596,7 +596,6 @@ public class NotificationActivity extends Activity {
             return notificationList.size();
         }
 
-
     }
 
 

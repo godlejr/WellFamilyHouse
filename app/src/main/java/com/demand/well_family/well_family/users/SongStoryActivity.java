@@ -1156,7 +1156,10 @@ public class SongStoryActivity extends Activity {
 
             if(resultCode == DELETE){
                 int position = data.getIntExtra("position", 0);
+                contentAdapter.storyList.remove(position);
                 contentAdapter.notifyItemRemoved(position);
+                contentAdapter.notifyItemRangeChanged(position, contentAdapter.getItemCount());
+
             }
         }
     }
