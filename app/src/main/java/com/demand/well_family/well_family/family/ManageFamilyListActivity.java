@@ -88,12 +88,15 @@ public class ManageFamilyListActivity extends Activity {
     private ArrayList<UserInfoForFamilyJoin> joiners;
     private UserInfoForFamilyJoin joiner;
 
+    private boolean notification_flag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_family_list);
 
         setUserInfo();
+        setFamilyInfo();
         setJoinersInfo();
         init();
     }
@@ -120,10 +123,10 @@ public class ManageFamilyListActivity extends Activity {
         family_avatar = intent.getStringExtra("family_avatar");
         family_created_at = intent.getStringExtra("family_created_at");
         position = intent.getIntExtra("position", 0);
+        notification_flag = intent.getBooleanExtra("notification_flag", false);
     }
 
     private void setJoinersInfo() {
-        setFamilyInfo();
 
         rv_manage_family_join = (RecyclerView) findViewById(R.id.rv_manage_family_join);
         familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
@@ -316,13 +319,16 @@ public class ManageFamilyListActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == DELETE_FAMILY) {
             if (resultCode == DELETE_USER_TO_FAMILY) {
-                position = data.getIntExtra("position", 0);
-
-                Intent intent = getIntent();
-                intent.putExtra("position", position);
-                intent.putExtra("delete", true);
-                setResult(DELETE_FAMILY, intent);
-                finish();
+                if (notification_flag) {
+                    finish();
+                } else {
+                    position = data.getIntExtra("position", 0);
+                    Intent intent = getIntent();
+                    intent.putExtra("position", position);
+                    intent.putExtra("delete", true);
+                    setResult(DELETE_FAMILY, intent);
+                    finish();
+                }
             }
         }
 
@@ -341,9 +347,13 @@ public class ManageFamilyListActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = getIntent();
-        intent.putExtra("position", position);
-        setResult(RESULT_CANCELED);
+        if (notification_flag) {
+            finish();
+        } else {
+            Intent intent = getIntent();
+            intent.putExtra("position", position);
+            setResult(RESULT_CANCELED);
+        }
         super.onBackPressed();
     }
 }

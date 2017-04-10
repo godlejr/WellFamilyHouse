@@ -27,6 +27,8 @@ import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.Notification;
 import com.demand.well_family.well_family.dto.NotificationInfo;
 import com.demand.well_family.well_family.family.FamilyActivity;
+import com.demand.well_family.well_family.family.ManageFamilyActivity;
+import com.demand.well_family.well_family.family.ManageFamilyListActivity;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.flag.NotificationBEHAVIORFlag;
 import com.demand.well_family.well_family.flag.NotificationINTENTFlag;
@@ -190,7 +192,7 @@ public class NotificationActivity extends Activity {
             if (behavior_id == NotificationBEHAVIORFlag.CREATING_THE_FAMILY ||  behavior_id == NotificationBEHAVIORFlag.JOIN ||  behavior_id == NotificationBEHAVIORFlag.WANT_TO_JOIN ||  behavior_id == NotificationBEHAVIORFlag.INVITED ) {
                 //creating family
                 notificationServerConnection = new HeaderInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
-                Call<NotificationInfo> call_notificationInfoForCreatingFamily = notificationServerConnection.NotificationForCreatingFamily(id);
+                Call<NotificationInfo> call_notificationInfoForCreatingFamily = notificationServerConnection.NotificationForCreatingFamilyAndJoinAndWantToJoin(id);
                 call_notificationInfoForCreatingFamily.enqueue(new Callback<NotificationInfo>() {
                     @Override
                     public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {
@@ -384,7 +386,7 @@ public class NotificationActivity extends Activity {
                                                 intent.putExtra("family_avatar", familyInfo.getAvatar());
                                                 intent.putExtra("family_user_id", familyInfo.getUser_id());
                                                 intent.putExtra("family_created_at", familyInfo.getCreated_at());
-                                                intent.putExtra("notification_flag", 1);
+                                                intent.putExtra("notification_flag",true);
 
                                                 startActivity(intent);
                                             } else {
@@ -461,6 +463,84 @@ public class NotificationActivity extends Activity {
                                 Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                             }
                         });
+                    }
+
+                    if(intent_flag == NotificationINTENTFlag.MANAGE_FAMILY){
+                        notificationServerConnection = new HeaderInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
+                        Call<ResponseBody> call_update_check = notificationServerConnection.notificationInfo(id);
+                        call_update_check.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()) {
+                                    if (checked == 0) {
+                                        holder.ll_notification.setBackgroundColor(Color.parseColor("#ffffff"));
+                                    }
+                                    Intent intent = new Intent(NotificationActivity.this, ManageFamilyActivity.class);
+                                    startActivity(intent);
+                                } else {
+                                    Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                log(t);
+                                Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+
+                    if(intent_flag == NotificationINTENTFlag.MANAGE_FAMILY_DETAIL){
+                        familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
+                        final Call<Family> call_family = familyServerConnection.family(intent_id);
+
+                        call_family.enqueue(new Callback<Family>() {
+                            @Override
+                            public void onResponse(Call<Family> call, Response<Family> response) {
+                                if (response.isSuccessful()) {
+                                    final Family familyInfo = response.body();
+                                    notificationServerConnection = new HeaderInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
+                                    Call<ResponseBody> call_update_check = notificationServerConnection.notificationInfo(id);
+                                    call_update_check.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            if (response.isSuccessful()) {
+                                                if (checked == 0) {
+                                                    holder.ll_notification.setBackgroundColor(Color.parseColor("#ffffff"));
+                                                }
+                                                Intent intent = new Intent(NotificationActivity.this, ManageFamilyListActivity.class);
+                                                //family info
+                                                intent.putExtra("family_id", familyInfo.getId());
+                                                intent.putExtra("family_name", familyInfo.getName());
+                                                intent.putExtra("family_content", familyInfo.getContent());
+                                                intent.putExtra("family_avatar", familyInfo.getAvatar());
+                                                intent.putExtra("family_user_id", familyInfo.getUser_id());
+                                                intent.putExtra("family_created_at", familyInfo.getCreated_at());
+                                                intent.putExtra("notification_flag", true);
+                                                startActivity(intent);
+                                            } else {
+                                                Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            log(t);
+                                            Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                } else {
+                                    Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<Family> call, Throwable t) {
+                                log(t);
+                                Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
                     }
 
                 }
