@@ -552,11 +552,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     case R.id.menu_family:
                         intent = new Intent(MainActivity.this, ManageFamilyActivity.class);
                         startActivity(intent);
+                        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
                         break;
 
                     case R.id.menu_market:
                         intent = new Intent(MainActivity.this, MarketMainActivity.class);
                         startActivity(intent);
+                        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
                         break;
 
                     case R.id.menu_setting:

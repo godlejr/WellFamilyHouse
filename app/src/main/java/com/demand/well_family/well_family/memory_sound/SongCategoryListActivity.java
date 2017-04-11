@@ -205,18 +205,19 @@ public class SongCategoryListActivity extends Activity {
                         intent  = new Intent(SongCategoryListActivity.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
-
+                        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
                         break;
 
                     case R.id.menu_family:
                         intent = new Intent(SongCategoryListActivity.this, ManageFamilyActivity.class);
                         startActivity(intent);
+                        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
                         break;
 
                     case R.id.menu_market:
                         intent = new Intent(SongCategoryListActivity.this, MarketMainActivity.class);
                         startActivity(intent);
-
+                        overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
                         break;
 
                     case R.id.menu_setting:
