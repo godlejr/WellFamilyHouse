@@ -10,9 +10,12 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.PopupWindow;
 
+import com.demand.well_family.well_family.LoginActivity;
 import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.dialog.NotificationPopup;
 import com.google.firebase.messaging.RemoteMessage;
 
 /**
@@ -36,15 +39,25 @@ public class FirebaseMessageService extends com.google.firebase.messaging.Fireba
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        String message = remoteMessage.getData().get("body");
+        if (remoteMessage.getData().get("body") == null) {
+            String content = remoteMessage.getNotification().getBody();
 
-        loginInfo = getSharedPreferences("loginInfo", MODE_PRIVATE);
-        notification_flag = loginInfo.getBoolean("notification", true);
-        if (notification_flag) {
-            sendNotification(message);
+            Intent popup_intent = new Intent(this, NotificationPopup.class);
+            popup_intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            popup_intent.putExtra("content", content);
+            startActivity(popup_intent);
+
+        } else {
+            String message = remoteMessage.getData().get("body");
+
+            loginInfo = getSharedPreferences("loginInfo", MODE_PRIVATE);
+            notification_flag = loginInfo.getBoolean("notification", true);
+            if (notification_flag) {
+                sendNotification(message);
+            }
+
+            set_badge();
         }
-
-        set_badge();
     }
 
     private void sendNotification(String message) {

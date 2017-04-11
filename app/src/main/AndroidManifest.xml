@@ -107,6 +107,10 @@
             android:name=".dialog.StoryPopup"
             android:theme="@style/Theme.AppCompat.Dialog" />
 
+        <activity
+            android:name=".dialog.NotificationPopup"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+
         <activity android:name=".ModifyStoryActivity" />
 
         <activity android:name=".family.ManageFamilyActivity" />

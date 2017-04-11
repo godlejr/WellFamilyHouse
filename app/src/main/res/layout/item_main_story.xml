@@ -18,17 +18,16 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:text="CONTENT"
+        android:id="@+id/tv_item_main_story_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tv_item_main_story_content"
-        android:textColor="#000"
-        android:textSize="14sp"
+        android:layout_marginBottom="10dp"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginBottom="10dp"
         android:gravity="center_vertical"
-        android:maxLines="2" />
+        android:maxLines="2"
+        android:text="CONTENT"
+        android:textColor="#000" />
 
     <LinearLayout
         android:id="@+id/story_images_container"
