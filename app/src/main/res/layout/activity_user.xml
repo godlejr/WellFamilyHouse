@@ -310,7 +310,7 @@
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="match_parent"
-                    android:src="@drawable/selffeet" />
+                    android:src="@drawable/logo_selffeet" />
 
                 <TextView
                     android:id="@+id/textView24"

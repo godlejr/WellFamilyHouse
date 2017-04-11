@@ -400,7 +400,7 @@ public class EditUserActivity extends Activity {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("name", user_name);
                 map.put("birth", user_birth);
-                map.put("phone", user_phone);
+                map.put("profile_phone", user_phone);
                 map.put("gender", String.valueOf(user_gender));
 
                 userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
@@ -441,7 +441,7 @@ public class EditUserActivity extends Activity {
 
                             //favorite and song category
                             final int favorite_size = favoriteList.size();
-                            //delete prior favorite list
+                            //photo_delete prior favorite list
                             userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
                             Call<ResponseBody> call_delete_favorite_list = userServerConnection.delete_favorite(user_id);
                             call_delete_favorite_list.enqueue(new Callback<ResponseBody>() {
@@ -486,7 +486,7 @@ public class EditUserActivity extends Activity {
 
 
                             final int song_size = songList.size();
-                            //delete prior song category list
+                            //photo_delete prior song category list
                             userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
                             Call<ResponseBody> call_delete_song_list = userServerConnection.delete_song_category(user_id);
                             call_delete_song_list.enqueue(new Callback<ResponseBody>() {

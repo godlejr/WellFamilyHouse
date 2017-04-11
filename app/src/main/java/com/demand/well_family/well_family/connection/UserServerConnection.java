@@ -112,7 +112,7 @@ public interface UserServerConnection {
     @POST("{user_id}/join_family")  // family_id, family_name
     Call<ResponseBody> join_family(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
-    @GET("{user_id}/find_family")   // search
+    @GET("{user_id}/find_family")   // menu_search
     Call<ArrayList<FamilyInfoForFamilyJoin>> find_family(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
 }

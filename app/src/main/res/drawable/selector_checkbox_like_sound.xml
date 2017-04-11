@@ -2,8 +2,9 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_checked ="false"
-        android:drawable="@drawable/btn_like"/>
+        android:drawable="@drawable/song_story_like_unchecked"/>
     <item
         android:state_checked ="true"
-        android:drawable="@drawable/btn_like_checked"/>
+        android:drawable="@drawable/song_story_like_checked"/>
 </selector>
+

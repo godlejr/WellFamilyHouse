@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="820dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/bubblefeet" />
+                android:src="@drawable/logo_bubblefeet" />
 
         </ScrollView>
 

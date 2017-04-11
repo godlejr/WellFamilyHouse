@@ -60,7 +60,7 @@
                             android:background="#00ffffff"
                             android:padding="10dp"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/arrow_right" />
+                            android:src="@drawable/song_story_arrow_right" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -117,7 +117,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
                                     android:gravity="center_vertical"
-                                    android:src="@drawable/comment" />
+                                    android:src="@drawable/song_story_comment" />
 
                                 <TextView
                                     android:id="@+id/tv_sound_random_comment_count"
@@ -164,7 +164,7 @@
                             android:background="#00ffffff"
                             android:padding="10dp"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/arrow_right" />
+                            android:src="@drawable/song_story_arrow_right" />
                     </LinearLayout>
 
                     <android.support.v7.widget.RecyclerView

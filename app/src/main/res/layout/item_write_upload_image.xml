@@ -9,7 +9,7 @@
         android:id="@+id/iv_write_upload_delete"
         android:layout_height="30dp"
         android:layout_gravity="right"
-        android:src="@drawable/delete"
+        android:src="@drawable/photo_delete"
         android:tint="#fff" />
 
     <ImageView

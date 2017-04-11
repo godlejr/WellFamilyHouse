@@ -245,7 +245,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
 
                                     isPlaying = true;
                                     isPaused = false;
-                                    Glide.with(SongPlayer.this).load(R.drawable.pause_player).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_player_start);
+                                    Glide.with(SongPlayer.this).load(R.drawable.song_story_pause_player).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_player_start);
                                 }
                             }
                         }
@@ -276,7 +276,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                 if (isPlaying) {
                     mp.seekTo(pausePos);
                     mp.start();
-                    Glide.with(SongPlayer.this).load(R.drawable.pause_player).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_player_start);
+                    Glide.with(SongPlayer.this).load(R.drawable.song_story_pause_player).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_player_start);
 
                     new SeekBarThread().start();
                 }
@@ -617,7 +617,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                 }
 
                 if (flag == 2) {
-                    //delete
+                    //photo_delete
                     int position = data.getIntExtra("position", -1);
                     commentAdapter.commentInfoList.remove(position);
                     commentAdapter.notifyItemRemoved(position);

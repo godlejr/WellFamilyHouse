@@ -185,7 +185,7 @@ public class CommentPopupActivity extends Activity {
         if (requestCode == EDIT_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Intent intent = getIntent();
-                intent.putExtra("flag", 1); //1: modify , 2:delete
+                intent.putExtra("flag", 1); //1: modify , 2:photo_delete
                 intent.putExtra("content", data.getStringExtra("content"));
                 intent.putExtra("position", position);
                 setResult(Activity.RESULT_OK, intent);
@@ -196,7 +196,7 @@ public class CommentPopupActivity extends Activity {
         if (requestCode == DELETE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Intent intent = getIntent();
-                intent.putExtra("flag", 2); //1: modify , 2:delete
+                intent.putExtra("flag", 2); //1: modify , 2:photo_delete
                 intent.putExtra("position", position);
                 setResult(Activity.RESULT_OK, intent);
                 finish();

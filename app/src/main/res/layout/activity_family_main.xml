@@ -51,7 +51,7 @@
                             android:layout_weight="1"
                             android:padding="5dp"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/family_write_btn" />
+                            android:src="@drawable/btn_family_write" />
 
                         <ImageView
                             android:id="@+id/iv_family_avatar"
@@ -81,7 +81,7 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="12.5dp"
                                 android:padding="5dp"
-                                android:src="@drawable/introduce" />
+                                android:src="@drawable/family_introduce" />
                         </LinearLayout>
 
                         <LinearLayout

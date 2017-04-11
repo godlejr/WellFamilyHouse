@@ -68,7 +68,7 @@
             android:layout_width="1dp"
             android:layout_height="50dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/market_toolbar"
+            android:src="@drawable/toolbar_market"
             android:layout_weight="0.8"
             android:padding="10dp"
             android:tint="#542920" />

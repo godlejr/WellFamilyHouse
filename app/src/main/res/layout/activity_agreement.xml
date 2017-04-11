@@ -22,7 +22,7 @@
             android:id="@+id/cb_agreement_all"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:background="@drawable/checkbox_agreement"
+            android:background="@drawable/selector_checkbox_agreement"
             android:button="@null"
             android:layout_height="20dp"
             android:layout_width="20dp" />
@@ -31,7 +31,7 @@
         <!--android:layout_height="30dp"-->
         <!--android:id="@+id/cb_agreement_all"-->
         <!--android:gravity="center_vertical"-->
-        <!--android:button="@drawable/checkbox_agreement"-->
+        <!--android:button="@drawable/selector_checkbox_agreement"-->
         <!--app:buttonTint="#BDBDBD"-->
         <!--android:checked="false" />-->
 
@@ -92,7 +92,7 @@
 
             android:id="@+id/cb_agreement1"
             android:layout_marginRight="10dp"
-            android:background="@drawable/checkbox_agreement"
+            android:background="@drawable/selector_checkbox_agreement"
             android:button="@null"
             android:layout_width="20dp"
             android:layout_height="20dp" />
@@ -152,7 +152,7 @@
         <CheckBox
             android:id="@+id/cb_agreement2"
             android:layout_marginRight="10dp"
-            android:background="@drawable/checkbox_agreement"
+            android:background="@drawable/selector_checkbox_agreement"
             android:button="@null"
             android:gravity="top"
             android:layout_width="20dp"

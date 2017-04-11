@@ -86,7 +86,7 @@
             android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:button="@drawable/checkbox_like" />
+            android:button="@drawable/selector_checkbox_like" />
 
         <ImageButton
             android:id="@+id/btn_item_main_story_comment"

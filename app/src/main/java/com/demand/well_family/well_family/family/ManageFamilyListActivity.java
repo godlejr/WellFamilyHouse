@@ -325,7 +325,7 @@ public class ManageFamilyListActivity extends Activity {
                     position = data.getIntExtra("position", 0);
                     Intent intent = getIntent();
                     intent.putExtra("position", position);
-                    intent.putExtra("delete", true);
+                    intent.putExtra("photo_delete", true);
                     setResult(DELETE_FAMILY, intent);
                     finish();
                 }

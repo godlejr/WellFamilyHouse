@@ -81,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_weight="1.5"
-                    android:src="@drawable/play" />
+                    android:src="@drawable/song_story_play" />
 
                 <TextView
                     android:id="@+id/textView32"

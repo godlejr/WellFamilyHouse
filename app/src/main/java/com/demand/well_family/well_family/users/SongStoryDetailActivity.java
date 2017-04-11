@@ -457,6 +457,30 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         tv_sound_story_detail_singer.setText(song_singer);
 
 
+
+        // hit
+        songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+        Call<Void> call_insert_story_hits = songStoryServerConnection.Insert_song_story_hit(story_id);
+        call_insert_story_hits.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+
+                }else {
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                log(t);
+                Toast.makeText(SongStoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+
+
         songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
         Call<String> call_song_avatar = songServerConnection.song_story_avatar(song_id);
         call_song_avatar.enqueue(new Callback<String>() {
@@ -533,7 +557,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         }
         cb_sound_story_detail.setOnCheckedChangeListener(this);
 
-        // share
+        // btn_share
         iv_sound_story_detail_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -559,7 +583,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                     shareIntentList.add(shareIntent);
                 }
 
-                Intent chooser = Intent.createChooser((Intent) shareIntentList.remove(0), "share");
+                Intent chooser = Intent.createChooser((Intent) shareIntentList.remove(0), "btn_share");
                 chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, shareIntentList.toArray(new Parcelable[]{}));
                 startActivity(chooser);
             }
@@ -644,7 +668,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                 public void onCompletion(MediaPlayer mp) {
                     isPlaying = isPaused = false;
 
-                    Glide.with(SongStoryDetailActivity.this).load(R.drawable.play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
+                    Glide.with(SongStoryDetailActivity.this).load(R.drawable.song_story_play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
                     sb_sound_story_detail.setProgress(0);
                     mp.pause();
                     mp.stop();
@@ -682,7 +706,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                     isPlaying = true;
 
                     new SeekBarThread().start();
-                    Glide.with(SongStoryDetailActivity.this).load(R.drawable.pause).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
+                    Glide.with(SongStoryDetailActivity.this).load(R.drawable.song_story_pause).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
                 }
             }
         });
@@ -697,7 +721,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                         isPlaying = false;
                         isPaused = true;
 
-                        Glide.with(SongStoryDetailActivity.this).load(R.drawable.play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
+                        Glide.with(SongStoryDetailActivity.this).load(R.drawable.song_story_play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
                     } else {
                         if (isPaused) {  // 일시정지 -> 재생
                             mp.seekTo(pausePos);
@@ -724,7 +748,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                                     public void onCompletion(MediaPlayer mp) {
                                         isPlaying = isPaused = false;
 
-                                        Glide.with(SongStoryDetailActivity.this).load(R.drawable.play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
+                                        Glide.with(SongStoryDetailActivity.this).load(R.drawable.song_story_play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
                                         sb_sound_story_detail.setProgress(0);
                                         mp.pause();
                                         mp.stop();
@@ -741,7 +765,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                         isPaused = false;
 
                         new SeekBarThread().start();
-                        Glide.with(SongStoryDetailActivity.this).load(R.drawable.pause).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
+                        Glide.with(SongStoryDetailActivity.this).load(R.drawable.song_story_pause).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
                     }
                 }
             }
@@ -1033,7 +1057,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                 }
 
                 if (flag == 2) {
-                    //delete
+                    //photo_delete
                     int position = data.getIntExtra("position", -1);
                     commentAdapter.commentInfoList.remove(position);
                     commentAdapter.notifyItemRemoved(position);

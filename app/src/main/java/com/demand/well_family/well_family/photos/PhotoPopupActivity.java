@@ -59,7 +59,7 @@ public class PhotoPopupActivity extends Activity {
     private int photo_type;
     private String photo_ext;
 
-    //download
+    //photo_download
     private ImageDownload imageDownload;
 
     @Override

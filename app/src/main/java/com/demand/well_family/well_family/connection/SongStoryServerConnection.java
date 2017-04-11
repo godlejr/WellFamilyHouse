@@ -73,5 +73,6 @@ public interface SongStoryServerConnection {
     @DELETE("{song_story_id}")
     Call<Void> delete_story(@Path("song_story_id") int song_story_id);
 
-
+    @PUT("{song_story_id}/hits")
+    Call<Void> Insert_song_story_hit(@Path("song_story_id") int song_story_id);
 }

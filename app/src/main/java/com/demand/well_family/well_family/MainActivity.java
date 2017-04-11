@@ -32,7 +32,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.demand.well_family.well_family.connection.MainServerConnection;
 import com.demand.well_family.well_family.connection.UserServerConnection;
 import com.demand.well_family.well_family.create_family.CreateFamilyActivity;
 import com.demand.well_family.well_family.dto.App;
@@ -353,9 +352,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void getAppData() {
         appList = new ArrayList<>();
         appList.add(new App("추억소리", R.drawable.memory_sound));
-        appList.add(new App("셀핏", R.drawable.selffeet));
+        appList.add(new App("셀핏", R.drawable.logo_selffeet));
         appList.add(new App("해핏", R.drawable.happyfeet, "com.demand.happyfeet"));
-        appList.add(new App("버블핏", R.drawable.bubblefeet, "com.demand.bubblefeet"));
+        appList.add(new App("버블핏", R.drawable.logo_bubblefeet, "com.demand.logo_bubblefeet"));
         appList.add(new App("Good Buddy", R.drawable.goodbuddy, "healthcare.nhis.GoodBuddy"));
 
         rv_apps = (RecyclerView) findViewById(R.id.rv_apps);
@@ -385,7 +384,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     } else {
                         Intent startLink = getPackageManager().getLaunchIntentForPackage(appList.get(getAdapterPosition()).getPackageName());
                         if (startLink == null) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appList.get(getAdapterPosition()).getPackageName() + "")));
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("menu_market://details?id=" + appList.get(getAdapterPosition()).getPackageName() + "")));
                         } else {
                             startActivity(startLink);
                         }

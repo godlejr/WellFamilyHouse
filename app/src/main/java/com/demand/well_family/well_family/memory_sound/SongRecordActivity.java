@@ -476,7 +476,7 @@ public class SongRecordActivity extends Activity {
                         public void onCompletion(MediaPlayer mp) {
                             isPlaying = isPaused = false;
 
-                            iv_sound_record_complete_play.setImageResource(R.drawable.play);
+                            iv_sound_record_complete_play.setImageResource(R.drawable.song_story_play);
                             seekBar.setProgress(0);
                             mp.pause();
                             mp.stop();
@@ -490,7 +490,7 @@ public class SongRecordActivity extends Activity {
                 isPlaying = true;
                 isPaused = false;
                 new SeekBarThread().start();
-                iv_sound_record_complete_play.setImageResource(R.drawable.pause);
+                iv_sound_record_complete_play.setImageResource(R.drawable.song_story_pause);
 
             }
         });
@@ -503,7 +503,7 @@ public class SongRecordActivity extends Activity {
                     pausePos = mp.getCurrentPosition();
                     isPlaying = false;
                     isPaused = true;
-                    iv_sound_record_complete_play.setImageResource(R.drawable.play);
+                    iv_sound_record_complete_play.setImageResource(R.drawable.song_story_play);
 
                     mp.seekTo(pausePos);
                 } else {
@@ -529,7 +529,7 @@ public class SongRecordActivity extends Activity {
                             public void onCompletion(MediaPlayer mp) {
                                 isPlaying = isPaused = false;
 
-                                iv_sound_record_complete_play.setImageResource(R.drawable.play);
+                                iv_sound_record_complete_play.setImageResource(R.drawable.song_story_play);
                                 sb_sound_record.setProgress(0);
                                 mp.pause();
                                 mp.stop();
@@ -547,7 +547,7 @@ public class SongRecordActivity extends Activity {
                     isPlaying = true;
                     isPaused = false;
 
-                    iv_sound_record_complete_play.setImageResource(R.drawable.pause);
+                    iv_sound_record_complete_play.setImageResource(R.drawable.song_story_pause);
                 }
             }
         });
@@ -589,7 +589,7 @@ public class SongRecordActivity extends Activity {
                 if (!isRecording) {
                     startRec();
                     isRecording = true;
-                    iv_sound_record.setImageResource(R.drawable.stop);
+                    iv_sound_record.setImageResource(R.drawable.song_story_stop);
                 } else {
                     stopRec();
                     isRecording = false;

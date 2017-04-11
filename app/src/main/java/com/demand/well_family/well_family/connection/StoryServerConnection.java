@@ -69,4 +69,7 @@ public interface StoryServerConnection {
 
     @DELETE("{story_id}")
     Call<Void> delete_story(@Path("story_id") int story_id);
+
+    @PUT("{story_id}/hits")
+    Call<Void> Insert_story_hit(@Path("story_id") int story_id);
 }

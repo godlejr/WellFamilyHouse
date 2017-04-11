@@ -119,7 +119,7 @@ public class SearchUserActivity extends Activity {
                     final String search = et_search_user.getText().toString();
 
                     HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("search", search);
+                    map.put("menu_search", search);
 
                     familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
                     Call<ArrayList<UserInfoForFamilyJoin>> call_user = familyServerConnection.find_user(family_id, map); // 여기

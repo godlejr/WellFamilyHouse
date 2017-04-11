@@ -149,7 +149,7 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
                     map.put("password", password);
                     map.put("name", name);
                     map.put("birth", birth);
-                    map.put("phone", phone);
+                    map.put("profile_phone", phone);
                     map.put("login_category_id", String.valueOf(login_category_id));
 
                     mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);

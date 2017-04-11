@@ -55,6 +55,7 @@ import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.photos.SongPhotoPopupActivity;
 import com.demand.well_family.well_family.settings.SettingActivity;
+import com.demand.well_family.well_family.users.SongStoryDetailActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 import com.demand.well_family.well_family.util.ErrorUtils;
 
@@ -110,7 +111,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
     private CommentAdapter commentAdapter;
     private RecyclerView rv_sound_story_detail_comments;
 
-    //share
+    //btn_share
     private ImageView iv_sound_story_detail_share;
 
     // content
@@ -200,6 +201,29 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
     }
 
     private void init() {
+        // hit
+        songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+        Call<Void> call_insert_story_hits = songStoryServerConnection.Insert_song_story_hit(story_id);
+        call_insert_story_hits.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+
+                }else {
+                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                log(t);
+                Toast.makeText(NotificationSongStoryDetail.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+
+
         songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
         Call<SongStoryInfoForNotification> call_song_story_info = songStoryServerConnection.storyDetailForNotification(story_id);
         call_song_story_info.enqueue(new Callback<SongStoryInfoForNotification>() {
@@ -307,6 +331,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
         ll_sound_story_detail_play = (LinearLayout) findViewById(R.id.ll_sound_story_detail_play);
 
         finishList.add(this);
+
         //song avatar
         songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
         Call<String> call_song_avatar = songServerConnection.song_story_avatar(song_id);
@@ -879,7 +904,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                 public void onCompletion(MediaPlayer mp) {
                     isPlaying = isPaused = false;
 
-                    Glide.with(NotificationSongStoryDetail.this).load(R.drawable.play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
+                    Glide.with(NotificationSongStoryDetail.this).load(R.drawable.song_story_play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
                     sb_sound_story_detail.setProgress(0);
                     mp.pause();
                     mp.stop();
@@ -917,7 +942,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                     isPlaying = true;
 
                     new SeekBarThread().start();
-                    Glide.with(NotificationSongStoryDetail.this).load(R.drawable.pause).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
+                    Glide.with(NotificationSongStoryDetail.this).load(R.drawable.song_story_pause).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
                 }
             }
         });
@@ -932,7 +957,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                         isPlaying = false;
                         isPaused = true;
 
-                        Glide.with(NotificationSongStoryDetail.this).load(R.drawable.play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
+                        Glide.with(NotificationSongStoryDetail.this).load(R.drawable.song_story_play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
 
                     } else {
                         if (isPaused) {  // 일시정지 -> 재생
@@ -962,7 +987,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                                     public void onCompletion(MediaPlayer mp) {
                                         isPlaying = isPaused = false;
 
-                                        Glide.with(NotificationSongStoryDetail.this).load(R.drawable.play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
+                                        Glide.with(NotificationSongStoryDetail.this).load(R.drawable.song_story_play).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
                                         sb_sound_story_detail.setProgress(0);
                                         mp.pause();
                                         mp.stop();
@@ -980,7 +1005,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                         isPaused = false;
 
                         new SeekBarThread().start();
-                        Glide.with(NotificationSongStoryDetail.this).load(R.drawable.pause).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
+                        Glide.with(NotificationSongStoryDetail.this).load(R.drawable.song_story_pause).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_story_detail_play);
                     }
                 }
             }
@@ -1049,7 +1074,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                 }
 
                 if (flag == 2) {
-                    //delete
+                    //photo_delete
                     int position = data.getIntExtra("position", -1);
                     commentAdapter.commentInfoList.remove(position);
                     commentAdapter.notifyItemRemoved(position);

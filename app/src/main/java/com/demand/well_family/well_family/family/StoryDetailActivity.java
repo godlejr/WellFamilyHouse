@@ -460,6 +460,27 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
     }
 
     private void init() {
+        // hit
+        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        Call<Void> call_insert_story_hits = storyServerConnection.Insert_story_hit(story_id);
+        call_insert_story_hits.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if(response.isSuccessful()){
+
+                }else {
+                    Toast.makeText(StoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                log(t);
+                Toast.makeText(StoryDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+            }
+        });
+
+
         //user_info
         iv_item_story_avatar = (ImageView) findViewById(R.id.iv_item_story_avatar);
         Glide.with(this).load(getString(R.string.cloud_front_user_avatar) + story_user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_item_story_avatar);
@@ -643,7 +664,7 @@ public class StoryDetailActivity extends Activity implements CompoundButton.OnCh
                 }
 
                 if (flag == 2) {
-                    //delete
+                    //photo_delete
                     int position = data.getIntExtra("position", -1);
                     commentAdapter.commentInfoList.remove(position);
                     commentAdapter.notifyItemRemoved(position);

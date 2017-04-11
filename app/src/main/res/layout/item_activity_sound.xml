@@ -131,7 +131,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:padding="3dp"
-                        android:src="@drawable/location" />
+                        android:src="@drawable/song_story_location" />
 
                     <TextView
                         android:id="@+id/tv_sound_story_location"
@@ -233,7 +233,7 @@
                     android:layout_toStartOf="@+id/tv_sound_story_comment"
                     android:layout_weight="0.1"
                     android:gravity="right|center_vertical"
-                    android:src="@drawable/comment" />
+                    android:src="@drawable/song_story_comment" />
 
                 <TextView
                     android:id="@+id/tv_sound_story_like"
@@ -256,7 +256,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_gravity="right"
                     android:layout_marginRight="90dp"
-                    android:src="@drawable/like_count" />
+                    android:src="@drawable/song_story_like_count" />
 
             </RelativeLayout>
         </LinearLayout>
@@ -271,7 +271,7 @@
                 android:layout_width="1dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:background="@drawable/checkbox_like"
+                android:background="@drawable/selector_checkbox_like"
                 android:button="@null" />
 
             <ImageButton

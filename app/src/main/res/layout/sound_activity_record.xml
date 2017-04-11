@@ -47,8 +47,7 @@
                         android:layout_width="62dp"
                         android:layout_height="62dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="15dp"
-                        android:src="@drawable/camera" />
+                        android:layout_marginLeft="15dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -135,7 +134,7 @@
                         android:layout_height="50dp"
                         android:layout_weight="0.7"
                         android:padding="12dp"
-                        android:src="@drawable/location" />
+                        android:src="@drawable/song_story_location" />
 
                     <LinearLayout
                         android:layout_width="1dp"
@@ -205,7 +204,7 @@
                         android:layout_weight="0.5"
                         android:padding="8dp"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/close_dialog"
+                        android:src="@drawable/dialog_close"
                         android:tint="#949494" />
 
                 </LinearLayout>
@@ -237,7 +236,7 @@
                             android:layout_height="50dp"
                             android:layout_weight="0.7"
                             android:padding="12dp"
-                            android:src="@drawable/emotion" />
+                            android:src="@drawable/song_story_emotion" />
 
                         <LinearLayout
                             android:layout_width="1dp"

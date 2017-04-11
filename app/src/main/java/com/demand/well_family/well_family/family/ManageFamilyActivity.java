@@ -363,7 +363,7 @@ public class ManageFamilyActivity extends Activity {
 
         if (requestCode == DELETE_FAMILY) {
             if (resultCode == DELETE_FAMILY) {
-                if (data.getBooleanExtra("delete", false)) {
+                if (data.getBooleanExtra("photo_delete", false)) {
                     int position = data.getIntExtra("position", 0);
                     ownerFamilyList.remove(position);
                     ownerFamilyAdapter.notifyItemRemoved(position);

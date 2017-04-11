@@ -40,7 +40,7 @@
         <ImageView
             android:id="@+id/iv_sound_record"
             android:layout_gravity="center"
-            android:src="@drawable/record"
+            android:src="@drawable/song_story_record"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_weight="2"

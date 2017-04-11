@@ -62,7 +62,7 @@ public class MarketMainActivity extends Activity {
         finishList.add(this);
 
         ImageView iv_market = (ImageView) findViewById(R.id.iv_market);
-        Glide.with(this).load(getString(R.string.cloud_front_banners) + "market.jpg").thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_market);
+        Glide.with(this).load(getString(R.string.cloud_front_banners) + "menu_market.jpg").thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_market);
     }
 
     private void setUserInfo() {

@@ -169,7 +169,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     map.put("password", encrypt_password);
                     map.put("name", et_join_name.getText().toString());
                     map.put("birth", et_join_birthday.getText().toString());
-                    map.put("phone", et_join_phone.getText().toString());
+                    map.put("profile_phone", et_join_phone.getText().toString());
                     map.put("login_category_id", String.valueOf(JoinFlag.DEMAND));
 
 

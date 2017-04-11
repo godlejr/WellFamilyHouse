@@ -89,7 +89,7 @@ public class SearchFamilyActivity extends Activity {
                 if (search.length() != 0) {
                     // 검색
                     HashMap<String, String> map = new HashMap<>();
-                    map.put("search", search);
+                    map.put("menu_search", search);
 
                     userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
                     Call<ArrayList<FamilyInfoForFamilyJoin>> call_find_family = userServerConnection.find_family(user_id, map);

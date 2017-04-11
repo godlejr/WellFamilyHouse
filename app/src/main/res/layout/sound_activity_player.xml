@@ -25,7 +25,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:srcCompat="@drawable/back"
+                    app:srcCompat="@drawable/song_story_back"
                     android:id="@+id/iv_sound_player_album_bg"
                     android:tint="#6f020202"
                     android:scaleType="fitXY" />
@@ -150,7 +150,7 @@
                                 <CheckBox
                                     android:id="@+id/cb_sound_player_like"
                                     android:layout_height="wrap_content"
-                                    android:background="@drawable/checkbox_like_sound"
+                                    android:background="@drawable/selector_checkbox_like_sound"
                                     android:button="@null"
                                     android:checked="false"
                                     android:layout_width="wrap_content"
@@ -168,7 +168,7 @@
                                     android:background="#00ffffff"
                                     android:focusable="false"
                                     android:focusableInTouchMode="false"
-                                    android:src="@drawable/pause_player"
+                                    android:src="@drawable/song_story_pause_player"
                                     android:layout_width="wrap_content"
                                     android:layout_alignParentTop="true"
                                     android:layout_centerHorizontal="true" />
@@ -179,12 +179,12 @@
                                 android:layout_weight="1">
 
                                 <ImageView
-                                    android:layout_height="match_parent"
                                     android:id="@+id/iv_sound_player_record"
-                                    android:src="@drawable/write"
                                     android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:layout_alignParentTop="true"
-                                    android:layout_centerHorizontal="true" />
+                                    android:layout_centerHorizontal="true"
+                                    android:src="@drawable/song_story_write" />
                             </RelativeLayout>
 
                         </LinearLayout>
@@ -213,7 +213,7 @@
 
 
                     <ImageView
-                        android:src="@drawable/like_count"
+                        android:src="@drawable/song_story_like_count"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="right"
@@ -248,7 +248,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/imageView24"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/comment"
+                        android:src="@drawable/song_story_comment"
                         android:layout_marginEnd="5dp"
                         android:layout_marginRight="5dp" />
 
