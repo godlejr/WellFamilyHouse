@@ -236,18 +236,18 @@ public class StoryPopup extends Activity {
         }
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
-            Intent intent = getIntent();
-            intent.putExtra("content", content);
-            intent.putExtra("position", position);
-            setResult(RESULT_CANCELED, intent);
-
-            finish();
-        }
-        return true;
-    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+//            Intent intent = getIntent();
+//            intent.putExtra("content", content);
+//            intent.putExtra("position", position);
+//            setResult(RESULT_CANCELED, intent);
+//
+//            finish();
+//        }
+//        return true;
+//    }
 
     @Override
     public void onBackPressed() {

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -35,10 +36,12 @@ public class NotificationPopup extends Activity {
 
         init();
     }
-    private void init(){
-        tv_popup_notification_content = (TextView)findViewById(R.id.tv_popup_notification_content);
-        btn_popup_notification_close = (Button)findViewById(R.id.btn_popup_notification_close);
+
+    private void init() {
+        tv_popup_notification_content = (TextView) findViewById(R.id.tv_popup_notification_content);
+        btn_popup_notification_close = (Button) findViewById(R.id.btn_popup_notification_close);
         tv_popup_notification_content.setText(getIntent().getStringExtra("content"));
+
         btn_popup_notification_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,7 +51,7 @@ public class NotificationPopup extends Activity {
         });
     }
 
-    private void logout(){
+    private void logout() {
         SharedPreferences loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = loginInfo.edit();
         editor.remove("user_id");
@@ -63,5 +66,11 @@ public class NotificationPopup extends Activity {
 
         Intent logout_intent = new Intent(this, LoginActivity.class);
         startActivity(logout_intent);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        return true;
     }
 }

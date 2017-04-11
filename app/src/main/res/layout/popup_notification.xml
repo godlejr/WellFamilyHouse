@@ -24,7 +24,7 @@
             android:padding="5dp"
             android:text="CONTENT"
             android:textColor="#444"
-            android:textSize="17sp" />
+            android:textSize="18sp" />
 
     </LinearLayout>
 
