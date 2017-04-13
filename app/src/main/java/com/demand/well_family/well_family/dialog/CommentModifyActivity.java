@@ -16,7 +16,7 @@ import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.CommentServerConnection;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,7 +93,7 @@ public class CommentModifyActivity extends Activity {
                                 setResult(Activity.RESULT_OK, intent);
                                 finish();
                             } else {
-                                Toast.makeText(CommentModifyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CommentModifyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 

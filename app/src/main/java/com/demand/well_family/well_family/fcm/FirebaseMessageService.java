@@ -10,10 +10,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.PopupWindow;
 
-import com.demand.well_family.well_family.LoginActivity;
-import com.demand.well_family.well_family.MainActivity;
+import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dialog.NotificationPopup;
 import com.google.firebase.messaging.RemoteMessage;

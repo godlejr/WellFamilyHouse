@@ -30,7 +30,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
-import com.demand.well_family.well_family.MainActivity;
+import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.SongServerConnection;
 import com.demand.well_family.well_family.family.ManageFamilyActivity;
@@ -41,7 +41,7 @@ import com.demand.well_family.well_family.dto.SongCategory;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.users.UserActivity;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -342,7 +342,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                                     ib_sound_today.setOnClickListener(SongMainActivity.this);
                                     ll_sound_random.setOnClickListener(SongMainActivity.this);
                                 } else {
-                                    Toast.makeText(SongMainActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SongMainActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -354,7 +354,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                         });
                     }
                 } else {
-                    Toast.makeText(SongMainActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongMainActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -378,7 +378,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (!response.isSuccessful()) {
-                            Toast.makeText(SongMainActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SongMainActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                         ///scess
                     }
@@ -428,7 +428,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if (!response.isSuccessful()) {
-                                Toast.makeText(SongMainActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SongMainActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -516,7 +516,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                         }
                     });
                 } else {
-                    Toast.makeText(SongMainActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongMainActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -599,7 +599,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                     rv_sound_category.setLayoutManager(new GridLayoutManager(SongMainActivity.this, 3));
                     rv_sound_category.addItemDecoration(new SpaceItemDecoration(getResources().getDimensionPixelSize(R.dimen.activity_horizontal_margin) / 2)); // horizontal spacing
                 } else {
-                    Toast.makeText(SongMainActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongMainActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 

@@ -22,7 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
-import com.demand.well_family.well_family.MainActivity;
+import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.settings.SettingActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;

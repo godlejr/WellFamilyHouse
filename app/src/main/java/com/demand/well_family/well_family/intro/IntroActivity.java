@@ -8,12 +8,12 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.LoginActivity;
-import com.demand.well_family.well_family.MainActivity;
+import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.UserServerConnection;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +91,7 @@ public class IntroActivity extends Activity {
                                     IntroActivity.this.finish();
                                 }
                             } else {
-                                Toast.makeText(IntroActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(IntroActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 

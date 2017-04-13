@@ -16,7 +16,7 @@ import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.MainServerConnection;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,7 +120,7 @@ public class ConfirmAccountActivity extends Activity {
                                     Toast.makeText(ConfirmAccountActivity.this, user_email + "로 임시 비밀번호가 발송되었습니다.", Toast.LENGTH_SHORT).show();
                                     finish();
                                 }else{
-                                    Toast.makeText(ConfirmAccountActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ConfirmAccountActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 

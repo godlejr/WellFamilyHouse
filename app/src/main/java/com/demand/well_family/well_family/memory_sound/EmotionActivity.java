@@ -26,7 +26,7 @@ import com.demand.well_family.well_family.connection.SongServerConnection;
 import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,7 +100,7 @@ public class EmotionActivity extends Activity {
                     rv_emotion.setAdapter(emotionAdapter);
                     rv_emotion.setLayoutManager(new LinearLayoutManager(EmotionActivity.this, LinearLayoutManager.VERTICAL, false));
                 } else {
-                    Toast.makeText(EmotionActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EmotionActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 

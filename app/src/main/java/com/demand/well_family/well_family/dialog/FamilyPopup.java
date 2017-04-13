@@ -22,7 +22,7 @@ import com.demand.well_family.well_family.connection.FamilyServerConnection;
 import com.demand.well_family.well_family.flag.FamilyJoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -171,7 +171,7 @@ public class FamilyPopup extends Activity {
                                 setResult(JOIN, manage_family);
                                 finish();
                             } else {
-                                Toast.makeText(FamilyPopup.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FamilyPopup.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -207,7 +207,7 @@ public class FamilyPopup extends Activity {
                                 setResult(DELETE_USER_TO_FAMILY, intent);
                                 finish();
                             } else {
-                                Toast.makeText(FamilyPopup.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FamilyPopup.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -241,7 +241,7 @@ public class FamilyPopup extends Activity {
                                 setResult(JOIN, getIntent().putExtra("position", getIntent().getIntExtra("joiner_position", 0)));
                                 finish();
                             } else {
-                                Toast.makeText(FamilyPopup.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FamilyPopup.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -278,7 +278,7 @@ public class FamilyPopup extends Activity {
                                 setResult(DELETE_USER_TO_FAMILY, intent);
                                 finish();
                             } else {
-                                Toast.makeText(FamilyPopup.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FamilyPopup.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 

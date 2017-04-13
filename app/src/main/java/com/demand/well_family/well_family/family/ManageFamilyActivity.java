@@ -30,7 +30,7 @@ import com.demand.well_family.well_family.flag.FamilyJoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.search.SearchFamilyActivity;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -156,7 +156,7 @@ public class ManageFamilyActivity extends Activity {
                     rv_manage_family_owner.setAdapter(ownerFamilyAdapter);
                     rv_manage_family_owner.setLayoutManager(new LinearLayoutManager(ManageFamilyActivity.this, LinearLayoutManager.HORIZONTAL, false));
                 } else {
-                    Toast.makeText(ManageFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ManageFamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -179,7 +179,7 @@ public class ManageFamilyActivity extends Activity {
                     rv_manage_family_member.setAdapter(familyAdapter);
                     rv_manage_family_member.setLayoutManager(new LinearLayoutManager(ManageFamilyActivity.this, LinearLayoutManager.HORIZONTAL, false));
                 } else {
-                    Toast.makeText(ManageFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ManageFamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 

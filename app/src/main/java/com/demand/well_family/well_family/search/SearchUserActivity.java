@@ -28,7 +28,7 @@ import com.demand.well_family.well_family.flag.FamilyJoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.users.UserActivity;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,7 +133,7 @@ public class SearchUserActivity extends Activity {
                                 rv_search_user.setAdapter(userAdapter);
                                 rv_search_user.setLayoutManager(new LinearLayoutManager(SearchUserActivity.this, LinearLayoutManager.VERTICAL, false));
                             } else {
-                                Toast.makeText(SearchUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SearchUserActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -274,7 +274,7 @@ public class SearchUserActivity extends Activity {
                                     userList.get(position).setJoin_flag(FamilyJoinFlag.FAMILY);
                                     userAdapter.notifyItemChanged(position);
                                 } else {
-                                    Toast.makeText(SearchUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SearchUserActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -324,7 +324,7 @@ public class SearchUserActivity extends Activity {
                                     userAdapter.notifyItemChanged(position);
 
                                 } else {
-                                    Toast.makeText(SearchUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SearchUserActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 

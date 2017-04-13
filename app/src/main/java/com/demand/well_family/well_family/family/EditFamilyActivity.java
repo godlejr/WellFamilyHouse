@@ -35,7 +35,7 @@ import com.demand.well_family.well_family.connection.FamilyServerConnection;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
 import org.slf4j.Logger;
@@ -252,7 +252,7 @@ public class EditFamilyActivity extends Activity {
                                                         //scss
                                                         resetFamilyInfo();
                                                     } else {
-                                                        Toast.makeText(EditFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(EditFamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
 
@@ -274,7 +274,7 @@ public class EditFamilyActivity extends Activity {
 
                                         progressDialog.dismiss();
                                     } else {
-                                        Toast.makeText(EditFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EditFamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -307,7 +307,7 @@ public class EditFamilyActivity extends Activity {
                     setResult(Activity.RESULT_OK, intent);
                     finish();
                 } else {
-                    Toast.makeText(EditFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditFamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 

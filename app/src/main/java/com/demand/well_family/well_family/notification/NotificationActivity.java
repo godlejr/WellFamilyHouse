@@ -33,7 +33,7 @@ import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.flag.NotificationBEHAVIORFlag;
 import com.demand.well_family.well_family.flag.NotificationINTENTFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,7 +128,7 @@ public class NotificationActivity extends Activity {
                     notificationAdapter = new NotificationAdapter(NotificationActivity.this, notiList, R.layout.item_notification);
                     rv_notification.setAdapter(notificationAdapter);
                 } else {
-                    Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -227,7 +227,7 @@ public class NotificationActivity extends Activity {
                             }
 
                         } else {
-                            Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -253,7 +253,7 @@ public class NotificationActivity extends Activity {
                                 holder.tv_notification_content.setText(notificationInfo.getName() + "님이 " + notificationInfo.getContent() + "에 댓글을 남겼습니다.");
                             }
                         } else {
-                            Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -279,7 +279,7 @@ public class NotificationActivity extends Activity {
                                 holder.tv_notification_content.setText(notificationInfo.getName() + "님이 " + notificationInfo.getContent() + "을 좋아합니다.");
                             }
                         } else {
-                            Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -314,7 +314,7 @@ public class NotificationActivity extends Activity {
                                     }
                                 }
                             } else {
-                                Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -347,7 +347,7 @@ public class NotificationActivity extends Activity {
                                     }
                                 }
                             } else {
-                                Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -399,7 +399,7 @@ public class NotificationActivity extends Activity {
 
                                                 startActivity(intent);
                                             } else {
-                                                Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
@@ -410,7 +410,7 @@ public class NotificationActivity extends Activity {
                                         }
                                     });
                                 } else {
-                                    Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -436,7 +436,7 @@ public class NotificationActivity extends Activity {
                                     intent.putExtra("story_id", intent_id);
                                     startActivity(intent);
                                 } else {
-                                    Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -462,7 +462,7 @@ public class NotificationActivity extends Activity {
                                     intent.putExtra("story_id", intent_id);
                                     startActivity(intent);
                                 } else {
-                                    Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -487,7 +487,7 @@ public class NotificationActivity extends Activity {
                                     Intent intent = new Intent(NotificationActivity.this, ManageFamilyActivity.class);
                                     startActivity(intent);
                                 } else {
-                                    Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
@@ -528,7 +528,7 @@ public class NotificationActivity extends Activity {
                                                 intent.putExtra("notification_flag", true);
                                                 startActivity(intent);
                                             } else {
-                                                Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
@@ -539,7 +539,7 @@ public class NotificationActivity extends Activity {
                                         }
                                     });
                                 } else {
-                                    Toast.makeText(NotificationActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 

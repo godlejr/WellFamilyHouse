@@ -24,7 +24,7 @@ import com.demand.well_family.well_family.connection.MainServerConnection;
 import com.demand.well_family.well_family.flag.JoinFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -185,10 +185,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                     Toast.makeText(RegisterActivity.this, "회원가입이 되었습니다.", Toast.LENGTH_LONG).show();
                                     finish();
                                 } else {
-                                    Toast.makeText(RegisterActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegisterActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
                             } else {
-                                Toast.makeText(RegisterActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -226,7 +226,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                         email_duplicate_check = false;
                                     }
                                 } else {
-                                    Toast.makeText(RegisterActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(RegisterActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
 
                             }

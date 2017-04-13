@@ -19,16 +19,14 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.demand.well_family.well_family.ModifyStoryActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.SongStoryServerConnection;
-import com.demand.well_family.well_family.connection.StoryServerConnection;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.SongStoryEmotionData;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.memory_sound.ModifySongStoryActivity;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -213,7 +211,7 @@ public class SongStoryPopup extends Activity {
                                         setResult(DELETE, intent);
                                         finish();
                                     } else {
-                                        Toast.makeText(context, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(context, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
 

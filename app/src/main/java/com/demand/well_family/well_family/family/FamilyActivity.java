@@ -38,7 +38,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
-import com.demand.well_family.well_family.MainActivity;
+import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.WriteActivity;
 import com.demand.well_family.well_family.connection.FamilyServerConnection;
@@ -58,7 +58,7 @@ import com.demand.well_family.well_family.photos.PhotosActivity;
 import com.demand.well_family.well_family.search.SearchUserActivity;
 import com.demand.well_family.well_family.settings.SettingActivity;
 import com.demand.well_family.well_family.users.UserActivity;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -191,7 +191,7 @@ public class FamilyActivity extends Activity {
                         finish();
                     }
                 } else {
-                    Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -496,7 +496,7 @@ public class FamilyActivity extends Activity {
                             msg.setData(bundle);
                             mainHanlder.sendMessage(msg);
                         } else {
-                            Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -677,7 +677,7 @@ public class FamilyActivity extends Activity {
                                         tv_item_main_story_like.setText(String.valueOf(Integer.parseInt(tv_item_main_story_like.getText().toString()) + 1));
                                         storyList.get(getAdapterPosition()).setChecked(true);
                                     } else {
-                                        Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(FamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -698,7 +698,7 @@ public class FamilyActivity extends Activity {
                                         tv_item_main_story_like.setText(String.valueOf(Integer.parseInt(tv_item_main_story_like.getText().toString()) - 1));
                                         storyList.get(getAdapterPosition()).setChecked(false);
                                     } else {
-                                        Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(FamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -756,7 +756,7 @@ public class FamilyActivity extends Activity {
                                     startActivity(intent);
                                 }
                             } else {
-                                Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(FamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -864,7 +864,7 @@ public class FamilyActivity extends Activity {
                             photoAdapter.notifyDataSetChanged();
                         }
                     } else {
-                        Toast.makeText(context, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -885,7 +885,7 @@ public class FamilyActivity extends Activity {
                         int like_count = response.body();
                         holder.tv_item_main_story_like.setText(String.valueOf(like_count));
                     } else {
-                        Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -905,7 +905,7 @@ public class FamilyActivity extends Activity {
                         int comment_count = response.body();
                         holder.tv_item_main_comment_story_count.setText(String.valueOf(comment_count));
                     } else {
-                        Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -932,7 +932,7 @@ public class FamilyActivity extends Activity {
                             storyList.get(position).setFirst_checked(true);
                         }
                     } else {
-                        Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -1086,7 +1086,7 @@ public class FamilyActivity extends Activity {
                     rv_family_users.setAdapter(userAdapter);
                     rv_family_users.setLayoutManager(new LinearLayoutManager(FamilyActivity.this, LinearLayoutManager.HORIZONTAL, false));
                 } else {
-                    Toast.makeText(FamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 

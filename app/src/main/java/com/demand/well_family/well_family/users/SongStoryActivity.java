@@ -21,7 +21,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,7 +38,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
-import com.demand.well_family.well_family.MainActivity;
+import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.SongStoryServerConnection;
 import com.demand.well_family.well_family.connection.UserServerConnection;
@@ -53,7 +52,7 @@ import com.demand.well_family.well_family.dto.SongStoryInfo;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -412,7 +411,7 @@ public class SongStoryActivity extends Activity {
                                     }
                                 }, 200);
                             } else {
-                                Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SongStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -481,7 +480,7 @@ public class SongStoryActivity extends Activity {
                                                     }
                                                 }, 200);
                                             } else {
-                                                Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(SongStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
@@ -542,7 +541,7 @@ public class SongStoryActivity extends Activity {
                                                     }
                                                 }, 200);
                                             } else {
-                                                Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(SongStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
@@ -554,7 +553,7 @@ public class SongStoryActivity extends Activity {
                                     });
                                 }
                             } else {
-                                Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SongStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -708,7 +707,7 @@ public class SongStoryActivity extends Activity {
                                         tv_sound_story_like.setText(String.valueOf(Integer.parseInt(tv_sound_story_like.getText().toString()) + 1));
                                         storyList.get(getAdapterPosition()).setChecked(true);
                                     } else {
-                                        Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SongStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -728,7 +727,7 @@ public class SongStoryActivity extends Activity {
                                         tv_sound_story_like.setText(String.valueOf(Integer.parseInt(tv_sound_story_like.getText().toString()) - 1));
                                         storyList.get(getAdapterPosition()).setChecked(false);
                                     } else {
-                                        Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SongStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -842,7 +841,7 @@ public class SongStoryActivity extends Activity {
                         holder.rv_song_story_emotion.setAdapter(emotionAdapter);
                         holder.rv_song_story_emotion.setLayoutManager(new GridLayoutManager(SongStoryActivity.this, 2));
                     } else {
-                        Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SongStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -902,7 +901,7 @@ public class SongStoryActivity extends Activity {
                             rv_main_story.setHasFixedSize(true);
                         }
                     } else {
-                        Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SongStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -922,7 +921,7 @@ public class SongStoryActivity extends Activity {
                         int like_count = response.body();
                         holder.tv_sound_story_like.setText(String.valueOf(like_count));
                     } else {
-                        Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SongStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -942,7 +941,7 @@ public class SongStoryActivity extends Activity {
                         int comment_count = response.body();
                         holder.tv_sound_story_comment.setText(String.valueOf(comment_count));
                     } else {
-                        Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SongStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -969,7 +968,7 @@ public class SongStoryActivity extends Activity {
                             storyList.get(position).setFirst_checked(true);
                         }
                     } else {
-                        Toast.makeText(SongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SongStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 

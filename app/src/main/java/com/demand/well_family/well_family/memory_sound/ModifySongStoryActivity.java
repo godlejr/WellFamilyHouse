@@ -13,7 +13,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.media.ExifInterface;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,19 +21,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.style.TextAppearanceSpan;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -46,23 +39,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.demand.well_family.well_family.LoginActivity;
-import com.demand.well_family.well_family.MainActivity;
-import com.demand.well_family.well_family.ModifyStoryActivity;
+import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.SongStoryServerConnection;
-import com.demand.well_family.well_family.connection.StoryServerConnection;
-import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.SongPhoto;
-import com.demand.well_family.well_family.dto.SongStoryEmotionData;
-import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
-import com.demand.well_family.well_family.market.MarketMainActivity;
-import com.demand.well_family.well_family.settings.SettingActivity;
-import com.demand.well_family.well_family.users.SongStoryDetailActivity;
-import com.demand.well_family.well_family.users.UserActivity;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
 import org.slf4j.Logger;
@@ -74,10 +57,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import okhttp3.MediaType;
@@ -343,7 +323,7 @@ public class ModifySongStoryActivity extends Activity {
                                                         if (response.isSuccessful()) {
 
                                                         } else {
-                                                            Toast.makeText(ModifySongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(ModifySongStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                                         }
                                                     }
 
@@ -374,7 +354,7 @@ public class ModifySongStoryActivity extends Activity {
                                         finish();
 
                                     } else {
-                                        Toast.makeText(ModifySongStoryActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ModifySongStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
 

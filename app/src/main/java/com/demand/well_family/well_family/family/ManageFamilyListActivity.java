@@ -26,7 +26,7 @@ import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
 import com.demand.well_family.well_family.flag.FamilyJoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,7 +142,7 @@ public class ManageFamilyListActivity extends Activity {
                     rv_manage_family_join.setLayoutManager(new LinearLayoutManager(ManageFamilyListActivity.this, LinearLayoutManager.VERTICAL, false));
 
                 } else {
-                    Toast.makeText(ManageFamilyListActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ManageFamilyListActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -270,7 +270,7 @@ public class ManageFamilyListActivity extends Activity {
 
                                     startActivityForResult(intent, POPUP);
                                 } else {
-                                    Toast.makeText(ManageFamilyListActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ManageFamilyListActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 

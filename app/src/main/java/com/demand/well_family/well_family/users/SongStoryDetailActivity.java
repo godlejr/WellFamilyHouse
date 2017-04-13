@@ -8,24 +8,16 @@ import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.style.TextAppearanceSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -40,8 +32,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.demand.well_family.well_family.LoginActivity;
-import com.demand.well_family.well_family.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.SongServerConnection;
 import com.demand.well_family.well_family.connection.SongStoryServerConnection;
@@ -52,14 +42,10 @@ import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStoryComment;
 import com.demand.well_family.well_family.dto.SongStoryEmotionData;
-import com.demand.well_family.well_family.family.ManageFamilyActivity;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
-import com.demand.well_family.well_family.market.MarketMainActivity;
-import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.photos.SongPhotoPopupActivity;
-import com.demand.well_family.well_family.settings.SettingActivity;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -269,7 +255,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                     int comment_count = response.body();
                     tv_sound_story_detail_comment_count.setText(String.valueOf(comment_count));
                 } else {
-                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -320,7 +306,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                 if(response.isSuccessful()){
 
                 }else {
-                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -345,7 +331,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                     Glide.with(SongStoryDetailActivity.this).load(getString(R.string.cloud_front_songs_avatar) + song_avatar)
                             .thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_detail_song_img);
                 } else {
-                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -390,7 +376,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                     int like_count = response.body();
                     tv_sound_story_detail_like_count.setText(String.valueOf(like_count));
                 } else {
-                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -478,7 +464,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                     }
 
                 } else {
-                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -647,7 +633,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                         rv_sound_story_detail.addItemDecoration(new SpaceItemDecoration(16));
                     }
                 } else {
-                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -675,7 +661,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                     rv_detail_emotion.setAdapter(emotionAdapter);
                     rv_detail_emotion.setLayoutManager(new GridLayoutManager(SongStoryDetailActivity.this, 2));
                 } else {
-                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -763,7 +749,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                                 NestedScrollView nsv = (NestedScrollView) findViewById(R.id.nsv_sound_story_detail);
                                 nsv.fullScroll(NestedScrollView.FOCUS_DOWN);
                             } else {
-                                Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SongStoryDetailActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -792,7 +778,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                     rv_sound_story_detail_comments.setAdapter(commentAdapter);
                     rv_sound_story_detail_comments.setLayoutManager(new LinearLayoutManager(SongStoryDetailActivity.this, LinearLayoutManager.VERTICAL, false));
                 } else {
-                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongStoryDetailActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1027,7 +1013,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                             tv_sound_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_sound_story_detail_like_count.getText().toString()) + 1));
                             like_checked = !like_checked;
                         } else {
-                            Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SongStoryDetailActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -1050,7 +1036,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                             tv_sound_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_sound_story_detail_like_count.getText().toString()) - 1));
                             like_checked = !like_checked;
                         } else {
-                            Toast.makeText(SongStoryDetailActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SongStoryDetailActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 

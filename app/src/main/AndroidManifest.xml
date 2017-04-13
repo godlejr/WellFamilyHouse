@@ -39,7 +39,7 @@
 
         <activity android:name=".users.UserActivity" />
         <activity android:name=".family.FamilyActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".main.base.activity.MainActivity" />
         <activity android:name=".register.RegisterActivity" />
         <activity android:name=".register.AgreementActivity" />
         <activity
@@ -63,7 +63,7 @@
             android:name=".market.MarketMainActivity"
             android:launchMode="singleInstance" />
         <activity
-            android:name=".create_family.CreateFamilyActivity"
+            android:name=".family.CreateFamilyActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity android:name=".search.SearchUserActivity" />
         <activity

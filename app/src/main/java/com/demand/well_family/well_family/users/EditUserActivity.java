@@ -39,7 +39,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.demand.well_family.well_family.MainActivity;
+import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.SongServerConnection;
 import com.demand.well_family.well_family.connection.UserServerConnection;
@@ -48,7 +48,7 @@ import com.demand.well_family.well_family.dto.SongCategory;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
 import org.slf4j.Logger;
@@ -303,7 +303,7 @@ public class EditUserActivity extends Activity {
                         }
                     }
                 } else {
-                    Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditUserActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -350,7 +350,7 @@ public class EditUserActivity extends Activity {
                     rv_profile_favorite.setAdapter(profileOptionAdapter);
                     rv_profile_favorite.setLayoutManager(new GridLayoutManager(EditUserActivity.this, 3));
                 } else {
-                    Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditUserActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -372,7 +372,7 @@ public class EditUserActivity extends Activity {
                     rv_profile_song.setAdapter(profileSongAdapter);
                     rv_profile_song.setLayoutManager(new GridLayoutManager(EditUserActivity.this, 3));
                 } else {
-                    Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditUserActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -423,7 +423,7 @@ public class EditUserActivity extends Activity {
                                             //scss
                                             resetUserinfo();
                                         } else {
-                                            Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(EditUserActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
@@ -459,7 +459,7 @@ public class EditUserActivity extends Activity {
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                         if (!response.isSuccessful()) {
-                                                            Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(EditUserActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                                         }
                                                         //scss
                                                     }
@@ -473,7 +473,7 @@ public class EditUserActivity extends Activity {
                                             }
                                         }
                                     } else {
-                                        Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EditUserActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -503,7 +503,7 @@ public class EditUserActivity extends Activity {
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                         if (!response.isSuccessful()) {
-                                                            Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(EditUserActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                                         }
                                                         //scss
                                                     }
@@ -517,7 +517,7 @@ public class EditUserActivity extends Activity {
                                             }
                                         }
                                     } else {
-                                        Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EditUserActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
@@ -553,7 +553,7 @@ public class EditUserActivity extends Activity {
                             finish();
 
                         } else {
-                            Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditUserActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -603,7 +603,7 @@ public class EditUserActivity extends Activity {
                     editor_update.putString("user_phone", userInfo.getPhone());
                     editor_update.apply();
                 } else {
-                    Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditUserActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -680,7 +680,7 @@ public class EditUserActivity extends Activity {
                             holder.tv_option.setTextColor(Color.parseColor("#999999"));
                         }
                     } else {
-                        Toast.makeText(EditUserActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditUserActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -761,7 +761,7 @@ public class EditUserActivity extends Activity {
                             holder.tv_option.setTextColor(Color.parseColor("#999999"));
                         }
                     } else {
-                        Toast.makeText(context, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 

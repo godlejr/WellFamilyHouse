@@ -25,10 +25,11 @@ import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.JoinFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.register.AgreementActivity;
 import com.demand.well_family.well_family.register.SNSRegisterActivity;
 import com.demand.well_family.well_family.settings.SearchAccountActivity;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -314,7 +315,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         setLogin(userInfo);
                     }
                 } else {
-                    Toast.makeText(LoginActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -351,7 +352,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 setLogin(userInfo);
                             }
                         } else {
-                            Toast.makeText(LoginActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -396,7 +397,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(LoginActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 

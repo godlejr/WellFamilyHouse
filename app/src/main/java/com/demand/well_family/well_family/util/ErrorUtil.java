@@ -1,7 +1,6 @@
 package com.demand.well_family.well_family.util;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.demand.well_family.well_family.flag.LogFlag;
 
@@ -14,13 +13,13 @@ import retrofit2.Response;
  * Created by ㅇㅇ on 2017-03-15.
  */
 
-public class ErrorUtils {
+public class ErrorUtil {
     private Logger logger = null;
     private String className, methodName;
     private Response errorResponse;
     private Class errorClass;
 
-    public ErrorUtils(Class errorClass) {
+    public ErrorUtil(Class errorClass) {
         this.errorClass = errorClass;
     }
 

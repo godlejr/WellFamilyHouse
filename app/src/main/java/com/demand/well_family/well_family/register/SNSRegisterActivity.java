@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.demand.well_family.well_family.MainActivity;
+import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.MainServerConnection;
 import com.demand.well_family.well_family.connection.UserServerConnection;
@@ -24,7 +24,7 @@ import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.JoinFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.slf4j.Logger;
@@ -200,7 +200,7 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
                                                         startActivity(intent);
                                                         finish();
                                                     } else {
-                                                        Toast.makeText(SNSRegisterActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(SNSRegisterActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
 
@@ -211,7 +211,7 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
                                                 }
                                             });
                                         } else {
-                                            Toast.makeText(SNSRegisterActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(SNSRegisterActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
@@ -222,7 +222,7 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
                                     }
                                 });
                             } else {
-                                Toast.makeText(SNSRegisterActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SNSRegisterActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 

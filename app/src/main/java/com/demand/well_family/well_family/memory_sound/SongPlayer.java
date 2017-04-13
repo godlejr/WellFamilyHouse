@@ -34,7 +34,7 @@ import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.SongComment;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -183,7 +183,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                                 NestedScrollView nsv = (NestedScrollView) findViewById(R.id.nsv_player);
                                 nsv.fullScroll(NestedScrollView.FOCUS_DOWN);
                             } else {
-                                Toast.makeText(SongPlayer.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SongPlayer.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -315,7 +315,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                         if (response.isSuccessful()) {
                             tv_sound_like_count.setText(String.valueOf(Integer.parseInt(tv_sound_like_count.getText().toString()) + 1));
                         } else {
-                            Toast.makeText(SongPlayer.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SongPlayer.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -334,7 +334,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                         if (response.isSuccessful()) {
                             tv_sound_like_count.setText(String.valueOf(Integer.parseInt(tv_sound_like_count.getText().toString()) - 1));
                         } else {
-                            Toast.makeText(SongPlayer.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SongPlayer.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -398,7 +398,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                     int like_count = response.body();
                     tv_sound_like_count.setText(String.valueOf(like_count));
                 } else {
-                    Toast.makeText(SongPlayer.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongPlayer.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -426,7 +426,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                     }
                     first_checked = true;
                 } else {
-                    Toast.makeText(SongPlayer.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongPlayer.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -490,7 +490,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                     int comment_count = response.body();
                     tv_sound_comment_count.setText(String.valueOf(comment_count));
                 } else {
-                    Toast.makeText(SongPlayer.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongPlayer.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -516,7 +516,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                     rv_sound_player_comment.setLayoutManager(new LinearLayoutManager(SongPlayer.this, LinearLayoutManager.VERTICAL, false));
                     rv_sound_player_comment.setAdapter(commentAdapter);
                 } else {
-                    Toast.makeText(SongPlayer.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SongPlayer.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 

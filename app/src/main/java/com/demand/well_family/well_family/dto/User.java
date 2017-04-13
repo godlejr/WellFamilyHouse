@@ -15,6 +15,9 @@ public class User {
     private int login_category_id;
     private String access_token;
 
+    public User() {
+    }
+
     public User(int id, String email, String name, String birth, String phone, String avatar, int level) {
         this.id = id;
         this.email = email;

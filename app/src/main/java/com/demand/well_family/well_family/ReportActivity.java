@@ -19,7 +19,7 @@ import com.demand.well_family.well_family.connection.MainServerConnection;
 import com.demand.well_family.well_family.connection.UserServerConnection;
 import com.demand.well_family.well_family.dto.Category;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -138,7 +138,7 @@ public class ReportActivity extends Activity {
                                 Toast.makeText(ReportActivity.this, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show();
                                 finish();
                             } else{
-                                Toast.makeText(ReportActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ReportActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 

@@ -37,7 +37,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.LoginActivity;
-import com.demand.well_family.well_family.MainActivity;
+import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.MainServerConnection;
 import com.demand.well_family.well_family.connection.SongServerConnection;
@@ -55,9 +55,8 @@ import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.photos.SongPhotoPopupActivity;
 import com.demand.well_family.well_family.settings.SettingActivity;
-import com.demand.well_family.well_family.users.SongStoryDetailActivity;
 import com.demand.well_family.well_family.users.UserActivity;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -210,7 +209,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                 if(response.isSuccessful()){
 
                 }else {
-                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -266,7 +265,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                                 }
                                 first_checked =true;
                             } else {
-                                Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -279,7 +278,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
 
                     setContent();
                 } else {
-                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -344,7 +343,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                     Glide.with(NotificationSongStoryDetail.this).load(getString(R.string.cloud_front_songs_avatar) + song_avatar)
                             .thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_detail_song_img);
                 } else {
-                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -375,7 +374,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                     int like_count = response.body();
                     tv_sound_story_detail_like_count.setText(String.valueOf(like_count));
                 } else {
-                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -404,7 +403,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                         rv_sound_story_detail.addItemDecoration(new SpaceItemDecoration(16));
                     }
                 } else {
-                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -623,7 +622,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                         rv_sound_story_detail.addItemDecoration(new SpaceItemDecoration(16));
                     }
                 } else {
-                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -652,7 +651,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                     rv_detail_emotion.setAdapter(emotionAdapter);
                     rv_detail_emotion.setLayoutManager(new GridLayoutManager(NotificationSongStoryDetail.this, 2));
                 } else {
-                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -736,7 +735,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                                 NestedScrollView nsv = (NestedScrollView) findViewById(R.id.nsv_sound_story_detail);
                                 nsv.fullScroll(NestedScrollView.FOCUS_DOWN);
                             } else {
-                                Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -765,7 +764,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                     rv_sound_story_detail_comments.setAdapter(commentAdapter);
                     rv_sound_story_detail_comments.setLayoutManager(new LinearLayoutManager(NotificationSongStoryDetail.this, LinearLayoutManager.VERTICAL, false));
                 } else {
-                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -790,7 +789,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                     int comment_count = response.body();
                     tv_sound_story_detail_comment_count.setText(String.valueOf(comment_count));
                 } else {
-                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1102,7 +1101,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                             tv_sound_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_sound_story_detail_like_count.getText().toString()) + 1));
                             like_checked = !like_checked;
                         } else {
-                            Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -1122,7 +1121,7 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                             tv_sound_story_detail_like_count.setText(String.valueOf(Integer.parseInt(tv_sound_story_detail_like_count.getText().toString()) - 1));
                             like_checked = !like_checked;
                         } else {
-                            Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(NotificationSongStoryDetail.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                         }
                     }
 

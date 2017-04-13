@@ -1,4 +1,4 @@
-package com.demand.well_family.well_family.create_family;
+package com.demand.well_family.well_family.family;
 
 import android.Manifest;
 import android.app.Activity;
@@ -34,10 +34,9 @@ import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.connection.FamilyServerConnection;
 import com.demand.well_family.well_family.connection.UserServerConnection;
 import com.demand.well_family.well_family.dto.Family;
-import com.demand.well_family.well_family.family.FamilyActivity;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
 import org.slf4j.Logger;
@@ -214,7 +213,7 @@ public class CreateFamilyActivity extends Activity {
 
                                                             finish();
                                                         } else {
-                                                            Toast.makeText(CreateFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(CreateFamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                                         }
                                                     }
 
@@ -225,7 +224,7 @@ public class CreateFamilyActivity extends Activity {
                                                     }
                                                 });
                                             } else {
-                                                Toast.makeText(CreateFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(CreateFamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
@@ -256,7 +255,7 @@ public class CreateFamilyActivity extends Activity {
                                                 startActivity(intent);
                                                 finish();
                                             } else {
-                                                Toast.makeText(CreateFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(CreateFamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                             }
                                         }
 
@@ -268,7 +267,7 @@ public class CreateFamilyActivity extends Activity {
                                     });
                                 }
                             } else {
-                                Toast.makeText(CreateFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CreateFamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 

@@ -28,7 +28,7 @@ import com.demand.well_family.well_family.family.FamilyActivity;
 import com.demand.well_family.well_family.flag.FamilyJoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
-import com.demand.well_family.well_family.util.ErrorUtils;
+import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,7 +100,7 @@ public class SearchFamilyActivity extends Activity {
                                 familyList = response.body();
                                 getFamilyData(familyList);
                             } else {
-                                Toast.makeText(SearchFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SearchFamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -265,7 +265,7 @@ public class SearchFamilyActivity extends Activity {
                                     familyList.get(position).setJoin_flag(FamilyJoinFlag.USER_TO_FAMILY);
                                     familyAdapter.notifyItemChanged(position);
                                 } else {
-                                    Toast.makeText(SearchFamilyActivity.this, new ErrorUtils(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SearchFamilyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
