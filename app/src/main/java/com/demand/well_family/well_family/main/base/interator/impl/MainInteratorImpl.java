@@ -14,7 +14,10 @@ import com.demand.well_family.well_family.util.ErrorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,10 +39,10 @@ public class MainInteratorImpl implements MainInterator {
 
     @Override
     public void getFamilyData(User user) {
-        String access_token = user.getAccess_token();
+        String accessToken = user.getAccess_token();
         int user_id = user.getId();
 
-        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
         Call<ArrayList<Family>> call = userServerConnection.family_Info(user_id);
         call.enqueue(new Callback<ArrayList<Family>>() {
             @Override
@@ -97,6 +100,19 @@ public class MainInteratorImpl implements MainInterator {
             }
         });
 
+    }
+
+    @Override
+    public String getUserBirth(String birth) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = dateFormat.parse(birth);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일생");
+            return simpleDateFormat.format(date);
+        } catch (ParseException e) {
+            log(e);
+            return null;
+        }
     }
 
 

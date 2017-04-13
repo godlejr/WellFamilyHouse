@@ -18,6 +18,7 @@ public interface MainPresenter {
 
     void setToolbarAndMenu(User user);
 
+    void setUserBirth(String birth);
 
     void getFamilyData();
 

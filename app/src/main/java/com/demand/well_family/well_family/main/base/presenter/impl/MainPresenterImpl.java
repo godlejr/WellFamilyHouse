@@ -51,7 +51,7 @@ public class MainPresenterImpl implements MainPresenter {
     public void setToolbarAndMenu(User user) {
         preferenceUtil.setUserInfoForMain(user);
 
-        View decorView = mainView.getDecoView();
+        View decorView = mainView.getDecorView();
 
         mainView.setToolbar(decorView);
         mainView.setMenu(decorView);
@@ -67,6 +67,12 @@ public class MainPresenterImpl implements MainPresenter {
         }
 
         mainView.showMenuUserInfo(user);
+    }
+
+    @Override
+    public void setUserBirth(String birth) {
+        String date = mainInterator.getUserBirth(birth);
+        mainView.showMenuUserBirth(date);
     }
 
     @Override
@@ -113,12 +119,11 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void onNetworkError(APIError apiError) {
         if(apiError == null){
-            mainView.showServerErrorMessage();
+            mainView.showMessage("네트워크 불안정합니다. 다시 시도하세요.");
         }else{
             mainView.showMessage(apiError.message());
         }
     }
-
 
     @Override
     public void onBackPressed() {

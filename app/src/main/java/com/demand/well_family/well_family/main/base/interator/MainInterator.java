@@ -16,4 +16,6 @@ public interface MainInterator {
     ArrayList<App> getAppData();
 
     void setUserInfo(User user);
+
+    String getUserBirth(String birth);
 }

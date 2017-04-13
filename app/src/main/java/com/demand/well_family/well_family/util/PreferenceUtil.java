@@ -48,6 +48,7 @@ public class PreferenceUtil {
         user.setAvatar(userInfo.getString("user_avatar", null));
         user.setPhone(userInfo.getString("user_phone", null));
         user.setAccess_token(userInfo.getString("access_token", null));
+        user.setDevice_id(userInfo.getString("device_id", null));
 
         return user;
     }

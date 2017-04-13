@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.main.join.activity.JoinActivity;
 
 /**
  * Created by ㅇㅇ on 2017-01-18.
@@ -50,7 +51,7 @@ public class AgreementActivity extends AppCompatActivity {
                 if (!(cb_agree1.isChecked() && cb_agree2.isChecked())) {
                     Toast.makeText(AgreementActivity.this, "이용약관에 동의하세요.", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent intent = new Intent(v.getContext(), RegisterActivity.class);
+                    Intent intent = new Intent(v.getContext(), JoinActivity.class);
                     startActivity(intent);
                     finish();
                 }

@@ -16,7 +16,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.TextAppearanceSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,10 +48,7 @@ import com.demand.well_family.well_family.notification.NotificationActivity;
 import com.demand.well_family.well_family.settings.SettingActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import static com.demand.well_family.well_family.LoginActivity.finishList;
 
@@ -304,7 +300,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
     }
 
     @Override
-    public View getDecoView() {
+    public View getDecorView() {
         if (decorView == null) {
             decorView = this.getWindow().getDecorView();
         }
@@ -319,27 +315,18 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
     @Override
     public void showMenuUserInfo(User user) {
         tv_menu_name.setText(user.getName());
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = dateFormat.parse(user.getBirth());
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일생");
-            tv_menu_birth.setText(simpleDateFormat.format(date));
-        } catch (ParseException e) {
-            Log.e("ParseException: ", e + "");
-        }
+        mainPresenter.setUserBirth(user.getBirth());
         Glide.with(this).load(getString(R.string.cloud_front_user_avatar) + user.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_menu_avatar);
     }
 
+    @Override
+    public void showMenuUserBirth(String birth) {
+        tv_menu_birth.setText(birth);
+    }
 
     @Override
     public void showBadgeCount(String message) {
         toolbar_noti_count.setText(message);
-    }
-
-
-    @Override
-    public void showServerErrorMessage() {
-        Toast.makeText(this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -396,7 +383,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
 
     @Override
     public void navigateToHappyfeet() {
-       Intent  intent = getPackageManager().getLaunchIntentForPackage(getString(R.string.happyfeet));
+        Intent intent = getPackageManager().getLaunchIntentForPackage(getString(R.string.happyfeet));
         if (intent == null) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.market_front) + getString(R.string.happyfeet))));
         } else {
@@ -442,8 +429,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
 
         startActivity(intent);
     }
-
-
 
 
 }

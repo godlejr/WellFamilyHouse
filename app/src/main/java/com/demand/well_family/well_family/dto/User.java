@@ -13,6 +13,7 @@ public class User {
     private String avatar;
     private int level;
     private int login_category_id;
+    private String device_id;
     private String access_token;
 
     public User() {
@@ -110,5 +111,13 @@ public class User {
 
     public void setLogin_category_id(int login_category_id) {
         this.login_category_id = login_category_id;
+    }
+
+    public String getDevice_id() {
+        return device_id;
+    }
+
+    public void setDevice_id(String device_id) {
+        this.device_id = device_id;
     }
 }

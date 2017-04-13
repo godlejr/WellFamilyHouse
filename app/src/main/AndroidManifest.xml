@@ -21,7 +21,7 @@
         android:theme="@style/AppTheme">
         <!--.LoginActivity-->
         <activity
-            android:name=".intro.IntroActivity"
+            android:name=".main.intro.activity.IntroActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:windowSoftInputMode="adjustResize">
             <!--android:windowSoftInputMode="adjustPan">-->
@@ -40,7 +40,7 @@
         <activity android:name=".users.UserActivity" />
         <activity android:name=".family.FamilyActivity" />
         <activity android:name=".main.base.activity.MainActivity" />
-        <activity android:name=".register.RegisterActivity" />
+        <activity android:name=".main.join.activity.JoinActivity" />
         <activity android:name=".register.AgreementActivity" />
         <activity
             android:name=".LoginActivity"

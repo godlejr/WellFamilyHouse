@@ -25,15 +25,16 @@ public interface MainView {
 
     void setFamilyAddView();
 
-    View getDecoView();
+    View getDecorView();
 
     void showToolbarTitle(String message);
 
     void showMenuUserInfo(User user);
 
+    void showMenuUserBirth(String birth);
+
     void showBadgeCount(String message);
 
-    void showServerErrorMessage();
 
     void showMessage(String message);
 
