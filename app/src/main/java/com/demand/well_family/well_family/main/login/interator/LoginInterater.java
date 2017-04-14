@@ -18,9 +18,9 @@ public interface LoginInterater {
 
     void setFacebookLogin();
 
-    void setLogin(User user,String deviceId, String firebaseToken);
+    void setDeviceIdAndToken(User user,String deviceId, String firebaseToken);
 
-    void validateLogin(String email,String password);
+    void setLogin(String email,String password);
 
     CallbackManager getCallbackManager();
 

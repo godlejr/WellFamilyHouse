@@ -51,7 +51,7 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void onClickLogin(String email, String password) {
-        loginInterater.validateLogin(email,password);
+        loginInterater.setLogin(email,password);
     }
 
     @Override
@@ -67,25 +67,25 @@ public class LoginPresenterImpl implements LoginPresenter {
             String deviceId = loginView.getDeviceId();
             String firebaseToken = loginView.getFireBaseToken();
 
-            loginInterater.setLogin(userFromLogin, deviceId, firebaseToken);
+            loginInterater.setDeviceIdAndToken(userFromLogin, deviceId, firebaseToken);
         }
     }
 
     @Override
-    public void onSuccessValidateLogin(User user) {
+    public void onSuccessLogin(User user) {
         if (user == null) {
             loginView.showMessage("ID / 패스워드를 확인해주세요.");
         } else {
             String deviceId = loginView.getDeviceId();
             String firebaseToken = loginView.getFireBaseToken();
 
-            loginInterater.setLogin(user, deviceId, firebaseToken);
+            loginInterater.setDeviceIdAndToken(user, deviceId, firebaseToken);
         }
     }
 
     @Override
-    public void onSuccessLogin(User user, String deviceId, String firebaseToken) {
-        preferenceUtil.setUserInfoForLogin(user, deviceId, firebaseToken);
+    public void onSuccessSetDeviceIdAndToken(User user, String deviceId, String firebaseToken,String accessToken) {
+        preferenceUtil.setUserInfo(user, deviceId, firebaseToken,accessToken);
         loginView.navigateToMainActivity();
     }
 

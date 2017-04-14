@@ -45,7 +45,7 @@
         <activity
             android:name=".main.login.activity.LoginActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".register.JoinFromSNSActivity" />
+        <activity android:name=".main.sns.activity.JoinFromSNSActivity" />
         <activity
             android:name=".WriteActivity"
             android:configChanges="keyboardHidden|orientation" />

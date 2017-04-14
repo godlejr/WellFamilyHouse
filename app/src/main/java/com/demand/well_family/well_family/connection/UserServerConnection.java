@@ -31,11 +31,11 @@ public interface UserServerConnection {
     @GET("{user_id}")
     Call<User> user_Info(@Path("user_id") int user_id);
 
-    @PUT("{user_id}/tokens/{token}/deviceids/{device_id}")
-    Call<ResponseBody> update_deviceId_token(@Path("user_id") int user_id, @Path("token") String token, @Path("device_id") String device_id);
+    @PUT("{user_id}/tokenAndDeviceid")
+    Call<ResponseBody> update_deviceId_token(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
-    @GET("{user_id}/deviceids/{device_id}")
-    Call<Integer> check_device_id(@Path("user_id") int user_id, @Path("device_id") String device_id);
+    @GET("{user_id}/deviceids")
+    Call<Integer> check_device_id(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
     @PUT("{user_id}/tokens/{token}")
     Call<ResponseBody> update_token(@Path("user_id") int user_id, @Path("token") String token);

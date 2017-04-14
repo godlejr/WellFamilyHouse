@@ -49,7 +49,7 @@ public class MainInteratorImpl implements MainInterator {
             public void onResponse(Call<ArrayList<Family>> call, Response<ArrayList<Family>> response) {
                 if (response.isSuccessful()) {
                     ArrayList<Family> familyList = response.body();
-                    mainPresenter.onFamilyDataParsing(familyList);
+                    mainPresenter.onSuccessGetFamilyData(familyList);
                 } else {
                     mainPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }

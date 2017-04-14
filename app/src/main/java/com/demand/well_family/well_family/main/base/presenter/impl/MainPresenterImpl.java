@@ -82,7 +82,7 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
-    public void onFamilyDataParsing(ArrayList<Family> familyList) {
+    public void onSuccessGetFamilyData(ArrayList<Family> familyList) {
         if (familyList.size() == 0) {
             mainView.setFamilyAddView();
         } else {

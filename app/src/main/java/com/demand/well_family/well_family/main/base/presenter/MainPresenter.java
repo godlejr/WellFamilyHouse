@@ -25,7 +25,7 @@ public interface MainPresenter {
     void getAppData();
 
 
-    void onFamilyDataParsing(ArrayList<Family> familyList);
+    void onSuccessGetFamilyData(ArrayList<Family> familyList);
 
     void onClickLogout();
 

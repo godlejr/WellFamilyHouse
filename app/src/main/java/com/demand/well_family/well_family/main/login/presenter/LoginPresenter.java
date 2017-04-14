@@ -22,9 +22,9 @@ public interface LoginPresenter {
 
     void onSuccessSNSLogin(User userFromLogin, User userForLogin);
 
-    void onSuccessValidateLogin(User user);
+    void onSuccessLogin(User user);
 
-    void onSuccessLogin(User user,String deviceId, String firebaseToken);
+    void onSuccessSetDeviceIdAndToken(User user,String deviceId, String firebaseToken, String accessToken);
 
     void onLoginFocusChange(boolean hasFocus);
 

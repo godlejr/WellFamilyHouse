@@ -18,7 +18,7 @@ import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.main.login.presenter.LoginPresenter;
 import com.demand.well_family.well_family.main.login.presenter.impl.LoginPresenterImpl;
 import com.demand.well_family.well_family.main.login.view.LoginView;
-import com.demand.well_family.well_family.register.JoinFromSNSActivity;
+import com.demand.well_family.well_family.main.sns.activity.JoinFromSNSActivity;
 import com.demand.well_family.well_family.settings.SearchAccountActivity;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -157,7 +157,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView, View.
         return response;
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -186,7 +185,6 @@ public class LoginActivity extends AppCompatActivity implements LoginView, View.
                 break;
         }
     }
-
 
     @Override
     public void onBackPressed() {

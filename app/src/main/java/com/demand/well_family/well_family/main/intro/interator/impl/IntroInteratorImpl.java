@@ -11,6 +11,8 @@ import com.demand.well_family.well_family.util.ErrorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,8 +38,10 @@ public class IntroInteratorImpl implements IntroInterator {
         String deviceId = user.getDevice_id();
         String accessToken = user.getAccess_token();
 
+        HashMap<String,String> map =new HashMap<>();
+        map.put("device_id",deviceId);
         userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
-        Call<Integer> call_device_check = userServerConnection.check_device_id(userId, deviceId);
+        Call<Integer> call_device_check = userServerConnection.check_device_id(userId,map);
         call_device_check.enqueue(new Callback<Integer>() {
             @Override
             public void onResponse(Call<Integer> call, Response<Integer> response) {

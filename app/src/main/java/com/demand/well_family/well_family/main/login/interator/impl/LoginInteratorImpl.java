@@ -129,7 +129,7 @@ public class LoginInteratorImpl implements LoginInterater {
                 if (error instanceof FacebookAuthorizationException) {
                     if (AccessToken.getCurrentAccessToken() != null) {
                         LoginManager.getInstance().logOut();
-                    }else{
+                    } else {
                         loginPresenter.onNetworkError(null);
                     }
                 }
@@ -139,16 +139,20 @@ public class LoginInteratorImpl implements LoginInterater {
     }
 
     @Override
-    public void setLogin(final User user, final String deviceId, final String firebaseToken) {
-        String accessToken = user.getAccess_token();
+    public void setDeviceIdAndToken(final User user, final String deviceId, final String firebaseToken) {
+        final String accessToken = user.getAccess_token();
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("device_id", deviceId);
+        map.put("token", firebaseToken);
 
         userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
-        Call<ResponseBody> call_update_deviceId_token = userServerConnection.update_deviceId_token(user.getId(), firebaseToken, deviceId);
+        Call<ResponseBody> call_update_deviceId_token = userServerConnection.update_deviceId_token(user.getId(), map);
         call_update_deviceId_token.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    loginPresenter.onSuccessLogin(user,deviceId,firebaseToken);
+                    loginPresenter.onSuccessSetDeviceIdAndToken(user, deviceId, firebaseToken, accessToken);
                 } else {
                     loginPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
@@ -163,7 +167,7 @@ public class LoginInteratorImpl implements LoginInterater {
     }
 
     @Override
-    public void validateLogin(String email, String password) {
+    public void setLogin(String email, String password) {
         String encryptedPassword = EncryptionUtil.encryptSHA256(password);
         HashMap<String, String> map = new HashMap<>();
         map.put("email", email);
@@ -177,7 +181,7 @@ public class LoginInteratorImpl implements LoginInterater {
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     User user = response.body();
-                    loginPresenter.onSuccessValidateLogin(user);
+                    loginPresenter.onSuccessLogin(user);
                 } else {
                     loginPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
@@ -284,7 +288,6 @@ public class LoginInteratorImpl implements LoginInterater {
             }
         });
     }
-
 
 
     private static void log(Throwable throwable) {
