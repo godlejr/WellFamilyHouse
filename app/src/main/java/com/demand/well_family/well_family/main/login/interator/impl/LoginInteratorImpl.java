@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
-import com.demand.well_family.well_family.connection.MainServerConnection;
-import com.demand.well_family.well_family.connection.UserServerConnection;
+import com.demand.well_family.well_family.repository.MainServerConnection;
+import com.demand.well_family.well_family.repository.UserServerConnection;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.JoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.main.login.interator.LoginInterater;
 import com.demand.well_family.well_family.main.login.presenter.LoginPresenter;
 import com.demand.well_family.well_family.util.EncryptionUtil;

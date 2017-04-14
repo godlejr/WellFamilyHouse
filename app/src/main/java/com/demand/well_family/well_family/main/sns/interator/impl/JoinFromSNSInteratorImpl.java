@@ -1,10 +1,10 @@
 package com.demand.well_family.well_family.main.sns.interator.impl;
 
-import com.demand.well_family.well_family.connection.MainServerConnection;
-import com.demand.well_family.well_family.connection.UserServerConnection;
+import com.demand.well_family.well_family.repository.MainServerConnection;
+import com.demand.well_family.well_family.repository.UserServerConnection;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.main.sns.interator.JoinFromSNSInterator;
 import com.demand.well_family.well_family.main.sns.presenter.JoinFromSNSPresenter;
 import com.demand.well_family.well_family.util.ErrorUtil;

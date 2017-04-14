@@ -1,7 +1,6 @@
-package com.demand.well_family.well_family.connection;
+package com.demand.well_family.well_family.repository;
 
 import com.demand.well_family.well_family.dto.Family;
-import com.demand.well_family.well_family.dto.FamilyInfoForFamilyJoin;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;

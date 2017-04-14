@@ -36,10 +36,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.demand.well_family.well_family.connection.StoryServerConnection;
+import com.demand.well_family.well_family.repository.StoryServerConnection;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.util.ErrorUtil;
 import com.demand.well_family.well_family.util.RealPathUtil;

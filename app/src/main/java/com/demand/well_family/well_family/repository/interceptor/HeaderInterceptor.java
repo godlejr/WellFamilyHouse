@@ -1,14 +1,10 @@
-package com.demand.well_family.well_family.interceptor;
+package com.demand.well_family.well_family.repository.interceptor;
 
-import android.content.SharedPreferences;
-import android.support.v4.content.SharedPreferencesCompat;
-import android.util.Log;
-
+import com.demand.well_family.well_family.repository.converter.NullOnEmptyConverterFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
-import java.util.Set;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;

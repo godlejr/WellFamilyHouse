@@ -1,4 +1,4 @@
-package com.demand.well_family.well_family.connection;
+package com.demand.well_family.well_family.repository;
 
 import com.demand.well_family.well_family.dto.Comment;
 import com.demand.well_family.well_family.dto.CommentInfo;

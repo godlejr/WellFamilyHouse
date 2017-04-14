@@ -3,10 +3,10 @@ package com.demand.well_family.well_family.main.join.interator.impl;
 import android.text.InputFilter;
 import android.text.Spanned;
 
-import com.demand.well_family.well_family.connection.MainServerConnection;
+import com.demand.well_family.well_family.repository.MainServerConnection;
 import com.demand.well_family.well_family.flag.JoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.main.base.interator.impl.MainInteratorImpl;
 import com.demand.well_family.well_family.main.join.interator.JoinInterator;
 import com.demand.well_family.well_family.main.join.presenter.JoinPresenter;

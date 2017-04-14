@@ -22,13 +22,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.connection.UserServerConnection;
+import com.demand.well_family.well_family.repository.UserServerConnection;
 import com.demand.well_family.well_family.dialog.FamilyPopup;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.FamilyInfoForFamilyJoin;
 import com.demand.well_family.well_family.flag.FamilyJoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.search.SearchFamilyActivity;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
