@@ -14,10 +14,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.demand.well_family.well_family.LoginActivity;
+import com.demand.well_family.well_family.main.login.activity.LoginActivity;
 import com.demand.well_family.well_family.R;
 
-import static com.demand.well_family.well_family.LoginActivity.finishList;
+import static com.demand.well_family.well_family.main.login.activity.LoginActivity.finishList;
 
 /**
  * Created by ㅇㅇ on 2017-04-07.

@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.demand.well_family.well_family.LoginActivity;
+import com.demand.well_family.well_family.main.login.activity.LoginActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dto.App;
 import com.demand.well_family.well_family.dto.Family;
@@ -50,7 +50,7 @@ import com.demand.well_family.well_family.users.UserActivity;
 
 import java.util.ArrayList;
 
-import static com.demand.well_family.well_family.LoginActivity.finishList;
+import static com.demand.well_family.well_family.main.login.activity.LoginActivity.finishList;
 
 /**
  * Created by ㅇㅇ on 2017-01-18.

@@ -41,7 +41,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.demand.well_family.well_family.LoginActivity.finishList;
+import static com.demand.well_family.well_family.main.login.activity.LoginActivity.finishList;
 
 /**
  * Created by ㅇㅇ on 2017-02-12.

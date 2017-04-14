@@ -45,7 +45,7 @@ import retrofit2.Response;
  * Created by Dev-0 on 2017-02-23.
  */
 
-public class SNSRegisterActivity extends Activity implements View.OnClickListener {
+public class JoinFromSNSActivity extends Activity implements View.OnClickListener {
     private EditText et_sns_phone;
     private Button btn_sns_register;
     private EditText et_sns_birth;
@@ -61,7 +61,7 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
     private MainServerConnection mainServerConnection;
     private UserServerConnection userServerConnection;
 
-    private static final Logger logger = LoggerFactory.getLogger(SNSRegisterActivity.class);
+    private static final Logger logger = LoggerFactory.getLogger(JoinFromSNSActivity.class);
     private SharedPreferences loginInfo;
     private SharedPreferences.Editor editor;
 
@@ -196,40 +196,40 @@ public class SNSRegisterActivity extends Activity implements View.OnClickListene
 
                                                         editor.commit();
 
-                                                        Intent intent = new Intent(SNSRegisterActivity.this, MainActivity.class);
+                                                        Intent intent = new Intent(JoinFromSNSActivity.this, MainActivity.class);
                                                         startActivity(intent);
                                                         finish();
                                                     } else {
-                                                        Toast.makeText(SNSRegisterActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(JoinFromSNSActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
 
                                                 @Override
                                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                                                     log(t);
-                                                    Toast.makeText(SNSRegisterActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(JoinFromSNSActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                                 }
                                             });
                                         } else {
-                                            Toast.makeText(SNSRegisterActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(JoinFromSNSActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(Call<User> call, Throwable t) {
                                         log(t);
-                                        Toast.makeText(SNSRegisterActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(JoinFromSNSActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                     }
                                 });
                             } else {
-                                Toast.makeText(SNSRegisterActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(JoinFromSNSActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                             log(t);
-                            Toast.makeText(SNSRegisterActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(JoinFromSNSActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
                 }

@@ -7,6 +7,7 @@ package com.demand.well_family.well_family.dto;
 public class User {
     private int id;
     private String email;
+    private String password;
     private String name;
     private String birth;
     private String phone;
@@ -119,5 +120,13 @@ public class User {
 
     public void setDevice_id(String device_id) {
         this.device_id = device_id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

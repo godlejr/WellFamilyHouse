@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
-import com.demand.well_family.well_family.LoginActivity;
+import com.demand.well_family.well_family.main.login.activity.LoginActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.main.intro.presenter.IntroPresenter;

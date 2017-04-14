@@ -20,7 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.demand.well_family.well_family.LoginActivity;
+import com.demand.well_family.well_family.main.login.activity.LoginActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dialog.TextPopup;
 import com.demand.well_family.well_family.flag.LogFlag;
