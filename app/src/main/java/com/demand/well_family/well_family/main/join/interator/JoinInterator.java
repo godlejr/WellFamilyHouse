@@ -22,5 +22,5 @@ public interface JoinInterator {
 
     boolean isEmailCheck();
 
-    public void setEmailCheck(boolean emailCheck);
+    void setEmailCheck(boolean emailCheck);
 }

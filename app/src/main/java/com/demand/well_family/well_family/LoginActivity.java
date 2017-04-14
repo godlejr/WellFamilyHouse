@@ -26,7 +26,7 @@ import com.demand.well_family.well_family.flag.JoinFlag;
 import com.demand.well_family.well_family.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.main.base.activity.MainActivity;
-import com.demand.well_family.well_family.register.AgreementActivity;
+import com.demand.well_family.well_family.main.agreement.activity.AgreementActivity;
 import com.demand.well_family.well_family.register.SNSRegisterActivity;
 import com.demand.well_family.well_family.settings.SearchAccountActivity;
 import com.demand.well_family.well_family.util.ErrorUtil;

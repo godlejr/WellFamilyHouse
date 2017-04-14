@@ -41,7 +41,7 @@
         <activity android:name=".family.FamilyActivity" />
         <activity android:name=".main.base.activity.MainActivity" />
         <activity android:name=".main.join.activity.JoinActivity" />
-        <activity android:name=".register.AgreementActivity" />
+        <activity android:name=".main.agreement.activity.AgreementActivity" />
         <activity
             android:name=".LoginActivity"
             android:launchMode="singleTop" />
