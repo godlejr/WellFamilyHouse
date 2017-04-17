@@ -8,5 +8,5 @@ import com.demand.well_family.well_family.dto.User;
 
 public interface IntroInterator {
 
-    void getDevideId(User user);
+    void getMutipleUserAccessValidation(User user);
 }

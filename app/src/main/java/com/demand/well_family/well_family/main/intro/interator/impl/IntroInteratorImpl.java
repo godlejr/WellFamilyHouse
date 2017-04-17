@@ -33,7 +33,7 @@ public class IntroInteratorImpl implements IntroInterator {
     }
 
     @Override
-    public void getDevideId(User user) {
+    public void getMutipleUserAccessValidation(User user) {
         int userId = user.getId();
         String deviceId = user.getDevice_id();
         String accessToken = user.getAccess_token();
@@ -47,7 +47,7 @@ public class IntroInteratorImpl implements IntroInterator {
             public void onResponse(Call<Integer> call, Response<Integer> response) {
                 if (response.isSuccessful()) {
                     int check = response.body();
-                    introPresenter.validateMultiUserAccess(check);
+                    introPresenter.onSuccessMultipleUserAccessValidation(check);
                 } else {
                     introPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }

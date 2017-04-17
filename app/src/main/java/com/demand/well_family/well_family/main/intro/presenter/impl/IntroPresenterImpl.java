@@ -36,14 +36,14 @@ public class IntroPresenterImpl implements IntroPresenter {
         int userId = user.getId();
 
         if (userId != 0) {
-            introInterator.getDevideId(user);
+            introInterator.getMutipleUserAccessValidation(user);
         } else {
             introView.navigateToLoginActivity();
         }
     }
 
     @Override
-    public void validateMultiUserAccess(int check) {
+    public void onSuccessMultipleUserAccessValidation(int check) {
         if (check > 0) {
             introView.navigateToMainActivity();
         } else {

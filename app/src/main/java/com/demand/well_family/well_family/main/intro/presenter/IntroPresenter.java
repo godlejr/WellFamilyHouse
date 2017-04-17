@@ -12,7 +12,7 @@ public interface IntroPresenter {
 
     void validateUserExist();
 
-    void validateMultiUserAccess(int check);
+    void onSuccessMultipleUserAccessValidation(int check);
 
     void onNetworkError(APIError apiError);
 
