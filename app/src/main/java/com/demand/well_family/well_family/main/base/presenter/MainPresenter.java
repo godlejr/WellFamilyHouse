@@ -29,9 +29,15 @@ public interface MainPresenter {
 
     void onClickLogout();
 
+    void onClickAppGames(String appPackageName);
+
+    void onClickFamily(Family family);
+
     void onCilckUser();
 
     void onClickNotification();
+
+    void onClickSongMain();
 
     void onBackPressed();
 

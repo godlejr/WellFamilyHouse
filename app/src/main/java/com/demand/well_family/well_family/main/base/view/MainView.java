@@ -52,9 +52,10 @@ public interface MainView {
 
     void navigateToSongMainActivity();
 
-    void navigateToHappyfeet();
+    void navigateToFamilyActivity(Family family);
 
-    void navigateToBubblefeet();
+
+    void navigateToAppGame(String appPackageName);
 
     void navigateToNotificationActivity();
 

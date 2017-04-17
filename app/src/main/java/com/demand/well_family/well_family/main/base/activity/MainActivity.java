@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.demand.well_family.well_family.family.FamilyActivity;
 import com.demand.well_family.well_family.main.login.activity.LoginActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dto.App;
@@ -211,15 +212,15 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
                 showMessage("준비중입니다");
                 break;
             case R.id.menu_bubblefeet:
-                navigateToBubblefeet();
+                mainPresenter.onClickAppGames(getString(R.string.bubblefeet));
                 break;
 
             case R.id.menu_happyfeet:
-                navigateToHappyfeet();
+                mainPresenter.onClickAppGames(getString(R.string.happyfeet));
                 break;
 
             case R.id.menu_memory_sound:
-                navigateToSongMainActivity();
+                mainPresenter.onClickSongMain();
                 break;
         }
         return true;
@@ -233,7 +234,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
 
     @Override
     public void setAppItem(ArrayList<App> appList) {
-        rv_apps.setAdapter(new AppAdapter(appList, this, R.layout.item_apps));
+        rv_apps.setAdapter(new AppAdapter(appList, this, R.layout.item_apps, mainPresenter));
         rv_apps.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
@@ -242,7 +243,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
         btn_family_add_exist.setVisibility(View.VISIBLE);
         layoutInflater.inflate(R.layout.item_family_list, ll_family_container_family, true);
         rv_family = (RecyclerView) ll_family_container_family.findViewById(R.id.rv_family);
-        rv_family.setAdapter(new FamilyAdapter(MainActivity.this, familyList, R.layout.item_users_familys));
+        rv_family.setAdapter(new FamilyAdapter(MainActivity.this, familyList, R.layout.item_users_familys, mainPresenter));
         rv_family.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
 
         btn_family_add_exist.setOnClickListener(this);
@@ -382,20 +383,24 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
     }
 
     @Override
-    public void navigateToHappyfeet() {
-        Intent intent = getPackageManager().getLaunchIntentForPackage(getString(R.string.happyfeet));
-        if (intent == null) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.market_front) + getString(R.string.happyfeet))));
-        } else {
-            startActivity(intent);
-        }
+    public void navigateToFamilyActivity(Family family) {
+        Intent intent = new Intent(this, FamilyActivity.class);
+
+        intent.putExtra("family_id", family.getId());
+        intent.putExtra("family_name", family.getName());
+        intent.putExtra("family_content", family.getContent());
+        intent.putExtra("family_avatar", family.getAvatar());
+        intent.putExtra("family_user_id", family.getUser_id());
+        intent.putExtra("family_created_at", family.getCreated_at());
+
+        startActivity(intent);
     }
 
     @Override
-    public void navigateToBubblefeet() {
-        Intent intent = getPackageManager().getLaunchIntentForPackage(getString(R.string.bubblefeet));
+    public void navigateToAppGame(String appPackageName) {
+        Intent intent = getPackageManager().getLaunchIntentForPackage(appPackageName);
         if (intent == null) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.market_front) + getString(R.string.bubblefeet))));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.market_front) + appPackageName)));
         } else {
             startActivity(intent);
         }
@@ -403,8 +408,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
 
     @Override
     public void navigateToNotificationActivity() {
-        Intent notificationIntent = new Intent(this, NotificationActivity.class);
-        startActivity(notificationIntent);
+        Intent intent = new Intent(this, NotificationActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -418,6 +423,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
     @Override
     public void navigateToUserActivity(User user) {
         Intent intent = new Intent(MainActivity.this, UserActivity.class);
+
 
         intent.putExtra("story_user_id", user.getId());
         intent.putExtra("story_user_email", user.getEmail());

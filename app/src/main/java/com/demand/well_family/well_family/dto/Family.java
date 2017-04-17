@@ -12,6 +12,9 @@ public class Family {
     private int user_id;
     private String created_at;
 
+    public Family() {
+    }
+
     public Family(int id, String name, String content, String avatar, int user_id, String created_at) {
         this.id = id;
         this.name = name;

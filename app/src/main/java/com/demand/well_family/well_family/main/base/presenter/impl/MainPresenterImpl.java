@@ -103,6 +103,17 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
+    public void onClickAppGames(String appPackageName) {
+        mainView.navigateToAppGame(appPackageName);
+    }
+
+    @Override
+    public void onClickFamily(Family family) {
+        mainView.navigateToFamilyActivity(family);
+    }
+
+
+    @Override
     public void onCilckUser() {
         User user = preferenceUtil.getUserInfo();
         mainView.navigateToUserActivity(user);
@@ -114,6 +125,11 @@ public class MainPresenterImpl implements MainPresenter {
         mainView.updateBadgeCount();
         mainView.showBadgeCount("");
         mainView.navigateToNotificationActivity();
+    }
+
+    @Override
+    public void onClickSongMain() {
+        mainView.navigateToSongMainActivity();
     }
 
     @Override
