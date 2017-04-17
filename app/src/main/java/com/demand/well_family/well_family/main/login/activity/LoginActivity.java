@@ -19,7 +19,7 @@ import com.demand.well_family.well_family.main.login.presenter.LoginPresenter;
 import com.demand.well_family.well_family.main.login.presenter.impl.LoginPresenterImpl;
 import com.demand.well_family.well_family.main.login.view.LoginView;
 import com.demand.well_family.well_family.main.sns.activity.JoinFromSNSActivity;
-import com.demand.well_family.well_family.settings.SearchAccountActivity;
+import com.demand.well_family.well_family.setting.SearchAccountActivity;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.iid.FirebaseInstanceId;

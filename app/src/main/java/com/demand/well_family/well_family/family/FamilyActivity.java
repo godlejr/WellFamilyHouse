@@ -56,7 +56,7 @@ import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.photos.PhotoPopupActivity;
 import com.demand.well_family.well_family.photos.PhotosActivity;
 import com.demand.well_family.well_family.search.SearchUserActivity;
-import com.demand.well_family.well_family.settings.SettingActivity;
+import com.demand.well_family.well_family.setting.base.activity.SettingActivity;
 import com.demand.well_family.well_family.users.UserActivity;
 import com.demand.well_family.well_family.util.ErrorUtil;
 

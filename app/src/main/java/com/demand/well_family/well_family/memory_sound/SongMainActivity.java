@@ -35,7 +35,7 @@ import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.repository.SongServerConnection;
 import com.demand.well_family.well_family.family.ManageFamilyActivity;
 import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
-import com.demand.well_family.well_family.settings.SettingActivity;
+import com.demand.well_family.well_family.setting.base.activity.SettingActivity;
 import com.demand.well_family.well_family.dto.Song;
 import com.demand.well_family.well_family.dto.SongCategory;
 import com.demand.well_family.well_family.flag.LogFlag;

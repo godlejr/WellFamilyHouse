@@ -85,22 +85,22 @@
 
         <activity android:name=".dialog.CommentModifyActivity" />
         <activity android:name=".ReportActivity" />
-        <activity android:name=".settings.SettingActivity" />
+        <activity android:name=".setting.base.activity.SettingActivity" />
         <activity android:name=".notification.NotificationActivity" />
-        <activity android:name=".settings.ConfirmPasswordActivity" />
-        <activity android:name=".settings.SearchAccountActivity" />
+        <activity android:name=".setting.ConfirmPasswordActivity" />
+        <activity android:name=".setting.SearchAccountActivity" />
         <activity
-            android:name=".settings.ConfirmAccountActivity"
+            android:name=".setting.ConfirmAccountActivity"
             android:theme="@style/CustomAppTheme" />
         <activity android:name=".notification.NotificationFamilyStoryDetail" />
         <activity android:name=".notification.NotificationSongStoryDetail" />
         <activity android:name=".memory_sound.ModifySongStoryActivity" />
-        <activity android:name=".settings.AccountDisableActivity" />
+        <activity android:name=".setting.AccountDisableActivity" />
         <activity
             android:name=".dialog.SongStoryPopup"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
-            android:name=".settings.AccountDisableSelectActivity"
+            android:name=".setting.AccountDisableSelectActivity"
             android:theme="@style/CustomAppTheme" />
 
         <activity

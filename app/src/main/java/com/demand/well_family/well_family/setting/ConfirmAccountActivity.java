@@ -1,4 +1,4 @@
-package com.demand.well_family.well_family.settings;
+package com.demand.well_family.well_family.setting;
 
 import android.app.Activity;
 import android.os.Bundle;
