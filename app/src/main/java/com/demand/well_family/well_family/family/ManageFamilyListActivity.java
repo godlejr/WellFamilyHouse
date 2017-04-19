@@ -20,12 +20,12 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.family.base.activity.FamilyActivity;
-import com.demand.well_family.well_family.repository.FamilyServerConnection;
-import com.demand.well_family.well_family.dialog.FamilyPopup;
+import com.demand.well_family.well_family.dialog.popup.family.activity.FamilyPopupActivity;
 import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
+import com.demand.well_family.well_family.family.base.activity.FamilyActivity;
 import com.demand.well_family.well_family.flag.FamilyJoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.repository.FamilyServerConnection;
 import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
@@ -183,7 +183,7 @@ public class ManageFamilyListActivity extends Activity {
         btn_manage_family_remove.setOnClickListener(new View.OnClickListener() { // 가족 삭제
             @Override
             public void onClick(View v) {
-                Intent remove_intent = new Intent(ManageFamilyListActivity.this, FamilyPopup.class);
+                Intent remove_intent = new Intent(ManageFamilyListActivity.this, FamilyPopupActivity.class);
                 remove_intent.putExtra("family_id", family_id);
                 remove_intent.putExtra("family_user_id", family_user_id);
                 remove_intent.putExtra("family_name", family_name);
@@ -254,7 +254,7 @@ public class ManageFamilyListActivity extends Activity {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 if (response.isSuccessful()) {
-                                    Intent intent = new Intent(ManageFamilyListActivity.this, FamilyPopup.class);
+                                    Intent intent = new Intent(ManageFamilyListActivity.this, FamilyPopupActivity.class);
 
                                     intent.putExtra("family_id", family_id);
                                     intent.putExtra("family_user_id", family_user_id);

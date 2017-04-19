@@ -49,6 +49,7 @@ public class PreferenceUtil {
         user.setPhone(userInfo.getString("user_phone", null));
         user.setAccess_token(userInfo.getString("access_token", null));
         user.setDevice_id(userInfo.getString("device_id", null));
+        user.setLogin_category_id(userInfo.getInt("login_category_id", 1));
 
         return user;
     }
@@ -68,6 +69,21 @@ public class PreferenceUtil {
         editor.apply();
     }
 
+    public boolean getNotificationCheck() {
+        SharedPreferences userInfo = getUserSharedPreferences();
+        boolean isCheck = userInfo.getBoolean("notification", true);
+
+        return isCheck;
+    }
+
+    public void setNotificationCheck(boolean isCheck) {
+        SharedPreferences userInfo = getUserSharedPreferences();
+        SharedPreferences.Editor editor = userInfo.edit();
+
+        editor.putBoolean("notification", isCheck);
+        editor.apply();
+    }
+
     public void setUserInfo(User user, String deviceId, String token, String access_token) {
         SharedPreferences userInfo = getUserSharedPreferences();
         SharedPreferences.Editor editor = userInfo.edit();
@@ -81,21 +97,12 @@ public class PreferenceUtil {
         editor.putString("token", token);
         editor.putInt("user_level", user.getLevel());
         editor.putString("access_token", access_token);
-
-        editor.commit();
-    }
-
-    public void setUserInfoForLogin(User user, String deviceId, String token) {
-        SharedPreferences userInfo = getUserSharedPreferences();
-        SharedPreferences.Editor editor = userInfo.edit();
-        editor.putInt("user_id", user.getId());
-        editor.putString("device_id", deviceId);
-        editor.putString("token", token);
-        editor.putInt("user_level", user.getLevel());
-        editor.putString("access_token", user.getAccess_token());
         editor.putInt("login_category_id", user.getLogin_category_id());
+
         editor.commit();
     }
+
+
 
     public void setUserInfoForMain(User user){
         SharedPreferences userInfo = getUserSharedPreferences();
