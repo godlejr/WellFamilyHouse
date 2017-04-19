@@ -44,28 +44,9 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.FamilyView
     public void onBindViewHolder(FamilyViewHolder holder, final int position) {
         ImageView familyAvatar = holder.iv_family_item;
         TextView familyName = holder.tv_family_name;
-        LinearLayout familyContainer = holder.ll_container;
 
         Glide.with(context).load(context.getString(R.string.cloud_front_family_avatar) + familyList.get(position).getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(familyAvatar);
         familyName.setText(familyList.get(position).getName());
-
-        familyContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Family family = new Family();
-
-                family.setId(familyList.get(position).getId());
-                family.setName( familyList.get(position).getName());
-                family.setContent(familyList.get(position).getContent());
-                family.setAvatar(familyList.get(position).getAvatar());
-                family.setUser_id( familyList.get(position).getUser_id());
-                family.setCreated_at(familyList.get(position).getCreated_at());
-
-                mainPresenter.onClickFamily(family);
-
-            }
-        });
-
 
     }
 
@@ -74,7 +55,7 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.FamilyView
         return familyList.size();
     }
 
-    public class FamilyViewHolder extends RecyclerView.ViewHolder  {
+    public class FamilyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private LinearLayout ll_container;
         private ImageView iv_family_item;
@@ -83,10 +64,30 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.FamilyView
         public FamilyViewHolder(View itemView) {
             super(itemView);
 
-            ll_container = (LinearLayout)itemView.findViewById(R.id.ll_container);
+            ll_container = (LinearLayout) itemView.findViewById(R.id.ll_container);
             iv_family_item = (ImageView) itemView.findViewById(R.id.iv_family_item);
             tv_family_name = (TextView) itemView.findViewById(R.id.tv_family_name);
 
+            ll_container.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.ll_container:
+                    int position = getAdapterPosition();
+                    Family family = new Family();
+
+                    family.setId(familyList.get(position).getId());
+                    family.setName(familyList.get(position).getName());
+                    family.setContent(familyList.get(position).getContent());
+                    family.setAvatar(familyList.get(position).getAvatar());
+                    family.setUser_id(familyList.get(position).getUser_id());
+                    family.setCreated_at(familyList.get(position).getCreated_at());
+
+                    mainPresenter.onClickFamily(family);
+                    break;
+            }
         }
     }
 }

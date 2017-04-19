@@ -60,9 +60,9 @@ public class MainPresenterImpl implements MainPresenter {
 
         int badgeCount = preferenceUtil.getBadgeCount();
 
-        if(badgeCount == BadgeFlag.BADGE_INITIALIZAION){
+        if (badgeCount == BadgeFlag.BADGE_INITIALIZAION) {
             mainView.showBadgeCount("");
-        }else{
+        } else {
             mainView.showBadgeCount(String.valueOf(badgeCount));
         }
 
@@ -91,9 +91,31 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
+    public void onClickApp(App app, int position) {
+        if (position == 0) {
+            mainView.navigateToSongMainActivity();
+        } else if (position == 1) {
+            //셀핏
+        } else {
+            mainView.navigateToAppGame(app.getPackageName());
+        }
+    }
+
+    @Override
     public void getAppData() {
-        ArrayList<App> appList= mainInteractor.getAppData();
+        ArrayList<App> appList = mainInteractor.getAppData();
         mainView.setAppItem(appList);
+    }
+
+    @Override
+    public String getBannerName(int position) {
+        if (position == 0) {
+            return "demand_banner1.jpg";
+        } else if (position == 1) {
+            return "demand_banner2.jpg";
+        } else {
+            return "demand_banner3.jpg";
+        }
     }
 
     @Override
@@ -134,9 +156,9 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void onNetworkError(APIErrorUtil apiErrorUtil) {
-        if(apiErrorUtil == null){
+        if (apiErrorUtil == null) {
             mainView.showMessage("네트워크 불안정합니다. 다시 시도하세요.");
-        }else{
+        } else {
             mainView.showMessage(apiErrorUtil.message());
         }
     }
