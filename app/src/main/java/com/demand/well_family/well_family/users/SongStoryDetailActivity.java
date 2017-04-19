@@ -36,8 +36,8 @@ import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.repository.SongServerConnection;
 import com.demand.well_family.well_family.repository.SongStoryServerConnection;
 import com.demand.well_family.well_family.repository.UserServerConnection;
-import com.demand.well_family.well_family.dialog.CommentPopupActivity;
-import com.demand.well_family.well_family.dialog.SongStoryPopup;
+import com.demand.well_family.well_family.dialog.list.comment.activity.CommentDialogActivity;
+import com.demand.well_family.well_family.dialog.list.songstory.SongStoryDialogActivity;
 import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStoryComment;
@@ -440,7 +440,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                         iv_sound_story_menu.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(SongStoryDetailActivity.this, SongStoryPopup.class);
+                                Intent intent = new Intent(SongStoryDetailActivity.this, SongStoryDialogActivity.class);
                                 intent.putExtra("story_id", story_id);
                                 intent.putExtra("content", content);
                                 intent.putExtra("photoList", photoList);
@@ -837,14 +837,14 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                 @Override
                 public void onClick(View v) {
                     if (user_id == commentInfoList.get(position).getUser_id()) {
-                        Intent intent = new Intent(SongStoryDetailActivity.this, CommentPopupActivity.class);
+                        Intent intent = new Intent(SongStoryDetailActivity.this, CommentDialogActivity.class);
                         intent.putExtra("comment_id", commentInfoList.get(position).getComment_id());
                         intent.putExtra("comment_content", commentInfoList.get(position).getContent());
                         intent.putExtra("position", position);
                         intent.putExtra("act_flag", 3);
                         startActivityForResult(intent, COMMENT_EDIT_REQUEST);
                     } else {
-                        Intent intent = new Intent(SongStoryDetailActivity.this, CommentPopupActivity.class);
+                        Intent intent = new Intent(SongStoryDetailActivity.this, CommentDialogActivity.class);
                         intent.putExtra("comment_id", commentInfoList.get(position).getComment_id());
                         intent.putExtra("comment_user_name", commentInfoList.get(position).getUser_name());
                         intent.putExtra("comment_content", commentInfoList.get(position).getContent());

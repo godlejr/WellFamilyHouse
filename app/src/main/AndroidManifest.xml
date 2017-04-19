@@ -33,7 +33,7 @@
         <activity android:name=".family.StoryDetailActivity" />
         <activity android:name=".photos.PhotosActivity" />
         <activity
-            android:name=".photos.PhotoPopupActivity"
+            android:name=".dialog.popup.photo.activity.PhotoPopupActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity android:name=".photos.SongPhotoPopupActivity" />
 
@@ -77,7 +77,7 @@
             android:theme="@style/Theme.AppCompat.Dialog" />
 
         <activity
-            android:name=".dialog.CommentPopupActivity"
+            android:name=".dialog.list.comment.activity.CommentDialogActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
             android:name=".dialog.CommentDeleteActivity"
@@ -87,28 +87,29 @@
         <activity android:name=".ReportActivity" />
         <activity android:name=".setting.base.activity.SettingActivity" />
         <activity android:name=".notification.NotificationActivity" />
-        <activity android:name=".setting.ConfirmPasswordActivity" />
-        <activity android:name=".setting.SearchAccountActivity" />
+        <activity android:name=".setting.verifyAccount.activity.VerifyAccountActivity" />
+        <activity android:name=".setting.searchAccount.activity.SearchAccountActivity" />
+        <activity android:name=".setting.resetPassword.activity.ResetPasswordActivity"/>
         <activity
-            android:name=".setting.ConfirmAccountActivity"
+            android:name=".setting.sendPassword.activity.SendPasswordActivity"
             android:theme="@style/CustomAppTheme" />
         <activity android:name=".notification.NotificationFamilyStoryDetail" />
         <activity android:name=".notification.NotificationSongStoryDetail" />
         <activity android:name=".memory_sound.ModifySongStoryActivity" />
-        <activity android:name=".setting.AccountDisableActivity" />
+        <activity android:name=".setting.deactivation.activity.DeactivationActivity" />
         <activity
-            android:name=".dialog.SongStoryPopup"
+            android:name=".dialog.list.songstory.SongStoryDialogActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
-            android:name=".setting.AccountDisableSelectActivity"
+            android:name=".setting.deactivationReason.activity.DeactivationReasonActivity"
             android:theme="@style/CustomAppTheme" />
 
         <activity
-            android:name=".dialog.StoryPopup"
+            android:name=".dialog.list.story.StoryDialogActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
 
         <activity
-            android:name=".dialog.NotificationPopup"
+            android:name=".dialog.popup.notification.activity.NotificationPopupActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
 
         <activity android:name=".ModifyStoryActivity" />
@@ -116,12 +117,12 @@
         <activity android:name=".family.ManageFamilyActivity" />
         <activity android:name=".family.ManageFamilyListActivity" />
         <activity
-            android:name=".dialog.TextPopup"
+            android:name=".dialog.popup.deactivation.activity.DeactivationPopupActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
 
         <activity android:name=".search.SearchFamilyActivity" />
         <activity
-            android:name=".dialog.FamilyPopup"
+            android:name=".dialog.popup.family.activity.FamilyPopupActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
 
         <service android:name=".fcm.FirebaseMessageService">

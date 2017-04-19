@@ -6,4 +6,10 @@ package com.demand.well_family.well_family.setting.base.presenter;
 
 public interface SettingPresenter {
     void onCreate();
+
+    void setNotificationCheck(boolean isCheck);
+    void getNotificationCheck();
+    void setToolbar();
+
+    void validateLoginCategoryId();
 }

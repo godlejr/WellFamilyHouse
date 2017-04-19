@@ -29,7 +29,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.repository.SongServerConnection;
-import com.demand.well_family.well_family.dialog.CommentPopupActivity;
+import com.demand.well_family.well_family.dialog.list.comment.activity.CommentDialogActivity;
 import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.SongComment;
 import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
@@ -576,14 +576,14 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                 @Override
                 public void onClick(View v) {
                     if (user_id == commentInfoList.get(position).getUser_id()) {
-                        Intent intent = new Intent(SongPlayer.this, CommentPopupActivity.class);
+                        Intent intent = new Intent(SongPlayer.this, CommentDialogActivity.class);
                         intent.putExtra("comment_id", commentInfoList.get(position).getComment_id());
                         intent.putExtra("comment_content", commentInfoList.get(position).getContent());
                         intent.putExtra("position", position);
                         intent.putExtra("act_flag", 2);
                         startActivityForResult(intent, COMMENT_EDIT_REQUEST);
                     } else {
-                        Intent intent = new Intent(SongPlayer.this, CommentPopupActivity.class);
+                        Intent intent = new Intent(SongPlayer.this, CommentDialogActivity.class);
                         intent.putExtra("comment_id", commentInfoList.get(position).getComment_id());
                         intent.putExtra("comment_user_name", commentInfoList.get(position).getUser_name());
                         intent.putExtra("comment_content", commentInfoList.get(position).getContent());

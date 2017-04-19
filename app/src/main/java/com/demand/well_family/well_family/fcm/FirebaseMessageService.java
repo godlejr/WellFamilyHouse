@@ -13,7 +13,7 @@ import android.util.Log;
 
 import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.dialog.NotificationPopup;
+import com.demand.well_family.well_family.dialog.popup.notification.activity.NotificationPopupActivity;
 import com.google.firebase.messaging.RemoteMessage;
 
 /**
@@ -40,7 +40,7 @@ public class FirebaseMessageService extends com.google.firebase.messaging.Fireba
         if (remoteMessage.getData().get("body") == null) {
             String content = remoteMessage.getNotification().getBody();
 
-            Intent popup_intent = new Intent(this, NotificationPopup.class);
+            Intent popup_intent = new Intent(this, NotificationPopupActivity.class);
             popup_intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             popup_intent.putExtra("content", content);
             startActivity(popup_intent);

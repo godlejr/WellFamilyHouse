@@ -43,7 +43,7 @@ import com.demand.well_family.well_family.repository.MainServerConnection;
 import com.demand.well_family.well_family.repository.SongServerConnection;
 import com.demand.well_family.well_family.repository.SongStoryServerConnection;
 import com.demand.well_family.well_family.repository.StoryServerConnection;
-import com.demand.well_family.well_family.dialog.CommentPopupActivity;
+import com.demand.well_family.well_family.dialog.list.comment.activity.CommentDialogActivity;
 import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStoryComment;
@@ -847,14 +847,14 @@ public class NotificationSongStoryDetail extends Activity implements CompoundBut
                 @Override
                 public void onClick(View v) {
                     if (user_id == commentInfoList.get(position).getUser_id()) {
-                        Intent intent = new Intent(NotificationSongStoryDetail.this, CommentPopupActivity.class);
+                        Intent intent = new Intent(NotificationSongStoryDetail.this, CommentDialogActivity.class);
                         intent.putExtra("comment_id", commentInfoList.get(position).getComment_id());
                         intent.putExtra("comment_content", commentInfoList.get(position).getContent());
                         intent.putExtra("position", position);
                         intent.putExtra("act_flag", 3);
                         startActivityForResult(intent, COMMENT_EDIT_REQUEST);
                     } else {
-                        Intent intent = new Intent(NotificationSongStoryDetail.this, CommentPopupActivity.class);
+                        Intent intent = new Intent(NotificationSongStoryDetail.this, CommentDialogActivity.class);
                         intent.putExtra("comment_id", commentInfoList.get(position).getComment_id());
                         intent.putExtra("comment_user_name", commentInfoList.get(position).getUser_name());
                         intent.putExtra("comment_content", commentInfoList.get(position).getContent());

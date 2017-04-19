@@ -40,10 +40,8 @@ public interface UserServerConnection {
     @PUT("{user_id}/tokens/{token}")
     Call<ResponseBody> update_token(@Path("user_id") int user_id, @Path("token") String token);
 
-
     @GET("{story_user_id}/family_check/{user_id}")
     Call<Integer> family_check(@Path("story_user_id") int story_user_id, @Path("user_id") int user_id);
-
 
     @GET("{story_user_id}/public_songstories")
     Call<ArrayList<SongStory>> song_story_List_Public(@Path("story_user_id") int story_user_id);
@@ -115,4 +113,6 @@ public interface UserServerConnection {
     @GET("{user_id}/find_family")   // menu_search
     Call<ArrayList<FamilyInfoForFamilyJoin>> find_family(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
+    @PUT("{user_id}/password")  // map : pwd
+    Call<Void> updatePassword(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 }
