@@ -30,6 +30,7 @@ import retrofit2.Response;
 public class MainInteractorImpl implements MainInteractor {
     private MainPresenter mainPresenter;
 
+
     private UserServerConnection userServerConnection;
     private static final Logger logger = LoggerFactory.getLogger(MainInteractorImpl.class);
 
