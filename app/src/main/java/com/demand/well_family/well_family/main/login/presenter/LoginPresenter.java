@@ -1,7 +1,7 @@
 package com.demand.well_family.well_family.main.login.presenter;
 
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.util.APIError;
+import com.demand.well_family.well_family.util.APIErrorUtil;
 import com.facebook.CallbackManager;
 import com.nhn.android.naverlogin.OAuthLogin;
 import com.nhn.android.naverlogin.OAuthLoginHandler;
@@ -38,5 +38,5 @@ public interface LoginPresenter {
 
     String getOAuthLoginResponse(OAuthLogin oAuthLogin, String url);
 
-    void onNetworkError(APIError apiError);
+    void onNetworkError(APIErrorUtil apiErrorUtil);
 }

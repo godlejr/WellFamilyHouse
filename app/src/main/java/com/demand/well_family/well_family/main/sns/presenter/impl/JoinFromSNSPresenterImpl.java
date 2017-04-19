@@ -4,11 +4,11 @@ import android.content.Context;
 import android.view.View;
 
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.main.sns.interator.JoinFromSNSInterator;
-import com.demand.well_family.well_family.main.sns.interator.impl.JoinFromSNSInteratorImpl;
+import com.demand.well_family.well_family.main.sns.interactor.JoinFromSNSInteractor;
+import com.demand.well_family.well_family.main.sns.interactor.impl.JoinFromSNSInteractorImpl;
 import com.demand.well_family.well_family.main.sns.presenter.JoinFromSNSPresenter;
 import com.demand.well_family.well_family.main.sns.view.JoinFromSNSView;
-import com.demand.well_family.well_family.util.APIError;
+import com.demand.well_family.well_family.util.APIErrorUtil;
 import com.demand.well_family.well_family.util.PreferenceUtil;
 
 import java.util.Calendar;
@@ -19,12 +19,12 @@ import java.util.Calendar;
 
 public class JoinFromSNSPresenterImpl implements JoinFromSNSPresenter {
     private JoinFromSNSView joinFromSNSView;
-    private JoinFromSNSInterator joinFromSNSInterator;
+    private JoinFromSNSInteractor joinFromSNSInteractor;
     private PreferenceUtil preferenceUtil;
 
     public JoinFromSNSPresenterImpl(Context context) {
         this.joinFromSNSView = (JoinFromSNSView) context;
-        this.joinFromSNSInterator = new JoinFromSNSInteratorImpl(this);
+        this.joinFromSNSInteractor = new JoinFromSNSInteractorImpl(this);
         this.preferenceUtil = new PreferenceUtil(context);
     }
 
@@ -44,7 +44,7 @@ public class JoinFromSNSPresenterImpl implements JoinFromSNSPresenter {
 
     @Override
     public void setUserBirth(String birth) {
-        String date = joinFromSNSInterator.getUserBirth(birth);
+        String date = joinFromSNSInteractor.getUserBirth(birth);
         joinFromSNSView.showBrith(date);
     }
 
@@ -69,7 +69,7 @@ public class JoinFromSNSPresenterImpl implements JoinFromSNSPresenter {
             joinFromSNSView.goneBirthCheckNotification();
             joinFromSNSView.gonePhoneCheckNotification();
 
-            joinFromSNSInterator.setJoin(email,password,name,loginCategoryId,phone,birth);
+            joinFromSNSInteractor.setJoin(email,password,name,loginCategoryId,phone,birth);
         } else {
             return;
         }
@@ -77,7 +77,7 @@ public class JoinFromSNSPresenterImpl implements JoinFromSNSPresenter {
 
     @Override
     public void onSuccessJoin(String email, String password) {
-        joinFromSNSInterator.setLogin(email,password);
+        joinFromSNSInteractor.setLogin(email,password);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class JoinFromSNSPresenterImpl implements JoinFromSNSPresenter {
         String deviceId = joinFromSNSView.getDeviceId();
         String firebaseToken = joinFromSNSView.getFireBaseToken();
 
-        joinFromSNSInterator.setDeviceIdAndToken(user,deviceId,firebaseToken);
+        joinFromSNSInteractor.setDeviceIdAndToken(user,deviceId,firebaseToken);
     }
 
     @Override
@@ -95,11 +95,11 @@ public class JoinFromSNSPresenterImpl implements JoinFromSNSPresenter {
     }
 
     @Override
-    public void onNetworkError(APIError apiError) {
-        if (apiError == null) {
+    public void onNetworkError(APIErrorUtil apiErrorUtil) {
+        if (apiErrorUtil == null) {
             joinFromSNSView.showMessage("네트워크 불안정합니다. 다시 시도하세요.");
         } else {
-            joinFromSNSView.showMessage(apiError.message());
+            joinFromSNSView.showMessage(apiErrorUtil.message());
         }
     }
 }

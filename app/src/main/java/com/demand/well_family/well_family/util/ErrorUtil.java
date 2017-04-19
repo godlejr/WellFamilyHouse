@@ -23,7 +23,7 @@ public class ErrorUtil {
         this.errorClass = errorClass;
     }
 
-    public APIError parseError(Response response) {
+    public APIErrorUtil parseError(Response response) {
         errorResponse = response;
 
         String errorMessage = null;
@@ -57,7 +57,7 @@ public class ErrorUtil {
 
         Log.e("RESPONSE_CODE", "(" + response.code() + ")  " + response.message());
         log();
-        return new APIError(response.code(), errorMessage);
+        return new APIErrorUtil(response.code(), errorMessage);
     }
 
 

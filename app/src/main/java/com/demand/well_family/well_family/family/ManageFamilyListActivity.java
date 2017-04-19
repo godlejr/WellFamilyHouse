@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.family.base.activity.FamilyActivity;
 import com.demand.well_family.well_family.repository.FamilyServerConnection;
 import com.demand.well_family.well_family.dialog.FamilyPopup;
 import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;

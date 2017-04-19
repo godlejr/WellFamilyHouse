@@ -3,11 +3,11 @@ package com.demand.well_family.well_family.main.login.presenter.impl;
 import android.content.Context;
 
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.main.login.interator.LoginInterater;
-import com.demand.well_family.well_family.main.login.interator.impl.LoginInteratorImpl;
+import com.demand.well_family.well_family.main.login.interactor.LoginInteracter;
+import com.demand.well_family.well_family.main.login.interactor.impl.LoginInteractorImpl;
 import com.demand.well_family.well_family.main.login.presenter.LoginPresenter;
 import com.demand.well_family.well_family.main.login.view.LoginView;
-import com.demand.well_family.well_family.util.APIError;
+import com.demand.well_family.well_family.util.APIErrorUtil;
 import com.demand.well_family.well_family.util.PreferenceUtil;
 import com.facebook.CallbackManager;
 import com.nhn.android.naverlogin.OAuthLogin;
@@ -19,12 +19,12 @@ import com.nhn.android.naverlogin.OAuthLoginHandler;
 
 public class LoginPresenterImpl implements LoginPresenter {
     private LoginView loginView;
-    private LoginInterater loginInterater;
+    private LoginInteracter loginInteracter;
     private PreferenceUtil preferenceUtil;
 
     public LoginPresenterImpl(Context context) {
         this.loginView = (LoginView) context;
-        this.loginInterater = new LoginInteratorImpl(this);
+        this.loginInteracter = new LoginInteractorImpl(this);
         this.preferenceUtil = new PreferenceUtil(context);
     }
 
@@ -32,14 +32,14 @@ public class LoginPresenterImpl implements LoginPresenter {
     public void onBeforeCreate() {
         //facebook login init
         loginView.initFacebookLogin();
-        loginInterater.setFacebookCallbackManager();
+        loginInteracter.setFacebookCallbackManager();
 
         //naver login init
-        loginInterater.setNaverOAuthLogin();
-        OAuthLogin oAuthLogin = loginInterater.getNaverOAuthLogin();
-        String naverClientId = loginInterater.getNaverClientId();
-        String naverClientSecret = loginInterater.getNaverClientSecret();
-        String naverClientName = loginInterater.getNaverClientName();
+        loginInteracter.setNaverOAuthLogin();
+        OAuthLogin oAuthLogin = loginInteracter.getNaverOAuthLogin();
+        String naverClientId = loginInteracter.getNaverClientId();
+        String naverClientSecret = loginInteracter.getNaverClientSecret();
+        String naverClientName = loginInteracter.getNaverClientName();
 
         loginView.initNaverLogin(oAuthLogin, naverClientId, naverClientSecret, naverClientName);
     }
@@ -51,12 +51,12 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public void onClickLogin(String email, String password) {
-        loginInterater.setLogin(email,password);
+        loginInteracter.setLogin(email,password);
     }
 
     @Override
     public void onClickFacebookLogin() {
-        loginInterater.setFacebookLogin();
+        loginInteracter.setFacebookLogin();
     }
 
     @Override
@@ -67,7 +67,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             String deviceId = loginView.getDeviceId();
             String firebaseToken = loginView.getFireBaseToken();
 
-            loginInterater.setDeviceIdAndToken(userFromLogin, deviceId, firebaseToken);
+            loginInteracter.setDeviceIdAndToken(userFromLogin, deviceId, firebaseToken);
         }
     }
 
@@ -79,7 +79,7 @@ public class LoginPresenterImpl implements LoginPresenter {
             String deviceId = loginView.getDeviceId();
             String firebaseToken = loginView.getFireBaseToken();
 
-            loginInterater.setDeviceIdAndToken(user, deviceId, firebaseToken);
+            loginInteracter.setDeviceIdAndToken(user, deviceId, firebaseToken);
         }
     }
 
@@ -93,7 +93,7 @@ public class LoginPresenterImpl implements LoginPresenter {
     @Override
     public void onLoginFocusChange(boolean hasFocus) {
         if (hasFocus) {
-            loginInterater.setLoginFocusHandler();
+            loginInteracter.setLoginFocusHandler();
         }
     }
 
@@ -104,17 +104,17 @@ public class LoginPresenterImpl implements LoginPresenter {
 
     @Override
     public OAuthLoginHandler getOAuthLoginHandler() {
-        return loginInterater.getOAuthLoginHandler();
+        return loginInteracter.getOAuthLoginHandler();
     }
 
     @Override
     public OAuthLogin getNaverOAuthLogin() {
-        return loginInterater.getNaverOAuthLogin();
+        return loginInteracter.getNaverOAuthLogin();
     }
 
     @Override
     public CallbackManager getCallbackManager() {
-        return loginInterater.getCallbackManager();
+        return loginInteracter.getCallbackManager();
     }
 
     @Override
@@ -123,11 +123,11 @@ public class LoginPresenterImpl implements LoginPresenter {
     }
 
     @Override
-    public void onNetworkError(APIError apiError) {
-        if (apiError == null) {
+    public void onNetworkError(APIErrorUtil apiErrorUtil) {
+        if (apiErrorUtil == null) {
             loginView.showMessage("네트워크 불안정합니다. 다시 시도하세요.");
         } else {
-            loginView.showMessage(apiError.message());
+            loginView.showMessage(apiErrorUtil.message());
         }
     }
 

@@ -2,7 +2,7 @@ package com.demand.well_family.well_family.main.base.presenter;
 
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.util.APIError;
+import com.demand.well_family.well_family.util.APIErrorUtil;
 
 import java.util.ArrayList;
 
@@ -33,7 +33,7 @@ public interface MainPresenter {
 
     void onClickFamily(Family family);
 
-    void onCilckUser();
+    void onClickUser();
 
     void onClickNotification();
 
@@ -41,5 +41,5 @@ public interface MainPresenter {
 
     void onBackPressed();
 
-    void onNetworkError(APIError apiError);
+    void onNetworkError(APIErrorUtil apiErrorUtil);
 }

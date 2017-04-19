@@ -4,11 +4,11 @@ import android.content.Context;
 import android.text.InputFilter;
 import android.view.View;
 
-import com.demand.well_family.well_family.main.join.interator.JoinInterator;
-import com.demand.well_family.well_family.main.join.interator.impl.JoinInteratorImpl;
+import com.demand.well_family.well_family.main.join.interactor.JoinInteractor;
+import com.demand.well_family.well_family.main.join.interactor.impl.JoinInteractorImpl;
 import com.demand.well_family.well_family.main.join.presenter.JoinPresenter;
 import com.demand.well_family.well_family.main.join.view.JoinView;
-import com.demand.well_family.well_family.util.APIError;
+import com.demand.well_family.well_family.util.APIErrorUtil;
 
 import java.util.Calendar;
 
@@ -18,11 +18,11 @@ import java.util.Calendar;
 
 public class JoinPresenterImpl implements JoinPresenter {
     private JoinView joinView;
-    private JoinInterator joinInterator;
+    private JoinInteractor joinInteractor;
 
     public JoinPresenterImpl(Context context) {
         this.joinView = (JoinView) context;
-        this.joinInterator = new JoinInteratorImpl(this);
+        this.joinInteractor = new JoinInteractorImpl(this);
     }
 
 
@@ -42,13 +42,13 @@ public class JoinPresenterImpl implements JoinPresenter {
 
     @Override
     public void setUserBirth(String birth) {
-        String date = joinInterator.getUserBirth(birth);
+        String date = joinInteractor.getUserBirth(birth);
         joinView.showBrith(date);
     }
 
     @Override
     public void setNameFilterCallback() {
-        InputFilter[] inputFilters = joinInterator.getInputFilterForName();
+        InputFilter[] inputFilters = joinInteractor.getInputFilterForName();
         joinView.setNameFilterCallback(inputFilters);
     }
 
@@ -93,7 +93,7 @@ public class JoinPresenterImpl implements JoinPresenter {
             joinable = false;
         }
 
-        boolean emailCheck = joinInterator.isEmailCheck();
+        boolean emailCheck = joinInteractor.isEmailCheck();
 
         if (emailCheck == false) {
             joinView.showMessage("아이디 중복확인을 해주세요.");
@@ -105,7 +105,7 @@ public class JoinPresenterImpl implements JoinPresenter {
             joinable = false;
         }
 
-        boolean passwordCheck = joinInterator.getPasswordValidation(password);
+        boolean passwordCheck = joinInteractor.getPasswordValidation(password);
         if (passwordCheck == false) {
             joinView.showMessage("비밀번호는 6~20자 대소문자, 숫자/특수문자를 포함해야합니다.");
             joinable = false;
@@ -119,7 +119,7 @@ public class JoinPresenterImpl implements JoinPresenter {
             joinView.gonePasswordConfirmCheckNotification();
             joinView.gonePhoneCheckNotification();
 
-            joinInterator.setJoin(email, password, name, birth, phone);
+            joinInteractor.setJoin(email, password, name, birth, phone);
         } else {
             return;
         }
@@ -132,11 +132,11 @@ public class JoinPresenterImpl implements JoinPresenter {
 
         if (emailLength == 0) {
             joinView.showEmailCheckNotification();
-        } else if (!joinInterator.getEmailValidation(email)) {
+        } else if (!joinInteractor.getEmailValidation(email)) {
             joinView.showMessage("올바른 이메일 형식을 입력해주세요.");
         } else {
             joinView.goneEmailCheckNotification();
-            joinInterator.getEmailCheck(email);
+            joinInteractor.getEmailCheck(email);
         }
     }
 
@@ -155,18 +155,18 @@ public class JoinPresenterImpl implements JoinPresenter {
     public void validateEmail(int check) {
         if (check != 1) {
             joinView.showMessage("사용가능한 아이디입니다.");
-            joinInterator.setEmailCheck(true);
+            joinInteractor.setEmailCheck(true);
         } else {
             joinView.showMessage("사용중인 아이디입니다.");
         }
     }
 
     @Override
-    public void onNetworkError(APIError apiError) {
-        if (apiError == null) {
+    public void onNetworkError(APIErrorUtil apiErrorUtil) {
+        if (apiErrorUtil == null) {
             joinView.showMessage("네트워크 불안정합니다. 다시 시도하세요.");
         } else {
-            joinView.showMessage(apiError.message());
+            joinView.showMessage(apiErrorUtil.message());
         }
     }
 }

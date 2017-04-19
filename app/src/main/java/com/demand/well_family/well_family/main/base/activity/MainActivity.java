@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.demand.well_family.well_family.family.FamilyActivity;
+import com.demand.well_family.well_family.family.base.activity.FamilyActivity;
 import com.demand.well_family.well_family.main.login.activity.LoginActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dto.App;
@@ -168,7 +168,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
 
             case R.id.ll_menu_mypage:
                 drawerLayout.closeDrawers();
-                mainPresenter.onCilckUser();
+                mainPresenter.onClickUser();
                 break;
 
 
@@ -180,7 +180,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
         item.setChecked(true);
         drawerLayout.closeDrawers();
 
-        Intent intent;
         switch (item.getItemId()) {
             case R.id.menu_home:
                 break;
@@ -366,13 +365,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
 
     @Override
     public void navigateToManageFamilyActivity() {
-        Intent intent = new Intent(MainActivity.this, ManageFamilyActivity.class);
+        Intent intent = new Intent(this, ManageFamilyActivity.class);
         startActivity(intent);
     }
 
     @Override
     public void navigateToSettingActivity() {
-        Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
+        Intent intent = new Intent(this, SettingActivity.class);
         startActivity(intent);
     }
 
@@ -422,7 +421,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
 
     @Override
     public void navigateToUserActivity(User user) {
-        Intent intent = new Intent(MainActivity.this, UserActivity.class);
+        Intent intent = new Intent(this, UserActivity.class);
 
 
         intent.putExtra("story_user_id", user.getId());

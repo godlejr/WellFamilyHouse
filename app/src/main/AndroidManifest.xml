@@ -38,7 +38,7 @@
         <activity android:name=".photos.SongPhotoPopupActivity" />
 
         <activity android:name=".users.UserActivity" />
-        <activity android:name=".family.FamilyActivity" />
+        <activity android:name=".family.base.activity.FamilyActivity" />
         <activity android:name=".main.base.activity.MainActivity" />
         <activity android:name=".main.join.activity.JoinActivity" />
         <activity android:name=".main.agreement.activity.AgreementActivity" />
@@ -47,7 +47,7 @@
             android:launchMode="singleTop" />
         <activity android:name=".main.sns.activity.JoinFromSNSActivity" />
         <activity
-            android:name=".WriteActivity"
+            android:name=".CreateStoryActivity"
             android:configChanges="keyboardHidden|orientation" />
 
         <activity android:name=".memory_sound.SongMainActivity" />

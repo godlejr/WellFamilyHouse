@@ -1,6 +1,6 @@
 package com.demand.well_family.well_family.main.join.presenter;
 
-import com.demand.well_family.well_family.util.APIError;
+import com.demand.well_family.well_family.util.APIErrorUtil;
 
 /**
  * Created by Dev-0 on 2017-04-13.
@@ -26,6 +26,6 @@ public interface JoinPresenter {
 
     void validateEmail(int check);
 
-    void onNetworkError(APIError apiError);
+    void onNetworkError(APIErrorUtil apiErrorUtil);
 
 }

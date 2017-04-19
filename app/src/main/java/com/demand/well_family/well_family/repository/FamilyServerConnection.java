@@ -3,6 +3,7 @@ package com.demand.well_family.well_family.repository;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.StoryInfo;
+import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public interface FamilyServerConnection {
     Call<Family> family(@Path("family_id") int family_id);
 
     @GET("{family_id}/usersBut/{user_id}")
-    Call<ArrayList<UserInfoForFamilyJoin>> family_user_Info(@Path("family_id") int family_id, @Path("user_id") int user_id);
+    Call<ArrayList<User>> family_user_Info(@Path("family_id") int family_id, @Path("user_id") int user_id);
 
     @GET("{family_id}/contents")
     Call<ArrayList<StoryInfo>> family_content_List(@Path("family_id") int family_id);

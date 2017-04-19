@@ -13,7 +13,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dto.Family;
-import com.demand.well_family.well_family.main.base.adapter.family.holder.FamilyViewHolder;
 import com.demand.well_family.well_family.main.base.presenter.MainPresenter;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ import java.util.ArrayList;
  * Created by Dev-0 on 2017-04-12.
  */
 
-public class FamilyAdapter extends RecyclerView.Adapter<FamilyViewHolder> {
+public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.FamilyViewHolder> {
     private MainPresenter mainPresenter;
     private Context context;
     private ArrayList<Family> familyList;
@@ -43,9 +42,9 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyViewHolder> {
 
     @Override
     public void onBindViewHolder(FamilyViewHolder holder, final int position) {
-        ImageView familyAvatar = holder.getIv_family_item();
-        TextView familyName = holder.getTv_family_name();
-        LinearLayout familyContainer = holder.getLl_container();
+        ImageView familyAvatar = holder.iv_family_item;
+        TextView familyName = holder.tv_family_name;
+        LinearLayout familyContainer = holder.ll_container;
 
         Glide.with(context).load(context.getString(R.string.cloud_front_family_avatar) + familyList.get(position).getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(familyAvatar);
         familyName.setText(familyList.get(position).getName());
@@ -73,5 +72,21 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyViewHolder> {
     @Override
     public int getItemCount() {
         return familyList.size();
+    }
+
+    public class FamilyViewHolder extends RecyclerView.ViewHolder  {
+
+        private LinearLayout ll_container;
+        private ImageView iv_family_item;
+        private TextView tv_family_name;
+
+        public FamilyViewHolder(View itemView) {
+            super(itemView);
+
+            ll_container = (LinearLayout)itemView.findViewById(R.id.ll_container);
+            iv_family_item = (ImageView) itemView.findViewById(R.id.iv_family_item);
+            tv_family_name = (TextView) itemView.findViewById(R.id.tv_family_name);
+
+        }
     }
 }

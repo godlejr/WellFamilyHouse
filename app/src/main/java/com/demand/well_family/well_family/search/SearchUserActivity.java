@@ -23,7 +23,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.repository.FamilyServerConnection;
 import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
-import com.demand.well_family.well_family.family.FamilyActivity;
+import com.demand.well_family.well_family.family.base.activity.FamilyActivity;
 import com.demand.well_family.well_family.flag.FamilyJoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
@@ -119,7 +119,7 @@ public class SearchUserActivity extends Activity {
                     final String search = et_search_user.getText().toString();
 
                     HashMap<String, String> map = new HashMap<String, String>();
-                    map.put("menu_search", search);
+                    map.put("search", search);
 
                     familyServerConnection = new HeaderInterceptor(access_token).getClientForFamilyServer().create(FamilyServerConnection.class);
                     Call<ArrayList<UserInfoForFamilyJoin>> call_user = familyServerConnection.find_user(family_id, map); // 여기

@@ -14,8 +14,11 @@ public class StoryInfo implements Serializable{
 
     private String created_at;
     private String content;
+
     private Boolean first_checked; //  select first check
     private Boolean isChecked; // like cheched
+
+    private int position;
 
     public StoryInfo(int user_id, String name, String avatar, int story_id, String created_at, String content) {
         super();
@@ -91,5 +94,13 @@ public class StoryInfo implements Serializable{
 
     public void setChecked(Boolean checked) {
         isChecked = checked;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

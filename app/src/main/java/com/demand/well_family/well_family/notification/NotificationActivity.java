@@ -26,7 +26,7 @@ import com.demand.well_family.well_family.repository.UserServerConnection;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.Notification;
 import com.demand.well_family.well_family.dto.NotificationInfo;
-import com.demand.well_family.well_family.family.FamilyActivity;
+import com.demand.well_family.well_family.family.base.activity.FamilyActivity;
 import com.demand.well_family.well_family.family.ManageFamilyActivity;
 import com.demand.well_family.well_family.family.ManageFamilyListActivity;
 import com.demand.well_family.well_family.flag.LogFlag;

@@ -7,11 +7,11 @@ import com.demand.well_family.well_family.dto.App;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.BadgeFlag;
-import com.demand.well_family.well_family.main.base.interator.MainInterator;
-import com.demand.well_family.well_family.main.base.interator.impl.MainInteratorImpl;
+import com.demand.well_family.well_family.main.base.interactor.MainInteractor;
+import com.demand.well_family.well_family.main.base.interactor.impl.MainInteractorImpl;
 import com.demand.well_family.well_family.main.base.presenter.MainPresenter;
 import com.demand.well_family.well_family.main.base.view.MainView;
-import com.demand.well_family.well_family.util.APIError;
+import com.demand.well_family.well_family.util.APIErrorUtil;
 import com.demand.well_family.well_family.util.PreferenceUtil;
 
 import java.util.ArrayList;
@@ -23,12 +23,12 @@ import java.util.ArrayList;
 public class MainPresenterImpl implements MainPresenter {
 
     private MainView mainView;
-    private MainInterator mainInterator;
+    private MainInteractor mainInteractor;
     private PreferenceUtil preferenceUtil;
 
     public MainPresenterImpl(Context context) {
         this.mainView = (MainView) context;
-        this.mainInterator = new MainInteratorImpl(this);
+        this.mainInteractor = new MainInteractorImpl(this);
         this.preferenceUtil = new PreferenceUtil(context);
     }
 
@@ -44,7 +44,7 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void setUserInfo() {
         User user = preferenceUtil.getUserInfo();
-        mainInterator.setUserInfo(user);
+        mainInteractor.setUserInfo(user);
     }
 
     @Override
@@ -71,14 +71,14 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void setUserBirth(String birth) {
-        String date = mainInterator.getUserBirth(birth);
+        String date = mainInteractor.getUserBirth(birth);
         mainView.showMenuUserBirth(date);
     }
 
     @Override
     public void getFamilyData() {
         User user = preferenceUtil.getUserInfo();
-        mainInterator.getFamilyData(user);
+        mainInteractor.getFamilyData(user);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void getAppData() {
-        ArrayList<App> appList= mainInterator.getAppData();
+        ArrayList<App> appList= mainInteractor.getAppData();
         mainView.setAppItem(appList);
     }
 
@@ -114,7 +114,7 @@ public class MainPresenterImpl implements MainPresenter {
 
 
     @Override
-    public void onCilckUser() {
+    public void onClickUser() {
         User user = preferenceUtil.getUserInfo();
         mainView.navigateToUserActivity(user);
     }
@@ -133,11 +133,11 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
-    public void onNetworkError(APIError apiError) {
-        if(apiError == null){
+    public void onNetworkError(APIErrorUtil apiErrorUtil) {
+        if(apiErrorUtil == null){
             mainView.showMessage("네트워크 불안정합니다. 다시 시도하세요.");
         }else{
-            mainView.showMessage(apiError.message());
+            mainView.showMessage(apiErrorUtil.message());
         }
     }
 
