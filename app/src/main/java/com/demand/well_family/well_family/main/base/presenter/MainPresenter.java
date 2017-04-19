@@ -1,5 +1,6 @@
 package com.demand.well_family.well_family.main.base.presenter;
 
+import com.demand.well_family.well_family.dto.App;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.util.APIErrorUtil;
@@ -24,8 +25,11 @@ public interface MainPresenter {
 
     void getAppData();
 
+    String getBannerName(int position);
 
     void onSuccessGetFamilyData(ArrayList<Family> familyList);
+
+    void onClickApp(App app, int position);
 
     void onClickLogout();
 

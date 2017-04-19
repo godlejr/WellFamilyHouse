@@ -45,19 +45,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.AppViewHolder> {
 
         tv_app_name.setText(appList.get(position).getName());
         iv_app_img.setImageResource(appList.get(position).getImage());
-
-        iv_app_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (position == 0) {
-                    mainPresenter.onClickSongMain();
-                } else if (position == 1) {
-                    //셀핏
-                } else {
-                    mainPresenter.onClickAppGames(appList.get(position).getPackageName());
-                }
-            }
-        });
     }
 
     @Override
@@ -66,7 +53,7 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.AppViewHolder> {
     }
 
 
-    public class AppViewHolder extends RecyclerView.ViewHolder{
+    public class AppViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView tv_app_name;
         private ImageView iv_app_img;
 
@@ -75,7 +62,19 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.AppViewHolder> {
             super(itemView);
             tv_app_name = (TextView) itemView.findViewById(R.id.tv_app_name);
             iv_app_img = (ImageView) itemView.findViewById(R.id.iv_app_img);
+
+            iv_app_img.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.iv_app_img:
+                    int position = getAdapterPosition();
+                    App app = appList.get(position);
+                    mainPresenter.onClickApp(app, position);
+                    break;
+            }
+        }
     }
 }

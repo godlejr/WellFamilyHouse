@@ -109,7 +109,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
         viewPager_prev = (ImageView) findViewById(R.id.iv_viewPager_prev);
         viewPager_next = (ImageView) findViewById(R.id.iv_viewPager_next);
 
-        viewPager.setAdapter(new ViewPageAdapter(getLayoutInflater(), MainActivity.this));
+        viewPager.setAdapter(new ViewPageAdapter(getLayoutInflater(), this, mainPresenter));
         viewPager_prev.setOnClickListener(this);
         viewPager_next.setOnClickListener(this);
 
