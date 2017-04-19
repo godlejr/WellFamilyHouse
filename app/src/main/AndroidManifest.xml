@@ -63,7 +63,7 @@
             android:name=".market.MarketMainActivity"
             android:launchMode="singleInstance" />
         <activity
-            android:name=".family.CreateFamilyActivity"
+            android:name=".family.create.activity.CreateFamilyActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity android:name=".search.SearchUserActivity" />
         <activity

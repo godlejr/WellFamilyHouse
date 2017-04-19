@@ -1,4 +1,4 @@
-package com.demand.well_family.well_family.family;
+package com.demand.well_family.well_family.family.create.activity;
 
 import android.Manifest;
 import android.app.Activity;
@@ -32,6 +32,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.family.base.activity.FamilyActivity;
+import com.demand.well_family.well_family.family.create.presenter.CreateFamilyPresenter;
+import com.demand.well_family.well_family.family.create.view.CreateFamilyView;
 import com.demand.well_family.well_family.repository.FamilyServerConnection;
 import com.demand.well_family.well_family.repository.UserServerConnection;
 import com.demand.well_family.well_family.dto.Family;
@@ -58,7 +60,9 @@ import retrofit2.Response;
  * Created by ㅇㅇ on 2017-02-12.
  */
 
-public class CreateFamilyActivity extends Activity {
+public class CreateFamilyActivity extends Activity implements CreateFamilyView{
+    private CreateFamilyPresenter createFamilyPresenter;
+
     private ImageButton ib_create_family;
     private ImageView iv_create_family_img;
     private EditText et_create_family_name, et_create_family_introduce;
