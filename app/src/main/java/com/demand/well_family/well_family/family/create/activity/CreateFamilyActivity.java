@@ -95,7 +95,6 @@ public class CreateFamilyActivity extends Activity implements CreateFamilyView{
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.popup_create_family);
         getWindow().setLayout(android.view.WindowManager.LayoutParams.MATCH_PARENT, android.view.WindowManager.LayoutParams.MATCH_PARENT);
-
         setUserInfo();
         init();
     }
