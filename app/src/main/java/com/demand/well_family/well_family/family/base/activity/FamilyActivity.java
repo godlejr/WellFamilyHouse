@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -37,7 +36,6 @@ import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.family.EditFamilyActivity;
 import com.demand.well_family.well_family.family.ManageFamilyActivity;
 import com.demand.well_family.well_family.family.StoryDetailActivity;
 import com.demand.well_family.well_family.family.base.adapter.content.ContentAdapter;
@@ -46,6 +44,7 @@ import com.demand.well_family.well_family.family.base.flag.FamilyCodeFlag;
 import com.demand.well_family.well_family.family.base.presenter.FamilyPresenter;
 import com.demand.well_family.well_family.family.base.presenter.impl.FamilyPresenterImpl;
 import com.demand.well_family.well_family.family.base.view.FamilyView;
+import com.demand.well_family.well_family.family.edit.activity.EditFamilyActivity;
 import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.main.login.activity.LoginActivity;
 import com.demand.well_family.well_family.market.MarketMainActivity;
@@ -66,28 +65,22 @@ import static com.demand.well_family.well_family.main.login.activity.LoginActivi
 public class FamilyActivity extends Activity implements FamilyView, NestedScrollView.OnScrollChangeListener, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     private FamilyPresenter familyPresenter;
 
-
     private ImageView iv_family_edit;
     private ImageView iv_family_avatar;
     private TextView tv_family_content;
-    private RecyclerView rv_family_users;
     private Button btn_family_photos;
+    private ProgressDialog progressDialog;
+    private ImageView iv_family_writer_avatar;
+    private LinearLayout ll_user_add_exist;
+    private TextView btn_family_write;
+    private NestedScrollView nsv_content;
+
+    private RecyclerView rv_family_users;
     private RecyclerView rv_family_content;
 
-
+    //adapter
     private UserAdapter userAdapter;
     private ContentAdapter contentAdapter;
-
-
-    // toolbar
-    private ProgressDialog progressDialog;
-
-    private Message msg;
-    private ImageView iv_family_writer_avatar;
-
-
-    private LinearLayout ll_user_add_exist;
-
 
     //decorview
     private View decorView;
@@ -110,8 +103,7 @@ public class FamilyActivity extends Activity implements FamilyView, NestedScroll
 
     //toggle
     private ActionBarDrawerToggle toggle;
-    private TextView btn_family_write;
-    private NestedScrollView nsv_content;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

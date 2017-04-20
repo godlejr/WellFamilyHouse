@@ -73,7 +73,7 @@
             android:name=".users.EditUserActivity"
             android:theme="@style/CustomAppTheme" />
         <activity
-            android:name=".family.EditFamilyActivity"
+            android:name=".family.edit.activity.EditFamilyActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
 
         <activity

@@ -15,7 +15,6 @@ public interface CreateFamilyPresenter {
 
     void onSuccessGetFamilyData(Family family);
 
-
     void onSuccessSetFamilyAvatarAdded(int familyId);
 
     void onSuccessSetFamilyAdded(int familyId);
