@@ -33,7 +33,7 @@ import com.demand.well_family.well_family.dto.Comment;
 import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.StoryInfoForNotification;
-import com.demand.well_family.well_family.family.StoryDetailActivity;
+import com.demand.well_family.well_family.story.StoryDetailActivity;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.dialog.popup.photo.activity.PhotoPopupActivity;

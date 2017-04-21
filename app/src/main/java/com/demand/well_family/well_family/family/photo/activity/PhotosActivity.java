@@ -1,4 +1,4 @@
-package com.demand.well_family.well_family.photos;
+package com.demand.well_family.well_family.family.photo.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -61,6 +61,13 @@ public class PhotosActivity extends Activity {
     private int user_id;
     private String user_email;
     private String user_name;
+
+
+
+
+
+
+
     private String user_birth;
     private String user_phone;
     private int user_level;

@@ -30,8 +30,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".family.StoryDetailActivity" />
-        <activity android:name=".photos.PhotosActivity" />
+        <activity android:name=".story.StoryDetailActivity" />
+        <activity android:name=".family.photo.activity.PhotosActivity" />
         <activity
             android:name=".dialog.popup.photo.activity.PhotoPopupActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
