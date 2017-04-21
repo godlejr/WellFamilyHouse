@@ -14,6 +14,8 @@ public class UserInfoForFamilyJoin {
     private int level;
     private int join_flag;
 
+    private int position;
+
     public UserInfoForFamilyJoin() {
         super();
     }
@@ -95,4 +97,11 @@ public class UserInfoForFamilyJoin {
     }
 
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 }
