@@ -136,7 +136,7 @@ public class EditFamilyActivity extends Activity implements EditFamilyView, View
     }
 
     @Override
-    public void navigateToBackground() {
+    public void navigateToBack() {
         finish();
     }
 
@@ -190,7 +190,7 @@ public class EditFamilyActivity extends Activity implements EditFamilyView, View
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back:
-                navigateToBackground();
+                navigateToBack();
                 break;
 
             case R.id.ib_create_family:

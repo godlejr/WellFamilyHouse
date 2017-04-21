@@ -30,7 +30,7 @@ public interface EditFamilyView {
     void showFamilyAvatar(Uri uri);
 
 
-    void navigateToBackground();
+    void navigateToBack();
 
     void navigateToMediaStore();
 

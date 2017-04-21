@@ -27,8 +27,8 @@ import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.Notification;
 import com.demand.well_family.well_family.dto.NotificationInfo;
 import com.demand.well_family.well_family.family.base.activity.FamilyActivity;
-import com.demand.well_family.well_family.family.ManageFamilyActivity;
-import com.demand.well_family.well_family.family.ManageFamilyListActivity;
+import com.demand.well_family.well_family.family.manage.activity.ManageFamilyActivity;
+import com.demand.well_family.well_family.family.managedetail.activity.ManageFamilyDetailActivity;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.flag.NotificationBEHAVIORFlag;
 import com.demand.well_family.well_family.flag.NotificationINTENTFlag;
@@ -517,7 +517,7 @@ public class NotificationActivity extends Activity {
                                                 if (checked == 0) {
                                                     holder.ll_notification.setBackgroundColor(Color.parseColor("#ffffff"));
                                                 }
-                                                Intent intent = new Intent(NotificationActivity.this, ManageFamilyListActivity.class);
+                                                Intent intent = new Intent(NotificationActivity.this, ManageFamilyDetailActivity.class);
                                                 //family info
                                                 intent.putExtra("family_id", familyInfo.getId());
                                                 intent.putExtra("family_name", familyInfo.getName());

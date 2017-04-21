@@ -35,7 +35,7 @@ import com.demand.well_family.well_family.dto.App;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.family.create.activity.CreateFamilyActivity;
-import com.demand.well_family.well_family.family.ManageFamilyActivity;
+import com.demand.well_family.well_family.family.manage.activity.ManageFamilyActivity;
 import com.demand.well_family.well_family.flag.BadgeFlag;
 import com.demand.well_family.well_family.main.base.adapter.app.AppAdapter;
 import com.demand.well_family.well_family.main.base.adapter.family.FamilyAdapter;

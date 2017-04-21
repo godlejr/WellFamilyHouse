@@ -1,4 +1,4 @@
-package com.demand.well_family.well_family.family;
+package com.demand.well_family.well_family.family.managedetail.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -23,6 +23,9 @@ import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dialog.popup.family.activity.FamilyPopupActivity;
 import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
 import com.demand.well_family.well_family.family.base.activity.FamilyActivity;
+import com.demand.well_family.well_family.family.managedetail.presenter.ManageFamilyDetailPresenter;
+import com.demand.well_family.well_family.family.managedetail.presenter.impl.ManageFamilyDetailPresenterImpl;
+import com.demand.well_family.well_family.family.managedetail.view.ManageFamilyDetailView;
 import com.demand.well_family.well_family.flag.FamilyJoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FamilyServerConnection;
@@ -43,7 +46,8 @@ import retrofit2.Response;
  * Created by ㅇㅇ on 2017-04-05.
  */
 
-public class ManageFamilyListActivity extends Activity {
+public class ManageFamilyDetailActivity extends Activity implements ManageFamilyDetailView{
+    private ManageFamilyDetailPresenter manageFamilyDetailPresenter;
 
     //user_info
     private int user_id;
@@ -96,6 +100,8 @@ public class ManageFamilyListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_family_list);
 
+        manageFamilyDetailPresenter = new ManageFamilyDetailPresenterImpl(this);
+
         setUserInfo();
         setFamilyInfo();
         setJoinersInfo();
@@ -138,19 +144,19 @@ public class ManageFamilyListActivity extends Activity {
             public void onResponse(Call<ArrayList<UserInfoForFamilyJoin>> call, Response<ArrayList<UserInfoForFamilyJoin>> response) {
                 if (response.isSuccessful()) {
                     joiners = response.body();
-                    familyJoinAdapter = new FamilyJoinAdapter(joiners, ManageFamilyListActivity.this, R.layout.item_manage_family_join);
+                    familyJoinAdapter = new FamilyJoinAdapter(joiners, ManageFamilyDetailActivity.this, R.layout.item_manage_family_join);
                     rv_manage_family_join.setAdapter(familyJoinAdapter);
-                    rv_manage_family_join.setLayoutManager(new LinearLayoutManager(ManageFamilyListActivity.this, LinearLayoutManager.VERTICAL, false));
+                    rv_manage_family_join.setLayoutManager(new LinearLayoutManager(ManageFamilyDetailActivity.this, LinearLayoutManager.VERTICAL, false));
 
                 } else {
-                    Toast.makeText(ManageFamilyListActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ManageFamilyDetailActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<UserInfoForFamilyJoin>> call, Throwable t) {
                 log(t);
-                Toast.makeText(ManageFamilyListActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                Toast.makeText(ManageFamilyDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -183,7 +189,7 @@ public class ManageFamilyListActivity extends Activity {
         btn_manage_family_remove.setOnClickListener(new View.OnClickListener() { // 가족 삭제
             @Override
             public void onClick(View v) {
-                Intent remove_intent = new Intent(ManageFamilyListActivity.this, FamilyPopupActivity.class);
+                Intent remove_intent = new Intent(ManageFamilyDetailActivity.this, FamilyPopupActivity.class);
                 remove_intent.putExtra("family_id", family_id);
                 remove_intent.putExtra("family_user_id", family_user_id);
                 remove_intent.putExtra("family_name", family_name);
@@ -254,7 +260,7 @@ public class ManageFamilyListActivity extends Activity {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {
                                 if (response.isSuccessful()) {
-                                    Intent intent = new Intent(ManageFamilyListActivity.this, FamilyPopupActivity.class);
+                                    Intent intent = new Intent(ManageFamilyDetailActivity.this, FamilyPopupActivity.class);
 
                                     intent.putExtra("family_id", family_id);
                                     intent.putExtra("family_user_id", family_user_id);
@@ -271,14 +277,14 @@ public class ManageFamilyListActivity extends Activity {
 
                                     startActivityForResult(intent, POPUP);
                                 } else {
-                                    Toast.makeText(ManageFamilyListActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ManageFamilyDetailActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<Void> call, Throwable t) {
                                 log(t);
-                                Toast.makeText(ManageFamilyListActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ManageFamilyDetailActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                             }
                         });
                     }

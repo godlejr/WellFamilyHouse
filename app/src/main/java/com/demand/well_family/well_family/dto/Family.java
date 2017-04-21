@@ -12,6 +12,8 @@ public class Family {
     private int user_id;
     private String created_at;
 
+    private int position; //temp variable
+
     public Family() {
     }
 
@@ -70,5 +72,13 @@ public class Family {
 
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

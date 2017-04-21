@@ -13,6 +13,8 @@ public class FamilyInfoForFamilyJoin {
     private int join_flag;
     private String created_at; // family join created_at
 
+    private int position;
+
     public FamilyInfoForFamilyJoin(int id, String name, String content, String avatar, int user_id, int join_flag, String created_at) {
         this.id = id;
         this.name = name;
@@ -77,5 +79,13 @@ public class FamilyInfoForFamilyJoin {
 
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

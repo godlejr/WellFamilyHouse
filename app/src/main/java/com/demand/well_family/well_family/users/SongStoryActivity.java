@@ -42,7 +42,7 @@ import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.repository.SongStoryServerConnection;
 import com.demand.well_family.well_family.repository.UserServerConnection;
-import com.demand.well_family.well_family.family.ManageFamilyActivity;
+import com.demand.well_family.well_family.family.manage.activity.ManageFamilyActivity;
 import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
 import com.demand.well_family.well_family.setting.base.activity.SettingActivity;
 import com.demand.well_family.well_family.dto.SongPhoto;

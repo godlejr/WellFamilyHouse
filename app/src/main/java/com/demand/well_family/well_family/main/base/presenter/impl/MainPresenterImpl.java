@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.demand.well_family.well_family.dto.App;
 import com.demand.well_family.well_family.dto.Family;
+import com.demand.well_family.well_family.dto.FamilyInfoForFamilyJoin;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.BadgeFlag;
 import com.demand.well_family.well_family.main.base.interactor.MainInteractor;
@@ -133,6 +134,8 @@ public class MainPresenterImpl implements MainPresenter {
     public void onClickFamily(Family family) {
         mainView.navigateToFamilyActivity(family);
     }
+
+
 
 
     @Override

@@ -58,7 +58,7 @@ public class EditFamilyPresenterImpl implements EditFamilyPresenter {
         Uri uri = editFamilyInteractor.getPhotoUri();
 
         if (familyName.equals(family.getName()) && familyContent.equals(family.getContent()) && uri == null) {
-            editFamilyView.navigateToBackground();
+            editFamilyView.navigateToBack();
         } else {
             editFamilyView.showProgressDialog();
             editFamilyInteractor.setFamilyEdited(familyName, familyContent);
@@ -107,7 +107,7 @@ public class EditFamilyPresenterImpl implements EditFamilyPresenter {
     public void onRequestPermissionsResultForReadExternalStorage(int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == EditFamilyCodeFlag.PERMISSION_DENIED) {
             editFamilyView.showMessage("권한을 허가해주세요");
-            editFamilyView.navigateToBackground();
+            editFamilyView.navigateToBack();
         }
     }
 }

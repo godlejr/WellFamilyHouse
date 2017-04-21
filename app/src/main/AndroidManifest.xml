@@ -114,8 +114,8 @@
 
         <activity android:name=".ModifyStoryActivity" />
 
-        <activity android:name=".family.ManageFamilyActivity" />
-        <activity android:name=".family.ManageFamilyListActivity" />
+        <activity android:name=".family.manage.activity.ManageFamilyActivity" />
+        <activity android:name=".family.managedetail.activity.ManageFamilyDetailActivity" />
         <activity
             android:name=".dialog.popup.deactivation.activity.DeactivationPopupActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
