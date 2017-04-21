@@ -29,7 +29,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.demand.well_family.well_family.CreateStoryActivity;
+import com.demand.well_family.well_family.story.CreateStoryActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dialog.popup.photo.activity.PhotoPopupActivity;
 import com.demand.well_family.well_family.dto.Family;
@@ -38,7 +38,7 @@ import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.family.manage.activity.ManageFamilyActivity;
 import com.demand.well_family.well_family.flag.PhotoPopupINTENTFlag;
-import com.demand.well_family.well_family.story.StoryDetailActivity;
+import com.demand.well_family.well_family.story.detail.activity.StoryDetailActivity;
 import com.demand.well_family.well_family.family.base.adapter.content.ContentAdapter;
 import com.demand.well_family.well_family.family.base.adapter.user.UserAdapter;
 import com.demand.well_family.well_family.family.base.flag.FamilyCodeFlag;

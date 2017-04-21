@@ -1,4 +1,4 @@
-package com.demand.well_family.well_family.story;
+package com.demand.well_family.well_family.story.detail.activity;
 
 import android.app.Activity;
 import android.content.Context;

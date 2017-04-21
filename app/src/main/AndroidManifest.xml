@@ -30,7 +30,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".story.StoryDetailActivity" />
+        <activity android:name=".story.detail.activity.StoryDetailActivity" />
         <activity android:name=".family.photo.activity.PhotosActivity" />
         <activity
             android:name=".dialog.popup.photo.activity.PhotoPopupActivity"
@@ -47,7 +47,7 @@
             android:launchMode="singleTop" />
         <activity android:name=".main.sns.activity.JoinFromSNSActivity" />
         <activity
-            android:name=".CreateStoryActivity"
+            android:name=".story.CreateStoryActivity"
             android:configChanges="keyboardHidden|orientation" />
 
         <activity android:name=".memory_sound.SongMainActivity" />
@@ -112,7 +112,7 @@
             android:name=".dialog.popup.notification.activity.NotificationPopupActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
 
-        <activity android:name=".ModifyStoryActivity" />
+        <activity android:name=".story.EditStoryActivity" />
 
         <activity android:name=".family.manage.activity.ManageFamilyActivity" />
         <activity android:name=".family.managedetail.activity.ManageFamilyDetailActivity" />

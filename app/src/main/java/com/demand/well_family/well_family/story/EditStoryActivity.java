@@ -1,4 +1,4 @@
-package com.demand.well_family.well_family;
+package com.demand.well_family.well_family.story;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.repository.StoryServerConnection;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.flag.LogFlag;
@@ -67,7 +68,7 @@ import retrofit2.Response;
  * Created by ㅇㅇ on 2017-03-28.
  */
 
-public class ModifyStoryActivity extends Activity {
+public class EditStoryActivity extends Activity {
     //user_info
     private int user_id;
     private String user_email;
@@ -154,7 +155,7 @@ public class ModifyStoryActivity extends Activity {
                 // 사진 업로드
                 Intent intent;
                 if (photoList.size() >= 10) {
-                    Toast.makeText(ModifyStoryActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditStoryActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
                 } else {
                     intent = new Intent();
                     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
@@ -179,7 +180,7 @@ public class ModifyStoryActivity extends Activity {
                 final int photoListSize = photoList.size();
 
                 if (photoListSize != 0 || et_write.getText().toString().length() != 0) {
-                    progressDialog = new ProgressDialog(ModifyStoryActivity.this);
+                    progressDialog = new ProgressDialog(EditStoryActivity.this);
                     progressDialog.show();
                     progressDialog.getWindow().setBackgroundDrawable(new
                             ColorDrawable(Color.TRANSPARENT));
@@ -235,14 +236,14 @@ public class ModifyStoryActivity extends Activity {
                                                         if (response.isSuccessful()) {
 
                                                         } else {
-                                                            Toast.makeText(ModifyStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(EditStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                                         }
                                                     }
 
                                                     @Override
                                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                                                         log(t);
-                                                        Toast.makeText(ModifyStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(EditStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                                     }
                                                 });
 
@@ -264,14 +265,14 @@ public class ModifyStoryActivity extends Activity {
                                         finish();
 
                                     } else {
-                                        Toast.makeText(ModifyStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EditStoryActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
 
                                 @Override
                                 public void onFailure(Call<Void> call, Throwable t) {
                                     log(t);
-                                    Toast.makeText(ModifyStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(EditStoryActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                                 }
                             });
                         }
@@ -384,11 +385,11 @@ public class ModifyStoryActivity extends Activity {
 
         photoViewAdapter = new PhotoViewAdapter(photoList, this, R.layout.item_write_upload_image);
         rv_write_image_upload.setAdapter(photoViewAdapter);
-        rv_write_image_upload.setLayoutManager(new LinearLayoutManager(ModifyStoryActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        rv_write_image_upload.setLayoutManager(new LinearLayoutManager(EditStoryActivity.this, LinearLayoutManager.HORIZONTAL, false));
 
         photoViewAdapter2 = new PhotoViewAdapter2(cdnPhotoList, this, R.layout.item_write_upload_image);
         rv_write_image_upload2.setAdapter(photoViewAdapter2);
-        rv_write_image_upload2.setLayoutManager(new LinearLayoutManager(ModifyStoryActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        rv_write_image_upload2.setLayoutManager(new LinearLayoutManager(EditStoryActivity.this, LinearLayoutManager.HORIZONTAL, false));
     }
 
     private class PhotoViewHolder extends RecyclerView.ViewHolder {
@@ -409,7 +410,7 @@ public class ModifyStoryActivity extends Activity {
                 public void onClick(View v) {
                     photoList.remove(getAdapterPosition());
                     photoViewAdapter.notifyDataSetChanged();
-                    Toast.makeText(ModifyStoryActivity.this, "사진이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditStoryActivity.this, "사진이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -433,7 +434,7 @@ public class ModifyStoryActivity extends Activity {
                 public void onClick(View v) {
                     cdnPhotoList.remove(getAdapterPosition());
                     photoViewAdapter2.notifyDataSetChanged();
-                    Toast.makeText(ModifyStoryActivity.this, "사진이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditStoryActivity.this, "사진이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
                 }
             });
         }

@@ -1,4 +1,4 @@
-package com.demand.well_family.well_family;
+package com.demand.well_family.well_family.story;
 
 import android.Manifest;
 import android.app.Activity;
@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.repository.StoryServerConnection;
 import com.demand.well_family.well_family.dto.Story;
 import com.demand.well_family.well_family.dto.StoryInfo;

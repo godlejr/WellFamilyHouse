@@ -19,7 +19,7 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.demand.well_family.well_family.ModifyStoryActivity;
+import com.demand.well_family.well_family.story.EditStoryActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.repository.StoryServerConnection;
 import com.demand.well_family.well_family.dto.Photo;
@@ -171,7 +171,7 @@ public class StoryDialogActivity extends Activity {
 
                     if (user_id == story_user_id) { // 본인
                         if (position == 1) { // 수정
-                            intent = new Intent(v.getContext(), ModifyStoryActivity.class);
+                            intent = new Intent(v.getContext(), EditStoryActivity.class);
                             intent.putExtra("story_id", getIntent().getIntExtra("story_id", 0));
                             intent.putExtra("content", getIntent().getStringExtra("content"));
                             intent.putExtra("photoList", getIntent().getSerializableExtra("photoList"));
