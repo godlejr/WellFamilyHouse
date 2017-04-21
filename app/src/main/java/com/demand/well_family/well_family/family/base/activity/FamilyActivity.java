@@ -462,10 +462,7 @@ public class FamilyActivity extends Activity implements FamilyView, NestedScroll
         Intent intent = new Intent(this, PhotoPopupActivity.class);
 
         String familyAvatar = family.getAvatar();
-        ArrayList<String> photoList = new ArrayList<>();
-        photoList.add(familyAvatar);
-
-        intent.putExtra("photoList", photoList);
+        intent.putExtra("avatar", familyAvatar);
         intent.putExtra("intent_flag", PhotoPopupINTENTFlag.FAMILYACTIVITY);
 
         startActivity(intent);

@@ -1,8 +1,5 @@
 package com.demand.well_family.well_family.dto;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 /**

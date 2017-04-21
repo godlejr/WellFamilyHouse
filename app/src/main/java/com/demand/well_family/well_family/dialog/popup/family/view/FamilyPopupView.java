@@ -1,5 +1,8 @@
 package com.demand.well_family.well_family.dialog.popup.family.view;
 
+import com.demand.well_family.well_family.dto.Family;
+import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
+
 /**
  * Created by ㅇㅇ on 2017-04-18.
  */
@@ -13,17 +16,21 @@ public interface FamilyPopupView {
 
     void setPopupContent(String content);
 
-    void setPopupFamilyAvatar(String familyAvatar);
+    void setPopupFamilyAvatar(Family family);
 
-    void setPopupButtonText(String commit, String cancel);
+    void setPopupButtonText(String conduct, String cancel);
 
     void setPopupButtonBackground(int resId);
 
     void showMessage(String message);
 
-    void navigateToBackAfterAcceptInvitation();
+    void setButtonUnClickable();
 
-    void navigateToBackAfterSecessionAndDelete();
+    void navigateToBack();
 
-    void navigateToBackAfterAcceptRequest();
+    void navigateToBackAfterAcceptInvitation(Family family);
+
+    void navigateToBackAfterSecessionAndDelete(Family family);
+
+    void navigateToBackAfterAcceptRequest(UserInfoForFamilyJoin userInfoForFamilyJoin);
 }

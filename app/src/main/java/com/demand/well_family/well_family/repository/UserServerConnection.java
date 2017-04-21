@@ -98,6 +98,9 @@ public interface UserServerConnection {
     @POST("{user_id}/comment_reports")
     Call<ResponseBody> insert_comment_report(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
 
+    @POST("{user_id}/story_reports")
+    Call<ResponseBody> insert_story_report(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
+
     @GET("{user_id}/notifications")
     Call<ArrayList<Notification>> notifications(@Path("user_id") int user_id);
 

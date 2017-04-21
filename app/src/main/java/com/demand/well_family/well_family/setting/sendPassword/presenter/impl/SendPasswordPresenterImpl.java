@@ -3,11 +3,13 @@ package com.demand.well_family.well_family.setting.sendPassword.presenter.impl;
 import android.content.Context;
 import android.view.View;
 
+import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.setting.sendPassword.interactor.SendPasswordInteractor;
 import com.demand.well_family.well_family.setting.sendPassword.interactor.impl.SendPasswordInteractorImpl;
 import com.demand.well_family.well_family.setting.sendPassword.presenter.SendPasswordPresenter;
 import com.demand.well_family.well_family.setting.sendPassword.view.SendPasswordView;
 import com.demand.well_family.well_family.util.APIErrorUtil;
+import com.demand.well_family.well_family.util.PreferenceUtil;
 
 /**
  * Created by ㅇㅇ on 2017-04-17.
@@ -23,7 +25,8 @@ public class SendPasswordPresenterImpl implements SendPasswordPresenter {
     }
 
     @Override
-    public void onCreate() {
+    public void onCreate(User user) {
+        findAccountInteractor.setUser(user);
         findAccountView.init();
 
         // toolbar
@@ -31,12 +34,12 @@ public class SendPasswordPresenterImpl implements SendPasswordPresenter {
         findAccountView.setToolbar(decorView);
         findAccountView.showToolbarTitle("계정 확인");
 
-        findAccountView.setUserInfo();
+        findAccountView.setUserInfo(user);
     }
 
     @Override
-    public void sendEmail(int userId, String name, String email) {
-        findAccountInteractor.sendEmail(userId, name, email);
+    public void sendEmail() {
+        findAccountInteractor.sendEmail();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.demand.well_family.well_family.dialog.popup.family.presenter;
 
 import com.demand.well_family.well_family.dto.Family;
+import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
 import com.demand.well_family.well_family.util.APIErrorUtil;
 
 
@@ -9,7 +10,7 @@ import com.demand.well_family.well_family.util.APIErrorUtil;
  */
 
 public interface FamilyPopupPresenter {
-    void onCreate(int joinFlag, boolean deleteFlag, Family family, String joinerName);
+    void onCreate(Family family, UserInfoForFamilyJoin userInfoForFamilyJoin, boolean deleteFlag);
 
     void setPopupContent();
 
@@ -17,13 +18,15 @@ public interface FamilyPopupPresenter {
 
     void onClickCommit();
 
-    void onSuccessAcceptInvitation(Family family);
+    void onClickClose();
 
-    void onSuccessFamilySecession(Family family);
+    void onSuccessAcceptInvitation();
 
-    void onSuccessAcceptRequest(Family family);
+    void onSuccessFamilySecession();
 
-    void onSuccessDeleteFamily(Family family);
+    void onSuccessAcceptRequest();
+
+    void onSuccessDeleteFamily();
 
     void onNetworkError(APIErrorUtil apiErrorUtil);
 

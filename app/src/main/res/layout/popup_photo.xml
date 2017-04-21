@@ -58,6 +58,12 @@
                 android:src="@drawable/main2"
                 android:visibility="visible" />
         </android.support.v4.view.ViewPager>
+
+        <ImageView
+            android:id="@+id/iv_photo_popup_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible" />
     </FrameLayout>
 
 </LinearLayout>

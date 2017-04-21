@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.setting.searchAccount.activity.SearchAccountActivity;
 import com.demand.well_family.well_family.setting.resetPassword.activity.ResetPasswordActivity;
 import com.demand.well_family.well_family.setting.verifyAccount.presenter.VerifyAccountPresenter;
@@ -94,9 +95,11 @@ public class VerifyAccountActivity extends Activity implements VerifyAccountView
                 break;
 
             case R.id.btn_confirm_pwd:
-                String email = et_verify_email.getText().toString();
-                String password = et_verify_pwd.getText().toString();
-                verifyAccountPresenter.getUserInfo(email, password);
+                User user = new User();
+                user.setEmail(et_verify_email.getText().toString());
+                user.setPassword( et_verify_pwd.getText().toString());
+
+                verifyAccountPresenter.getUserInfo(user);
                 break;
 
             case R.id.ll_search_pwd:

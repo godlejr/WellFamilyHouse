@@ -10,11 +10,11 @@ import java.util.ArrayList;
  */
 
 public interface PhotoPopupPresenter {
-    void onCreate();
+    void onCreate(int intentFlag, ArrayList<Photo> photoList, String fromActivity);
 
-    void onRequestPermissionsResult(int requestCode, int[] grantResults);
+    void onRequestPermissionsResultForWriteExternalStorage(int[] grantResults);
 
-    void setViewPagerAdapterInit(String from, ArrayList<Photo> photoList, int currentPhotoPosition);
+    void setViewPagerAdapterInit( int currentPhotoPosition);
 
     void setViewPagerAdapter(ViewPagerAdapter viewPagerAdapter);
 
@@ -26,7 +26,7 @@ public interface PhotoPopupPresenter {
 
     void setPopupTitleBarVisibility();
 
-
     void onClickImageDownload(int position);
 
+    void setImage(String avatar);
 }

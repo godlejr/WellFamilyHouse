@@ -83,7 +83,7 @@
             android:name=".dialog.CommentDeleteActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
 
-        <activity android:name=".dialog.CommentModifyActivity" />
+        <activity android:name=".dialog.CommentEditActivity" />
         <activity android:name=".ReportActivity" />
         <activity android:name=".setting.base.activity.SettingActivity" />
         <activity android:name=".notification.NotificationActivity" />
@@ -98,14 +98,14 @@
         <activity android:name=".memory_sound.ModifySongStoryActivity" />
         <activity android:name=".setting.deactivation.activity.DeactivationActivity" />
         <activity
-            android:name=".dialog.list.songstory.SongStoryDialogActivity"
+            android:name=".dialog.list.songstory.activity.SongStoryDialogActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
             android:name=".setting.deactivationReason.activity.DeactivationReasonActivity"
             android:theme="@style/CustomAppTheme" />
 
         <activity
-            android:name=".dialog.list.story.StoryDialogActivity"
+            android:name=".dialog.list.story.activity.StoryDialogActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
 
         <activity

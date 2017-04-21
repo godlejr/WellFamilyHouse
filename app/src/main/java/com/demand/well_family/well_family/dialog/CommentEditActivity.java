@@ -32,14 +32,14 @@ import retrofit2.Response;
  * Created by Dev-0 on 2017-03-02.
  */
 
-public class CommentModifyActivity extends Activity {
+public class CommentEditActivity extends Activity {
     private EditText et_comment_modify;
 
     private int comment_id;
     private String comment_content;
     private CommentServerConnection commentServerConnection;
 
-    private static final Logger logger = LoggerFactory.getLogger(CommentModifyActivity.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommentEditActivity.class);
     private int act_flag;
     private String access_token;
     private SharedPreferences loginInfo;
@@ -87,20 +87,20 @@ public class CommentModifyActivity extends Activity {
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if(response.isSuccessful()) {
                                 //scss
-                                Toast.makeText(CommentModifyActivity.this, "댓글이 수정되었습니다.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(CommentEditActivity.this, "댓글이 수정되었습니다.", Toast.LENGTH_LONG).show();
                                 Intent intent = getIntent();
                                 intent.putExtra("content", content);
                                 setResult(Activity.RESULT_OK, intent);
                                 finish();
                             } else {
-                                Toast.makeText(CommentModifyActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CommentEditActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                             log(t);
-                            Toast.makeText(CommentModifyActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(CommentEditActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                         }
                     });
                 }

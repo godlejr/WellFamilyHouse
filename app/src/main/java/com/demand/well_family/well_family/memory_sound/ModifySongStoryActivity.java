@@ -663,9 +663,6 @@ public class ModifySongStoryActivity extends Activity {
 
     // toolbar & menu
     public void setToolbar(View view, Context context, String title) {
-        NavigationView nv = (NavigationView) view.findViewById(R.id.nv);
-        nv.setItemIconTintList(null);
-        final DrawerLayout dl = (DrawerLayout) view.findViewById(R.id.dl);
 
         // toolbar menu, title, back
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolBar);
@@ -679,8 +676,6 @@ public class ModifySongStoryActivity extends Activity {
             }
         });
 
-        ImageView toolbar_menu = (ImageView) toolbar.findViewById(R.id.toolbar_menu);
-        toolbar_menu.setVisibility(View.GONE);
 
     }
 

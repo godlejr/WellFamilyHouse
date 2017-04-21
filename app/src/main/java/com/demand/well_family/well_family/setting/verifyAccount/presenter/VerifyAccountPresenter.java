@@ -10,7 +10,7 @@ import com.demand.well_family.well_family.util.APIErrorUtil;
 public interface VerifyAccountPresenter {
     void onCreate();
 
-    void getUserInfo(String email, String password);
+    void getUserInfo(User user);
 
     void onSuccessVerifyAccount(User user);
 

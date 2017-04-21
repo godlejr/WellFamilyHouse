@@ -232,7 +232,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
 
                                     isPlaying = false;
                                     isPaused = true;
-                                    Glide.with(SongPlayer.this).load(R.drawable.play_player).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_player_start);
+                                    Glide.with(SongPlayer.this).load(R.drawable.song_story_play_player).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_player_start);
                                 } else {
                                     if (isPaused) {  // 일시정지 -> 재생
                                         mp.seekTo(pausePos);
@@ -257,7 +257,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     isPlaying = false;
-                    Glide.with(SongPlayer.this).load(R.drawable.play_player).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_player_start);
+                    Glide.with(SongPlayer.this).load(R.drawable.song_story_play_player).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_player_start);
                     sb_sound.setProgress(0);
 
                     mp.pause();

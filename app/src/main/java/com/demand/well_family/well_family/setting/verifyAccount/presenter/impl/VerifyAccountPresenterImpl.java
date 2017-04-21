@@ -33,14 +33,17 @@ public class VerifyAccountPresenterImpl implements VerifyAccountPresenter {
     }
 
     @Override
-    public void getUserInfo(String email, String password) {
-        int emailLength = email.length();
-        int passwordLength = password.length();
+    public void getUserInfo(User user) {
+        String userEmail = user.getEmail();
+        String userPassword = user.getPassword();
+
+        int emailLength = userEmail.length();
+        int passwordLength = userPassword.length();
 
         if (emailLength == 0 || passwordLength == 0) {
             verifyAccountView.showMessage("이메일과 비밀번호를 확인해주세요");
         } else {
-            verifyAccountInteractor.getUserInfo(email, password);
+            verifyAccountInteractor.getUserInfo(userEmail, userPassword);
         }
     }
 

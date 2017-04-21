@@ -20,6 +20,11 @@ public class SongStory {
     private Boolean first_checked; //  select first check
     private Boolean isChecked; // like cheched
 
+    private int position; // list position
+
+    public SongStory() {
+    }
+
     public SongStory(int id, int user_id, int range_id, int song_id, String song_title, String song_singer, String record_file, String content, String location, int hits, String created_at, String updated_at) {
         this.id = id;
         this.user_id = user_id;
@@ -35,6 +40,14 @@ public class SongStory {
         this.updated_at = updated_at;
         this.first_checked = false;
         this.isChecked = false;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public int getId() {

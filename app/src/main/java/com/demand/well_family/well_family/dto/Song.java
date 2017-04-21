@@ -16,6 +16,9 @@ public class Song implements Serializable {
     private int category_id;
     private String created_at;
 
+    public Song() {
+    }
+
     public Song(int id, String name, String ext, String title, String singer, String avatar, int category_id, String created_at) {
         this.id = id;
         this.name = name;

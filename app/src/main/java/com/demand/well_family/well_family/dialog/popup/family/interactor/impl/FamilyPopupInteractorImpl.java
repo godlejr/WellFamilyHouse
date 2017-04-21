@@ -6,6 +6,7 @@ import com.demand.well_family.well_family.dialog.popup.family.presenter.FamilyPo
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.User;
 
+import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FamilyServerConnection;
 import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
@@ -24,16 +25,14 @@ import retrofit2.Response;
  */
 
 public class FamilyPopupInteractorImpl implements FamilyPopupInteractor {
-    private String joinerName;
-    private int joinFlag;
+    private UserInfoForFamilyJoin userInfoForFamilyJoin;
     private Family family;
+    private User user;
     private boolean deleteFlag;
 
     private FamilyPopupPresenter familyPopupPresenter;
     private FamilyServerConnection familyServerConnection;
     private static final Logger logger = LoggerFactory.getLogger(FamilyPopupInteractorImpl.class);
-
-    private User user;
 
     public FamilyPopupInteractorImpl(FamilyPopupPresenter familyPopupPresenter) {
         this.familyPopupPresenter = familyPopupPresenter;
@@ -50,9 +49,19 @@ public class FamilyPopupInteractorImpl implements FamilyPopupInteractor {
     }
 
     @Override
-    public void setAcceptInvitation(final Family family) { // 초대승인
-        String accessToken = user.getAccess_token();
+    public void setUserInfoForFamilyJoin(UserInfoForFamilyJoin userInfoForFamilyJoin) {
+        this.userInfoForFamilyJoin = userInfoForFamilyJoin;
+    }
+
+    @Override
+    public UserInfoForFamilyJoin getUserInfoForFamilyJoin() {
+        return this.userInfoForFamilyJoin;
+    }
+
+    @Override
+    public void setAcceptInvitation() {
         int userId = user.getId();
+        String accessToken = user.getAccess_token();
         int familyId = family.getId();
 
         familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
@@ -61,7 +70,7 @@ public class FamilyPopupInteractorImpl implements FamilyPopupInteractor {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    familyPopupPresenter.onSuccessAcceptInvitation(family);
+                    familyPopupPresenter.onSuccessAcceptInvitation();
                 } else {
                     familyPopupPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
@@ -76,7 +85,7 @@ public class FamilyPopupInteractorImpl implements FamilyPopupInteractor {
     }
 
     @Override
-    public void setFamilySecession(final Family family) { // 가족탈퇴
+    public void setFamilySecession() {
         String accessToken = user.getAccess_token();
         int familyId = family.getId();
         int userId = user.getId();
@@ -89,7 +98,7 @@ public class FamilyPopupInteractorImpl implements FamilyPopupInteractor {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    familyPopupPresenter.onSuccessFamilySecession(family);
+                    familyPopupPresenter.onSuccessFamilySecession();
                 } else {
                     familyPopupPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
@@ -104,18 +113,18 @@ public class FamilyPopupInteractorImpl implements FamilyPopupInteractor {
     }
 
     @Override
-    public void setAcceptRequest(final Family family) {
+    public void setAcceptRequest() {
         String accessToken = user.getAccess_token();
         int familyId = family.getId();
-        int userId = user.getId();
+        int joinerId = userInfoForFamilyJoin.getId();
 
         familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
-        Call<Void> call_update_user_for_familyjoin = familyServerConnection.update_user_for_familyjoin(familyId, userId);
+        Call<Void> call_update_user_for_familyjoin = familyServerConnection.update_user_for_familyjoin(familyId, joinerId);
         call_update_user_for_familyjoin.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    familyPopupPresenter.onSuccessAcceptRequest(family);
+                    familyPopupPresenter.onSuccessAcceptRequest();
                 } else {
                     familyPopupPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
@@ -130,7 +139,7 @@ public class FamilyPopupInteractorImpl implements FamilyPopupInteractor {
     }
 
     @Override
-    public void setDeleteFamily(final Family family) {
+    public void setDeleteFamily() {
         String accessToken = user.getAccess_token();
         int familyId = family.getId();
 
@@ -140,7 +149,7 @@ public class FamilyPopupInteractorImpl implements FamilyPopupInteractor {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    familyPopupPresenter.onSuccessDeleteFamily(family);
+                    familyPopupPresenter.onSuccessDeleteFamily();
                 } else {
                     familyPopupPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
@@ -152,26 +161,6 @@ public class FamilyPopupInteractorImpl implements FamilyPopupInteractor {
                 familyPopupPresenter.onNetworkError(null);
             }
         });
-    }
-
-    @Override
-    public void setJoinerName(String joinerName) {
-        this.joinerName = joinerName;
-    }
-
-    @Override
-    public String getJoinerName() {
-        return this.joinerName;
-    }
-
-    @Override
-    public void setJoinFlag(int joinFlag) {
-        this.joinFlag = joinFlag;
-    }
-
-    @Override
-    public int getJoinFlag() {
-        return this.joinFlag;
     }
 
     @Override

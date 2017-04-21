@@ -9,6 +9,7 @@ import com.demand.well_family.well_family.dialog.popup.family.presenter.FamilyPo
 import com.demand.well_family.well_family.dialog.popup.family.view.FamilyPopupView;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.User;
+import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
 import com.demand.well_family.well_family.flag.FamilyJoinFlag;
 
 import com.demand.well_family.well_family.util.APIErrorUtil;
@@ -30,13 +31,12 @@ public class FamilyPopupPresenterImpl implements FamilyPopupPresenter {
     }
 
     @Override
-    public void onCreate(int joinFlag, boolean deleteFlag, Family family, String joinerName) {
+    public void onCreate(Family family, UserInfoForFamilyJoin userInfoForFamilyJoin, boolean deleteFlag) {
         User user = preferenceUtil.getUserInfo();
 
         familyPopupInteractor.setUser(user);
         familyPopupInteractor.setFamily(family);
-        familyPopupInteractor.setJoinerName(joinerName);
-        familyPopupInteractor.setJoinFlag(joinFlag);
+        familyPopupInteractor.setUserInfoForFamilyJoin(userInfoForFamilyJoin);
         familyPopupInteractor.setDeleteFlag(deleteFlag);
 
         familyPopupView.setDisplay();
@@ -46,17 +46,16 @@ public class FamilyPopupPresenterImpl implements FamilyPopupPresenter {
     @Override
     public void setPopupContent() {
         Family family = familyPopupInteractor.getFamily();
-        int joinFlag= familyPopupInteractor.getJoinFlag();
-        String joinerName = familyPopupInteractor.getJoinerName();
+        UserInfoForFamilyJoin userInfoForFamilyJoin = familyPopupInteractor.getUserInfoForFamilyJoin();
+        User user = familyPopupInteractor.getUser();
         boolean deleteFlag = familyPopupInteractor.getDeleteFlag();
 
         String familyName = family.getName();
-        String familyAvatar = family.getAvatar();
-
-        User user = preferenceUtil.getUserInfo();
         String userName = user.getName();
+        int joinFlag = userInfoForFamilyJoin.getJoin_flag();
+        String joinerName = userInfoForFamilyJoin.getName();
 
-        familyPopupView.setPopupFamilyAvatar(familyAvatar);
+        familyPopupView.setPopupFamilyAvatar(family);
 
         if (joinFlag == FamilyJoinFlag.FAMILY_TO_USER) {
             familyPopupView.setPopupTitle("가족 가입");
@@ -78,7 +77,6 @@ public class FamilyPopupPresenterImpl implements FamilyPopupPresenter {
             familyPopupView.setPopupButtonText("수락", "거절");
             familyPopupView.setPopupButtonBackground(R.drawable.round_corner_green_r10);
         }
-
         if (deleteFlag) {
             familyPopupView.setPopupTitle("가족 삭제");
             familyPopupView.setPopupContent("가족 페이지를 삭제할 경우, \n\'" + familyName + "\' 가족과 함께 나누었던 소중한 추억들이 \n모두 삭제됩니다.\n그래도 \"" + familyName + "\" 가족 페이지를 삭제하시겠습니까?");
@@ -89,30 +87,46 @@ public class FamilyPopupPresenterImpl implements FamilyPopupPresenter {
     }
 
     @Override
-    public void onSuccessAcceptInvitation(Family family) {
+    public void onSuccessAcceptInvitation() {
+        Family family = familyPopupInteractor.getFamily();
         String familyName = family.getName();
+
         familyPopupView.showMessage("\"" + familyName + "\" 에 가입되었습니다.");
-        familyPopupView.navigateToBackAfterAcceptInvitation();
+        familyPopupView.navigateToBackAfterAcceptInvitation(family);
     }
 
     @Override
-    public void onSuccessFamilySecession(Family family) {
+    public void onSuccessFamilySecession() {
+        UserInfoForFamilyJoin userInfoForFamilyJoin = familyPopupInteractor.getUserInfoForFamilyJoin();
+        Family family = familyPopupInteractor.getFamily();
+
+        int joinFlag = userInfoForFamilyJoin.getJoin_flag();
         String familyName = family.getName();
-        familyPopupView.showMessage("\"" + familyName + "\" 에서 탈퇴하였습니다.");
-        familyPopupView.navigateToBackAfterSecessionAndDelete();
+
+        if (joinFlag == FamilyJoinFlag.FAMILY) {
+            familyPopupView.showMessage("\"" + familyName + "\" 에서 탈퇴하였습니다.");
+        }
+
+        if (joinFlag == FamilyJoinFlag.FAMILY_TO_USER) {
+            familyPopupView.showMessage("\"" + familyName + "\" 의 초대를 거절하였습니다.");
+        }
+
+        familyPopupView.navigateToBackAfterSecessionAndDelete(family);
     }
 
     @Override
-    public void onSuccessAcceptRequest(Family family) {
-        familyPopupView.navigateToBackAfterAcceptRequest();
+    public void onSuccessAcceptRequest() {
+        UserInfoForFamilyJoin userInfoForFamilyJoin = familyPopupInteractor.getUserInfoForFamilyJoin();
+        familyPopupView.navigateToBackAfterAcceptRequest(userInfoForFamilyJoin);
     }
 
     @Override
-    public void onSuccessDeleteFamily(Family family) {
+    public void onSuccessDeleteFamily() {
+        Family family = familyPopupInteractor.getFamily();
         String familyName = family.getName();
         familyPopupView.showMessage("\"" + familyName + "\" 이 삭제되었습니다.");
 
-        familyPopupView.navigateToBackAfterSecessionAndDelete();
+        familyPopupView.navigateToBackAfterSecessionAndDelete(family);
     }
 
     @Override
@@ -131,24 +145,41 @@ public class FamilyPopupPresenterImpl implements FamilyPopupPresenter {
 
     @Override
     public void onClickCommit() {
-        int joinFlag = familyPopupInteractor.getJoinFlag();
-        Family family = familyPopupInteractor.getFamily();
+        UserInfoForFamilyJoin userInfoForFamilyJoin = familyPopupInteractor.getUserInfoForFamilyJoin();
         boolean deleteFlag = familyPopupInteractor.getDeleteFlag();
+        int joinFlag = userInfoForFamilyJoin.getJoin_flag();
 
         if (joinFlag == FamilyJoinFlag.FAMILY_TO_USER) {
-            familyPopupInteractor.setAcceptInvitation(family);
+            familyPopupInteractor.setAcceptInvitation();
         }
 
         if (joinFlag == FamilyJoinFlag.FAMILY) {
-            familyPopupInteractor.setFamilySecession(family);
+            familyPopupInteractor.setFamilySecession();
         }
 
         if (joinFlag == FamilyJoinFlag.USER_TO_FAMILY) {
-            familyPopupInteractor.setAcceptRequest(family);
+            familyPopupInteractor.setAcceptRequest();
         }
 
         if (deleteFlag) {
-            familyPopupInteractor.setDeleteFamily(family);
+            familyPopupInteractor.setDeleteFamily();
         }
+
+        familyPopupView.setButtonUnClickable();
+
     }
+
+    @Override
+    public void onClickClose() {
+        UserInfoForFamilyJoin userInfoForFamilyJoin = familyPopupInteractor.getUserInfoForFamilyJoin();
+        int joinFlag = userInfoForFamilyJoin.getJoin_flag();
+
+        if (joinFlag == FamilyJoinFlag.FAMILY_TO_USER) { //reject
+            familyPopupInteractor.setFamilySecession();
+        } else {
+            familyPopupView.navigateToBack();
+        }
+
+    }
+
 }

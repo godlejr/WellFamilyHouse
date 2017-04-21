@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.setting.sendPassword.presenter.SendPasswordPresenter;
 import com.demand.well_family.well_family.setting.sendPassword.presenter.impl.SendPasswordPresenterImpl;
 import com.demand.well_family.well_family.setting.sendPassword.view.SendPasswordView;
@@ -45,8 +46,13 @@ public class SendPasswordActivity extends Activity implements SendPasswordView, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_account);
 
+        User user = new User();
+        user.setName(getIntent().getStringExtra("name"));
+        user.setAvatar(getIntent().getStringExtra("avatar"));
+        user.setEmail(getIntent().getStringExtra("email"));
+
         findAccountPresenter = new SendPasswordPresenterImpl(this);
-        findAccountPresenter.onCreate();
+        findAccountPresenter.onCreate(user);
     }
 
     @Override
@@ -88,14 +94,14 @@ public class SendPasswordActivity extends Activity implements SendPasswordView, 
     }
 
     @Override
-    public void setUserInfo() {
-        String name = getIntent().getStringExtra("name");
-        String user_avatar = getIntent().getStringExtra("avatar");
-        String email = getIntent().getStringExtra("email");
+    public void setUserInfo(User user) {
+        String userEmail = user.getEmail();
+        String userName = user.getName();
+        String userAvatar = user.getAvatar();
 
-        tv_confirm_account_email.setText(email);
-        tv_confirm_account_name.setText(name);
-        Glide.with(SendPasswordActivity.this).load(getString(R.string.cloud_front_user_avatar) + user_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_confirm_account_avatar);
+        tv_confirm_account_email.setText(userEmail);
+        tv_confirm_account_name.setText(userName);
+        Glide.with(SendPasswordActivity.this).load(getString(R.string.cloud_front_user_avatar) + userAvatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_confirm_account_avatar);
     }
 
     @Override
@@ -106,10 +112,7 @@ public class SendPasswordActivity extends Activity implements SendPasswordView, 
                 break;
 
             case R.id.btn_confirm_account:
-                int user_id = getIntent().getIntExtra("user_id", 0);
-                String name = getIntent().getStringExtra("name");
-                String email = getIntent().getStringExtra("email");
-                findAccountPresenter.sendEmail(user_id, name, email);
+                findAccountPresenter.sendEmail();
                 break;
         }
     }
