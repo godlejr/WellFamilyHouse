@@ -37,6 +37,7 @@ import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.family.manage.activity.ManageFamilyActivity;
+import com.demand.well_family.well_family.flag.PhotoPopupINTENTFlag;
 import com.demand.well_family.well_family.story.StoryDetailActivity;
 import com.demand.well_family.well_family.family.base.adapter.content.ContentAdapter;
 import com.demand.well_family.well_family.family.base.adapter.user.UserAdapter;
@@ -465,7 +466,7 @@ public class FamilyActivity extends Activity implements FamilyView, NestedScroll
         photoList.add(familyAvatar);
 
         intent.putExtra("photoList", photoList);
-        intent.putExtra("intent_flag", "PhotoPopupINTENTFlag");
+        intent.putExtra("intent_flag", PhotoPopupINTENTFlag.FAMILYACTIVITY);
 
         startActivity(intent);
     }
