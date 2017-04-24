@@ -13,6 +13,10 @@ public class CommentInfo {
     private String content;
     private String created_at;
 
+    private int position;
+
+
+
     public CommentInfo(int comment_id, int user_id, String user_name, String avatar, String content, String created_at) {
         this.comment_id = comment_id;
         this.user_id = user_id;
@@ -68,5 +72,13 @@ public class CommentInfo {
 
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by Dev-0 on 2017-01-20.
  */
 
-public class StoryInfo implements Serializable{
+public class StoryInfo implements Serializable {
     private int user_id;
     private String name;
     private String avatar;
@@ -19,6 +19,9 @@ public class StoryInfo implements Serializable{
     private Boolean isChecked; // like cheched
 
     private int position;
+
+    public StoryInfo() {
+    }
 
     public StoryInfo(int user_id, String name, String avatar, int story_id, String created_at, String content) {
         super();
