@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demand.well_family.well_family.flag.ReportINTETNFlag;
+import com.demand.well_family.well_family.flag.StoryINTENTFlag;
 import com.demand.well_family.well_family.repository.MainServerConnection;
 import com.demand.well_family.well_family.repository.UserServerConnection;
 import com.demand.well_family.well_family.dto.Category;
@@ -34,13 +36,14 @@ import retrofit2.Response;
  */
 
 public class ReportActivity extends Activity {
-    private String comment_user_name; // author
-    private int comment_id;
-    private int comment_category_id;
-    private int report_category_id;
-    private String comment_content;
+    private String authorName;
+    private int writingId;
+    private int writingCategoryId;
+    private String writingContent;
     private int user_id;
     private String access_token;
+
+    private int intentFlag;
 
     private TextView tv_report_content;
     private TextView tv_report_author_name;
@@ -56,10 +59,13 @@ public class ReportActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
 
-        comment_user_name = getIntent().getStringExtra("comment_user_name");
-        comment_content = getIntent().getStringExtra("comment_content");
-        comment_category_id = getIntent().getIntExtra("comment_category_id", 0);
-        comment_id = getIntent().getIntExtra("comment_id", 0);
+        intentFlag = getIntent().getIntExtra("intent_flag", 0); //1: comment, 2:story;
+
+        authorName = getIntent().getStringExtra("author_name");
+        writingContent = getIntent().getStringExtra("writing_content");
+        writingCategoryId = getIntent().getIntExtra("writing_category_id", 0);
+        writingId = getIntent().getIntExtra("writing_id", 0);
+
 
         //user_info
         loginInfo = getSharedPreferences("loginInfo", Activity.MODE_PRIVATE);
@@ -72,8 +78,8 @@ public class ReportActivity extends Activity {
     private void init() {
         tv_report_author_name = (TextView) findViewById(R.id.tv_report_author_name);
         tv_report_content = (TextView) findViewById(R.id.tv_report_content);
-        tv_report_author_name.setText(comment_user_name);
-        tv_report_content.setText(comment_content);
+        tv_report_author_name.setText(authorName);
+        tv_report_content.setText(writingContent);
 
         rv_report = (RecyclerView) findViewById(R.id.rv_report);
         mainServerConnection = new HeaderInterceptor(access_token).getClientForMainServer().create(MainServerConnection.class);
@@ -96,6 +102,7 @@ public class ReportActivity extends Activity {
         setToolbar(getWindow().getDecorView());
 
     }
+
     public void setToolbar(View view) {
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolBar);
         ImageView toolbar_back = (ImageView) toolbar.findViewById(R.id.toolbar_back);
@@ -120,33 +127,64 @@ public class ReportActivity extends Activity {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // 신고
-                    report_category_id = getAdapterPosition() + 1;
+                    int report_category_id = getAdapterPosition() + 1;
 
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("comment_category_id", String.valueOf(comment_category_id));
-                    map.put("report_category_id", String.valueOf(report_category_id));
-                    map.put("comment_id", String.valueOf(comment_id));
+                    if(intentFlag == ReportINTETNFlag.COMMENT){
 
-                    Log.e("신고", user_id + "," + comment_category_id + " ," + report_category_id + "," + comment_id);
-                    userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
-                    final Call<ResponseBody> call_report = userServerConnection.insert_comment_report(user_id, map);
-                    call_report.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            if(response.isSuccessful()) {
-                                Toast.makeText(ReportActivity.this, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show();
-                                finish();
-                            } else{
-                                Toast.makeText(ReportActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("comment_category_id", String.valueOf(writingCategoryId));
+                        map.put("report_category_id", String.valueOf(report_category_id));
+                        map.put("comment_id", String.valueOf(writingId));
+
+                        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                        final Call<ResponseBody> call_report = userServerConnection.insert_comment_report(user_id, map);
+                        call_report.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(ReportActivity.this, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                } else {
+                                    Toast.makeText(ReportActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Toast.makeText(ReportActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Toast.makeText(ReportActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                    } else if (intentFlag == ReportINTETNFlag.STORY){
+
+                        HashMap<String, String> map = new HashMap<>();
+                        map.put("story_category_id", String.valueOf(writingCategoryId));
+                        map.put("report_category_id", String.valueOf(report_category_id));
+                        map.put("story_id", String.valueOf(writingId));
+
+                        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                        final Call<ResponseBody> call_report = userServerConnection.insert_story_report(user_id, map);
+                        call_report.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(ReportActivity.this, "신고가 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                } else {
+                                    Toast.makeText(ReportActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Toast.makeText(ReportActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+
+                    }
+
+
                 }
             });
 

@@ -14,6 +14,11 @@ public class Comment {
     private String created_at;
     private String updated_at;
 
+    private int position;   // list position
+
+    public Comment() {
+    }
+
     public Comment(int id, int user_id, int story_id, String content, int deleted, String created_at,
                    String updated_at) {
         super();
@@ -24,6 +29,14 @@ public class Comment {
         this.deleted = deleted;
         this.created_at = created_at;
         this.updated_at = updated_at;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     public int getId() {

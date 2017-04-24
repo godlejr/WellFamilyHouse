@@ -1,5 +1,6 @@
 package com.demand.well_family.well_family.setting.sendPassword.presenter;
 
+import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.util.APIErrorUtil;
 
 /**
@@ -7,9 +8,9 @@ import com.demand.well_family.well_family.util.APIErrorUtil;
  */
 
 public interface SendPasswordPresenter {
-    void onCreate();
+    void onCreate(User user);
 
-    void sendEmail(int userId, String name, String email);
+    void sendEmail();
 
     void onSuccessSendEmail(String message);
 

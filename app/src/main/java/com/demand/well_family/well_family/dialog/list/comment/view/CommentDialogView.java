@@ -1,6 +1,10 @@
 package com.demand.well_family.well_family.dialog.list.comment.view;
 
 import com.demand.well_family.well_family.dialog.list.comment.adapter.CommentDialogAdapter;
+import com.demand.well_family.well_family.dto.Comment;
+import com.demand.well_family.well_family.dto.Report;
+
+import java.util.ArrayList;
 
 /**
  * Created by ㅇㅇ on 2017-04-19.
@@ -9,20 +13,25 @@ import com.demand.well_family.well_family.dialog.list.comment.adapter.CommentDia
 public interface CommentDialogView {
     void init();
 
+    void setCommentDialogAdapterInit(ArrayList<String> commentDialogList);
+
     void setCommentDialogAdapter(CommentDialogAdapter commentDialogAdapter);
-    void setCommentCopy();
 
-    String getCommentContent();
-    int getActFlag();
+    void setCommentCopied(Comment comment);
 
-    void navigateToCommentModifyActivity();
-    void navigateToCommentDeleteActivity();
-    void navigateToReportActivity();
+    void setCommentModifiedOrReported();
 
-    void navigateToBackAfterEdit(int commentPosition, String commentContent, int commentCodeFlag);
-    void navigateToBackAfterDelete(int commentPosition, int commentCodeFlag);
+    void navigateToCommentEditActivity(Comment comment, int actFlag);
 
-    void showMessage(String message);
+    void navigateToCommentDeleteActivity(Comment comment, int actFlag);
+
+    void navigateToReportActivity(Report report);
+
     void navigateToBack();
 
+    void navigateToBackAfterEdit(Comment comment, int commentCodeFlag);
+
+    void navigateToBackAfterDelete(Comment comment, int commentCodeFlag);
+
+    void showMessage(String message);
 }

@@ -11,7 +11,7 @@ import com.demand.well_family.well_family.dialog.popup.photo.interactor.impl.Pho
 import com.demand.well_family.well_family.dialog.popup.photo.presenter.PhotoPopupPresenter;
 import com.demand.well_family.well_family.dialog.popup.photo.view.PhotoPopupView;
 import com.demand.well_family.well_family.dto.Photo;
-import com.demand.well_family.well_family.flag.PermissionFlag;
+import com.demand.well_family.well_family.flag.PhotoPopupINTENTFlag;
 import com.demand.well_family.well_family.util.PreferenceUtil;
 
 import java.util.ArrayList;
@@ -25,42 +25,35 @@ public class PhotoPopupPresenterImpl implements PhotoPopupPresenter {
     private PreferenceUtil preferenceUtil;
     private PhotoPopupInteractor photoPopupInteractor;
 
-
-    private  String cloud_front;
-    private Context context;
-    private String fromActivity;
-    private ArrayList<Photo> photoList;
     private boolean visibility = true;
-    private ImageDownloadAsyncTask imageDownloadAsyncTask;
 
     public PhotoPopupPresenterImpl(Context context) {
         this.photoPopupView = (PhotoPopupView) context;
         this.photoPopupInteractor = new PhotoPopupInteractorImpl(this);
         this.preferenceUtil = new PreferenceUtil(context);
-        this.context = context;
     }
 
     @Override
-    public void onCreate() {
-        photoPopupView.checkPermission();
+    public void onCreate(int intentFlag, ArrayList<Photo> photoList, String fromActivity) {
+        photoPopupInteractor.setFromActivity(fromActivity);
+        photoPopupInteractor.setIntentFlag(intentFlag);
+        photoPopupInteractor.setPhotoList(photoList);
+
+        photoPopupView.setPermission();
         photoPopupView.init();
-        photoPopupView.setViewPagerAdapterInit();
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, int[] grantResults) {
-        if (requestCode == PermissionFlag.WRITE_EXTERNAL_STORAGE_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                photoPopupView.showMessage("권한을 허가해주세요.");
-            }
+    public void onRequestPermissionsResultForWriteExternalStorage(int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+            photoPopupView.showMessage("권한을 허가해주세요.");
         }
     }
 
     @Override
-    public void setViewPagerAdapterInit(String fromActivity, ArrayList<Photo> photoList, int currentPhotoPosition) {
-        this.fromActivity = fromActivity;
-        this.photoList = photoList;
-
+    public void setViewPagerAdapterInit(int currentPhotoPosition) {
+        ArrayList<Photo> photoList = photoPopupInteractor.getPhotoList();
+        photoPopupView.setViewPagerAdapterInit(photoList);
         photoPopupView.setCurrentItem(currentPhotoPosition);
     }
 
@@ -71,31 +64,58 @@ public class PhotoPopupPresenterImpl implements PhotoPopupPresenter {
 
     @Override
     public String getImageURL(int position) {
-        switch (fromActivity) {
-            case "FamilyActivity":
-                cloud_front = context.getString(R.string.cloud_front_family_avatar);
-                break;
-            case "UserActivity":
-                cloud_front = context.getString(R.string.cloud_front_user_avatar);
-                break;
-            case "PhotosActivity":
-            case "StoryDetailActivity":
-                cloud_front = context.getString(R.string.cloud_front_stories_images);
-                break;
+        String fromActivity = photoPopupInteractor.getFromActivity();
+
+        int intentFlag = photoPopupInteractor.getIntentFlag();
+        ArrayList<Photo> photoList = photoPopupInteractor.getPhotoList();
+        String cloudFront = null;
+
+        if (intentFlag == PhotoPopupINTENTFlag.FAMILYACTIVITY) {
+            cloudFront = photoPopupView.getCloudFrontFamilyAvatar();
         }
 
-        String imageURL = cloud_front + photoList.get(position).getName() + "." + photoList.get(position).getExt();
+        if (intentFlag == PhotoPopupINTENTFlag.USERACTIVITY) {
+            cloudFront = photoPopupView.getCloudFrontUserAvatar();
+        }
+
+        if (intentFlag == PhotoPopupINTENTFlag.PHOTOSACTIVITY || intentFlag == PhotoPopupINTENTFlag.STORYDETAILACTIVITY) {
+            cloudFront = photoPopupView.getCloudFrontStoryImages();
+        }
+
+        ////////
+        if (fromActivity != null) {
+            switch (fromActivity) {
+                case "FamilyActivity":
+                    cloudFront = photoPopupView.getCloudFrontFamilyAvatar();
+                    break;
+                case "UserActivity":
+                    cloudFront = photoPopupView.getCloudFrontUserAvatar();
+                    break;
+                case "PhotosActivity":
+                case "StoryDetailActivity":
+                    cloudFront = photoPopupView.getCloudFrontStoryImages();
+                    break;
+            }
+        }
+        ////////
+
+        photoPopupInteractor.setCloudFront(cloudFront);
+        String imageURL = cloudFront + photoList.get(position).getName() + "." + photoList.get(position).getExt();
         return imageURL;
     }
 
     @Override
     public void setViewPagerIndicator(int position) {
-        if (fromActivity.equals("FamilyActivity") || fromActivity.equals("UserActivity")) {
+        int intentFlag = photoPopupInteractor.getIntentFlag();
+        ArrayList<Photo> photoList = photoPopupInteractor.getPhotoList();
+
+        if (intentFlag == PhotoPopupINTENTFlag.FAMILYACTIVITY || intentFlag == PhotoPopupINTENTFlag.USERACTIVITY) {
             photoPopupView.setViewPagerIndicator("");
         } else {
             String viewPagerPosition = (position + 1) + " / " + photoList.size();
             photoPopupView.setViewPagerIndicator(viewPagerPosition);
         }
+
     }
 
     @Override
@@ -115,9 +135,56 @@ public class PhotoPopupPresenterImpl implements PhotoPopupPresenter {
 
     @Override
     public void onClickImageDownload(int position) {
-        String imageURL = cloud_front + photoList.get(position).getName() + "." + photoList.get(position).getExt();
-        imageDownloadAsyncTask = new ImageDownloadAsyncTask(context, photoList.get(position).getName() + "." + photoList.get(position).getExt());
-        imageDownloadAsyncTask.execute(imageURL);
+        ArrayList<Photo> photoList = photoPopupInteractor.getPhotoList();
+        String cloudFront = photoPopupInteractor.getCloudFront();
+
+        photoPopupView.setImageDownload(photoList, cloudFront, position);
     }
 
+    @Override
+    public void setImage(String avatar) {
+        String fromActivity = photoPopupInteractor.getFromActivity();
+
+        int intentFlag = photoPopupInteractor.getIntentFlag();
+        String cloudFront = null;
+
+        if (intentFlag == PhotoPopupINTENTFlag.FAMILYACTIVITY) {
+            cloudFront = photoPopupView.getCloudFrontFamilyAvatar();
+        }
+
+        if (intentFlag == PhotoPopupINTENTFlag.USERACTIVITY) {
+            cloudFront = photoPopupView.getCloudFrontUserAvatar();
+        }
+
+        if (intentFlag == PhotoPopupINTENTFlag.PHOTOSACTIVITY || intentFlag == PhotoPopupINTENTFlag.STORYDETAILACTIVITY) {
+            cloudFront = photoPopupView.getCloudFrontStoryImages();
+        }
+
+        ////////
+        if (fromActivity != null) {
+            switch (fromActivity) {
+                case "FamilyActivity":
+                    cloudFront = photoPopupView.getCloudFrontFamilyAvatar();
+                    break;
+                case "UserActivity":
+                    cloudFront = photoPopupView.getCloudFrontUserAvatar();
+                    break;
+                case "PhotosActivity":
+                case "StoryDetailActivity":
+                    cloudFront = photoPopupView.getCloudFrontStoryImages();
+                    break;
+            }
+        }
+        ////////
+
+        if (avatar != null) {
+            photoPopupView.showPhoto();
+            photoPopupView.goneViewPager();
+            photoPopupView.showImage(cloudFront + avatar);
+        } else {
+            photoPopupView.showViewPager();
+            photoPopupView.gonePhoto();
+            photoPopupView.showImages();
+        }
+    }
 }

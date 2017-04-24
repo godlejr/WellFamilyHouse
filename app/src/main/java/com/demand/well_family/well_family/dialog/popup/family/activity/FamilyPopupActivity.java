@@ -22,6 +22,8 @@ import com.demand.well_family.well_family.dialog.popup.family.presenter.FamilyPo
 import com.demand.well_family.well_family.dialog.popup.family.presenter.impl.FamilyPopupPresenterImpl;
 import com.demand.well_family.well_family.dialog.popup.family.view.FamilyPopupView;
 import com.demand.well_family.well_family.dto.Family;
+import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
+import com.demand.well_family.well_family.family.base.flag.FamilyCodeFlag;
 
 
 /**
@@ -44,27 +46,25 @@ public class FamilyPopupActivity extends Activity implements FamilyPopupView, Vi
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.popup_family);
 
-        int familyId = getIntent().getIntExtra("family_id", 0);
-        int familyUserId = getIntent().getIntExtra("family_user_id", 0);
-        String familyName = getIntent().getStringExtra("family_name");
-        String familyContent = getIntent().getStringExtra("family_content");
-        String familyAvatar = getIntent().getStringExtra("family_avatar");
-        String familyCreatedAt = getIntent().getStringExtra("family_created_at");
-
-        String joinerName = getIntent().getStringExtra("joiner_name");
         Boolean deleteFlag = getIntent().getBooleanExtra("delete_flag", false);
-        int joinFlag = getIntent().getIntExtra("join_flag", 0);
 
         Family family = new Family();
-        family.setId(familyId);
-        family.setName(familyName);
-        family.setContent(familyContent);
-        family.setAvatar(familyAvatar);
-        family.setUser_id(familyUserId);
-        family.setCreated_at(familyCreatedAt);
+        family.setId(getIntent().getIntExtra("family_id", 0));
+        family.setName(getIntent().getStringExtra("family_name"));
+        family.setContent(getIntent().getStringExtra("family_content"));
+        family.setAvatar(getIntent().getStringExtra("family_avatar"));
+        family.setUser_id(getIntent().getIntExtra("family_user_id", 0));
+        family.setCreated_at(getIntent().getStringExtra("family_created_at"));
+        family.setPosition(getIntent().getIntExtra("position", 0));
+
+        UserInfoForFamilyJoin userInfoForFamilyJoin = new UserInfoForFamilyJoin();
+        userInfoForFamilyJoin.setName(getIntent().getStringExtra("joiner_name"));
+        userInfoForFamilyJoin.setJoin_flag(getIntent().getIntExtra("join_flag", 0));
+        userInfoForFamilyJoin.setPosition(getIntent().getIntExtra("joiner_position", 0));
+        userInfoForFamilyJoin.setId(getIntent().getIntExtra("joiner_id", 0));
 
         familyPopupPresenter = new FamilyPopupPresenterImpl(this);
-        familyPopupPresenter.onCreate(joinFlag, deleteFlag, family, joinerName);
+        familyPopupPresenter.onCreate(family, userInfoForFamilyJoin, deleteFlag);
     }
 
     @Override
@@ -92,20 +92,20 @@ public class FamilyPopupActivity extends Activity implements FamilyPopupView, Vi
 
     @Override
     public void onBackPressed() {
-        setResult(RESULT_CANCELED);
+        setResult(FamilyPopupCodeFlag.RESULT_CANCELED);
         super.onBackPressed();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_popup_family_cancel:
-                setResult(RESULT_CANCELED);
+            case R.id.btn_popup_family_close:
+                setResult(FamilyPopupCodeFlag.RESULT_CANCELED);
                 finish();
                 break;
 
-            case R.id.btn_popup_family_close:
-                finish();
+            case R.id.btn_popup_family_cancel:
+                familyPopupPresenter.onClickClose();
                 break;
 
             case R.id.btn_popup_family_commit:
@@ -125,13 +125,13 @@ public class FamilyPopupActivity extends Activity implements FamilyPopupView, Vi
     }
 
     @Override
-    public void setPopupFamilyAvatar(String familyAvatar) {
-        Glide.with(FamilyPopupActivity.this).load(getString(R.string.cloud_front_family_avatar) + familyAvatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_popup_family_avatar);
+    public void setPopupFamilyAvatar(Family family) {
+        Glide.with(FamilyPopupActivity.this).load(getString(R.string.cloud_front_family_avatar) + family.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_popup_family_avatar);
     }
 
     @Override
-    public void setPopupButtonText(String commit, String cancel) {
-        btn_popup_family_commit.setText(commit);
+    public void setPopupButtonText(String conduct, String cancel) {
+        btn_popup_family_commit.setText(conduct);
         btn_popup_family_cancel.setText(cancel);
     }
 
@@ -146,32 +146,34 @@ public class FamilyPopupActivity extends Activity implements FamilyPopupView, Vi
     }
 
     @Override
-    public void navigateToBackAfterAcceptInvitation() {
-        int familyPosition = getIntent().getIntExtra("position", 0);
-
-        Intent backIntent = getIntent();
-        backIntent.putExtra("position", familyPosition);
-        setResult(FamilyPopupCodeFlag.FAMILY_JOIN, backIntent);
+    public void navigateToBack() {
         finish();
     }
 
     @Override
-    public void navigateToBackAfterAcceptRequest() {
-        int joinerPosition = getIntent().getIntExtra("joiner_position", 0);
-
-        setResult(FamilyPopupCodeFlag.FAMILY_JOIN, getIntent().putExtra("position", joinerPosition));
+    public void navigateToBackAfterAcceptInvitation(Family family) {
+        Intent intent = getIntent();
+        intent.putExtra("position", family.getPosition());
+        setResult(FamilyPopupCodeFlag.FAMILY_JOIN, intent);
         finish();
     }
 
     @Override
-    public void navigateToBackAfterSecessionAndDelete() {
-        int familyPosition = getIntent().getIntExtra("position", 0);
-
-        Intent backIntent = getIntent();
-        backIntent.putExtra("position", familyPosition);
-        setResult(FamilyPopupCodeFlag.DELETE_USER_TO_FAMILY, backIntent);
+    public void navigateToBackAfterAcceptRequest(UserInfoForFamilyJoin userInfoForFamilyJoin) {
+        setResult(FamilyPopupCodeFlag.FAMILY_JOIN, getIntent().putExtra("position", userInfoForFamilyJoin.getPosition()));
         finish();
     }
 
+    @Override
+    public void navigateToBackAfterSecessionAndDelete(Family family) {
+        Intent intent = getIntent();
+        intent.putExtra("position", family.getPosition());
+        setResult(FamilyPopupCodeFlag.DELETE_USER_TO_FAMILY, intent);
+        finish();
+    }
 
+    @Override
+    public void setButtonUnClickable() {
+        btn_popup_family_commit.setClickable(false);
+    }
 }

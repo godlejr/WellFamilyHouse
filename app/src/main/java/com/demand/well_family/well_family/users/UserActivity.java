@@ -194,11 +194,7 @@ public class UserActivity extends Activity implements View.OnClickListener {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), PhotoPopupActivity.class);
 
-                String[] filename = story_user_avatar.split("\\.");
-                ArrayList<Photo> photo = new ArrayList<Photo>();
-                photo.add(new Photo(0, 0, 0, filename[0], filename[1]));
-
-                intent.putExtra("photoList", photo);
+                intent.putExtra("avatar", story_user_avatar);
                 intent.putExtra("from", "UserActivity");
                 startActivity(intent);
             }

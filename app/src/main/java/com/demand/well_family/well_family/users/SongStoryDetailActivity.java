@@ -37,7 +37,7 @@ import com.demand.well_family.well_family.repository.SongServerConnection;
 import com.demand.well_family.well_family.repository.SongStoryServerConnection;
 import com.demand.well_family.well_family.repository.UserServerConnection;
 import com.demand.well_family.well_family.dialog.list.comment.activity.CommentDialogActivity;
-import com.demand.well_family.well_family.dialog.list.songstory.SongStoryDialogActivity;
+import com.demand.well_family.well_family.dialog.list.songstory.activity.SongStoryDialogActivity;
 import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStoryComment;
@@ -451,9 +451,12 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                                 intent.putExtra("song_singer", song_singer);
                                 intent.putExtra("emotionList", emotionList);
                                 intent.putExtra("location", location);
-                                if(story_user_id ==  user_id){
-                                    intent.putExtra("story_user_is_me", true);
-                                }
+                                intent.putExtra("author_name", story_user_name);
+                                intent.putExtra("story_user_id", story_user_id);
+
+//                                if(story_user_id ==  user_id){
+//                                    intent.putExtra("story_user_is_me", true);
+//                                }
 
                                 startActivityForResult(intent, POPUP_REQUEST);
 

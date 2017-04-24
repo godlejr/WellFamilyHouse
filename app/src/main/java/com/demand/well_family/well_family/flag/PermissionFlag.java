@@ -5,5 +5,6 @@ package com.demand.well_family.well_family.flag;
  */
 
 public class PermissionFlag {
-    public static final int WRITE_EXTERNAL_STORAGE_PERMISSION = 1;
+    // 얘 안에 넣기
+    public static final int WRITE_EXTERNAL_STORAGE_PERMISSION = 10002;
 }

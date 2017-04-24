@@ -11,7 +11,12 @@ public class Story {
     private String content;
     private String created_at;
 
-    public Story(int id, int user_id, int family_id, String content,String created_at) {
+    private int position; // list position
+
+    public Story() {
+    }
+
+    public Story(int id, int user_id, int family_id, String content, String created_at) {
         super();
         this.id = id;
         this.user_id = user_id;
@@ -61,4 +66,11 @@ public class Story {
         this.id = id;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 }

@@ -1,5 +1,6 @@
 package com.demand.well_family.well_family.setting.sendPassword.interactor.impl;
 
+import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.MainServerConnection;
 import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
@@ -26,25 +27,31 @@ public class SendPasswordInteractorImpl implements SendPasswordInteractor {
     private MainServerConnection mainServerConnection;
     private static final Logger logger = LoggerFactory.getLogger(SendPasswordInteractorImpl.class);
 
+    private User user;
+
     public SendPasswordInteractorImpl(SendPasswordPresenter findAccountPresenter) {
         this.findAccountPresenter = findAccountPresenter;
     }
 
     @Override
-    public void sendEmail(int userId, String name, final String email) {
+    public void sendEmail() {
+        int userId = user.getId();
+        final String userEmail = user.getEmail();
+        String userName = user.getName();
+
         mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
 
         HashMap<String, String> map = new HashMap<>();
         map.put("user_id", String.valueOf(userId));
-        map.put("email", email);
-        map.put("name", name);
+        map.put("email", userEmail);
+        map.put("name", userName);
 
         Call<ResponseBody> call_find_password = mainServerConnection.findPassword(map);
         call_find_password.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    findAccountPresenter.onSuccessSendEmail(email);
+                    findAccountPresenter.onSuccessSendEmail(userEmail);
                 } else {
                     findAccountPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
@@ -59,6 +66,15 @@ public class SendPasswordInteractorImpl implements SendPasswordInteractor {
         });
     }
 
+    @Override
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public User getUser() {
+        return this.user;
+    }
 
     private static void log(Throwable throwable) {
         StackTraceElement[] ste = throwable.getStackTrace();

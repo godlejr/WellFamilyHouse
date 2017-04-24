@@ -3,9 +3,7 @@ package com.demand.well_family.well_family.dialog.popup.deactivation.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.Display;
 import android.view.View;
 import android.view.Window;
@@ -14,11 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dialog.popup.deactivation.presenter.DeactivationPopupPresenter;
 import com.demand.well_family.well_family.dialog.popup.deactivation.presenter.impl.DeactivationPopupPresenterImpl;
 import com.demand.well_family.well_family.dialog.popup.deactivation.view.DeactivationPopupView;
 import com.demand.well_family.well_family.main.login.activity.LoginActivity;
-import com.demand.well_family.well_family.R;
 
 import static com.demand.well_family.well_family.main.login.activity.LoginActivity.finishList;
 
@@ -34,7 +32,7 @@ public class DeactivationPopupActivity extends Activity implements DeactivationP
     private Button btn_deactivation_popup_commit;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.popup_deactivation);
