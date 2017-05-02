@@ -1,7 +1,6 @@
 package com.demand.well_family.well_family.setting.resetPassword.activity;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -14,13 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.setting.resetPassword.presenter.ResetPasswordPresenter;
 import com.demand.well_family.well_family.setting.resetPassword.presenter.impl.ResetPasswordPresenterImpl;
 import com.demand.well_family.well_family.setting.resetPassword.view.ResetPasswordView;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static com.demand.well_family.well_family.main.login.activity.LoginActivity.finishList;
 
@@ -113,12 +108,12 @@ public class ResetPasswordActivity extends Activity implements ResetPasswordView
 
     @Override
     public void setButtonColorBrown() {
-        btn_reset_pwd.setBackgroundResource(R.drawable.round_corner_btn_brown_r10);
+        btn_reset_pwd.setBackgroundResource(R.drawable.round_corner_brown_r10);
     }
 
     @Override
     public void setButtonColorGray() {
-        btn_reset_pwd.setBackgroundResource(R.drawable.round_corner_btn_gray_r10);
+        btn_reset_pwd.setBackgroundResource(R.drawable.round_corner_gray_r10);
     }
 
     @Override

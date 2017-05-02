@@ -68,7 +68,8 @@ public class MainInteractorImpl implements MainInteractor {
     public ArrayList<App> getAppData() {
         ArrayList<App> appList = new ArrayList<>();
         appList.add(new App("추억소리", R.drawable.memory_sound));
-        appList.add(new App("셀핏", R.drawable.logo_selffeet));
+        appList.add(new App("낙상진단", R.drawable.logo_selffeet));
+        appList.add(new App("신체운동", R.drawable.logo_selffeet));
         appList.add(new App("해핏", R.drawable.happyfeet, "com.demand.happyfeet"));
         appList.add(new App("버블핏", R.drawable.logo_bubblefeet, "com.demand.bubblefeet"));
         appList.add(new App("Good Buddy", R.drawable.goodbuddy, "healthcare.nhis.GoodBuddy"));

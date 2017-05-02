@@ -77,4 +77,6 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.AppViewHolder> {
             }
         }
     }
+
+
 }

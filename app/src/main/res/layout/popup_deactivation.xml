@@ -43,7 +43,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="15dp"
             android:layout_weight="1"
-            android:background="@drawable/round_corner_btn_gray_r10"
+            android:background="@drawable/round_corner_gray_r10"
             android:text="취소"
             android:textColor="#fff"
             android:textSize="18sp" />
@@ -55,7 +55,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:background="@drawable/round_corner_btn_brown_r10"
+            android:background="@drawable/round_corner_brown_r10"
             android:text="확인"
             android:textColor="#fff"
             android:textSize="18sp" />

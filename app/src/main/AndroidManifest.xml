@@ -30,100 +30,117 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".story.detail.activity.StoryDetailActivity" />
-        <activity android:name=".family.photo.activity.PhotosActivity" />
-        <activity
-            android:name=".dialog.popup.photo.activity.PhotoPopupActivity"
-            android:theme="@style/Theme.AppCompat.Dialog" />
-        <activity android:name=".photos.SongPhotoPopupActivity" />
 
-        <activity android:name=".users.UserActivity" />
-        <activity android:name=".family.base.activity.FamilyActivity" />
         <activity android:name=".main.base.activity.MainActivity" />
         <activity android:name=".main.join.activity.JoinActivity" />
+        <activity android:name=".main.sns.activity.JoinFromSNSActivity" />
         <activity android:name=".main.agreement.activity.AgreementActivity" />
         <activity
             android:name=".main.login.activity.LoginActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".main.sns.activity.JoinFromSNSActivity" />
+
+
+        <activity android:name=".story.EditStoryActivity" />
+        <activity android:name=".story.detail.activity.StoryDetailActivity" />
         <activity
             android:name=".story.CreateStoryActivity"
             android:configChanges="keyboardHidden|orientation" />
 
+        <activity android:name=".family.base.activity.FamilyActivity" />
+        <activity android:name=".family.photo.activity.PhotosActivity" />
+
+
+        <activity android:name=".memory_sound.SongRecordActivity" />
         <activity android:name=".memory_sound.SongMainActivity" />
         <activity android:name=".memory_sound.SongChartListActivity" />
         <activity android:name=".memory_sound.SongCategoryListActivity" />
         <activity
             android:name=".memory_sound.SongPlayer"
             android:theme="@style/Theme.AppCompat.Dialog" />
-        <activity android:name=".users.SongStoryActivity" />
-        <activity android:name=".memory_sound.SongRecordActivity" />
-        <activity android:name=".users.SongStoryDetailActivity" />
-        <activity
-            android:name=".market.MarketMainActivity"
-            android:launchMode="singleInstance" />
-        <activity
-            android:name=".family.create.activity.CreateFamilyActivity"
-            android:theme="@style/Theme.AppCompat.Dialog" />
-        <activity android:name=".search.SearchUserActivity" />
         <activity
             android:name=".memory_sound.EmotionActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
+
+
+        <activity android:name=".users.UserActivity" />
+        <activity android:name=".users.SongStoryDetailActivity" />
+        <activity android:name=".users.SongStoryActivity" />
         <activity
             android:name=".users.EditUserActivity"
             android:theme="@style/CustomAppTheme" />
+
+
+        <activity android:name=".family.manage.activity.ManageFamilyActivity" />
+        <activity android:name=".family.managedetail.activity.ManageFamilyDetailActivity" />
+        <activity
+            android:name=".family.create.activity.CreateFamilyActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
             android:name=".family.edit.activity.EditFamilyActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
 
+
+        <activity android:name=".setting.verifyAccount.activity.VerifyAccountActivity" />
+        <activity android:name=".setting.base.activity.SettingActivity" />
+        <activity android:name=".setting.searchAccount.activity.SearchAccountActivity" />
+        <activity android:name=".setting.resetPassword.activity.ResetPasswordActivity" />
+        <activity
+            android:name=".setting.sendPassword.activity.SendPasswordActivity"
+            android:theme="@style/CustomAppTheme" />
+        <activity android:name=".setting.deactivation.activity.DeactivationActivity" />
+        <activity
+            android:name=".setting.deactivationReason.activity.DeactivationReasonActivity"
+            android:theme="@style/CustomAppTheme" />
+
+
+        <activity android:name=".notification.NotificationActivity" />
+        <activity android:name=".notification.NotificationFamilyStoryDetail" />
+        <activity android:name=".notification.NotificationSongStoryDetail" />
+        <activity android:name=".memory_sound.ModifySongStoryActivity" />
+
+
+        <activity android:name=".dialog.CommentEditActivity" />
+        <activity
+            android:name=".dialog.list.songstory.activity.SongStoryDialogActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".dialog.list.story.StoryDialogActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".dialog.popup.notification.activity.NotificationPopupActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".dialog.popup.family.activity.FamilyPopupActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".dialog.popup.deactivation.activity.DeactivationPopupActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
             android:name=".dialog.list.comment.activity.CommentDialogActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
             android:name=".dialog.CommentDeleteActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
-
-        <activity android:name=".dialog.CommentEditActivity" />
-        <activity android:name=".ReportActivity" />
-        <activity android:name=".setting.base.activity.SettingActivity" />
-        <activity android:name=".notification.NotificationActivity" />
-        <activity android:name=".setting.verifyAccount.activity.VerifyAccountActivity" />
-        <activity android:name=".setting.searchAccount.activity.SearchAccountActivity" />
-        <activity android:name=".setting.resetPassword.activity.ResetPasswordActivity"/>
         <activity
-            android:name=".setting.sendPassword.activity.SendPasswordActivity"
-            android:theme="@style/CustomAppTheme" />
-        <activity android:name=".notification.NotificationFamilyStoryDetail" />
-        <activity android:name=".notification.NotificationSongStoryDetail" />
-        <activity android:name=".memory_sound.ModifySongStoryActivity" />
-        <activity android:name=".setting.deactivation.activity.DeactivationActivity" />
-        <activity
-            android:name=".dialog.list.songstory.activity.SongStoryDialogActivity"
-            android:theme="@style/Theme.AppCompat.Dialog" />
-        <activity
-            android:name=".setting.deactivationReason.activity.DeactivationReasonActivity"
-            android:theme="@style/CustomAppTheme" />
-
-        <activity
-            android:name=".dialog.list.story.activity.StoryDialogActivity"
+            android:name=".dialog.popup.photo.activity.PhotoPopupActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
 
-        <activity
-            android:name=".dialog.popup.notification.activity.NotificationPopupActivity"
-            android:theme="@style/Theme.AppCompat.Dialog" />
-
-        <activity android:name=".story.EditStoryActivity" />
-
-        <activity android:name=".family.manage.activity.ManageFamilyActivity" />
-        <activity android:name=".family.managedetail.activity.ManageFamilyDetailActivity" />
-        <activity
-            android:name=".dialog.popup.deactivation.activity.DeactivationPopupActivity"
-            android:theme="@style/Theme.AppCompat.Dialog" />
 
         <activity android:name=".search.SearchFamilyActivity" />
+        <activity android:name=".search.SearchUserActivity" />
+
+
+        <activity android:name=".falldiagnosis.base.activity.FallDiagnosisActivity" />
+        <activity android:name=".falldiagnosis.dangerevaluation.activity.DangerEvaluationActivity" />
+
         <activity
-            android:name=".dialog.popup.family.activity.FamilyPopupActivity"
-            android:theme="@style/Theme.AppCompat.Dialog" />
+            android:name=".market.MarketMainActivity"
+            android:launchMode="singleInstance" />
+
+        <activity android:name=".photos.SongPhotoPopupActivity" />
+
+        <activity android:name=".ReportActivity" />
+
 
         <service android:name=".fcm.FirebaseMessageService">
             <intent-filter>

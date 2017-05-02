@@ -5,7 +5,7 @@ package com.demand.well_family.well_family.dto;
  */
 
 public class App {
-   String name, packageName;
+    String name, packageName;
     int image;
 
 

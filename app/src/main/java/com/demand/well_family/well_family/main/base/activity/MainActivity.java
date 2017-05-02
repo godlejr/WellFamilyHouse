@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.demand.well_family.well_family.falldiagnosis.base.activity.FallDiagnosisActivity;
 import com.demand.well_family.well_family.family.base.activity.FamilyActivity;
 import com.demand.well_family.well_family.main.login.activity.LoginActivity;
 import com.demand.well_family.well_family.R;
@@ -435,5 +436,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
         startActivity(intent);
     }
 
-
+    @Override
+    public void navigateToFallDiagnosisActivity() {
+        Intent intent = new Intent(MainActivity.this, FallDiagnosisActivity.class);
+        startActivity(intent);
+    }
 }

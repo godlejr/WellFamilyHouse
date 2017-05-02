@@ -126,7 +126,7 @@
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/round_corner_btn_gray_r10"
+                android:background="@drawable/round_corner_gray_r10"
                 android:text="등록"
                 android:textColor="#fff"
                 android:textSize="16sp" />
@@ -170,7 +170,7 @@
                 android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:layout_margin="25dp"
-                android:background="@drawable/round_corner_btn_brown_r10"
+                android:background="@drawable/round_corner_brown_r10"
                 android:text="저장"
                 android:textColor="#fff"
                 android:textSize="18sp"

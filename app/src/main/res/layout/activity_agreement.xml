@@ -178,7 +178,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:background="@drawable/round_corner_btn_brown_r10"
+            android:background="@drawable/round_corner_brown_r10"
             android:text="가입하기"
             android:textColor="#fff" />
     </LinearLayout>

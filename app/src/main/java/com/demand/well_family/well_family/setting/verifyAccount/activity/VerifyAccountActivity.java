@@ -147,12 +147,12 @@ public class VerifyAccountActivity extends Activity implements VerifyAccountView
 
     @Override
     public void setButtonColorBrown() {
-        btn_verify_pwd.setBackgroundResource(R.drawable.round_corner_btn_brown_r10);
+        btn_verify_pwd.setBackgroundResource(R.drawable.round_corner_brown_r10);
     }
 
     @Override
     public void setButtonColorGray() {
-        btn_verify_pwd.setBackgroundResource(R.drawable.round_corner_btn_gray_r10);
+        btn_verify_pwd.setBackgroundResource(R.drawable.round_corner_gray_r10);
     }
 
 

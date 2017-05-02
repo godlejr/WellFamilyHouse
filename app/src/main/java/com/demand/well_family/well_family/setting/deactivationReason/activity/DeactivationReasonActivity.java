@@ -197,7 +197,7 @@ public class DeactivationReasonActivity extends Activity implements Deactivation
         }
 
         deactivationReasonPresenter.setVisibleGuidance(position);
-        btn_deactivation.setBackgroundResource(R.drawable.round_corner_btn_brown_r10);
+        btn_deactivation.setBackgroundResource(R.drawable.round_corner_brown_r10);
     }
 
     @Override

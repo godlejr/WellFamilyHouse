@@ -19,7 +19,7 @@ public interface MainView {
 
     void setToolbar(View view);
 
-    void setAppItem( ArrayList<App> appList);
+    void setAppItem(ArrayList<App> appList);
 
     void setFamilyItem(ArrayList<Family> familyList);
 
@@ -54,8 +54,9 @@ public interface MainView {
 
     void navigateToFamilyActivity(Family family);
 
-
     void navigateToAppGame(String appPackageName);
+
+    void navigateToFallDiagnosisActivity();
 
     void navigateToNotificationActivity();
 

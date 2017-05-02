@@ -579,7 +579,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="26dp"
                 android:layout_marginRight="26dp"
-                android:background="@drawable/round_corner_btn_gray_r10"
+                android:background="@drawable/round_corner_gray_r10"
                 android:text="계정 비활성화 하기"
                 android:textColor="#fff"
                 android:textSize="15sp" />

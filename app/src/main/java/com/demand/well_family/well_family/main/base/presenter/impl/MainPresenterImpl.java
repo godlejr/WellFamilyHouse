@@ -96,7 +96,11 @@ public class MainPresenterImpl implements MainPresenter {
         if (position == 0) {
             mainView.navigateToSongMainActivity();
         } else if (position == 1) {
-            //셀핏
+            mainView.navigateToFallDiagnosisActivity();
+
+        } else if (position == 2) {
+
+
         } else {
             mainView.navigateToAppGame(app.getPackageName());
         }
@@ -134,8 +138,6 @@ public class MainPresenterImpl implements MainPresenter {
     public void onClickFamily(Family family) {
         mainView.navigateToFamilyActivity(family);
     }
-
-
 
 
     @Override

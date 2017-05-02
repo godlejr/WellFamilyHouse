@@ -122,7 +122,7 @@ public class SendPasswordActivity extends Activity implements SendPasswordView, 
         rb_send_email = (RadioButton) findViewById(checkedId);
         rb_send_email.setSelected(true);
 
-        btn_confirm_account.setBackgroundResource(R.drawable.round_corner_btn_brown_r10);
+        btn_confirm_account.setBackgroundResource(R.drawable.round_corner_brown_r10);
         btn_confirm_account.setOnClickListener(this);
     }
 
