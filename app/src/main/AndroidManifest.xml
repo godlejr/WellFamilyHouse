@@ -42,7 +42,7 @@
         <activity android:name=".story.EditStoryActivity" />
         <activity android:name=".story.detail.activity.StoryDetailActivity" />
         <activity
-            android:name=".story.CreateStoryActivity"
+            android:name=".story.create.activity.CreateStoryActivity"
             android:configChanges="keyboardHidden|orientation" />
 
         <activity android:name=".family.base.activity.FamilyActivity" />

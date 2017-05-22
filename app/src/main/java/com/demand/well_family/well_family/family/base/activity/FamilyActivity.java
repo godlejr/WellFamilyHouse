@@ -29,7 +29,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.demand.well_family.well_family.story.CreateStoryActivity;
+import com.demand.well_family.well_family.story.create.activity.CreateStoryActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dialog.popup.photo.activity.PhotoPopupActivity;
 import com.demand.well_family.well_family.dto.Family;
