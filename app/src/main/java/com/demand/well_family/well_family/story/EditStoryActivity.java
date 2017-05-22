@@ -203,7 +203,19 @@ public class EditStoryActivity extends Activity {
                             HashMap<String, String> map = new HashMap<>();
                             map.put("content", content);
 
-                            final int photoSize = photoViewAdapter.getItemCount() + photoViewAdapter2.getItemCount();
+
+                            int tempSize;
+                            if (photoViewAdapter != null && photoViewAdapter2 != null) {
+                                tempSize = photoViewAdapter.getItemCount() + photoViewAdapter2.getItemCount();
+                            } else {
+                                if (photoViewAdapter != null) {
+                                    tempSize =  photoViewAdapter.getItemCount();
+                                } else {
+                                    tempSize = 0;
+                                }
+                            }
+                            final int photoSize = tempSize;
+
                             if (photoSize != 0) {
 
                                 for (int j = 0; j < cdnPhotoList.size(); j++) {
@@ -373,23 +385,26 @@ public class EditStoryActivity extends Activity {
         photoList = new ArrayList<>(); // 갤러리 이미지
         cdnPhotoList = new ArrayList<>(); // 서버 이미지
         ArrayList<Photo> photos = (ArrayList<Photo>) getIntent().getSerializableExtra("photoList");
-        int photosSize = photos.size();
-        for (int i = 0; i < photosSize; i++) {
-//            cdnPhotoList.add(Uri.parse(getString(R.string.cloud_front_stories_images) + photos.get(i).getName() + "." + photos.get(i).getExt()));
-            try {
-                cdnPhotoList.add(new URL(getString(R.string.cloud_front_stories_images) + photos.get(i).getName() + "." + photos.get(i).getExt()));
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
 
         photoViewAdapter = new PhotoViewAdapter(photoList, this, R.layout.item_write_upload_image);
         rv_write_image_upload.setAdapter(photoViewAdapter);
         rv_write_image_upload.setLayoutManager(new LinearLayoutManager(EditStoryActivity.this, LinearLayoutManager.HORIZONTAL, false));
 
-        photoViewAdapter2 = new PhotoViewAdapter2(cdnPhotoList, this, R.layout.item_write_upload_image);
-        rv_write_image_upload2.setAdapter(photoViewAdapter2);
-        rv_write_image_upload2.setLayoutManager(new LinearLayoutManager(EditStoryActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        if (photos != null) {
+            int photosSize = photos.size();
+            for (int i = 0; i < photosSize; i++) {
+//            cdnPhotoList.add(Uri.parse(getString(R.string.cloud_front_stories_images) + photos.get(i).getName() + "." + photos.get(i).getExt()));
+                try {
+                    cdnPhotoList.add(new URL(getString(R.string.cloud_front_stories_images) + photos.get(i).getName() + "." + photos.get(i).getExt()));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            photoViewAdapter2 = new PhotoViewAdapter2(cdnPhotoList, this, R.layout.item_write_upload_image);
+            rv_write_image_upload2.setAdapter(photoViewAdapter2);
+            rv_write_image_upload2.setLayoutManager(new LinearLayoutManager(EditStoryActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        }
     }
 
     private class PhotoViewHolder extends RecyclerView.ViewHolder {

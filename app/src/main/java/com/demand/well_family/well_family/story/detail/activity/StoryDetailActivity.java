@@ -23,7 +23,7 @@ import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dialog.list.comment.activity.CommentDialogActivity;
 import com.demand.well_family.well_family.dialog.list.comment.flag.CommentActFlag;
 import com.demand.well_family.well_family.dialog.list.comment.flag.CommentDialogFlag;
-import com.demand.well_family.well_family.dialog.list.story.StoryDialogActivity;
+import com.demand.well_family.well_family.dialog.list.story.activity.StoryDialogActivity;
 import com.demand.well_family.well_family.dialog.popup.photo.activity.PhotoPopupActivity;
 import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.Photo;
@@ -296,7 +296,9 @@ public class StoryDetailActivity extends Activity implements StoryDetailView, Co
 
         intent.putExtra("story_id", storyInfo.getStory_id());
         intent.putExtra("content", storyInfo.getContent());
-        intent.putExtra("photoList", photoAdapter.getPhotoList());
+        if (photoAdapter != null) {
+            intent.putExtra("photoList", photoAdapter.getPhotoList());
+        }
         intent.putExtra("content_user_id", storyInfo.getUser_id());
         intent.putExtra("position", storyInfo.getPosition());
         intent.putExtra("author_name", storyInfo.getName());

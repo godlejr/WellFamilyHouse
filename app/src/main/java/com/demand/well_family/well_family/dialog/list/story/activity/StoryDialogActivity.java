@@ -1,8 +1,6 @@
 package com.demand.well_family.well_family.dialog.list.story.activity;
 
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -69,7 +67,6 @@ public class StoryDialogActivity extends Activity implements StoryDialogView {
     @Override
     public void init() {
         rv_popup_comment = (RecyclerView) findViewById(R.id.rv_popup_comment);
-        storyDialogPresenter.setStoryDialogAdapterInit();
     }
 
     @Override

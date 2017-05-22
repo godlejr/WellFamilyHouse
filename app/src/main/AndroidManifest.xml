@@ -104,7 +104,7 @@
             android:name=".dialog.list.songstory.activity.SongStoryDialogActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
-            android:name=".dialog.list.story.StoryDialogActivity"
+            android:name=".dialog.list.story.activity.StoryDialogActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
             android:name=".dialog.popup.notification.activity.NotificationPopupActivity"

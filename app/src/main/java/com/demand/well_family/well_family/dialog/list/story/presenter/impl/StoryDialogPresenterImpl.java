@@ -44,6 +44,7 @@ public class StoryDialogPresenterImpl implements StoryDialogPresenter {
         storyDialogInteractor.setUser(user);
         storyDialogInteractor.setStory(story);
         storyDialogInteractor.setReport(report);
+        setStoryDialogAdapterInit();
     }
 
     @Override
