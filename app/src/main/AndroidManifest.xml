@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-    <!---->
+
     <application
         android:allowBackup="false"
         android:hardwareAccelerated="false"
@@ -19,12 +19,11 @@
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--.LoginActivity-->
+
         <activity
             android:name=".main.intro.activity.IntroActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:windowSoftInputMode="adjustResize">
-            <!--android:windowSoftInputMode="adjustPan">-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -154,7 +153,7 @@
             </intent-filter>
         </service>
 
-        <!-- 페북 -->
+        <!-- facebook -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -165,7 +164,7 @@
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
 
-        <!-- 네이버 -->
+        <!-- naver -->
         <activity
             android:name="com.nhn.android.naverlogin.ui.OAuthLoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
