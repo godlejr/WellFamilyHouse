@@ -30,4 +30,6 @@ public interface CreateStoryPresenter {
     void onNetworkError(APIErrorUtil apiErrorUtil);
 
     void onClickPhotoDelete(int position);
+
+
 }

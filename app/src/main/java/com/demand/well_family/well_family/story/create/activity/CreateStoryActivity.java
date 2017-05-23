@@ -28,7 +28,6 @@ import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.family.edit.flag.EditFamilyCodeFlag;
 import com.demand.well_family.well_family.story.create.adapter.PhotoAdapter;
 import com.demand.well_family.well_family.story.create.flag.CreateStoryCodeFlag;
 import com.demand.well_family.well_family.story.create.presenter.CreateStoryPresenter;
@@ -135,7 +134,7 @@ public class CreateStoryActivity extends Activity implements CreateStoryView, Vi
 
     @Override
     public void setPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, EditFamilyCodeFlag.READ_EXTERNAL_STORAGE_PERMISSION);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, CreateStoryCodeFlag.READ_EXTERNAL_STORAGE_PERMISSION);
     }
 
     @Override

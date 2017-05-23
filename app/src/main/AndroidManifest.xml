@@ -39,7 +39,7 @@
             android:launchMode="singleTop" />
 
 
-        <activity android:name=".story.EditStoryActivity" />
+        <activity android:name=".story.edit.activity.EditStoryActivity" />
         <activity android:name=".story.detail.activity.StoryDetailActivity" />
         <activity
             android:name=".story.create.activity.CreateStoryActivity"
