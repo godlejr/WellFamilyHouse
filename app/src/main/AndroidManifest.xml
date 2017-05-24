@@ -129,8 +129,8 @@
         <activity android:name=".users.search.activity.SearchUserActivity" />
 
 
-        <activity android:name=".falldiagnosis.base.activity.FallDiagnosisMainActivity" />
-        <activity android:name=".falldiagnosis.fall.diagnosis.activity.FallDiagnosisActivity" />
+        <activity android:name=".falldiagnosis.base.activity.FallDiagnosisActivity" />
+        <activity android:name=".falldiagnosis.fall.diagnosis.activity.SelfDiagnosisActivity" />
         <activity android:name=".falldiagnosis.fall.result.activity.FallDiagnosisResultActivity"/>
         <activity android:name=".falldiagnosis.environment.activity.EnvironmentEvaluationActivity" />
 

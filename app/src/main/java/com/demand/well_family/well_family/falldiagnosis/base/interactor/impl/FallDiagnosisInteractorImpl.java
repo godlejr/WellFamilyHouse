@@ -1,13 +1,12 @@
 package com.demand.well_family.well_family.falldiagnosis.base.interactor.impl;
 
-import com.demand.well_family.well_family.dto.Category;
+import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.falldiagnosis.base.interactor.FallDiagnosisMainInteractor;
-import com.demand.well_family.well_family.falldiagnosis.base.presenter.FallDiagnosisMainPresenter;
+import com.demand.well_family.well_family.falldiagnosis.base.interactor.FallDiagnosisInteractor;
+import com.demand.well_family.well_family.falldiagnosis.base.presenter.FallDiagnosisPresenter;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FallDiagnosisServerConnection;
 import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
-import com.demand.well_family.well_family.users.search.interactor.impl.SearchUserInteractorImpl;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -23,13 +22,13 @@ import retrofit2.Response;
  * Created by ㅇㅇ on 2017-04-24.
  */
 
-public class FallDiagnosisMainInteractorImpl implements FallDiagnosisMainInteractor {
-    private FallDiagnosisMainPresenter fallDiagnosisPresenter;
+public class FallDiagnosisInteractorImpl implements FallDiagnosisInteractor {
+    private FallDiagnosisPresenter fallDiagnosisPresenter;
 
     private FallDiagnosisServerConnection fallDiagnosisServerConnection;
-    private static final Logger logger = LoggerFactory.getLogger(FallDiagnosisMainInteractorImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(FallDiagnosisInteractorImpl.class);
 
-    public FallDiagnosisMainInteractorImpl(FallDiagnosisMainPresenter fallDiagnosisPresenter) {
+    public FallDiagnosisInteractorImpl(FallDiagnosisPresenter fallDiagnosisPresenter) {
         this.fallDiagnosisPresenter = fallDiagnosisPresenter;
     }
 
@@ -38,20 +37,20 @@ public class FallDiagnosisMainInteractorImpl implements FallDiagnosisMainInterac
         String accessToken = user.getAccess_token();
 
         fallDiagnosisServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisServer().create(FallDiagnosisServerConnection.class);
-        Call<ArrayList<Category>> callGetCategoryList = fallDiagnosisServerConnection.getCategoryList();
-        callGetCategoryList.enqueue(new Callback<ArrayList<Category>>() {
+        Call<ArrayList<FallDiagnosisCategory>> callGetCategoryList = fallDiagnosisServerConnection.getCategoryList();
+        callGetCategoryList.enqueue(new Callback<ArrayList<FallDiagnosisCategory>>() {
             @Override
-            public void onResponse(Call<ArrayList<Category>> call, Response<ArrayList<Category>> response) {
+            public void onResponse(Call<ArrayList<FallDiagnosisCategory>> call, Response<ArrayList<FallDiagnosisCategory>> response) {
                 if (response.isSuccessful()) {
-                    ArrayList<Category> categoryList = response.body();
-                    fallDiagnosisPresenter.onSuccessGetCategoryList(categoryList);
+                    ArrayList<FallDiagnosisCategory> fallDiagnosisCategoryList = response.body();
+                    fallDiagnosisPresenter.onSuccessGetCategoryList(fallDiagnosisCategoryList);
                 } else {
                     fallDiagnosisPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Category>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<FallDiagnosisCategory>> call, Throwable t) {
                 log(t);
                 fallDiagnosisPresenter.onNetworkError(null);
             }

@@ -1,6 +1,6 @@
 package com.demand.well_family.well_family.repository;
 
-import com.demand.well_family.well_family.dto.Category;
+import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.dto.SelfDiagnosisCategory;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import retrofit2.http.Path;
 
 public interface FallDiagnosisServerConnection {
     @GET("categories")
-    Call<ArrayList<Category>> getCategoryList();
+    Call<ArrayList<FallDiagnosisCategory>> getCategoryList();
 
     @GET("categories/{fall_diagnosis_category_id}")
     Call<ArrayList<SelfDiagnosisCategory>> getDiagnosisCategories(@Path("fall_diagnosis_category_id") int fall_diagnosis_category_id);

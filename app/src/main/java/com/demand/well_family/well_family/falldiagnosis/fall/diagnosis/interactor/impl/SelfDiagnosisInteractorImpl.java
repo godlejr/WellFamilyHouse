@@ -1,10 +1,10 @@
 package com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.interactor.impl;
 
+import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.dto.SelfDiagnosisCategory;
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.falldiagnosis.base.interactor.impl.FallDiagnosisMainInteractorImpl;
-import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.interactor.FallDiagnosisInteractor;
-import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.FallDiagnosisPresenter;
+import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.interactor.SelfDiagnosisInteractor;
+import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.SelfDiagnosisPresenter;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FallDiagnosisServerConnection;
 import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
@@ -23,39 +23,87 @@ import retrofit2.Response;
  * Created by ㅇㅇ on 2017-05-23.
  */
 
-public class FallDiagnosisInteractorImpl implements FallDiagnosisInteractor {
-    private FallDiagnosisPresenter fallDiagnosisPresenter;
+public class SelfDiagnosisInteractorImpl implements SelfDiagnosisInteractor {
+    private SelfDiagnosisPresenter selfDiagnosisPresenter;
+
+    private FallDiagnosisCategory fallDiagnosisCategory;
+    private User user;
+
+    private ArrayList<Boolean> answerList;
+
     private FallDiagnosisServerConnection fallDiagnosisServerConnection;
 
-    private static final Logger logger = LoggerFactory.getLogger(FallDiagnosisInteractorImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(SelfDiagnosisInteractorImpl.class);
 
-    public FallDiagnosisInteractorImpl(FallDiagnosisPresenter fallDiagnosisPresenter) {
-        this.fallDiagnosisPresenter = fallDiagnosisPresenter;
+    public SelfDiagnosisInteractorImpl(SelfDiagnosisPresenter selfDiagnosisPresenter) {
+        this.selfDiagnosisPresenter = selfDiagnosisPresenter;
+        this.answerList = new ArrayList<>();
     }
 
     @Override
     public void getDiagnosisCategories(User user) {
         String accessToken = user.getAccess_token();
+        int categoryId = fallDiagnosisCategory.getId();
 
         fallDiagnosisServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisServer().create(FallDiagnosisServerConnection.class);
-        Call<ArrayList<SelfDiagnosisCategory>> callGetDiagnosisCategories = fallDiagnosisServerConnection.getDiagnosisCategories();
+        Call<ArrayList<SelfDiagnosisCategory>> callGetDiagnosisCategories = fallDiagnosisServerConnection.getDiagnosisCategories(categoryId);
         callGetDiagnosisCategories.enqueue(new Callback<ArrayList<SelfDiagnosisCategory>>() {
             @Override
             public void onResponse(Call<ArrayList<SelfDiagnosisCategory>> call, Response<ArrayList<SelfDiagnosisCategory>> response) {
                 if (response.isSuccessful()) {
                     ArrayList<SelfDiagnosisCategory> categoryList = response.body();
-                    fallDiagnosisPresenter.onSuccessGetDiagnosisCategories(categoryList);
+                    selfDiagnosisPresenter.onSuccessGetDiagnosisCategories(categoryList);
                 } else {
-                    fallDiagnosisPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
+                    selfDiagnosisPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<SelfDiagnosisCategory>> call, Throwable t) {
                 log(t);
-                fallDiagnosisPresenter.onNetworkError(null);
+                selfDiagnosisPresenter.onNetworkError(null);
             }
         });
+    }
+
+
+    @Override
+    public FallDiagnosisCategory getFallDiagnosisCategory() {
+        return fallDiagnosisCategory;
+    }
+
+    @Override
+    public void setFallDiagnosisCategory(FallDiagnosisCategory fallDiagnosisCategory) {
+        this.fallDiagnosisCategory = fallDiagnosisCategory;
+    }
+
+
+    @Override
+    public User getUser() {
+        return user;
+    }
+
+    @Override
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
+
+
+    @Override
+    public ArrayList<Boolean> getAnswerList() {
+        return answerList;
+    }
+
+    @Override
+    public void setAnswerList(ArrayList<Boolean> answerList) {
+        this.answerList = answerList;
+    }
+
+    @Override
+    public void setAnswerAdded(boolean check) {
+        answerList.add(check);
     }
 
     private static void log(Throwable throwable) {
@@ -72,5 +120,4 @@ public class FallDiagnosisInteractorImpl implements FallDiagnosisInteractor {
             }
         }
     }
-
 }

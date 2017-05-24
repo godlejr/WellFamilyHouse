@@ -1,7 +1,6 @@
 package com.demand.well_family.well_family.falldiagnosis.base.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.dto.Category;
-import com.demand.well_family.well_family.falldiagnosis.base.presenter.FallDiagnosisMainPresenter;
+import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
+import com.demand.well_family.well_family.falldiagnosis.base.presenter.FallDiagnosisPresenter;
 
 import java.util.ArrayList;
 
@@ -21,13 +20,13 @@ import java.util.ArrayList;
 
 public class FallDiagnosisCategoryAdapter extends RecyclerView.Adapter<FallDiagnosisCategoryAdapter.FallDiagnosisCategoryViewHolder> {
     private Context context;
-    private ArrayList<Category> fallDiagnosisCategoryList;
-    private FallDiagnosisMainPresenter fallDiagnosisMainPresenter;
+    private ArrayList<FallDiagnosisCategory> fallDiagnosisCategoryList;
+    private FallDiagnosisPresenter fallDiagnosisPresenter;
 
-    public FallDiagnosisCategoryAdapter(Context context, ArrayList<Category> fallDiagnosisCategoryList, FallDiagnosisMainPresenter fallDiagnosisMainPresenter) {
+    public FallDiagnosisCategoryAdapter(Context context, ArrayList<FallDiagnosisCategory> fallDiagnosisCategoryList, FallDiagnosisPresenter fallDiagnosisPresenter) {
         this.context = context;
         this.fallDiagnosisCategoryList = fallDiagnosisCategoryList;
-        this.fallDiagnosisMainPresenter = fallDiagnosisMainPresenter;
+        this.fallDiagnosisPresenter = fallDiagnosisPresenter;
     }
 
     @Override
@@ -43,10 +42,10 @@ public class FallDiagnosisCategoryAdapter extends RecyclerView.Adapter<FallDiagn
 
     @Override
     public void onBindViewHolder(FallDiagnosisCategoryViewHolder holder, int position) {
-        Category category = fallDiagnosisCategoryList.get(position);
+        FallDiagnosisCategory fallDiagnosisCategory = fallDiagnosisCategoryList.get(position);
 
-        String title = category.getName();
-        String content = fallDiagnosisMainPresenter.setCategoryContent(holder, category.getId());
+        String title = fallDiagnosisCategory.getName();
+        String content = fallDiagnosisPresenter.setCategoryContent(holder, fallDiagnosisCategory.getId());
 
         holder.tv_title.setText(title);
         holder.tv_content.setText(content);
@@ -57,18 +56,6 @@ public class FallDiagnosisCategoryAdapter extends RecyclerView.Adapter<FallDiagn
         return fallDiagnosisCategoryList.size();
     }
 
-    public class FallDiagnosisCategoryViewHolder extends RecyclerView.ViewHolder {
-        public TextView tv_title;
-        public TextView tv_content;
-        public LinearLayout ll_category;
-
-        public FallDiagnosisCategoryViewHolder(View itemView) {
-            super(itemView);
-            tv_title = (TextView) itemView.findViewById(R.id.tv_falldiagnosis_category_title);
-            tv_content = (TextView) itemView.findViewById(R.id.tv_falldiagnosis_category_content);
-            ll_category = (LinearLayout)itemView.findViewById(R.id.ll_falldiagnosis_category);
-        }
-    }
 
     public void setBackgroundColorBeige(FallDiagnosisCategoryViewHolder holder) {
         holder.ll_category.setBackgroundResource(R.drawable.round_corner_beige_r10);
@@ -80,5 +67,31 @@ public class FallDiagnosisCategoryAdapter extends RecyclerView.Adapter<FallDiagn
 
     public void setBackgroundColorIndipink(FallDiagnosisCategoryViewHolder holder) {
         holder.ll_category.setBackgroundResource(R.drawable.round_corner_indipink_r10);
+    }
+
+    public class FallDiagnosisCategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public TextView tv_title;
+        public TextView tv_content;
+        public LinearLayout ll_category;
+
+        public FallDiagnosisCategoryViewHolder(View itemView) {
+            super(itemView);
+            tv_title = (TextView) itemView.findViewById(R.id.tv_falldiagnosis_category_title);
+            tv_content = (TextView) itemView.findViewById(R.id.tv_falldiagnosis_category_content);
+            ll_category = (LinearLayout)itemView.findViewById(R.id.ll_falldiagnosis_category);
+
+            ll_category.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.ll_falldiagnosis_category:
+                    int position = getAdapterPosition();
+                    FallDiagnosisCategory fallDiagnosisCategory = fallDiagnosisCategoryList.get(position);
+                    fallDiagnosisPresenter.onClickCategory(fallDiagnosisCategory);
+                    break;
+            }
+        }
     }
 }

@@ -12,13 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.dto.Category;
+import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.falldiagnosis.base.adapter.FallDiagnosisCategoryAdapter;
-import com.demand.well_family.well_family.falldiagnosis.base.presenter.FallDiagnosisMainPresenter;
-import com.demand.well_family.well_family.falldiagnosis.base.presenter.impl.FallDiagnosisMainPresenterImpl;
-import com.demand.well_family.well_family.falldiagnosis.base.view.FallDiagnosisMainView;
+import com.demand.well_family.well_family.falldiagnosis.base.presenter.FallDiagnosisPresenter;
+import com.demand.well_family.well_family.falldiagnosis.base.presenter.impl.FallDiagnosisPresenterImpl;
+import com.demand.well_family.well_family.falldiagnosis.base.view.FallDiagnosisView;
 import com.demand.well_family.well_family.falldiagnosis.environment.activity.EnvironmentEvaluationActivity;
-import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.activity.FallDiagnosisActivity;
+import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.activity.SelfDiagnosisActivity;
 
 import java.util.ArrayList;
 
@@ -26,8 +26,8 @@ import java.util.ArrayList;
  * Created by ㅇㅇ on 2017-04-24.
  */
 
-public class FallDiagnosisMainActivity extends Activity implements FallDiagnosisMainView, View.OnClickListener {
-    private FallDiagnosisMainPresenter fallDiagnosisPresenter;
+public class FallDiagnosisActivity extends Activity implements FallDiagnosisView, View.OnClickListener {
+    private FallDiagnosisPresenter fallDiagnosisPresenter;
 
 
     private View decorView;
@@ -35,18 +35,21 @@ public class FallDiagnosisMainActivity extends Activity implements FallDiagnosis
     private TextView toolbar_title;
     private ImageView toolbar_back;
     private FallDiagnosisCategoryAdapter fallDiagnosisCategoryAdapter;
+    private RecyclerView rv_diagnosis_category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fall_diagnosis_main);
 
-        fallDiagnosisPresenter = new FallDiagnosisMainPresenterImpl(this);
+        fallDiagnosisPresenter = new FallDiagnosisPresenterImpl(this);
         fallDiagnosisPresenter.onCreate();
     }
 
     @Override
     public void init() {
+        rv_diagnosis_category = (RecyclerView)findViewById(R.id.rv_falldiagnosismain);
+
         fallDiagnosisPresenter.getDiagnosisCategory();
     }
 
@@ -61,21 +64,22 @@ public class FallDiagnosisMainActivity extends Activity implements FallDiagnosis
     }
 
     @Override
-    public void navigateToFallEvaluationActivity() {
-        Intent intent = new Intent(FallDiagnosisMainActivity.this, FallDiagnosisActivity.class);
-
+    public void navigateToFallEvaluationActivity(FallDiagnosisCategory fallDiagnosisCategory) {
+        Intent intent = new Intent(FallDiagnosisActivity.this, SelfDiagnosisActivity.class);
+        intent.putExtra("category_id", fallDiagnosisCategory.getId());
         startActivity(intent);
     }
 
     @Override
-    public void navigateToPhysicalEvaluationActivity() {
-//        Intent intent = new Intent(FallDiagnosisMainActivity.this, );
+    public void navigateToPhysicalEvaluationActivity(FallDiagnosisCategory fallDiagnosisCategory) {
+//        Intent intent = new Intent(FallDiagnosisActivity.this, );
 //        startActivity(intent);
     }
 
     @Override
-    public void navigateToEvEvaluationActivity() {
-        Intent intent = new Intent(FallDiagnosisMainActivity.this, EnvironmentEvaluationActivity.class);
+    public void navigateToEvEvaluationActivity(FallDiagnosisCategory fallDiagnosisCategory) {
+        Intent intent = new Intent(FallDiagnosisActivity.this, EnvironmentEvaluationActivity.class);
+        intent.putExtra("category_id", fallDiagnosisCategory.getId());
         startActivity(intent);
     }
 
@@ -97,13 +101,12 @@ public class FallDiagnosisMainActivity extends Activity implements FallDiagnosis
 
     @Override
     public void showMessage(String message) {
-        Toast.makeText(FallDiagnosisMainActivity.this, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(FallDiagnosisActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void setCategoryAdapterInit(ArrayList<Category> categoryList) {
-        RecyclerView rv_diagnosis_category = (RecyclerView)findViewById(R.id.rv_falldiagnosismain);
-        fallDiagnosisCategoryAdapter = new FallDiagnosisCategoryAdapter(FallDiagnosisMainActivity.this, categoryList, fallDiagnosisPresenter);
+    public void setCategoryAdapterInit(ArrayList<FallDiagnosisCategory> fallDiagnosisCategoryList) {
+        fallDiagnosisCategoryAdapter = new FallDiagnosisCategoryAdapter(FallDiagnosisActivity.this, fallDiagnosisCategoryList, fallDiagnosisPresenter);
         rv_diagnosis_category.setAdapter(fallDiagnosisCategoryAdapter);
         rv_diagnosis_category.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
@@ -111,34 +114,17 @@ public class FallDiagnosisMainActivity extends Activity implements FallDiagnosis
     @Override
     public void setBackgroundColorForSelfDiagnosis(FallDiagnosisCategoryAdapter.FallDiagnosisCategoryViewHolder holder) {
         fallDiagnosisCategoryAdapter.setBackgroundColorBeige(holder);
-        holder.ll_category.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToFallEvaluationActivity();
-            }
-        });
     }
 
     @Override
     public void setBackgroundColorForBodyEvaluation(FallDiagnosisCategoryAdapter.FallDiagnosisCategoryViewHolder holder) {
         fallDiagnosisCategoryAdapter.setBackgroundColorBeigegray(holder);
-        holder.ll_category.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToPhysicalEvaluationActivity();
-            }
-        });
+
     }
 
     @Override
     public void setBackgroundColorForEvEvaluation(FallDiagnosisCategoryAdapter.FallDiagnosisCategoryViewHolder holder) {
         fallDiagnosisCategoryAdapter.setBackgroundColorIndipink(holder);
-        holder.ll_category.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToEvEvaluationActivity();
-            }
-        });
     }
 
     @Override

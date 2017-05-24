@@ -6,6 +6,6 @@ import com.demand.well_family.well_family.dto.User;
  * Created by ㅇㅇ on 2017-04-24.
  */
 
-public interface FallDiagnosisMainInteractor {
+public interface FallDiagnosisInteractor {
     void getCategoryList(User user);
 }

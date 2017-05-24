@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Created by ㅇㅇ on 2017-05-23.
  */
 
-public interface FallDiagnosisView {
+public interface SelfDiagnosisView {
     void init();
 
     View getDecorView();
@@ -22,9 +22,7 @@ public interface FallDiagnosisView {
     void setNextView(int page);
     void setPreviousView(int page);
 
-    void navigateToResultActivity();
-
-    int getDiagnosisItemCount();
+    void navigateToResultActivity(ArrayList<Boolean> answerList);
 
     void setDiagnosisCategoryAdapter(ArrayList<SelfDiagnosisCategory> diagnosisCategoryList);
 }

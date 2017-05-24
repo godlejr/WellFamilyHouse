@@ -1,6 +1,8 @@
 package com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.adapter;
 
+import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dto.SelfDiagnosisCategory;
-import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.FallDiagnosisPresenter;
+import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.flag.SelfDiagnosisCodeFlag;
+import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.SelfDiagnosisPresenter;
 
 import java.util.ArrayList;
 
@@ -20,17 +23,17 @@ import java.util.ArrayList;
  * Created by ㅇㅇ on 2017-05-23.
  */
 
-public class FallViewPagerAdapter extends PagerAdapter {
-    private FallDiagnosisPresenter fallDiagnosisPresenter;
+public class SelfDiagnosisViewPagerAdapter extends PagerAdapter  {
+    private SelfDiagnosisPresenter selfDiagnosisPresenter;
 
     private LayoutInflater inflater;
     private TextView tv_viewPager_indicator;
     private ArrayList<SelfDiagnosisCategory> diagnosisCategoryList;    // temp
 
 
-    public FallViewPagerAdapter(LayoutInflater inflater, ArrayList<SelfDiagnosisCategory> diagnosisCategoryList, FallDiagnosisPresenter fallDiagnosisPresenter) {
+    public SelfDiagnosisViewPagerAdapter(LayoutInflater inflater, ArrayList<SelfDiagnosisCategory> diagnosisCategoryList, SelfDiagnosisPresenter selfDiagnosisPresenter) {
         this.diagnosisCategoryList = diagnosisCategoryList;
-        this.fallDiagnosisPresenter = fallDiagnosisPresenter;
+        this.selfDiagnosisPresenter = selfDiagnosisPresenter;
         this.inflater = inflater;
     }
 
@@ -44,25 +47,27 @@ public class FallViewPagerAdapter extends PagerAdapter {
         Button btn_falldiagnosis_answer_no = (Button) view.findViewById(R.id.btn_falldiagnosis_answer_no);
 
         SelfDiagnosisCategory category = diagnosisCategoryList.get(position);
-        tv_falldiagnosis_num.setText(category.getId());
+        tv_falldiagnosis_num.setText(String.valueOf(category.getId()));
         tv_falldiagnosis_question.setText(category.getName());
-        Glide.with(container.getContext()).load(category.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_falldiagnosis_question);
 
+        Log.e("시발",category.getAvatar());
+        Context context = inflater.getContext();
 
+        Glide.with(context).load(context.getString(R.string.cloud_front_self_diagnosis) + category.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_falldiagnosis_question);
+
+        final int categorySize = getCount();
         btn_falldiagnosis_answer_no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fallDiagnosisPresenter.onClickNextView(position);
+                selfDiagnosisPresenter.onClickAnswer(position,categorySize, SelfDiagnosisCodeFlag.NO);
             }
         });
-
         btn_falldiagnosis_answer_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fallDiagnosisPresenter.onClickNextView(position);
+                selfDiagnosisPresenter.onClickAnswer(position,categorySize, SelfDiagnosisCodeFlag.YES);
             }
         });
-
 
         container.addView(view);
         return view;
@@ -82,4 +87,6 @@ public class FallViewPagerAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
     }
+
+
 }
