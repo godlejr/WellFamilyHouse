@@ -33,8 +33,6 @@ public class FallViewPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
-        // 마지막 결과 페이지 ??
-
         View view = inflater.inflate(R.layout.item_fall_diagnosis, null);
         ImageView iv_falldiagnosis_question = (ImageView) view.findViewById(R.id.iv_falldiagnosis_question);
         TextView tv_falldiagnosis_question = (TextView) view.findViewById(R.id.tv_falldiagnosis_question);
@@ -45,17 +43,16 @@ public class FallViewPagerAdapter extends PagerAdapter {
         btn_falldiagnosis_answer_no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fallDiagnosisPresenter.setNextView(position);
+                fallDiagnosisPresenter.onClickNextView(position);
             }
         });
 
         btn_falldiagnosis_answer_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fallDiagnosisPresenter.setNextView(position);
+                fallDiagnosisPresenter.onClickNextView(position);
             }
         });
-
 
 
         container.addView(view);

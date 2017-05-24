@@ -45,4 +45,15 @@ public class FallDiagnosisPresenterImpl implements FallDiagnosisPresenter {
         fallDiagnosisView.setPreviousView(page - 1);
     }
 
+    @Override
+    public void onClickNextView(int page) {
+        int daignosisItemCount = fallDiagnosisView.getDiagnosisItemCount();
+
+        if(page == daignosisItemCount){
+            fallDiagnosisView.navigateToResultActivity();
+        } else {
+            fallDiagnosisView.setNextView(page + 1);
+        }
+    }
+
 }

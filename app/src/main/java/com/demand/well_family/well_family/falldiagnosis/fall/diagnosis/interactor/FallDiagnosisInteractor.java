@@ -5,4 +5,5 @@ package com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.interact
  */
 
 public interface FallDiagnosisInteractor {
+
 }

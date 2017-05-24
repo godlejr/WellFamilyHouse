@@ -20,6 +20,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/fall_result_circleshape"
+            android:max="11"
+            android:progress="5"
+            android:progressDrawable="@drawable/fall_result_progressbar" />
     </FrameLayout>
 
 </LinearLayout>

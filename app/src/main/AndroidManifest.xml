@@ -125,7 +125,7 @@
             android:theme="@style/Theme.AppCompat.Dialog" />
 
 
-        <activity android:name=".search.SearchFamilyActivity" />
+        <activity android:name=".family.search.activity.SearchFamilyActivity" />
         <activity android:name=".users.search.activity.SearchUserActivity" />
 
 

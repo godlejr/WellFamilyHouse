@@ -17,4 +17,8 @@ public interface FallDiagnosisView {
 
     void setNextView(int page);
     void setPreviousView(int page);
+
+    void navigateToResultActivity();
+
+    int getDiagnosisItemCount();
 }

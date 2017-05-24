@@ -26,6 +26,7 @@ public interface SearchUserPresenter {
 
     void onClickSetUserInvited(UserInfoForFamilyJoin userFound, UserAdapter.UserViewHolder holder);
 
+
     void onSuccessSetUserSearched(ArrayList<UserInfoForFamilyJoin> userList);
 
     void onSuccessSetUserJoinFamily(UserInfoForFamilyJoin userFound);

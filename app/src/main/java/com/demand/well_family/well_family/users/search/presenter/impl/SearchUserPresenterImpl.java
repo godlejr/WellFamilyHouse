@@ -59,11 +59,12 @@ public class SearchUserPresenterImpl implements SearchUserPresenter {
 
     @Override
     public void onClickSetUserSearched(String searchKeyword) {
-        User user = preferenceUtil.getUserInfo();
-        Family family = searchUserInteractor.getFamily();
-
         if (searchKeyword.length() != 0) {
+            User user = preferenceUtil.getUserInfo();
+            Family family = searchUserInteractor.getFamily();
             searchUserInteractor.setUserSearched(user, family, searchKeyword);
+        } else {
+            searchUserView.showMessage("검색어를 입력해주세요.");
         }
     }
 

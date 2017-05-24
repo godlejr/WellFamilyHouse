@@ -1,6 +1,7 @@
 package com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +16,7 @@ import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.adapter.F
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.FallDiagnosisPresenter;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.impl.FallDiagnosisPresenterImpl;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.view.FallDiagnosisView;
+import com.demand.well_family.well_family.falldiagnosis.fall.result.activity.FallDiagnosisResultActivity;
 
 /**
  * Created by ㅇㅇ on 2017-05-23.
@@ -79,6 +81,18 @@ public class FallDiagnosisActivity extends Activity implements FallDiagnosisView
     @Override
     public void setPreviousView(int page) {
         viewPager_diagnosisItem.setCurrentItem(page);
+    }
+
+    @Override
+    public void navigateToResultActivity() {
+        Intent intent = new Intent(FallDiagnosisActivity.this, FallDiagnosisResultActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public int getDiagnosisItemCount() {
+        return fallViewPagerAdapter.getCount();
     }
 
     @Override

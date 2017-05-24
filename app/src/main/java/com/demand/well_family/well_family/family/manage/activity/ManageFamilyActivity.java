@@ -23,7 +23,7 @@ import com.demand.well_family.well_family.family.manage.flag.ManageFamilyCodeFla
 import com.demand.well_family.well_family.family.manage.presenter.ManageFamilyPresenter;
 import com.demand.well_family.well_family.family.manage.presenter.impl.ManageFamilyPresenterImpl;
 import com.demand.well_family.well_family.family.manage.view.ManageFamilyView;
-import com.demand.well_family.well_family.search.SearchFamilyActivity;
+import com.demand.well_family.well_family.family.search.activity.SearchFamilyActivity;
 
 import java.util.ArrayList;
 

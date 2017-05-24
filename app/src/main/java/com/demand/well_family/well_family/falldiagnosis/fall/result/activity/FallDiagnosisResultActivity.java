@@ -26,6 +26,7 @@ public class FallDiagnosisResultActivity extends Activity implements FallDiagnos
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        setContentView(R.layout.activity_fall_diagnosis_result);
 
         fallDiagnosisResultPresenter = new FallDiagnosisResultPresenterImpl(this);
         fallDiagnosisResultPresenter.onCreate();

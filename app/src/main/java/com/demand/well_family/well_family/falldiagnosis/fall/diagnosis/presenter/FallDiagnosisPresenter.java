@@ -9,4 +9,6 @@ public interface FallDiagnosisPresenter {
 
     void setNextView(int page);
     void setPreviousView(int page);
+
+    void onClickNextView(int page);
 }
