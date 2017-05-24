@@ -14,7 +14,7 @@ import com.demand.well_family.well_family.falldiagnosis.fall.result.presenter.im
 import com.demand.well_family.well_family.falldiagnosis.fall.result.view.FallDiagnosisResultView;
 
 /**
- * Created by ㅇㅇ on 2017-05-23.
+ * Created by ㅇㅇ1 on 2017-05-23.
  */
 
 public class FallDiagnosisResultActivity extends Activity implements FallDiagnosisResultView, View.OnClickListener {
