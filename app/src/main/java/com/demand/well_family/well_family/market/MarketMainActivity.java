@@ -26,7 +26,7 @@ import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.setting.base.activity.SettingActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
-import com.demand.well_family.well_family.users.UserActivity;
+import com.demand.well_family.well_family.users.base.activity.UserActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

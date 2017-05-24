@@ -61,7 +61,7 @@
             android:theme="@style/Theme.AppCompat.Dialog" />
 
 
-        <activity android:name=".users.UserActivity" />
+        <activity android:name=".users.base.activity.UserActivity" />
         <activity android:name=".users.SongStoryDetailActivity" />
         <activity android:name=".users.SongStoryActivity" />
         <activity
