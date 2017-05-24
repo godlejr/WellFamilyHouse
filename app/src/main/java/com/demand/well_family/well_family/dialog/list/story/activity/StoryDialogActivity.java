@@ -22,7 +22,7 @@ import com.demand.well_family.well_family.dto.Report;
 import com.demand.well_family.well_family.dto.Story;
 import com.demand.well_family.well_family.flag.ReportINTETNFlag;
 import com.demand.well_family.well_family.flag.StoryINTENTFlag;
-import com.demand.well_family.well_family.story.EditStoryActivity;
+import com.demand.well_family.well_family.story.edit.activity.EditStoryActivity;
 
 import java.util.ArrayList;
 
