@@ -83,6 +83,10 @@ public class FamilyPopupActivity extends Activity implements FamilyPopupView, Vi
         btn_popup_family_cancel = (Button) findViewById(R.id.btn_popup_family_cancel);
         btn_popup_family_commit = (Button) findViewById(R.id.btn_popup_family_commit);
 
+
+
+
+
         btn_popup_family_cancel.setOnClickListener(this);
         btn_popup_family_close.setOnClickListener(this);
         btn_popup_family_commit.setOnClickListener(this);

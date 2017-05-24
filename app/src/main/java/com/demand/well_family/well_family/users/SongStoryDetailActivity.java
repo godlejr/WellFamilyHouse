@@ -44,7 +44,7 @@ import com.demand.well_family.well_family.dto.SongStoryComment;
 import com.demand.well_family.well_family.dto.SongStoryEmotionData;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
-import com.demand.well_family.well_family.photos.SongPhotoPopupActivity;
+import com.demand.well_family.well_family.dialog.popup.songphoto.activity.SongPhotoPopupActivity;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;

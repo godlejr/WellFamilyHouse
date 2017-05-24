@@ -47,10 +47,8 @@ public class ViewPagerAdapter extends PagerAdapter implements View.OnTouchListen
         iv_viewPager_childView.setOnTouchListener(this);
         container.addView(view);
 
-
         String imageURL = photoPopupPresenter.getImageURL(position);
         Glide.with(inflater.getContext()).load(imageURL).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_viewPager_childView);
-
 
         photoPopupPresenter.setViewPagerIndicator(position);
 

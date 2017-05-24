@@ -14,7 +14,7 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.ReportActivity;
+import com.demand.well_family.well_family.main.report.activity.ReportActivity;
 import com.demand.well_family.well_family.dialog.list.songstory.adapter.SongStoryDialogAdapter;
 import com.demand.well_family.well_family.dialog.list.songstory.flag.SongStoryDialogCodeFlag;
 import com.demand.well_family.well_family.dialog.list.songstory.presenter.SongStoryDialogPresenter;

@@ -98,7 +98,7 @@
         <activity android:name=".memory_sound.ModifySongStoryActivity" />
 
 
-        <activity android:name=".dialog.CommentEditActivity" />
+        <activity android:name=".dialog.popup.comment.edit.activity.CommentEditActivity" />
         <activity
             android:name=".dialog.list.songstory.activity.SongStoryDialogActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
@@ -118,7 +118,7 @@
             android:name=".dialog.list.comment.activity.CommentDialogActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
-            android:name=".dialog.CommentDeleteActivity"
+            android:name=".dialog.popup.comment.delete.activity.CommentDeleteActivity"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
             android:name=".dialog.popup.photo.activity.PhotoPopupActivity"
@@ -126,19 +126,21 @@
 
 
         <activity android:name=".search.SearchFamilyActivity" />
-        <activity android:name=".search.SearchUserActivity" />
+        <activity android:name=".users.search.activity.SearchUserActivity" />
 
 
-        <activity android:name=".falldiagnosis.base.activity.FallDiagnosisActivity" />
-        <activity android:name=".falldiagnosis.dangerevaluation.activity.DangerEvaluationActivity" />
+        <activity android:name=".falldiagnosis.base.activity.FallDiagnosisMainActivity" />
+        <activity android:name=".falldiagnosis.fall.diagnosis.activity.FallDiagnosisActivity" />
+        <activity android:name=".falldiagnosis.fall.result.activity.FallDiagnosisResultActivity"/>
+        <activity android:name=".falldiagnosis.environment.activity.EnvironmentEvaluationActivity" />
 
         <activity
             android:name=".market.MarketMainActivity"
             android:launchMode="singleInstance" />
 
-        <activity android:name=".photos.SongPhotoPopupActivity" />
+        <activity android:name=".dialog.popup.songphoto.activity.SongPhotoPopupActivity" />
 
-        <activity android:name=".ReportActivity" />
+        <activity android:name=".main.report.activity.ReportActivity" />
 
 
         <service android:name=".fcm.FirebaseMessageService">

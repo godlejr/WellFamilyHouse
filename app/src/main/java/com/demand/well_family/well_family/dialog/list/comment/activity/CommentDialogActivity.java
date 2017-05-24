@@ -11,9 +11,9 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.ReportActivity;
-import com.demand.well_family.well_family.dialog.CommentDeleteActivity;
-import com.demand.well_family.well_family.dialog.CommentEditActivity;
+import com.demand.well_family.well_family.main.report.activity.ReportActivity;
+import com.demand.well_family.well_family.dialog.popup.comment.delete.activity.CommentDeleteActivity;
+import com.demand.well_family.well_family.dialog.popup.comment.edit.activity.CommentEditActivity;
 import com.demand.well_family.well_family.dialog.list.comment.adapter.CommentDialogAdapter;
 import com.demand.well_family.well_family.dialog.list.comment.flag.CommentCodeFlag;
 import com.demand.well_family.well_family.dialog.list.comment.presenter.CommentDialogPresenter;
