@@ -40,7 +40,7 @@ import com.demand.well_family.well_family.dto.Song;
 import com.demand.well_family.well_family.dto.SongCategory;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
-import com.demand.well_family.well_family.users.UserActivity;
+import com.demand.well_family.well_family.users.base.activity.UserActivity;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;

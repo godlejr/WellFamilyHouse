@@ -28,13 +28,12 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.demand.well_family.well_family.falldiagnosis.base.activity.FallDiagnosisActivity;
-import com.demand.well_family.well_family.family.base.activity.FamilyActivity;
-import com.demand.well_family.well_family.main.login.activity.LoginActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dto.App;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.User;
+import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.activity.FallDiagnosisActivity;
+import com.demand.well_family.well_family.family.base.activity.FamilyActivity;
 import com.demand.well_family.well_family.family.create.activity.CreateFamilyActivity;
 import com.demand.well_family.well_family.family.manage.activity.ManageFamilyActivity;
 import com.demand.well_family.well_family.flag.BadgeFlag;
@@ -44,11 +43,12 @@ import com.demand.well_family.well_family.main.base.adapter.viewpager.ViewPageAd
 import com.demand.well_family.well_family.main.base.presenter.MainPresenter;
 import com.demand.well_family.well_family.main.base.presenter.impl.MainPresenterImpl;
 import com.demand.well_family.well_family.main.base.view.MainView;
+import com.demand.well_family.well_family.main.login.activity.LoginActivity;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.notification.NotificationActivity;
 import com.demand.well_family.well_family.setting.base.activity.SettingActivity;
-import com.demand.well_family.well_family.users.UserActivity;
+import com.demand.well_family.well_family.users.base.activity.UserActivity;
 
 import java.util.ArrayList;
 

@@ -52,6 +52,7 @@ import com.demand.well_family.well_family.dto.SongStoryInfo;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
+import com.demand.well_family.well_family.users.base.activity.UserActivity;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;

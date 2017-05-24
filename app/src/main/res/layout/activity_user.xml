@@ -124,36 +124,14 @@
                                 android:layout_height="match_parent"
                                 android:src="@drawable/phone" />
 
-                            <FrameLayout
+                            <TextView
+                                android:id="@+id/tv_family_activity_phone2"
                                 android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_marginRight="10dp">
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="000-0000-000"
+                                android:textColor="#000" />
 
-                                <RelativeLayout
-                                    android:id="@+id/rl_call_phone"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:background="#fff">
-
-                                    <TextView
-                                        android:id="@+id/tv_family_activity_phone2"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="000-0000-000"
-                                        android:textColor="#000" />
-                                </RelativeLayout>
-
-                                <TextView
-                                    android:id="@+id/tv_family_activity_phone"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_marginBottom="2dp"
-                                    android:gravity="center_vertical|center_horizontal"
-                                    android:text="000-0000-0000"
-                                    android:textColor="#444"
-                                    android:textSize="16sp"
-                                    android:visibility="visible" />
-                            </FrameLayout>
                         </LinearLayout>
 
                     </RelativeLayout>

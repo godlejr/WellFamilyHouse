@@ -29,16 +29,12 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.demand.well_family.well_family.story.create.activity.CreateStoryActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dialog.popup.photo.activity.PhotoPopupActivity;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.family.manage.activity.ManageFamilyActivity;
-import com.demand.well_family.well_family.flag.PhotoPopupINTENTFlag;
-import com.demand.well_family.well_family.story.detail.activity.StoryDetailActivity;
 import com.demand.well_family.well_family.family.base.adapter.content.ContentAdapter;
 import com.demand.well_family.well_family.family.base.adapter.user.UserAdapter;
 import com.demand.well_family.well_family.family.base.flag.FamilyCodeFlag;
@@ -46,14 +42,18 @@ import com.demand.well_family.well_family.family.base.presenter.FamilyPresenter;
 import com.demand.well_family.well_family.family.base.presenter.impl.FamilyPresenterImpl;
 import com.demand.well_family.well_family.family.base.view.FamilyView;
 import com.demand.well_family.well_family.family.edit.activity.EditFamilyActivity;
+import com.demand.well_family.well_family.family.manage.activity.ManageFamilyActivity;
+import com.demand.well_family.well_family.family.photo.activity.PhotosActivity;
+import com.demand.well_family.well_family.flag.PhotoPopupINTENTFlag;
 import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.main.login.activity.LoginActivity;
 import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
-import com.demand.well_family.well_family.family.photo.activity.PhotosActivity;
-import com.demand.well_family.well_family.search.SearchUserActivity;
 import com.demand.well_family.well_family.setting.base.activity.SettingActivity;
-import com.demand.well_family.well_family.users.UserActivity;
+import com.demand.well_family.well_family.story.create.activity.CreateStoryActivity;
+import com.demand.well_family.well_family.story.detail.activity.StoryDetailActivity;
+import com.demand.well_family.well_family.users.base.activity.UserActivity;
+import com.demand.well_family.well_family.users.search.activity.SearchUserActivity;
 
 import java.util.ArrayList;
 

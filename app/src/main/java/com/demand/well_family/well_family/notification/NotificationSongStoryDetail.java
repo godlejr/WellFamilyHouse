@@ -55,7 +55,7 @@ import com.demand.well_family.well_family.market.MarketMainActivity;
 import com.demand.well_family.well_family.memory_sound.SongMainActivity;
 import com.demand.well_family.well_family.dialog.popup.songphoto.activity.SongPhotoPopupActivity;
 import com.demand.well_family.well_family.setting.base.activity.SettingActivity;
-import com.demand.well_family.well_family.users.UserActivity;
+import com.demand.well_family.well_family.users.base.activity.UserActivity;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
