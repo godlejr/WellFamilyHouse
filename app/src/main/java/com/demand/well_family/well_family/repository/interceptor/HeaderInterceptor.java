@@ -13,7 +13,6 @@ import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-
 /**
  * Created by ㅇㅇ on 2017-03-14.
  */
@@ -148,5 +147,16 @@ public class HeaderInterceptor implements Interceptor {
 
         return retrofit;
     }
+
+    public Retrofit getFallDiagnosisServer() {
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/fall_diagnosis/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(client)
+                .build();
+
+        return retrofit;
+    }
+
 
 }

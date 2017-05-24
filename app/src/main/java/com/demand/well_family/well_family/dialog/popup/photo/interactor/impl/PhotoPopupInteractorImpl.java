@@ -3,8 +3,16 @@ package com.demand.well_family.well_family.dialog.popup.photo.interactor.impl;
 import com.demand.well_family.well_family.dialog.popup.photo.interactor.PhotoPopupInteractor;
 import com.demand.well_family.well_family.dialog.popup.photo.presenter.PhotoPopupPresenter;
 import com.demand.well_family.well_family.dto.Photo;
+import com.demand.well_family.well_family.dto.SelfDiagnosisCategory;
+import com.demand.well_family.well_family.dto.User;
+import com.demand.well_family.well_family.repository.FallDiagnosisServerConnection;
+import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by ㅇㅇ on 2017-04-19.
@@ -61,4 +69,7 @@ public class PhotoPopupInteractorImpl implements PhotoPopupInteractor {
     public void setFromActivity(String fromActivity) {
         this.fromActivity = fromActivity;
     }
+
+
+
 }

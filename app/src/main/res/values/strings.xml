@@ -27,6 +27,9 @@
     <string name="cloud_front_song_stories_images">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/songstories/</string>
     <string name="cloud_front_banners">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/banner/</string>
     <string name="cloud_front_song_story_emotion">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/emotions/</string>
+
+    <string name="cloud_front_self_diagnosis">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/falldiagnosis/selfdiagnosis/</string>
+
     <string name="bubblefeet">com.demand.bubblefeet</string>
     <string name="happyfeet">com.demand.happyfeet</string>
     <string name="market_front">market://details?id=</string>

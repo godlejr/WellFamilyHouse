@@ -32,7 +32,7 @@ import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dto.App;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.activity.FallDiagnosisActivity;
+import com.demand.well_family.well_family.falldiagnosis.base.activity.FallDiagnosisMainActivity;
 import com.demand.well_family.well_family.family.base.activity.FamilyActivity;
 import com.demand.well_family.well_family.family.create.activity.CreateFamilyActivity;
 import com.demand.well_family.well_family.family.manage.activity.ManageFamilyActivity;
@@ -438,7 +438,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
 
     @Override
     public void navigateToFallDiagnosisActivity() {
-        Intent intent = new Intent(MainActivity.this, FallDiagnosisActivity.class);
+        Intent intent = new Intent(MainActivity.this, FallDiagnosisMainActivity.class);
         startActivity(intent);
     }
 }

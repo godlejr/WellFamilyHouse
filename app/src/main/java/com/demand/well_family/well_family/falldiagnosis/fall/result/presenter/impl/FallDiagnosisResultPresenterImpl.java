@@ -1,6 +1,7 @@
 package com.demand.well_family.well_family.falldiagnosis.fall.result.presenter.impl;
 
 import android.content.Context;
+import android.view.View;
 
 import com.demand.well_family.well_family.falldiagnosis.fall.result.interactor.FallDiagnosisResultInteractor;
 import com.demand.well_family.well_family.falldiagnosis.fall.result.interactor.impl.FallDiagnosisResultInteractorImpl;
@@ -25,6 +26,10 @@ public class FallDiagnosisResultPresenterImpl implements FallDiagnosisResultPres
 
     @Override
     public void onCreate() {
+        fallDiagnosisResultView.init();
 
+        View decorView = fallDiagnosisResultView.getDecorView();
+        fallDiagnosisResultView.setToolbar(decorView);
+        fallDiagnosisResultView.showToolbarTitle("낙상위험 자가진단");
     }
 }

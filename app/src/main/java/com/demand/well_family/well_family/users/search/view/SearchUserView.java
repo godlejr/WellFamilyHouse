@@ -36,4 +36,5 @@ public interface SearchUserView {
     void setUserStateButtonForMe(UserAdapter.UserViewHolder holder);
 
     void setUserStateButtonForInvite(UserAdapter.UserViewHolder holder, UserInfoForFamilyJoin userFound);
+
 }

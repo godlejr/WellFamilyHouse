@@ -12,11 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.dto.SelfDiagnosisCategory;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.adapter.FallViewPagerAdapter;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.FallDiagnosisPresenter;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.impl.FallDiagnosisPresenterImpl;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.view.FallDiagnosisView;
 import com.demand.well_family.well_family.falldiagnosis.fall.result.activity.FallDiagnosisResultActivity;
+
+import java.util.ArrayList;
 
 /**
  * Created by ㅇㅇ on 2017-05-23.
@@ -27,7 +30,7 @@ public class FallDiagnosisActivity extends Activity implements FallDiagnosisView
 
     private View decorView;
     private TextView toolbarTitle;
-    private ViewPager viewPager_diagnosisItem;
+    private ViewPager viewPager_diagnosisCategories;
     private FallViewPagerAdapter fallViewPagerAdapter;
 
     @Override
@@ -41,10 +44,10 @@ public class FallDiagnosisActivity extends Activity implements FallDiagnosisView
 
     @Override
     public void init() {
-        viewPager_diagnosisItem = (ViewPager) findViewById(R.id.viewpager_fall);
-        viewPager_diagnosisItem.setOnTouchListener(this);
-        fallViewPagerAdapter = new FallViewPagerAdapter(this.getLayoutInflater(), null, fallDiagnosisPresenter);
-        viewPager_diagnosisItem.setAdapter(fallViewPagerAdapter);
+        viewPager_diagnosisCategories = (ViewPager) findViewById(R.id.viewpager_fall);
+        viewPager_diagnosisCategories.setOnTouchListener(this);
+
+        fallDiagnosisPresenter.onLoadData();
     }
 
     @Override
@@ -75,12 +78,12 @@ public class FallDiagnosisActivity extends Activity implements FallDiagnosisView
 
     @Override
     public void setNextView(int page) {
-        viewPager_diagnosisItem.setCurrentItem(page);
+        viewPager_diagnosisCategories.setCurrentItem(page);
     }
 
     @Override
     public void setPreviousView(int page) {
-        viewPager_diagnosisItem.setCurrentItem(page);
+        viewPager_diagnosisCategories.setCurrentItem(page);
     }
 
     @Override
@@ -93,6 +96,12 @@ public class FallDiagnosisActivity extends Activity implements FallDiagnosisView
     @Override
     public int getDiagnosisItemCount() {
         return fallViewPagerAdapter.getCount();
+    }
+
+    @Override
+    public void setDiagnosisCategoryAdapter(ArrayList<SelfDiagnosisCategory> diagnosisCategoryList) {
+        fallViewPagerAdapter = new FallViewPagerAdapter(this.getLayoutInflater(), diagnosisCategoryList, fallDiagnosisPresenter);
+        viewPager_diagnosisCategories.setAdapter(fallViewPagerAdapter);
     }
 
     @Override

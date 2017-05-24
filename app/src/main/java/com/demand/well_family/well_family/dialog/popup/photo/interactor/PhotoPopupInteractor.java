@@ -2,6 +2,7 @@ package com.demand.well_family.well_family.dialog.popup.photo.interactor;
 
 import com.demand.well_family.well_family.dialog.popup.photo.presenter.PhotoPopupPresenter;
 import com.demand.well_family.well_family.dto.Photo;
+import com.demand.well_family.well_family.dto.User;
 
 import java.util.ArrayList;
 
@@ -25,4 +26,5 @@ public interface PhotoPopupInteractor {
     String getFromActivity();
 
     void setFromActivity(String fromActivity);
+
 }

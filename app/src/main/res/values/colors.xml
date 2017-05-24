@@ -7,4 +7,8 @@
     <color name="wellfamilyhouseColor">#542920</color>
     <color name="gray">#999999</color>
 
+    <color name="green">#05a29d</color>
+    <color name="yellow">#ffa200</color>
+    <color name="red">#d54654</color>
+
 </resources>

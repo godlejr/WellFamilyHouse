@@ -2,6 +2,7 @@ package com.demand.well_family.well_family.falldiagnosis.fall.result.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,8 +25,8 @@ public class FallDiagnosisResultActivity extends Activity implements FallDiagnos
     private TextView toolbarTitle;
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fall_diagnosis_result);
 
         fallDiagnosisResultPresenter = new FallDiagnosisResultPresenterImpl(this);

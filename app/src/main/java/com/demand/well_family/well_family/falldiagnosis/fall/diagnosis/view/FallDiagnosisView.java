@@ -2,6 +2,10 @@ package com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.view;
 
 import android.view.View;
 
+import com.demand.well_family.well_family.dto.SelfDiagnosisCategory;
+
+import java.util.ArrayList;
+
 /**
  * Created by ㅇㅇ on 2017-05-23.
  */
@@ -21,4 +25,6 @@ public interface FallDiagnosisView {
     void navigateToResultActivity();
 
     int getDiagnosisItemCount();
+
+    void setDiagnosisCategoryAdapter(ArrayList<SelfDiagnosisCategory> diagnosisCategoryList);
 }

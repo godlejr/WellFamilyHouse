@@ -34,7 +34,6 @@ import static com.demand.well_family.well_family.main.login.activity.LoginActivi
 public class SearchUserActivity extends Activity implements SearchUserView, View.OnClickListener {
     private SearchUserPresenter searchUserPresenter;
 
-
     private View decorView;
     private TextView toolbarTitle;
 
@@ -107,7 +106,6 @@ public class SearchUserActivity extends Activity implements SearchUserView, View
         rv_search_user.setAdapter(userAdapter);
         rv_search_user.setLayoutManager(new LinearLayoutManager(SearchUserActivity.this, LinearLayoutManager.VERTICAL, false));
     }
-
 
     @Override
     public void navigateToBackWithFamily(Family family) {
