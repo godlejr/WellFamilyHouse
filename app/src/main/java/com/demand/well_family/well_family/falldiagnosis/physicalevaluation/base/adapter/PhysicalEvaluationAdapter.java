@@ -2,6 +2,7 @@ package com.demand.well_family.well_family.falldiagnosis.physicalevaluation.base
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ public class PhysicalEvaluationAdapter extends RecyclerView.Adapter<PhysicalEval
             super(itemView);
             iv_physicalevaluation_img = (ImageView) itemView.findViewById(R.id.iv_physicalevaluation_img);
             tv_physicalevaluation_content = (TextView)itemView.findViewById(R.id.tv_physicalevaluation_content);
+            tv_physicalevaluation_content.setMovementMethod(new ScrollingMovementMethod());
         }
     }
 

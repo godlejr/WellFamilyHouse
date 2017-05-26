@@ -5,15 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
-import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.dto.PhysicalEvaluationCategory;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.create.adapter.CreatePhysicalEvaluationAdapter;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.create.presenter.CreatePhysicalEvaluationPresenter;
@@ -26,7 +25,7 @@ import java.util.ArrayList;
  * Created by ㅇㅇ on 2017-05-25.
  */
 
-public class CreatePhysicalEvaluationActivity extends Activity implements CreatePhysicalEvaluationView, View.OnClickListener {
+public class CreatePhysicalEvaluationActivity extends Activity implements CreatePhysicalEvaluationView, View.OnClickListener{
     private CreatePhysicalEvaluationPresenter createPhysicalEvaluationPresenter;
 
     private Toolbar toolbar;
@@ -59,6 +58,7 @@ public class CreatePhysicalEvaluationActivity extends Activity implements Create
         iv_createphysicalevaluation_next = (ImageView)findViewById(R.id.iv_createphysicalevaluation_next);
         iv_createphysicalevaluation_start.setOnClickListener(this);
         iv_createphysicalevaluation_next.setOnClickListener(this);
+
 
         createPhysicalEvaluationPresenter.onLoadData();
     }

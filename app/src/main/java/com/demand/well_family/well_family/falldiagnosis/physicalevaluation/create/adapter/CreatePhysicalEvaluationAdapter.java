@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,7 +13,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.dto.PhysicalEvaluationCategory;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.create.presenter.CreatePhysicalEvaluationPresenter;
 
@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * Created by ㅇㅇ on 2017-05-26.
  */
 
-public class CreatePhysicalEvaluationAdapter extends PagerAdapter {
+public class CreatePhysicalEvaluationAdapter extends PagerAdapter{
     private ArrayList<PhysicalEvaluationCategory> physicalEvaluationCategoryList;
     private CreatePhysicalEvaluationPresenter createPhysicalEvaluationPresenter;
     private LayoutInflater inflater;
@@ -47,6 +47,7 @@ public class CreatePhysicalEvaluationAdapter extends PagerAdapter {
         tv_physicalevaluation_content.setText(physicalEvaluationCategory.getContent());
 
         container.addView(view);
+
         return view;
     }
 
@@ -62,4 +63,5 @@ public class CreatePhysicalEvaluationAdapter extends PagerAdapter {
     public boolean isViewFromObject(View view, Object object) {
         return view == object;
     }
+
 }
