@@ -158,5 +158,15 @@ public class HeaderInterceptor implements Interceptor {
         return retrofit;
     }
 
+    public Retrofit getFallDiagnosisStoryServer() {
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/fall_diagnosis_story/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(client)
+                .build();
+
+        return retrofit;
+    }
+
 
 }

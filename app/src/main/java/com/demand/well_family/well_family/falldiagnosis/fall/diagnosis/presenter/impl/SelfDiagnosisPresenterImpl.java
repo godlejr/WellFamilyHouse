@@ -3,14 +3,12 @@ package com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presente
 import android.content.Context;
 import android.view.View;
 
-
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.dto.SelfDiagnosisCategory;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.flag.SelfDiagnosisCodeFlag;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.interactor.SelfDiagnosisInteractor;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.interactor.impl.SelfDiagnosisInteractorImpl;
-
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.SelfDiagnosisPresenter;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.view.SelfDiagnosisView;
 import com.demand.well_family.well_family.util.APIErrorUtil;
@@ -51,19 +49,21 @@ public class SelfDiagnosisPresenterImpl implements SelfDiagnosisPresenter {
     public void onClickAnswer(int position, int categorySize, int flag) {
         int endOfCategoryList =  categorySize-1;
 
+        if(flag == SelfDiagnosisCodeFlag.YES){
+            selfDiagnosisInteractor.setAnswerAdded(true);
+        }
+
+        if(flag == SelfDiagnosisCodeFlag.NO){
+            selfDiagnosisInteractor.setAnswerAdded(false);
+        }
+
         if(position ==  endOfCategoryList){
+
+            FallDiagnosisCategory fallDiagnosisCategory = selfDiagnosisInteractor.getFallDiagnosisCategory();
             ArrayList<Boolean> answerList  = selfDiagnosisInteractor.getAnswerList();
-            fallDiagnosisView.navigateToResultActivity(answerList);
+            fallDiagnosisView.navigateToResultActivity(fallDiagnosisCategory, answerList);
 
         } else {
-            if(flag == SelfDiagnosisCodeFlag.YES){
-                selfDiagnosisInteractor.setAnswerAdded(true);
-            }
-
-            if(flag == SelfDiagnosisCodeFlag.NO){
-                selfDiagnosisInteractor.setAnswerAdded(false);
-            }
-
             fallDiagnosisView.setNextView(position + 1);
         }
     }

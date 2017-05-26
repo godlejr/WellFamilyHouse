@@ -17,18 +17,80 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="1dp"
+        android:layout_weight="3.5">
 
-        <ProgressBar
-            android:id="@+id/progressBar2"
-            style="?android:attr/progressBarStyleHorizontal"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/fall_result_circleshape"
-            android:max="11"
-            android:progress="5"
-            android:progressDrawable="@drawable/fall_result_progressbar" />
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_total_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/tv_score"
+                android:layout_alignBottom="@+id/tv_score"
+                android:layout_toRightOf="@+id/tv_score"
+                android:text="/ 11"
+                android:textColor="@color/green"
+                android:textSize="24sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/tv_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="142dp"
+                android:layout_marginStart="142dp"
+                android:soundEffectsEnabled="true"
+                android:text="10"
+                android:textColor="@color/green"
+                android:textSize="50sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/tv_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_score"
+                android:layout_centerHorizontal="true"
+                android:text="SSSSS" />
+
+            <ProgressBar
+                android:id="@+id/pb_score"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:background="@drawable/fall_result_circleshape"
+                android:elevation="0dp"
+                android:progressDrawable="@drawable/fall_result_progressbar_safe"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
 
     </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_send_result"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:allowUndo="true"
+            android:background="@drawable/round_corner_border_gray_r30"
+            android:text="확인" />
+    </LinearLayout>
 
 </LinearLayout>

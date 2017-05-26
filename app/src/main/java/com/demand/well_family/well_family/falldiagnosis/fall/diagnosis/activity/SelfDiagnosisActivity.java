@@ -18,7 +18,7 @@ import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.adapter.S
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.SelfDiagnosisPresenter;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.impl.SelfDiagnosisPresenterImpl;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.view.SelfDiagnosisView;
-import com.demand.well_family.well_family.falldiagnosis.fall.result.activity.FallDiagnosisResultActivity;
+import com.demand.well_family.well_family.falldiagnosis.fall.result.activity.SelfDiagnosisResultActivity;
 
 import java.util.ArrayList;
 
@@ -91,8 +91,9 @@ public class SelfDiagnosisActivity extends Activity implements SelfDiagnosisView
     }
 
     @Override
-    public void navigateToResultActivity(ArrayList<Boolean> answerList) {
-        Intent intent = new Intent(SelfDiagnosisActivity.this, FallDiagnosisResultActivity.class);
+    public void navigateToResultActivity(FallDiagnosisCategory fallDiagnosisCategory, ArrayList<Boolean> answerList) {
+        Intent intent = new Intent(SelfDiagnosisActivity.this, SelfDiagnosisResultActivity.class);
+        intent.putExtra("fall_diagnosis_category_id", fallDiagnosisCategory.getId());
         intent.putExtra("answerList", answerList);
         startActivity(intent);
         finish();

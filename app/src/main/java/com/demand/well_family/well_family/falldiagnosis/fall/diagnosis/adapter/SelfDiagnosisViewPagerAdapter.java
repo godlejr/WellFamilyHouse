@@ -2,7 +2,6 @@ package com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.adapter;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +49,6 @@ public class SelfDiagnosisViewPagerAdapter extends PagerAdapter  {
         tv_falldiagnosis_num.setText(String.valueOf(category.getId()));
         tv_falldiagnosis_question.setText(category.getName());
 
-        Log.e("시발",category.getAvatar());
         Context context = inflater.getContext();
 
         Glide.with(context).load(context.getString(R.string.cloud_front_self_diagnosis) + category.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_falldiagnosis_question);
