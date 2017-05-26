@@ -3,7 +3,7 @@ package com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.view;
 import android.view.View;
 
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
-import com.demand.well_family.well_family.dto.SelfDiagnosisCategory;
+import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 
 import java.util.ArrayList;
 
@@ -25,5 +25,5 @@ public interface SelfDiagnosisView {
 
     void navigateToResultActivity(FallDiagnosisCategory fallDiagnosisCategory, ArrayList<Boolean> answerList);
 
-    void setDiagnosisCategoryAdapter(ArrayList<SelfDiagnosisCategory> diagnosisCategoryList);
+    void setDiagnosisCategoryAdapter(ArrayList<FallDiagnosisContentCategory> fallDiagnosisContentCategoryList);
 }

@@ -130,13 +130,13 @@ public class SelfDiagnosisResultInteractorImpl implements SelfDiagnosisResultInt
     }
 
     @Override
-    public void setSelfDiagnosisAdded(int storyId, int selfDiagnosisCategoryId) {
+    public void setSelfDiagnosisAdded(int storyId, int fallDiagnosisContentCategoryId) {
         String accessToken = user.getAccess_token();
         int userId = user.getId();
 
         HashMap<String, String> map = new HashMap<>();
         map.put("user_id",String.valueOf(userId));
-        map.put("self_diagnosis_category_id",String.valueOf(selfDiagnosisCategoryId));
+        map.put("fall_diagnosis_content_category_id",String.valueOf(fallDiagnosisContentCategoryId));
 
 
         fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);

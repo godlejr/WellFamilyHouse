@@ -34,5 +34,5 @@ public interface SelfDiagnosisResultInteractor {
 
     void setStoryAdded();
 
-    void setSelfDiagnosisAdded(int storyId, int selfDiagnosisCategoryId);
+    void setSelfDiagnosisAdded(int storyId, int fallDiagnosisContentCategoryId);
 }

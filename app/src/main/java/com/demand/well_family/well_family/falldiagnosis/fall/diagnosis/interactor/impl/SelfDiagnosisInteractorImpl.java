@@ -1,7 +1,7 @@
 package com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.interactor.impl;
 
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
-import com.demand.well_family.well_family.dto.SelfDiagnosisCategory;
+import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.interactor.SelfDiagnosisInteractor;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.SelfDiagnosisPresenter;
@@ -46,20 +46,20 @@ public class SelfDiagnosisInteractorImpl implements SelfDiagnosisInteractor {
         int categoryId = fallDiagnosisCategory.getId();
 
         fallDiagnosisServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisServer().create(FallDiagnosisServerConnection.class);
-        Call<ArrayList<SelfDiagnosisCategory>> callGetDiagnosisCategories = fallDiagnosisServerConnection.getDiagnosisCategories(categoryId);
-        callGetDiagnosisCategories.enqueue(new Callback<ArrayList<SelfDiagnosisCategory>>() {
+        Call<ArrayList<FallDiagnosisContentCategory>> callGetDiagnosisCategories = fallDiagnosisServerConnection.getDiagnosisCategories(categoryId);
+        callGetDiagnosisCategories.enqueue(new Callback<ArrayList<FallDiagnosisContentCategory>>() {
             @Override
-            public void onResponse(Call<ArrayList<SelfDiagnosisCategory>> call, Response<ArrayList<SelfDiagnosisCategory>> response) {
+            public void onResponse(Call<ArrayList<FallDiagnosisContentCategory>> call, Response<ArrayList<FallDiagnosisContentCategory>> response) {
                 if (response.isSuccessful()) {
-                    ArrayList<SelfDiagnosisCategory> categoryList = response.body();
-                    selfDiagnosisPresenter.onSuccessGetDiagnosisCategories(categoryList);
+                    ArrayList<FallDiagnosisContentCategory> fallDiagnosisContentCategoryList = response.body();
+                    selfDiagnosisPresenter.onSuccessGetDiagnosisCategories(fallDiagnosisContentCategoryList);
                 } else {
                     selfDiagnosisPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<SelfDiagnosisCategory>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<FallDiagnosisContentCategory>> call, Throwable t) {
                 log(t);
                 selfDiagnosisPresenter.onNetworkError(null);
             }

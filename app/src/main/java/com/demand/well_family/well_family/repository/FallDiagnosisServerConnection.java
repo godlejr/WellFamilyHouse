@@ -1,7 +1,7 @@
 package com.demand.well_family.well_family.repository;
 
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
-import com.demand.well_family.well_family.dto.SelfDiagnosisCategory;
+import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 
 import java.util.ArrayList;
 
@@ -18,5 +18,5 @@ public interface FallDiagnosisServerConnection {
     Call<ArrayList<FallDiagnosisCategory>> getCategoryList();
 
     @GET("categories/{fall_diagnosis_category_id}")
-    Call<ArrayList<SelfDiagnosisCategory>> getDiagnosisCategories(@Path("fall_diagnosis_category_id") int fall_diagnosis_category_id);
+    Call<ArrayList<FallDiagnosisContentCategory>> getDiagnosisCategories(@Path("fall_diagnosis_category_id") int fall_diagnosis_category_id);
 }

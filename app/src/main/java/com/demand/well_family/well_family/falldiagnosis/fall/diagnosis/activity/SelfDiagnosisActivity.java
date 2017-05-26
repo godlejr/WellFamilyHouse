@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
-import com.demand.well_family.well_family.dto.SelfDiagnosisCategory;
+import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.adapter.SelfDiagnosisViewPagerAdapter;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.SelfDiagnosisPresenter;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.impl.SelfDiagnosisPresenterImpl;
@@ -41,6 +41,7 @@ public class SelfDiagnosisActivity extends Activity implements SelfDiagnosisView
 
         FallDiagnosisCategory fallDiagnosisCategory = new FallDiagnosisCategory();
         fallDiagnosisCategory.setId(getIntent().getIntExtra("category_id", 0));
+
 
         selfDiagnosisPresenter = new SelfDiagnosisPresenterImpl(this);
         selfDiagnosisPresenter.onCreate(fallDiagnosisCategory);
@@ -100,8 +101,8 @@ public class SelfDiagnosisActivity extends Activity implements SelfDiagnosisView
     }
 
     @Override
-    public void setDiagnosisCategoryAdapter(ArrayList<SelfDiagnosisCategory> diagnosisCategoryList) {
-        selfDiagnosisViewPagerAdapter = new SelfDiagnosisViewPagerAdapter(this.getLayoutInflater(), diagnosisCategoryList, selfDiagnosisPresenter);
+    public void setDiagnosisCategoryAdapter(ArrayList<FallDiagnosisContentCategory> fallDiagnosisContentCategoryList) {
+        selfDiagnosisViewPagerAdapter = new SelfDiagnosisViewPagerAdapter(this.getLayoutInflater(), fallDiagnosisContentCategoryList, selfDiagnosisPresenter);
         viewPager_diagnosisCategories.setAdapter(selfDiagnosisViewPagerAdapter);
     }
 

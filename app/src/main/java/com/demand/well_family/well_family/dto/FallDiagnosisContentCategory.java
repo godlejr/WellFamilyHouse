@@ -5,25 +5,25 @@ package com.demand.well_family.well_family.dto;
  */
 
 
-public class SelfDiagnosisCategory {
+public class FallDiagnosisContentCategory {
 
     private int id;
     private int fall_diagnosis_category_id;
     private String name;
+    private String content;
     private String avatar;
     private String created_at;
     private String updated_at;
 
-    public SelfDiagnosisCategory() {
+    public FallDiagnosisContentCategory() {
         super();
     }
 
-    public SelfDiagnosisCategory(int id, int fall_diagnosis_category_id, String name, String avatar, String created_at,
-                                 String updated_at) {
-        super();
+    public FallDiagnosisContentCategory(int id, int fall_diagnosis_category_id, String name, String content, String avatar, String created_at, String updated_at) {
         this.id = id;
         this.fall_diagnosis_category_id = fall_diagnosis_category_id;
         this.name = name;
+        this.content = content;
         this.avatar = avatar;
         this.created_at = created_at;
         this.updated_at = updated_at;
@@ -77,4 +77,11 @@ public class SelfDiagnosisCategory {
         this.updated_at = updated_at;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

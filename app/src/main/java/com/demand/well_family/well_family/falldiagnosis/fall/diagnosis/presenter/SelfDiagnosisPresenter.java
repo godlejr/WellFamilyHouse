@@ -1,7 +1,7 @@
 package com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter;
 
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
-import com.demand.well_family.well_family.dto.SelfDiagnosisCategory;
+import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.util.APIErrorUtil;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public interface SelfDiagnosisPresenter {
 
     void onNetworkError(APIErrorUtil apiErrorUtil);
 
-    void onSuccessGetDiagnosisCategories(ArrayList<SelfDiagnosisCategory> diagnosisCategoryList);
+    void onSuccessGetDiagnosisCategories(ArrayList<FallDiagnosisContentCategory> fallDiagnosisContentCategoryList);
 
     void onLoadData();
 

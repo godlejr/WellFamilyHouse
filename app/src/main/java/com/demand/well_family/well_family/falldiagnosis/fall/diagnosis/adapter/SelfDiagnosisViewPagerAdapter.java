@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.dto.SelfDiagnosisCategory;
+import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.flag.SelfDiagnosisCodeFlag;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.SelfDiagnosisPresenter;
 
@@ -27,11 +27,11 @@ public class SelfDiagnosisViewPagerAdapter extends PagerAdapter  {
 
     private LayoutInflater inflater;
     private TextView tv_viewPager_indicator;
-    private ArrayList<SelfDiagnosisCategory> diagnosisCategoryList;    // temp
+    private ArrayList<FallDiagnosisContentCategory> fallDiagnosisContentCategoryList;    // temp
 
 
-    public SelfDiagnosisViewPagerAdapter(LayoutInflater inflater, ArrayList<SelfDiagnosisCategory> diagnosisCategoryList, SelfDiagnosisPresenter selfDiagnosisPresenter) {
-        this.diagnosisCategoryList = diagnosisCategoryList;
+    public SelfDiagnosisViewPagerAdapter(LayoutInflater inflater, ArrayList<FallDiagnosisContentCategory> fallDiagnosisContentCategoryList, SelfDiagnosisPresenter selfDiagnosisPresenter) {
+        this.fallDiagnosisContentCategoryList = fallDiagnosisContentCategoryList;
         this.selfDiagnosisPresenter = selfDiagnosisPresenter;
         this.inflater = inflater;
     }
@@ -45,7 +45,7 @@ public class SelfDiagnosisViewPagerAdapter extends PagerAdapter  {
         Button btn_falldiagnosis_answer_ok = (Button) view.findViewById(R.id.btn_falldiagnosis_answer_ok);
         Button btn_falldiagnosis_answer_no = (Button) view.findViewById(R.id.btn_falldiagnosis_answer_no);
 
-        SelfDiagnosisCategory category = diagnosisCategoryList.get(position);
+        FallDiagnosisContentCategory category = fallDiagnosisContentCategoryList.get(position);
         tv_falldiagnosis_num.setText(String.valueOf(category.getId()));
         tv_falldiagnosis_question.setText(category.getName());
 
@@ -73,7 +73,7 @@ public class SelfDiagnosisViewPagerAdapter extends PagerAdapter  {
 
     @Override
     public int getCount() {
-        return diagnosisCategoryList.size();
+        return fallDiagnosisContentCategoryList.size();
     }
 
     @Override

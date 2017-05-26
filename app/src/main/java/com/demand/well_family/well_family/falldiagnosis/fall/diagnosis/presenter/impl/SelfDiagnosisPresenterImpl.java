@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
-import com.demand.well_family.well_family.dto.SelfDiagnosisCategory;
+import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.flag.SelfDiagnosisCodeFlag;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.interactor.SelfDiagnosisInteractor;
@@ -79,8 +79,8 @@ public class SelfDiagnosisPresenterImpl implements SelfDiagnosisPresenter {
     }
 
     @Override
-    public void onSuccessGetDiagnosisCategories(ArrayList<SelfDiagnosisCategory> diagnosisCategoryList) {
-        fallDiagnosisView.setDiagnosisCategoryAdapter(diagnosisCategoryList);
+    public void onSuccessGetDiagnosisCategories(ArrayList<FallDiagnosisContentCategory> fallDiagnosisContentCategoryList) {
+        fallDiagnosisView.setDiagnosisCategoryAdapter(fallDiagnosisContentCategoryList);
     }
 
     @Override
