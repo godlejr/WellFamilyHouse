@@ -1,6 +1,5 @@
 package com.demand.well_family.well_family.dialog.list.story.view;
 
-import com.demand.well_family.well_family.dialog.list.story.adpater.StoryDialogAdapter;
 import com.demand.well_family.well_family.dto.Report;
 import com.demand.well_family.well_family.dto.Story;
 
@@ -13,15 +12,11 @@ import java.util.ArrayList;
 public interface StoryDialogView {
     void init();
 
-    void setStoryDialogAdapter(StoryDialogAdapter storyDialogAdapter);
-
     void setStoryDialogAdapterInit(ArrayList<String> storyDialogList);
 
     void setStoryContentCopied();
 
     void setStoryDeleted();
-
-    void setStoryDialogAction(int dialogPosition);
 
     void navigateToBack();
 

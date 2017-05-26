@@ -1,6 +1,5 @@
 package com.demand.well_family.well_family.dialog.popup.songphoto.interactor.impl;
 
-import com.demand.well_family.well_family.dialog.popup.comment.delete.interactor.impl.CommentDeleteInteractorImpl;
 import com.demand.well_family.well_family.dialog.popup.songphoto.interactor.SongPhotoInteractor;
 import com.demand.well_family.well_family.dialog.popup.songphoto.presenter.SongPhotoPresenter;
 import com.demand.well_family.well_family.flag.LogFlag;

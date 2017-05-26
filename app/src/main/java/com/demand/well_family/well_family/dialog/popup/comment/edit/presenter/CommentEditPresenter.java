@@ -13,4 +13,5 @@ public interface CommentEditPresenter {
     void onClickEdit(Comment commentBeforeEdited, Comment commentAfterEdited, int actFlag);
     void onSuccessSetCommentEdited(Comment commentAfterEdited);
     void onNetworkError(APIErrorUtil apiErrorUtil);
+
 }

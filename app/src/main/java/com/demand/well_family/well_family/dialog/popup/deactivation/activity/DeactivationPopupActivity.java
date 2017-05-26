@@ -73,7 +73,7 @@ public class DeactivationPopupActivity extends Activity implements DeactivationP
                 break;
 
             case R.id.btn_deactivation_popup_commit:
-                deactivationPopupPresenter.setDeactivation();
+                deactivationPopupPresenter.onClickSetDeactivation();
                 break;
         }
     }

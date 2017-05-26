@@ -61,7 +61,6 @@ public class SongPhotoPopupActivity extends Activity implements SongPhotoView, V
         songPhotoPresenter.onCreate();
     }
 
-
     @Override
     public void init() {
         ll_popup_top = (LinearLayout) findViewById(R.id.ll_popup_top);

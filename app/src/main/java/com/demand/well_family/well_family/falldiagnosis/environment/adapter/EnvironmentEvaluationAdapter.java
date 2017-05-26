@@ -30,7 +30,7 @@ public class EnvironmentEvaluationAdapter extends RecyclerView.Adapter<Environme
 
     @Override
     public DangerEvaluationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        DangerEvaluationViewHolder dangerEvaluationViewHolder = new DangerEvaluationViewHolder(LayoutInflater.from(context).inflate(R.layout.item_danger_evaluation, parent, false));
+        DangerEvaluationViewHolder dangerEvaluationViewHolder = new DangerEvaluationViewHolder(LayoutInflater.from(context).inflate(R.layout.item_evrisk_evaluation, parent, false));
         return dangerEvaluationViewHolder;
     }
 

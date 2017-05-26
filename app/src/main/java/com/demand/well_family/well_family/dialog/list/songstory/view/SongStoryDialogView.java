@@ -1,6 +1,5 @@
 package com.demand.well_family.well_family.dialog.list.songstory.view;
 
-import com.demand.well_family.well_family.dialog.list.songstory.adapter.SongStoryDialogAdapter;
 import com.demand.well_family.well_family.dto.Report;
 import com.demand.well_family.well_family.dto.Song;
 import com.demand.well_family.well_family.dto.SongStory;
@@ -15,10 +14,6 @@ public interface SongStoryDialogView {
     void init();
 
     void setSongStoryDialogAdapterInit(ArrayList<String> songStoryDialogList);
-
-    void setSongStoryDialogAdapter(SongStoryDialogAdapter songStoryDialogAdapter);
-
-    void setSongStoryDialogAction(int dialogPosition);
 
     void setSongStoryDeleted();
 

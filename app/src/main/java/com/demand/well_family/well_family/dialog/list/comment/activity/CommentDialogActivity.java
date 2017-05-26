@@ -32,6 +32,7 @@ import java.util.ArrayList;
 
 public class CommentDialogActivity extends Activity implements CommentDialogView {
     private CommentDialogPresenter commentDialogPresenter;
+
     private CommentDialogAdapter commentDialogAdapter;
     private RecyclerView rv_popup_comment;
 
@@ -62,7 +63,7 @@ public class CommentDialogActivity extends Activity implements CommentDialogView
     @Override
     public void init() {
         rv_popup_comment = (RecyclerView) findViewById(R.id.rv_popup_comment);
-        commentDialogPresenter.setCommentDialogAdapterInit();
+        commentDialogPresenter.onLoadData();
     }
 
     @Override
@@ -104,11 +105,6 @@ public class CommentDialogActivity extends Activity implements CommentDialogView
     public void setCommentDialogAdapter(CommentDialogAdapter commentDialogAdapter) {
         rv_popup_comment.setAdapter(commentDialogAdapter);
         rv_popup_comment.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-    }
-
-    @Override
-    public void setCommentModifiedOrReported() {
-        commentDialogPresenter.onClickCommentModifyOrReport();
     }
 
     @Override

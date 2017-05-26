@@ -49,6 +49,7 @@ public class SongStoryDialogActivity extends Activity implements SongStoryDialog
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getWindow().setLayout(android.view.WindowManager.LayoutParams.WRAP_CONTENT, android.view.WindowManager.LayoutParams.WRAP_CONTENT);
 
+
         String songStoryContent = getIntent().getStringExtra("content");
         int position = getIntent().getIntExtra("position", 0);
         int songStoryId = getIntent().getIntExtra("story_id", 0);
@@ -79,25 +80,18 @@ public class SongStoryDialogActivity extends Activity implements SongStoryDialog
     @Override
     public void init() {
         rv_popup_comment = (RecyclerView) findViewById(R.id.rv_popup_comment);
-        songStoryDialogPresenter.setSongStoryDialogAdapterInit();
+        songStoryDialogPresenter.onLoadData();
     }
 
     @Override
     public void setSongStoryDialogAdapterInit(ArrayList<String> songStoryDialogList) {
         songStoryDialogAdapter = new SongStoryDialogAdapter(this, songStoryDialogList, R.layout.item_textview, songStoryDialogPresenter);
-        songStoryDialogPresenter.setSongStoryDialogAdapter(songStoryDialogAdapter);
-    }
-
-    @Override
-    public void setSongStoryDialogAdapter(SongStoryDialogAdapter songStoryDialogAdapter) {
         rv_popup_comment.setAdapter(songStoryDialogAdapter);
         rv_popup_comment.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
         switch (requestCode) {
             case SongStoryDialogCodeFlag.MODIFY_REQUEST:
                 switch (resultCode) {
@@ -207,8 +201,4 @@ public class SongStoryDialogActivity extends Activity implements SongStoryDialog
         finish();
     }
 
-    @Override
-    public void setSongStoryDialogAction(int dialogPosition) {
-        songStoryDialogPresenter.setSongStoryDialogAction(dialogPosition);
-    }
 }

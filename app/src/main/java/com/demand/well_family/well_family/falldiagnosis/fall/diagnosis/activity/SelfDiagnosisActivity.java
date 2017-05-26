@@ -37,7 +37,7 @@ public class SelfDiagnosisActivity extends Activity implements SelfDiagnosisView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fall_diagnosis);
+        setContentView(R.layout.activity_selfdiagnosis);
 
         FallDiagnosisCategory fallDiagnosisCategory = new FallDiagnosisCategory();
         fallDiagnosisCategory.setId(getIntent().getIntExtra("category_id", 0));

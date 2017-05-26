@@ -40,9 +40,9 @@ public class CommentDialogPresenterImpl implements CommentDialogPresenter {
     }
 
     @Override
-    public void setCommentDialogAdapterInit() {
+    public void onLoadData() {
         int authorIsMe = commentDialogInteractor.getAuthorIsMe();
-        ArrayList<String> commentDialogList = commentDialogInteractor.setCommentDialogInit(authorIsMe);
+        ArrayList<String> commentDialogList = commentDialogInteractor.getCommentDialog(authorIsMe);
 
         commentDialogView.setCommentDialogAdapterInit(commentDialogList);
     }
@@ -67,7 +67,7 @@ public class CommentDialogPresenterImpl implements CommentDialogPresenter {
         }
 
         if (commentDialogPosition == CommentDialogFlag.MODIFY_OR_REPORT) {
-            commentDialogView.setCommentModifiedOrReported();
+            setCommentModifyOrReport();
         }
 
         if (commentDialogPosition == CommentDialogFlag.DELETE) {
@@ -77,7 +77,7 @@ public class CommentDialogPresenterImpl implements CommentDialogPresenter {
     }
 
     @Override
-    public void onClickCommentModifyOrReport() {
+    public void setCommentModifyOrReport() {
         int authorIsMe = commentDialogInteractor.getAuthorIsMe();
         Report report = commentDialogInteractor.getReport();
         Comment comment = commentDialogInteractor.getComment();

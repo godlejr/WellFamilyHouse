@@ -23,7 +23,6 @@ import com.demand.well_family.well_family.dialog.popup.family.presenter.impl.Fam
 import com.demand.well_family.well_family.dialog.popup.family.view.FamilyPopupView;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
-import com.demand.well_family.well_family.family.base.flag.FamilyCodeFlag;
 
 
 /**
@@ -83,21 +82,17 @@ public class FamilyPopupActivity extends Activity implements FamilyPopupView, Vi
         btn_popup_family_cancel = (Button) findViewById(R.id.btn_popup_family_cancel);
         btn_popup_family_commit = (Button) findViewById(R.id.btn_popup_family_commit);
 
-
-
-
-
         btn_popup_family_cancel.setOnClickListener(this);
         btn_popup_family_close.setOnClickListener(this);
         btn_popup_family_commit.setOnClickListener(this);
 
-        familyPopupPresenter.setPopupContent();
+        familyPopupPresenter.onLoadData();
     }
 
     @Override
     public void onBackPressed() {
         setResult(FamilyPopupCodeFlag.RESULT_CANCELED);
-        super.onBackPressed();
+        finish();
     }
 
     @Override

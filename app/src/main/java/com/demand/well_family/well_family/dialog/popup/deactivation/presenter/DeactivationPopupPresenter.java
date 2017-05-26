@@ -7,5 +7,4 @@ package com.demand.well_family.well_family.dialog.popup.deactivation.presenter;
 public interface DeactivationPopupPresenter {
     void onCreate();
 
-    void setDeactivation();
-}
+    void onClickSetDeactivation();}

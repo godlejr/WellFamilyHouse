@@ -42,7 +42,7 @@ public class SelfDiagnosisResultActivity extends Activity implements SelfDiagnos
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fall_diagnosis_result);
+        setContentView(R.layout.activity_falldiagnosisresult);
 
 
         ArrayList<Boolean> answerList = (ArrayList<Boolean>) getIntent().getSerializableExtra("answerList");

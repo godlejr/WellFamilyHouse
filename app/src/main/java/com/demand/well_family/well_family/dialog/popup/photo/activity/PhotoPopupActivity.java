@@ -51,6 +51,7 @@ public class PhotoPopupActivity extends Activity implements PhotoPopupView, View
         String fromActivity = getIntent().getStringExtra("from");
         ArrayList<Photo> photoList = (ArrayList<Photo>) getIntent().getSerializableExtra("photoList");
         int intentFlag = getIntent().getIntExtra("intent_flag", 0);
+
         photoPopupPresenter = new PhotoPopupPresenterImpl(this);
         photoPopupPresenter.onCreate(intentFlag, photoList, fromActivity);
     }
@@ -89,11 +90,6 @@ public class PhotoPopupActivity extends Activity implements PhotoPopupView, View
     @Override
     public void setViewPagerAdapterInit(ArrayList<Photo> photoList) {
         viewPagerAdapter = new ViewPagerAdapter(getLayoutInflater(), photoList, photoPopupPresenter);
-        photoPopupPresenter.setViewPagerAdapter(viewPagerAdapter);
-    }
-
-    @Override
-    public void setViewPagerAdapter(ViewPagerAdapter viewPagerAdapter) {
         photo_viewPager.setAdapter(viewPagerAdapter);
     }
 

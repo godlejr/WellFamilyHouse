@@ -33,7 +33,7 @@ public class DeactivationPopupPresenterImpl implements DeactivationPopupPresente
     }
 
     @Override
-    public void setDeactivation() {
+    public void onClickSetDeactivation() {
         preferenceUtil.removeUserInfo();
 
         deactivationPopupView.showMessage("계정이 비활성화 되었습니다.");

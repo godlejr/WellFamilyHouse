@@ -35,7 +35,7 @@ public class EnvironmentEvaluationActivity extends Activity implements Environme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_danger_evaluation);
+        setContentView(R.layout.activity_evrisk_evaluation);
 
         dangerEvaluationPresenter = new EnvironmentEvaluationPresenterImpl(this);
         dangerEvaluationPresenter.onCreate();

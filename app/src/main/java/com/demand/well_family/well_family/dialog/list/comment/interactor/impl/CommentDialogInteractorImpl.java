@@ -54,7 +54,7 @@ public class CommentDialogInteractorImpl implements CommentDialogInteractor {
     }
 
     @Override
-    public ArrayList<String> setCommentDialogInit(int authorIsMe) {
+    public ArrayList<String> getCommentDialog(int authorIsMe) {
         ArrayList<String> commentDialogList = new ArrayList<>();
         commentDialogList.add("댓글 복사");
 

@@ -49,7 +49,6 @@ public class ViewPagerAdapter extends PagerAdapter implements View.OnTouchListen
         String imageURL = context.getString(R.string.cloud_front_song_stories_images) + photoList.get(position).getName() + "." + photoList.get(position).getExt();
         Glide.with(context).load(imageURL).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_viewPager_childView);
 
-
         int photoListSize = photoList.size();
         String viewPager_position = (position + 1) + " / " + photoListSize;
         tv_viewPager_position.setText(viewPager_position);

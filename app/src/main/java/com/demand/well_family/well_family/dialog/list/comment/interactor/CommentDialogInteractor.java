@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 
 public interface CommentDialogInteractor {
-    ArrayList<String> setCommentDialogInit(int actFlag);
+    ArrayList<String> getCommentDialog(int actFlag);
 
     Report getReport();
 

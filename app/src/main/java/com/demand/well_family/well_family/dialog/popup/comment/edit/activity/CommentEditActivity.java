@@ -38,6 +38,14 @@ public class CommentEditActivity extends Activity implements CommentEditView, Vi
     }
 
     @Override
+    public void init() {
+        String commentContentBeforeEdited = getIntent().getStringExtra("comment_content");
+
+        et_comment_modify = (EditText) findViewById(R.id.et_comment_modify);
+        et_comment_modify.setText(commentContentBeforeEdited);
+    }
+
+    @Override
     public void navigateToBack() {
         finish();
     }
@@ -81,14 +89,6 @@ public class CommentEditActivity extends Activity implements CommentEditView, Vi
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
-
-    @Override
-    public void init() {
-        String commentContentBeforeEdited = getIntent().getStringExtra("comment_content");
-        et_comment_modify = (EditText) findViewById(R.id.et_comment_modify);
-        et_comment_modify.setText(commentContentBeforeEdited);
-    }
-
 
     @Override
     public void onClick(View v) {

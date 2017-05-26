@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public interface CommentDialogPresenter {
     void onCreate(Report report, Comment comment, int authorIsMe);
 
-    void setCommentDialogAdapterInit();
+    void onLoadData();
 
     void setCommentDialogAdapter(CommentDialogAdapter commentDialogAdapter);
 
@@ -21,7 +21,7 @@ public interface CommentDialogPresenter {
 
     void onClickCommentDialog(int commentDialogPosition);
 
-    void onClickCommentModifyOrReport();
+    void setCommentModifyOrReport();
 
     void onActivityResultForEditResultOk(int commentCodeFlag, String editedCommentContent);
 

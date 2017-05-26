@@ -19,8 +19,6 @@ public interface CommentDialogView {
 
     void setCommentCopied(Comment comment);
 
-    void setCommentModifiedOrReported();
-
     void navigateToCommentEditActivity(Comment comment, int actFlag);
 
     void navigateToCommentDeleteActivity(Comment comment, int actFlag);

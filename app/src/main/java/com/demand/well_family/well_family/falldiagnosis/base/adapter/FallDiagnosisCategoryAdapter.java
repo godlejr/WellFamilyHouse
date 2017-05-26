@@ -31,7 +31,7 @@ public class FallDiagnosisCategoryAdapter extends RecyclerView.Adapter<FallDiagn
 
     @Override
     public FallDiagnosisCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_fall_diagnosis_main_category, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_fall_diagnosis_main, parent, false);
         int height = parent.getMeasuredHeight() / 3;
         view.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
 

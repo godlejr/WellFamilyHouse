@@ -19,6 +19,7 @@ import com.demand.well_family.well_family.falldiagnosis.base.presenter.impl.Fall
 import com.demand.well_family.well_family.falldiagnosis.base.view.FallDiagnosisView;
 import com.demand.well_family.well_family.falldiagnosis.environment.activity.EnvironmentEvaluationActivity;
 import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.activity.SelfDiagnosisActivity;
+import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.base.activity.PhysicalEvaluationActivity;
 
 import java.util.ArrayList;
 
@@ -40,7 +41,7 @@ public class FallDiagnosisActivity extends Activity implements FallDiagnosisView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fall_diagnosis_main);
+        setContentView(R.layout.activity_falldiagnosis);
 
         fallDiagnosisPresenter = new FallDiagnosisPresenterImpl(this);
         fallDiagnosisPresenter.onCreate();
@@ -72,8 +73,8 @@ public class FallDiagnosisActivity extends Activity implements FallDiagnosisView
 
     @Override
     public void navigateToPhysicalEvaluationActivity(FallDiagnosisCategory fallDiagnosisCategory) {
-//        Intent intent = new Intent(FallDiagnosisActivity.this, );
-//        startActivity(intent);
+        Intent intent = new Intent(FallDiagnosisActivity.this, PhysicalEvaluationActivity.class);
+        startActivity(intent);
     }
 
     @Override

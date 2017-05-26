@@ -22,8 +22,6 @@ public interface PhotoPopupView {
 
     void setViewPagerAdapterInit(ArrayList<Photo> photoList);
 
-    void setViewPagerAdapter(ViewPagerAdapter viewPagerAdapter);
-
     void setViewPagerIndicator(String position);
 
     void showPopupTitleBar();

@@ -16,8 +16,6 @@ public interface PhotoPopupPresenter {
 
     void setViewPagerAdapterInit( int currentPhotoPosition);
 
-    void setViewPagerAdapter(ViewPagerAdapter viewPagerAdapter);
-
     String getImageURL(int position);
 
     void setViewPagerIndicator(int position);

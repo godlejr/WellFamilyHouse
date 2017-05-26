@@ -31,9 +31,17 @@ public class CommentDeleteActivity extends Activity implements CommentDeleteView
         setContentView(R.layout.activity_comment_delete);
         getWindow().setLayout(android.view.WindowManager.LayoutParams.WRAP_CONTENT, android.view.WindowManager.LayoutParams.WRAP_CONTENT);
 
-
         commentDeletePresenter = new CommentDeletePresenterImpl(this);
         commentDeletePresenter.onCreate();
+    }
+
+    @Override
+    public void init() {
+        tv_comment_delete_confirm = (TextView) findViewById(R.id.tv_comment_delete_confirm);
+        tv_comment_delete_cancel = (TextView) findViewById(R.id.tv_comment_delete_cancel);
+
+        tv_comment_delete_cancel.setOnClickListener(this);
+        tv_comment_delete_confirm.setOnClickListener(this);
     }
 
     @Override
@@ -61,15 +69,6 @@ public class CommentDeleteActivity extends Activity implements CommentDeleteView
     @Override
     public void showMessage(String message) {
         Toast.makeText(CommentDeleteActivity.this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void init() {
-        tv_comment_delete_confirm = (TextView) findViewById(R.id.tv_comment_delete_confirm);
-        tv_comment_delete_cancel = (TextView) findViewById(R.id.tv_comment_delete_cancel);
-
-        tv_comment_delete_cancel.setOnClickListener(this);
-        tv_comment_delete_confirm.setOnClickListener(this);
     }
 
     @Override

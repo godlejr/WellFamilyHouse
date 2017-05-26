@@ -2,7 +2,6 @@ package com.demand.well_family.well_family.dialog.list.songstory.presenter.impl;
 
 import android.content.Context;
 
-import com.demand.well_family.well_family.dialog.list.songstory.adapter.SongStoryDialogAdapter;
 import com.demand.well_family.well_family.dialog.list.songstory.flag.SongStoryDialogFlag;
 import com.demand.well_family.well_family.dialog.list.songstory.interactor.SongStoryDialogInteractor;
 import com.demand.well_family.well_family.dialog.list.songstory.interactor.impl.SongStoryDialogInteractorImpl;
@@ -45,16 +44,10 @@ public class SongStoryDialogPresenterImpl implements SongStoryDialogPresenter {
     }
 
     @Override
-    public void setSongStoryDialogAdapterInit() {
+    public void onLoadData() {
         ArrayList<String> songStoryDialogList = songStoryDialogInteractor.getSongStoryDialogList();
         songStoryDialogView.setSongStoryDialogAdapterInit(songStoryDialogList);
     }
-
-    @Override
-    public void setSongStoryDialogAdapter(SongStoryDialogAdapter songStoryDialogAdapter) {
-        songStoryDialogView.setSongStoryDialogAdapter(songStoryDialogAdapter);
-    }
-
 
     @Override
     public void onActivityResultForEditResultOk(String songStoryContent, String songStoryLocation) {
@@ -92,20 +85,6 @@ public class SongStoryDialogPresenterImpl implements SongStoryDialogPresenter {
     }
 
     @Override
-    public void onNetworkError(APIErrorUtil apiErrorUtil) {
-        if (apiErrorUtil == null) {
-            songStoryDialogView.showMessage("네트워크 불안정합니다. 다시 시도하세요.");
-        } else {
-            songStoryDialogView.showMessage(apiErrorUtil.message());
-        }
-    }
-
-    @Override
-    public void setSongStoryDialogAction(int dialogPosition) {
-        songStoryDialogView.setSongStoryDialogAction(dialogPosition);
-    }
-
-    @Override
     public void onClickSongStoryDialog(int dialogPosition) {
         SongStory songStory = songStoryDialogInteractor.getSongStory();
         Song song = songStoryDialogInteractor.getSong();
@@ -140,8 +119,15 @@ public class SongStoryDialogPresenterImpl implements SongStoryDialogPresenter {
                 songStoryDialogView.navigateToBack(songStory);
             }
         }
-
     }
 
+    @Override
+    public void onNetworkError(APIErrorUtil apiErrorUtil) {
+        if (apiErrorUtil == null) {
+            songStoryDialogView.showMessage("네트워크 불안정합니다. 다시 시도하세요.");
+        } else {
+            songStoryDialogView.showMessage(apiErrorUtil.message());
+        }
+    }
 
 }

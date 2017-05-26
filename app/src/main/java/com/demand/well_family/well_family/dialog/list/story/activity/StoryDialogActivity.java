@@ -67,16 +67,12 @@ public class StoryDialogActivity extends Activity implements StoryDialogView {
     @Override
     public void init() {
         rv_popup_comment = (RecyclerView) findViewById(R.id.rv_popup_comment);
+        storyDialogPresenter.onLoadData();
     }
 
     @Override
     public void setStoryDialogAdapterInit(ArrayList<String> storyDialogList) {
         storyDialogAdapter = new StoryDialogAdapter(this, storyDialogList, R.layout.item_textview, storyDialogPresenter);
-        storyDialogPresenter.setStoryDialogAdapter(storyDialogAdapter);
-    }
-
-    @Override
-    public void setStoryDialogAdapter(StoryDialogAdapter storyDialogAdapter) {
         rv_popup_comment.setAdapter(storyDialogAdapter);
         rv_popup_comment.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
@@ -84,11 +80,6 @@ public class StoryDialogActivity extends Activity implements StoryDialogView {
     @Override
     public void setStoryContentCopied() {
         storyDialogPresenter.setStoryContentCopied();
-    }
-
-    @Override
-    public void setStoryDialogAction(int dialogPosition) {
-        storyDialogPresenter.setStoryDialogAction(dialogPosition);
     }
 
     @Override

@@ -12,7 +12,7 @@ import com.demand.well_family.well_family.util.APIErrorUtil;
 public interface FamilyPopupPresenter {
     void onCreate(Family family, UserInfoForFamilyJoin userInfoForFamilyJoin, boolean deleteFlag);
 
-    void setPopupContent();
+    void onLoadData();
 
     void setPopupButtonBackground(int resId);
 

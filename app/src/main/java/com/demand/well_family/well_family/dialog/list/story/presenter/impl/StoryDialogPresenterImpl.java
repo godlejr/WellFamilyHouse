@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 
-import com.demand.well_family.well_family.dialog.list.story.adpater.StoryDialogAdapter;
 import com.demand.well_family.well_family.dialog.list.story.flag.StoryDialogFlag;
 import com.demand.well_family.well_family.dialog.list.story.interactor.StoryDialogInteractor;
 import com.demand.well_family.well_family.dialog.list.story.interactor.impl.StoryDialogInteractorImpl;
@@ -38,17 +37,16 @@ public class StoryDialogPresenterImpl implements StoryDialogPresenter {
 
     @Override
     public void onCreate(Story story, Report report) {
-        storyDialogView.init();
-
         User user = preferenceUtil.getUserInfo();
         storyDialogInteractor.setUser(user);
         storyDialogInteractor.setStory(story);
         storyDialogInteractor.setReport(report);
-        setStoryDialogAdapterInit();
+
+        storyDialogView.init();
     }
 
     @Override
-    public void setStoryDialogAdapterInit() {
+    public void onLoadData() {
         ArrayList<String> storyDialogList = storyDialogInteractor.getStoryDialogList();
         storyDialogView.setStoryDialogAdapterInit(storyDialogList);
     }
@@ -74,11 +72,6 @@ public class StoryDialogPresenterImpl implements StoryDialogPresenter {
     }
 
     @Override
-    public void setStoryDialogAdapter(StoryDialogAdapter storyDialogAdapter) {
-        storyDialogView.setStoryDialogAdapter(storyDialogAdapter);
-    }
-
-    @Override
     public void onActivityResultForModifyResultOk(String editedStoryContent) {
         Story story = storyDialogInteractor.getStory();
         story.setContent(editedStoryContent);
@@ -90,8 +83,7 @@ public class StoryDialogPresenterImpl implements StoryDialogPresenter {
         if (dialogPosition == StoryDialogFlag.COPY) {
             storyDialogView.setStoryContentCopied();
         }
-
-        storyDialogView.setStoryDialogAction(dialogPosition);
+        setStoryDialogAction(dialogPosition);
     }
 
     @Override
@@ -128,6 +120,12 @@ public class StoryDialogPresenterImpl implements StoryDialogPresenter {
     }
 
     @Override
+    public void onBackPressed() {
+        Story story  = storyDialogInteractor.getStory();
+        storyDialogView.navigateToBackForResultOk(story);
+    }
+
+    @Override
     public void onNetworkError(APIErrorUtil apiErrorUtil) {
         if (apiErrorUtil == null) {
             storyDialogView.showMessage("네트워크 불안정합니다. 다시 시도하세요.");
@@ -136,9 +134,4 @@ public class StoryDialogPresenterImpl implements StoryDialogPresenter {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        Story story  = storyDialogInteractor.getStory();
-        storyDialogView.navigateToBackForResultOk(story);
-    }
 }

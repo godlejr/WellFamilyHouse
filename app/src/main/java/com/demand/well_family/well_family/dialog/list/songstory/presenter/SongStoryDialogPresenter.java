@@ -1,6 +1,5 @@
 package com.demand.well_family.well_family.dialog.list.songstory.presenter;
 
-import com.demand.well_family.well_family.dialog.list.songstory.adapter.SongStoryDialogAdapter;
 import com.demand.well_family.well_family.dto.Report;
 import com.demand.well_family.well_family.dto.Song;
 import com.demand.well_family.well_family.dto.SongStory;
@@ -13,9 +12,7 @@ import com.demand.well_family.well_family.util.APIErrorUtil;
 public interface SongStoryDialogPresenter {
     void onCreate(SongStory songStory, Song song, Report report);
 
-    void setSongStoryDialogAdapterInit();
-
-    void setSongStoryDialogAdapter(SongStoryDialogAdapter songStoryDialogAdapter);
+    void onLoadData();
 
     void onActivityResultForEditResultOk(String songStoryContent, String songStoryLocation);
 
@@ -26,8 +23,6 @@ public interface SongStoryDialogPresenter {
     void onClickCopySongStory();
 
     void onClickDeleteSongStory();
-
-    void setSongStoryDialogAction(int dialogPosition);
 
     void onClickSongStoryDialog(int dialogPosition);
 

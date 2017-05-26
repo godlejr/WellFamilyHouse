@@ -1,9 +1,7 @@
 package com.demand.well_family.well_family.dialog.list.story.presenter;
 
-import com.demand.well_family.well_family.dialog.list.story.adpater.StoryDialogAdapter;
 import com.demand.well_family.well_family.dto.Report;
 import com.demand.well_family.well_family.dto.Story;
-import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.util.APIErrorUtil;
 
 /**
@@ -13,9 +11,7 @@ import com.demand.well_family.well_family.util.APIErrorUtil;
 public interface StoryDialogPresenter {
     void onCreate(Story story, Report report);
 
-    void setStoryDialogAdapterInit();
-
-    void setStoryDialogAdapter(StoryDialogAdapter storyDialogAdapter);
+    void onLoadData();
 
     void setStoryContentCopied();
 

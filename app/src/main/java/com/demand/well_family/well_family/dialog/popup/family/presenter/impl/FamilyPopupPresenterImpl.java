@@ -33,7 +33,6 @@ public class FamilyPopupPresenterImpl implements FamilyPopupPresenter {
     @Override
     public void onCreate(Family family, UserInfoForFamilyJoin userInfoForFamilyJoin, boolean deleteFlag) {
         User user = preferenceUtil.getUserInfo();
-
         familyPopupInteractor.setUser(user);
         familyPopupInteractor.setFamily(family);
         familyPopupInteractor.setUserInfoForFamilyJoin(userInfoForFamilyJoin);
@@ -44,7 +43,7 @@ public class FamilyPopupPresenterImpl implements FamilyPopupPresenter {
     }
 
     @Override
-    public void setPopupContent() {
+    public void onLoadData() {
         Family family = familyPopupInteractor.getFamily();
         UserInfoForFamilyJoin userInfoForFamilyJoin = familyPopupInteractor.getUserInfoForFamilyJoin();
         User user = familyPopupInteractor.getUser();
@@ -179,7 +178,6 @@ public class FamilyPopupPresenterImpl implements FamilyPopupPresenter {
         } else {
             familyPopupView.navigateToBack();
         }
-
     }
 
 }

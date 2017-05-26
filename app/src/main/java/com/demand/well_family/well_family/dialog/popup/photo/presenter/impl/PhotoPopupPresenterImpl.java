@@ -58,14 +58,7 @@ public class PhotoPopupPresenterImpl implements PhotoPopupPresenter {
     }
 
     @Override
-    public void setViewPagerAdapter(ViewPagerAdapter viewPagerAdapter) {
-        photoPopupView.setViewPagerAdapter(viewPagerAdapter);
-    }
-
-    @Override
     public String getImageURL(int position) {
-        String fromActivity = photoPopupInteractor.getFromActivity();
-
         int intentFlag = photoPopupInteractor.getIntentFlag();
         ArrayList<Photo> photoList = photoPopupInteractor.getPhotoList();
         String cloudFront = null;
@@ -81,23 +74,6 @@ public class PhotoPopupPresenterImpl implements PhotoPopupPresenter {
         if (intentFlag == PhotoPopupINTENTFlag.PHOTOSACTIVITY || intentFlag == PhotoPopupINTENTFlag.STORYDETAILACTIVITY) {
             cloudFront = photoPopupView.getCloudFrontStoryImages();
         }
-
-        ////////
-        if (fromActivity != null) {
-            switch (fromActivity) {
-                case "FamilyActivity":
-                    cloudFront = photoPopupView.getCloudFrontFamilyAvatar();
-                    break;
-                case "UserActivity":
-                    cloudFront = photoPopupView.getCloudFrontUserAvatar();
-                    break;
-                case "PhotosActivity":
-                case "StoryDetailActivity":
-                    cloudFront = photoPopupView.getCloudFrontStoryImages();
-                    break;
-            }
-        }
-        ////////
 
         photoPopupInteractor.setCloudFront(cloudFront);
         String imageURL = cloudFront + photoList.get(position).getName() + "." + photoList.get(position).getExt();
@@ -143,8 +119,6 @@ public class PhotoPopupPresenterImpl implements PhotoPopupPresenter {
 
     @Override
     public void setImage(String avatar) {
-        String fromActivity = photoPopupInteractor.getFromActivity();
-
         int intentFlag = photoPopupInteractor.getIntentFlag();
         String cloudFront = null;
 
@@ -159,23 +133,6 @@ public class PhotoPopupPresenterImpl implements PhotoPopupPresenter {
         if (intentFlag == PhotoPopupINTENTFlag.PHOTOSACTIVITY || intentFlag == PhotoPopupINTENTFlag.STORYDETAILACTIVITY) {
             cloudFront = photoPopupView.getCloudFrontStoryImages();
         }
-
-        ////////
-        if (fromActivity != null) {
-            switch (fromActivity) {
-                case "FamilyActivity":
-                    cloudFront = photoPopupView.getCloudFrontFamilyAvatar();
-                    break;
-                case "UserActivity":
-                    cloudFront = photoPopupView.getCloudFrontUserAvatar();
-                    break;
-                case "PhotosActivity":
-                case "StoryDetailActivity":
-                    cloudFront = photoPopupView.getCloudFrontStoryImages();
-                    break;
-            }
-        }
-        ////////
 
         if (avatar != null) {
             photoPopupView.showPhoto();
