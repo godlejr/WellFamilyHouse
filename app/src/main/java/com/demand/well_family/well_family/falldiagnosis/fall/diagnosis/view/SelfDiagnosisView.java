@@ -20,8 +20,8 @@ public interface SelfDiagnosisView {
 
     void showMessage(String message);
 
-    void setNextView(int page);
-    void setPreviousView(int page);
+    void setNextView(int position);
+    void setPreviousView(int position);
 
     void navigateToResultActivity(FallDiagnosisCategory fallDiagnosisCategory, ArrayList<Boolean> answerList);
 

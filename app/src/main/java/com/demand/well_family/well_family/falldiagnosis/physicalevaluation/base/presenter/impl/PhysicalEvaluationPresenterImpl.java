@@ -3,6 +3,8 @@ package com.demand.well_family.well_family.falldiagnosis.physicalevaluation.base
 import android.content.Context;
 import android.view.View;
 
+import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
+import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.base.interactor.PhysicalEvaluationInteractor;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.base.interactor.impl.PhysicalEvaluationInteractorImpl;
@@ -29,7 +31,8 @@ public class PhysicalEvaluationPresenterImpl implements PhysicalEvaluationPresen
     }
 
     @Override
-    public void onCreate() {
+    public void onCreate(FallDiagnosisCategory fallDiagnosisCategory) {
+        physicalEvaluationInteractor.setFallDiagnosisCategory(fallDiagnosisCategory);
         physicalEvaluationView.init();
 
         View decorView = physicalEvaluationView.getDecorView();
@@ -53,13 +56,13 @@ public class PhysicalEvaluationPresenterImpl implements PhysicalEvaluationPresen
     }
 
     @Override
-    public void onSuccessGetPhysicalEvaluationCategories(ArrayList<String> physicalEvaluationList) {
+    public void onSuccessGetPhysicalEvaluationCategories(ArrayList<FallDiagnosisContentCategory> physicalEvaluationList) {
         physicalEvaluationView.setPhysicalEvaluationAdapterInit(physicalEvaluationList);
     }
 
     @Override
     public void onClickStart() {
-        physicalEvaluationView.navigateToCreatePhysicalEvaluationActivity();
+        physicalEvaluationView.navigateToCreatePhysicalEvaluationActivity(physicalEvaluationInteractor.getFallDiagnosisCategory());
     }
 
 }

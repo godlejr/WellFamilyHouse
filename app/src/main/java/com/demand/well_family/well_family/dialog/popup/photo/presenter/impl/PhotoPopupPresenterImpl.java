@@ -35,7 +35,6 @@ public class PhotoPopupPresenterImpl implements PhotoPopupPresenter {
 
     @Override
     public void onCreate(int intentFlag, ArrayList<Photo> photoList, String fromActivity) {
-        photoPopupInteractor.setFromActivity(fromActivity);
         photoPopupInteractor.setIntentFlag(intentFlag);
         photoPopupInteractor.setPhotoList(photoList);
 

@@ -2,6 +2,9 @@ package com.demand.well_family.well_family.falldiagnosis.physicalevaluation.base
 
 import android.view.View;
 
+import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
+import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
+
 import java.util.ArrayList;
 
 /**
@@ -19,7 +22,7 @@ public interface PhysicalEvaluationView {
 
     void showMessage(String message);
 
-    void setPhysicalEvaluationAdapterInit(ArrayList<String> physicalEvaluationList);
+    void setPhysicalEvaluationAdapterInit(ArrayList<FallDiagnosisContentCategory> physicalEvaluationList);
 
-    void navigateToCreatePhysicalEvaluationActivity();
+    void navigateToCreatePhysicalEvaluationActivity(FallDiagnosisCategory fallDiagnosisCategory);
 }

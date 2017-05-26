@@ -8,7 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.base.presenter.PhysicalEvaluationPresenter;
 
 import java.util.ArrayList;
@@ -19,10 +22,10 @@ import java.util.ArrayList;
 
 public class PhysicalEvaluationAdapter extends RecyclerView.Adapter<PhysicalEvaluationAdapter.PhysicalEvaluationViewHolder> {
     private Context context;
-    private ArrayList<String> physicalEvaluationCategoryList;
+    private ArrayList<FallDiagnosisContentCategory> physicalEvaluationCategoryList;
     private PhysicalEvaluationPresenter physicalEvaluationPresenter;
 
-    public PhysicalEvaluationAdapter(Context context, ArrayList<String> physicalEvaluationCategoryList, PhysicalEvaluationPresenter physicalEvaluationPresenter) {
+    public PhysicalEvaluationAdapter(Context context, ArrayList<FallDiagnosisContentCategory> physicalEvaluationCategoryList, PhysicalEvaluationPresenter physicalEvaluationPresenter) {
         this.context = context;
         this.physicalEvaluationCategoryList = physicalEvaluationCategoryList;
         this.physicalEvaluationPresenter = physicalEvaluationPresenter;
@@ -30,25 +33,20 @@ public class PhysicalEvaluationAdapter extends RecyclerView.Adapter<PhysicalEval
 
     @Override
     public PhysicalEvaluationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        View view = LayoutInflater.from(context).inflate(R.layout.item_physicalevaluation, parent, false);
-//        int height = parent.getMeasuredHeight() / 3;
-//        RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams();
-//        layoutParams.setMargins(10, 10, 10, 10);
-//        view.setLayoutParams(layoutParams);
-
         PhysicalEvaluationViewHolder viewHolder = new PhysicalEvaluationViewHolder(LayoutInflater.from(context).inflate(R.layout.item_physicalevaluation, parent, false));
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(PhysicalEvaluationViewHolder holder, int position) {
-//        Glide.with(context).load(context.getString("cloud_front_") + physicalEvaluationCategoryList.get(position)).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_physicalevaluation_main);
+        FallDiagnosisContentCategory fallDiagnosisContentCategory = physicalEvaluationCategoryList.get(position);
+        holder.tv_physicalevaluation_content.setText(fallDiagnosisContentCategory.getContent());
+        Glide.with(context).load(context.getString(R.string.cloud_front_self_diagnosis) + fallDiagnosisContentCategory.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_physicalevaluation_img);
     }
 
     @Override
     public int getItemCount() {
-//        return physicalEvaluationCategoryList.size();
-        return 3;
+        return physicalEvaluationCategoryList.size();
     }
 
     public class PhysicalEvaluationViewHolder extends RecyclerView.ViewHolder {

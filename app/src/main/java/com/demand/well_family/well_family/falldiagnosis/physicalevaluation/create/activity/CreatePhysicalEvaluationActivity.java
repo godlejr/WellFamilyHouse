@@ -3,14 +3,19 @@ package com.demand.well_family.well_family.falldiagnosis.physicalevaluation.crea
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
 
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.base.view.PhysicalEvaluationView;
+import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
+import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
+import com.demand.well_family.well_family.dto.PhysicalEvaluationCategory;
+import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.create.adapter.CreatePhysicalEvaluationAdapter;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.create.presenter.CreatePhysicalEvaluationPresenter;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.create.presenter.impl.CreatePhysicalEvaluationPresenterImpl;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.create.view.CreatePhysicalEvaluationView;
@@ -29,19 +34,33 @@ public class CreatePhysicalEvaluationActivity extends Activity implements Create
     private View decorView;
     private ImageView toolbarBack;
 
+    private ImageView iv_createphysicalevaluation_next;
+    private ImageView iv_createphysicalevaluation_start;
+
+    private ViewPager vp_physicalevaluation;
+    private CreatePhysicalEvaluationAdapter createPhysicalEvaluationAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_createphysicalevaluation);
 
+        FallDiagnosisCategory fallDiagnosisCategory = new FallDiagnosisCategory();
+        fallDiagnosisCategory.setId(getIntent().getIntExtra("category_id", 0));
+
         createPhysicalEvaluationPresenter = new CreatePhysicalEvaluationPresenterImpl(this);
-        createPhysicalEvaluationPresenter.onCreate();
+        createPhysicalEvaluationPresenter.onCreate(fallDiagnosisCategory);
     }
 
     @Override
     public void init() {
+        vp_physicalevaluation = (ViewPager)findViewById(R.id.vp_physicalevaluation);
+        iv_createphysicalevaluation_start = (ImageView)findViewById(R.id.iv_createphysicalevaluation_start);
+        iv_createphysicalevaluation_next = (ImageView)findViewById(R.id.iv_createphysicalevaluation_next);
+        iv_createphysicalevaluation_start.setOnClickListener(this);
+        iv_createphysicalevaluation_next.setOnClickListener(this);
 
+        createPhysicalEvaluationPresenter.onLoadData();
     }
 
     @Override
@@ -59,14 +78,11 @@ public class CreatePhysicalEvaluationActivity extends Activity implements Create
 
 
     @Override
-
-
     public void setToolbar(View decorView) {
         toolbar = (Toolbar) decorView.findViewById(R.id.toolBar);
         toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         toolbarBack = (ImageView) toolbar.findViewById(R.id.toolbar_back);
         toolbarBack.setOnClickListener(this);
-
     }
 
     @Override
@@ -74,6 +90,16 @@ public class CreatePhysicalEvaluationActivity extends Activity implements Create
         Toast.makeText(CreatePhysicalEvaluationActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void setCreatePhysicalEvaluationAdapter(ArrayList<PhysicalEvaluationCategory> createPhysicalEvaluationList) {
+        createPhysicalEvaluationAdapter = new CreatePhysicalEvaluationAdapter(CreatePhysicalEvaluationActivity.this.getLayoutInflater(), createPhysicalEvaluationList, createPhysicalEvaluationPresenter);
+        vp_physicalevaluation.setAdapter(createPhysicalEvaluationAdapter);
+    }
+
+    @Override
+    public void setNextView(int position) {
+        vp_physicalevaluation.setCurrentItem(position + 1);
+    }
 
     @Override
     public void onClick(View v) {
@@ -82,6 +108,18 @@ public class CreatePhysicalEvaluationActivity extends Activity implements Create
                 finish();
                 break;
 
+            case R.id.iv_createphysicalevaluation_start:
+
+                break;
+
+            case R.id.iv_createphysicalevaluation_next:
+                int position = vp_physicalevaluation.getCurrentItem();
+                int count = createPhysicalEvaluationAdapter.getCount();
+
+                createPhysicalEvaluationPresenter.onClickNext(position, count);
+                break;
         }
     }
+
+
 }

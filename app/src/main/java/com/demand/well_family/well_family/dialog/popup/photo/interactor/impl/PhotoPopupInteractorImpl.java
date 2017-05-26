@@ -17,8 +17,9 @@ public class PhotoPopupInteractorImpl implements PhotoPopupInteractor {
 
     private ArrayList<Photo> photoList;
     private int intentFlag;
+
     private String cloudFront;
-    private String fromActivity;
+
 
     public PhotoPopupInteractorImpl(PhotoPopupPresenter photoPopupPresenter) {
         this.photoPopupPresenter = photoPopupPresenter;
@@ -54,15 +55,7 @@ public class PhotoPopupInteractorImpl implements PhotoPopupInteractor {
         this.cloudFront = cloudFront;
     }
 
-    @Override
-    public String getFromActivity() {
-        return this.fromActivity;
-    }
 
-    @Override
-    public void setFromActivity(String fromActivity) {
-        this.fromActivity = fromActivity;
-    }
 
 
 

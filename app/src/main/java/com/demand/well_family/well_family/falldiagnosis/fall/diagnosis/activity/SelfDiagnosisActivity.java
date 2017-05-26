@@ -82,13 +82,13 @@ public class SelfDiagnosisActivity extends Activity implements SelfDiagnosisView
     }
 
     @Override
-    public void setNextView(int page) {
-        viewPager_diagnosisCategories.setCurrentItem(page);
+    public void setNextView(int position) {
+        viewPager_diagnosisCategories.setCurrentItem(position);
     }
 
     @Override
-    public void setPreviousView(int page) {
-        viewPager_diagnosisCategories.setCurrentItem(page);
+    public void setPreviousView(int position) {
+        viewPager_diagnosisCategories.setCurrentItem(position);
     }
 
     @Override

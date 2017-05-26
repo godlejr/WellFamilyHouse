@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
+import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.base.adapter.PhysicalEvaluationAdapter;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.base.presenter.PhysicalEvaluationPresenter;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.base.presenter.impl.PhysicalEvaluationPresenterImpl;
@@ -43,14 +45,17 @@ public class PhysicalEvaluationActivity extends Activity implements PhysicalEval
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_physicalevaluation);
 
+        FallDiagnosisCategory fallDiagnosisCategory = new FallDiagnosisCategory();
+        fallDiagnosisCategory.setId(getIntent().getIntExtra("category_id", 0));
+
         physicalEvaluationPresenter = new PhysicalEvaluationPresenterImpl(this);
-        physicalEvaluationPresenter.onCreate();
+        physicalEvaluationPresenter.onCreate(fallDiagnosisCategory);
     }
 
     @Override
     public void init() {
-        rv_physicalevaluation = (RecyclerView)findViewById(R.id.rv_physicalevaluation);
-        btn_physicalevaluation_start = (Button)findViewById(R.id.btn_physicalevaluation_start);
+        rv_physicalevaluation = (RecyclerView) findViewById(R.id.rv_physicalevaluation);
+        btn_physicalevaluation_start = (Button) findViewById(R.id.btn_physicalevaluation_start);
         physicalEvaluationPresenter.onLoadData();
         btn_physicalevaluation_start.setOnClickListener(this);
     }
@@ -83,21 +88,23 @@ public class PhysicalEvaluationActivity extends Activity implements PhysicalEval
     }
 
     @Override
-    public void setPhysicalEvaluationAdapterInit(ArrayList<String> physicalEvaluationList) {
+    public void setPhysicalEvaluationAdapterInit(ArrayList<FallDiagnosisContentCategory> physicalEvaluationList) {
         rv_physicalevaluation.setLayoutManager(new LinearLayoutManager(PhysicalEvaluationActivity.this, LinearLayoutManager.VERTICAL, false));
-        physicalEvaluationAdapter = new PhysicalEvaluationAdapter(PhysicalEvaluationActivity.this, null, physicalEvaluationPresenter);
+        physicalEvaluationAdapter = new PhysicalEvaluationAdapter(PhysicalEvaluationActivity.this, physicalEvaluationList, physicalEvaluationPresenter);
         rv_physicalevaluation.setAdapter(physicalEvaluationAdapter);
     }
 
     @Override
-    public void navigateToCreatePhysicalEvaluationActivity() {
+    public void navigateToCreatePhysicalEvaluationActivity(FallDiagnosisCategory fallDiagnosisCategory) {
+        int categoryId = fallDiagnosisCategory.getId();
         Intent intent = new Intent(PhysicalEvaluationActivity.this, CreatePhysicalEvaluationActivity.class);
+        intent.putExtra("category_id", categoryId);
         startActivity(intent);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.toolbar_back:
                 finish();
                 break;

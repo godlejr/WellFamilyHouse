@@ -2,6 +2,7 @@ package com.demand.well_family.well_family.repository;
 
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
+import com.demand.well_family.well_family.dto.PhysicalEvaluationCategory;
 
 import java.util.ArrayList;
 
@@ -19,4 +20,7 @@ public interface FallDiagnosisServerConnection {
 
     @GET("categories/{fall_diagnosis_category_id}")
     Call<ArrayList<FallDiagnosisContentCategory>> getDiagnosisCategories(@Path("fall_diagnosis_category_id") int fall_diagnosis_category_id);
+
+    @GET("categories/{fall_diagnosis_category_id}/physicalEvaluationCategories")
+    Call<ArrayList<PhysicalEvaluationCategory>> getPhysicalEvaluationCategories(@Path("fall_diagnosis_category_id") int fall_diagnosis_category_id);
 }

@@ -50,7 +50,6 @@ public class FallDiagnosisActivity extends Activity implements FallDiagnosisView
     @Override
     public void init() {
         rv_diagnosis_category = (RecyclerView)findViewById(R.id.rv_falldiagnosismain);
-
         fallDiagnosisPresenter.getDiagnosisCategory();
     }
 
@@ -74,6 +73,7 @@ public class FallDiagnosisActivity extends Activity implements FallDiagnosisView
     @Override
     public void navigateToPhysicalEvaluationActivity(FallDiagnosisCategory fallDiagnosisCategory) {
         Intent intent = new Intent(FallDiagnosisActivity.this, PhysicalEvaluationActivity.class);
+        intent.putExtra("category_id", fallDiagnosisCategory.getId());
         startActivity(intent);
     }
 

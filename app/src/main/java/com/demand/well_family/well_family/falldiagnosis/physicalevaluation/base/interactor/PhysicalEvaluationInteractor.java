@@ -1,5 +1,6 @@
 package com.demand.well_family.well_family.falldiagnosis.physicalevaluation.base.interactor;
 
+import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.dto.User;
 
 /**
@@ -8,4 +9,8 @@ import com.demand.well_family.well_family.dto.User;
 
 public interface PhysicalEvaluationInteractor {
     void getPhysicalEvaluationCategories(User user);
+
+    FallDiagnosisCategory getFallDiagnosisCategory();
+
+    void setFallDiagnosisCategory(FallDiagnosisCategory fallDiagnosisCategory);
 }

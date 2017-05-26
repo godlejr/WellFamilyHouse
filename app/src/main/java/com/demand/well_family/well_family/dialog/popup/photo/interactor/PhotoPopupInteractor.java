@@ -23,8 +23,5 @@ public interface PhotoPopupInteractor {
 
     void setCloudFront(String cloudFront);
 
-    String getFromActivity();
-
-    void setFromActivity(String fromActivity);
 
 }
