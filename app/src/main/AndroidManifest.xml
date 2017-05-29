@@ -135,6 +135,7 @@
         <activity android:name=".falldiagnosis.environment.activity.EnvironmentEvaluationActivity" />
         <activity android:name=".falldiagnosis.physicalevaluation.base.activity.PhysicalEvaluationActivity"/>
         <activity android:name=".falldiagnosis.physicalevaluation.create.activity.CreatePhysicalEvaluationActivity"/>
+        <activity android:name=".falldiagnosis.physicalevaluation.result.activity.PhysicalEvaluationResultActivity"/>
 
         <activity
             android:name=".market.MarketMainActivity"

@@ -28,16 +28,16 @@
                 android:id="@+id/tv_total_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/tv_score"
-                android:layout_alignBottom="@+id/tv_score"
-                android:layout_toRightOf="@+id/tv_score"
+                android:layout_alignBaseline="@+id/tv_physicalevaluation_score_total"
+                android:layout_alignBottom="@+id/tv_physicalevaluation_score_total"
+                android:layout_toRightOf="@+id/tv_physicalevaluation_score_total"
                 android:text="/ 11"
                 android:textColor="@color/green"
                 android:textSize="24sp"
                 android:textStyle="italic" />
 
             <TextView
-                android:id="@+id/tv_score"
+                android:id="@+id/tv_physicalevaluation_score_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -55,7 +55,7 @@
                 android:id="@+id/tv_result"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_score"
+                android:layout_below="@+id/tv_physicalevaluation_score_total"
                 android:layout_centerHorizontal="true"
                 android:text="SSSSS" />
 

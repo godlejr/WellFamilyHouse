@@ -3,34 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
     android:layout_marginTop="10dp"
     android:background="@drawable/round_corner_skyblue_r10"
-    android:orientation="horizontal">
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
     <ImageView
         android:id="@+id/iv_physicalevaluation_img"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="center"
         android:layout_margin="15dp"
         android:scaleType="fitXY" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="15dp"
-        >
+        android:layout_gravity="center">
 
         <TextView
             android:id="@+id/tv_physicalevaluation_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center_vertical"
             android:lineSpacingMultiplier="1.2"
-            android:text="khkjkhjhjhj" />
+            android:text="khkjkhjhjhj\nkhkjkhjhjhj\nkhkjkhjhjhj" />
     </ScrollView>
 </LinearLayout>

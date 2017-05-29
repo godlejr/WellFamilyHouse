@@ -58,7 +58,7 @@ public class SelfDiagnosisResultActivity extends Activity implements SelfDiagnos
     public void init() {
         pb_score = (ProgressBar) findViewById(R.id.pb_score);
         tv_total_count = (TextView) findViewById(R.id.tv_total_count);
-        tv_score = (TextView) findViewById(R.id.tv_score);
+        tv_score = (TextView) findViewById(R.id.tv_physicalevaluation_score_total);
         tv_result = (TextView) findViewById(R.id.tv_result);
         btn_send_result = (Button) findViewById(R.id.btn_send_result);
 
