@@ -1,9 +1,13 @@
 package com.demand.well_family.well_family.falldiagnosis.physicalevaluation.create.presenter.impl;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
+import com.demand.well_family.well_family.dto.PhysicalEvaluation;
 import com.demand.well_family.well_family.dto.PhysicalEvaluationCategory;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.create.interactor.CreatePhysicalEvaluationInteractor;
@@ -23,11 +27,15 @@ public class CreatePhysicalEvaluationPresenterImpl implements CreatePhysicalEval
     private CreatePhysicalEvaluationInteractor createPhysicalEvaluationInteractor;
     private CreatePhysicalEvaluationView createPhysicalEvaluationView;
     private PreferenceUtil preferenceUtil;
+    private CountDownHandler countDownHandler;
+    private TimerHandler timerHandler;
 
     public CreatePhysicalEvaluationPresenterImpl(Context context) {
         this.createPhysicalEvaluationInteractor = new CreatePhysicalEvaluationInteractorImpl(this);
-        this.createPhysicalEvaluationView = (CreatePhysicalEvaluationView)context;
+        this.createPhysicalEvaluationView = (CreatePhysicalEvaluationView) context;
         this.preferenceUtil = new PreferenceUtil(context);
+        this.countDownHandler = new CountDownHandler();
+        this.timerHandler = new TimerHandler();
     }
 
     @Override
@@ -61,14 +69,105 @@ public class CreatePhysicalEvaluationPresenterImpl implements CreatePhysicalEval
     }
 
     @Override
-    public void onClickNext(int position, int count) {
-        int listCount = count-1;
+    public void onClickStart() {
+        createPhysicalEvaluationView.playCountDown();
+        createPhysicalEvaluationView.gonePlayButton();
+        createPhysicalEvaluationInteractor.getCountDownSecond();
+    }
 
-        if(position != listCount){
+    @Override
+    public void onCompletionCountDown() {
+        createPhysicalEvaluationView.goneCountDown();
+        createPhysicalEvaluationView.showPauseButton();
+        createPhysicalEvaluationView.showTimerLayout();
+        createPhysicalEvaluationInteractor.getTimer();
+    }
+
+    @Override
+    public void onSuccessGetCountDownSecond(int second) {
+        Message message = new Message();
+        Bundle bundle = new Bundle();
+        if (second > 0) {
+            bundle.putString("message", String.valueOf(second));
+        } else {
+            bundle.putString("message", "시작합니다.");
+        }
+        message.setData(bundle);
+
+        countDownHandler.sendMessage(message);
+    }
+
+    @Override
+    public void onSuccessGetTimer(int minute, int second, int milliSecond) {
+        Message message = new Message();
+        Bundle bundle = new Bundle();
+        bundle.putString("minute", createPhysicalEvaluationInteractor.getTimes(minute));
+        bundle.putString("second", createPhysicalEvaluationInteractor.getTimes(second));
+        bundle.putString("milliSecond", createPhysicalEvaluationInteractor.getTimes(milliSecond));
+
+        message.setData(bundle);
+
+        timerHandler.sendMessage(message);
+    }
+
+    @Override
+    public void onClickPause() {
+        createPhysicalEvaluationInteractor.setTimerPause();
+        createPhysicalEvaluationView.gonePauseButton();
+        createPhysicalEvaluationView.showReplayAndNextButton();
+    }
+
+    @Override
+    public void onClickReplay() {
+        createPhysicalEvaluationView.gonewReplayAndNextButton();
+        createPhysicalEvaluationView.showPauseButton();
+        createPhysicalEvaluationInteractor.getTimer();
+    }
+
+    @Override
+    public void onClickNext(PhysicalEvaluation physicalEvaluation, int position) {
+        ArrayList<PhysicalEvaluationCategory> physicalEvaluationCategoryList = createPhysicalEvaluationInteractor.getPhysicalEvaluationCategoryList();
+        int physicalEvaluationCategorySize = physicalEvaluationCategoryList.size();
+        int physicalEvaluationCategoryId = physicalEvaluationCategoryList.get(position).getId();
+
+        if (position != physicalEvaluationCategorySize) {
+            physicalEvaluation.setPhysical_evaluation_category_id(physicalEvaluationCategoryId);
+            createPhysicalEvaluationInteractor.setPhysicalEvaluationAdded(physicalEvaluation);
+            createPhysicalEvaluationView.gonewReplayAndNextButton();
+            createPhysicalEvaluationView.showPlayButton();
+            createPhysicalEvaluationView.goneTimerLayout();
+            createPhysicalEvaluationView.showCountDown();
             createPhysicalEvaluationView.setNextView(position);
+
         } else {
             // result
         }
+    }
 
+    public class CountDownHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            Bundle bundle = msg.getData();
+            String message = bundle.getString("message");
+
+            createPhysicalEvaluationView.showCountDown(message);
+        }
+    }
+
+
+    public class TimerHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            Bundle bundle = msg.getData();
+            String minute = bundle.getString("minute");
+            String second = bundle.getString("second");
+            String milliSecond = bundle.getString("milliSecond");
+
+            createPhysicalEvaluationView.showMinute(minute);
+            createPhysicalEvaluationView.showSecond(second);
+            createPhysicalEvaluationView.showMilliSecond(milliSecond);
+        }
     }
 }

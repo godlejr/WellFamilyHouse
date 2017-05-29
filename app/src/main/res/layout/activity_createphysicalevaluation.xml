@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
@@ -25,15 +26,76 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_createphysicalevaluation_timer"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_weight="1.3"
-            android:gravity="center"
-            android:text="00:00.00"
-            android:textColor="@color/red"
-            android:textSize="70sp" />
+            android:layout_weight="1.3">
+
+            <LinearLayout
+                android:id="@+id/ll_createphysicalevaluation_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_createphysicalevaluation_minute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="00"
+                    android:textColor="@color/red"
+                    android:textSize="70sp" />
+
+                <TextView
+                    android:id="@+id/textView39"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=":"
+                    android:textColor="@color/red"
+                    android:textSize="70sp" />
+
+                <TextView
+                    android:id="@+id/tv_createphysicalevaluation_second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="00"
+                    android:textColor="@color/red"
+                    android:textSize="70sp" />
+
+                <TextView
+                    android:id="@+id/textView37"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="."
+                    android:textColor="@color/red"
+                    android:textSize="70sp" />
+
+                <TextView
+                    android:id="@+id/tv_createphysicalevaluation_millisecond"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="00"
+                    android:textColor="@color/red"
+                    android:textSize="40sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_createphysicalevaluation_count_down"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="5"
+                android:textColor="@color/green"
+                android:textSize="70sp" />
+
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,21 +103,54 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/iv_createphysicalevaluation_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:src="@drawable/physicalevaluation_start" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-            <ImageView
-                android:id="@+id/iv_createphysicalevaluation_next"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:src="@drawable/physicalevaluation_next" />
+                <ImageView
+                    android:id="@+id/iv_createphysicalevaluation_pause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/physicalevaluation_pause"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/iv_createphysicalevaluation_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:src="@drawable/physicalevaluation_start"
+                    android:visibility="visible" />
+
+                <LinearLayout
+                    android:id="@+id/ll_createphysicalevaluation_replay_and_next"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/iv_createphysicalevaluation_replay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:src="@drawable/physicalevaluation_replay" />
+
+                    <ImageView
+                        android:id="@+id/iv_createphysicalevaluation_next"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:src="@drawable/physicalevaluation_next" />
+                </LinearLayout>
+
+            </FrameLayout>
 
         </LinearLayout>
 

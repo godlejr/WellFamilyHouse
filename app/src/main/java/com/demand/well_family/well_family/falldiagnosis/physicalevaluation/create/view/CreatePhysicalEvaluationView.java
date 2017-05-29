@@ -24,4 +24,40 @@ public interface CreatePhysicalEvaluationView {
     void setCreatePhysicalEvaluationAdapter(ArrayList<PhysicalEvaluationCategory> createPhysicalEvaluationList);
 
     void setNextView(int position);
+
+    void playCountDown();
+
+    void showReplayAndNextButton();
+
+    void gonewReplayAndNextButton();
+
+
+    void showPauseButton();
+
+    void gonePauseButton();
+
+    void showPlayButton();
+
+
+    void gonePlayButton();
+
+    void showCountDown(String message);
+
+    void showCountDown();
+
+    void goneCountDown();
+
+    void showTimerLayout();
+
+    void goneTimerLayout();
+
+
+    void showMinute(String minute);
+
+    void showSecond(String second);
+
+    void showMilliSecond(String milliSecond);
+
+
+
 }

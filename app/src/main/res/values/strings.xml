@@ -29,7 +29,7 @@
     <string name="cloud_front_song_story_emotion">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/emotions/</string>
 
     <string name="cloud_front_self_diagnosis">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/falldiagnosis/selfdiagnosis/</string>
-    <string name="cloud_front_self_diagnosis_audio">/demand.files/apps/well_family_house/audios/falldiagnosis/</string>
+    <string name="cloud_front_self_diagnosis_audio">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/audios/falldiagnosis/countdown.mp3</string>
 
     <string name="bubblefeet">com.demand.bubblefeet</string>
     <string name="happyfeet">com.demand.happyfeet</string>
