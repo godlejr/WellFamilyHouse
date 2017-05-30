@@ -158,7 +158,7 @@ public class PhysicalEvaluationResultActivity extends Activity implements Physic
 
     @Override
     public void showBalanceScore(String score) {
-        tv_physicalevaluation_result_leg.setText(score);
+        tv_physicalevaluation_result_balance.setText(score);
     }
 
     @Override
@@ -168,7 +168,7 @@ public class PhysicalEvaluationResultActivity extends Activity implements Physic
 
     @Override
     public void showLegStrengthScore(String score) {
-        tv_physicalevaluation_result_balance.setText(score);
+        tv_physicalevaluation_result_leg.setText(score);
     }
 
     @Override
