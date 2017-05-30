@@ -25,4 +25,6 @@ public interface PhysicalEvaluationView {
     void setPhysicalEvaluationAdapterInit(ArrayList<FallDiagnosisContentCategory> physicalEvaluationList);
 
     void navigateToCreatePhysicalEvaluationActivity(FallDiagnosisCategory fallDiagnosisCategory);
+
+
 }

@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * Created by ㅇㅇ on 2017-05-23.
  */
 
-public class SelfDiagnosisViewPagerAdapter extends PagerAdapter  {
+public class SelfDiagnosisViewPagerAdapter extends PagerAdapter {
     private SelfDiagnosisPresenter selfDiagnosisPresenter;
 
     private LayoutInflater inflater;
@@ -57,13 +57,13 @@ public class SelfDiagnosisViewPagerAdapter extends PagerAdapter  {
         btn_falldiagnosis_answer_no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selfDiagnosisPresenter.onClickAnswer(position,categorySize, SelfDiagnosisCodeFlag.NO);
+                selfDiagnosisPresenter.onClickAnswer(position, categorySize, SelfDiagnosisCodeFlag.NO);
             }
         });
         btn_falldiagnosis_answer_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selfDiagnosisPresenter.onClickAnswer(position,categorySize, SelfDiagnosisCodeFlag.YES);
+                selfDiagnosisPresenter.onClickAnswer(position, categorySize, SelfDiagnosisCodeFlag.YES);
             }
         });
 

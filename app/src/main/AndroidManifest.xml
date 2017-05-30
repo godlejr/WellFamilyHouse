@@ -131,11 +131,12 @@
 
         <activity android:name=".falldiagnosis.base.activity.FallDiagnosisActivity" />
         <activity android:name=".falldiagnosis.fall.diagnosis.activity.SelfDiagnosisActivity" />
-        <activity android:name=".falldiagnosis.fall.result.activity.SelfDiagnosisResultActivity"/>
-        <activity android:name=".falldiagnosis.environment.activity.EnvironmentEvaluationActivity" />
-        <activity android:name=".falldiagnosis.physicalevaluation.base.activity.PhysicalEvaluationActivity"/>
-        <activity android:name=".falldiagnosis.physicalevaluation.create.activity.CreatePhysicalEvaluationActivity"/>
-        <activity android:name=".falldiagnosis.physicalevaluation.result.activity.PhysicalEvaluationResultActivity"/>
+        <activity android:name=".falldiagnosis.fall.result.activity.SelfDiagnosisResultActivity" />
+        <activity android:name=".falldiagnosis.environment.base.activity.EnvironmentEvaluationActivity" />
+        <activity android:name=".falldiagnosis.physicalevaluation.base.activity.PhysicalEvaluationActivity" />
+        <activity android:name=".falldiagnosis.physicalevaluation.create.activity.CreatePhysicalEvaluationActivity" />
+        <activity android:name=".falldiagnosis.physicalevaluation.result.activity.PhysicalEvaluationResultActivity" />
+        <activity android:name=".falldiagnosis.environment.create.activity.CreateEnvironmentEvaluationActivity" />
 
         <activity
             android:name=".market.MarketMainActivity"
@@ -171,6 +172,8 @@
 
         <!-- naver -->
         <activity
+
+
             android:name="com.nhn.android.naverlogin.ui.OAuthLoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity

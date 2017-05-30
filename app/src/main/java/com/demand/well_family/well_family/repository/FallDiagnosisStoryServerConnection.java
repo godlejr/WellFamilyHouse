@@ -31,4 +31,5 @@ public interface FallDiagnosisStoryServerConnection {
     @POST("{fall_diagnosis_story_id}/physical_evaluation_score")
     Call<ResponseBody> insertPhysicalEvaluationScore(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Body PhysicalEvaluationScore physicalEvaluationScore);
 
+
 }

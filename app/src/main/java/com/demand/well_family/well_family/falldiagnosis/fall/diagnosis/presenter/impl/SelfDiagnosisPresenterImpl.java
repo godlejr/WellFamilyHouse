@@ -27,7 +27,7 @@ public class SelfDiagnosisPresenterImpl implements SelfDiagnosisPresenter {
 
     public SelfDiagnosisPresenterImpl(Context context) {
         this.selfDiagnosisInteractor = new SelfDiagnosisInteractorImpl(this);
-        this.fallDiagnosisView = (SelfDiagnosisView)context;
+        this.fallDiagnosisView = (SelfDiagnosisView) context;
         this.preferenceUtil = new PreferenceUtil(context);
     }
 
@@ -47,22 +47,20 @@ public class SelfDiagnosisPresenterImpl implements SelfDiagnosisPresenter {
 
     @Override
     public void onClickAnswer(int position, int categorySize, int flag) {
-        int endOfCategoryList =  categorySize-1;
+        int endOfCategoryList = categorySize - 1;
 
-        if(flag == SelfDiagnosisCodeFlag.YES){
+        if (flag == SelfDiagnosisCodeFlag.YES) {
             selfDiagnosisInteractor.setAnswerAdded(true);
         }
 
-        if(flag == SelfDiagnosisCodeFlag.NO){
+        if (flag == SelfDiagnosisCodeFlag.NO) {
             selfDiagnosisInteractor.setAnswerAdded(false);
         }
 
-        if(position ==  endOfCategoryList){
-
+        if (position == endOfCategoryList) {
             FallDiagnosisCategory fallDiagnosisCategory = selfDiagnosisInteractor.getFallDiagnosisCategory();
-            ArrayList<Boolean> answerList  = selfDiagnosisInteractor.getAnswerList();
+            ArrayList<Boolean> answerList = selfDiagnosisInteractor.getAnswerList();
             fallDiagnosisView.navigateToResultActivity(fallDiagnosisCategory, answerList);
-
         } else {
             fallDiagnosisView.setNextView(position + 1);
         }

@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_danger_evaluation"
+    <com.demand.well_family.well_family.falldiagnosis.physicalevaluation.create.viewpager.SwipeDisableViewPager
+        android:id="@+id/vp_create_environment_evaluation"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"/>
+        android:layout_height="match_parent" />
+
 </LinearLayout>

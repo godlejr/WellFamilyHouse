@@ -1,10 +1,11 @@
-package com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.interactor.impl;
+package com.demand.well_family.well_family.falldiagnosis.environment.base.interactor.impl;
 
+import com.demand.well_family.well_family.dto.Evaluation;
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.interactor.SelfDiagnosisInteractor;
-import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.presenter.SelfDiagnosisPresenter;
+import com.demand.well_family.well_family.falldiagnosis.environment.base.interactor.EnvironmentEvaluationInteractor;
+import com.demand.well_family.well_family.falldiagnosis.environment.base.presenter.EnvironmentEvaluationPresenter;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FallDiagnosisServerConnection;
 import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
@@ -20,28 +21,32 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by ㅇㅇ on 2017-05-23.
+ * Created by ㅇㅇ on 2017-04-24.
  */
 
-public class SelfDiagnosisInteractorImpl implements SelfDiagnosisInteractor {
-    private SelfDiagnosisPresenter selfDiagnosisPresenter;
-
-    private FallDiagnosisCategory fallDiagnosisCategory;
-    private User user;
-
-    private ArrayList<Boolean> answerList;
-
+public class EnvironmentEvaluationInteractorImpl implements EnvironmentEvaluationInteractor {
+    private EnvironmentEvaluationPresenter dangerEvaluationPresenter;
     private FallDiagnosisServerConnection fallDiagnosisServerConnection;
 
-    private static final Logger logger = LoggerFactory.getLogger(SelfDiagnosisInteractorImpl.class);
+    private FallDiagnosisCategory fallDiagnosisCategory;
+    private static final Logger logger = LoggerFactory.getLogger(EnvironmentEvaluationInteractorImpl.class);
 
-    public SelfDiagnosisInteractorImpl(SelfDiagnosisPresenter selfDiagnosisPresenter) {
-        this.selfDiagnosisPresenter = selfDiagnosisPresenter;
-        this.answerList = new ArrayList<>();
+    public EnvironmentEvaluationInteractorImpl(EnvironmentEvaluationPresenter dangerEvaluationPresenter) {
+        this.dangerEvaluationPresenter = dangerEvaluationPresenter;
     }
 
     @Override
-    public void getDiagnosisCategories(User user) {
+    public void setFallDiagnosisCategory(FallDiagnosisCategory fallDiagnosisCategory) {
+        this.fallDiagnosisCategory = fallDiagnosisCategory;
+    }
+
+    @Override
+    public FallDiagnosisCategory getFallDiagnosisCategory() {
+        return this.fallDiagnosisCategory;
+    }
+
+    @Override
+    public void getDangerEvaluationList(User user) {
         String accessToken = user.getAccess_token();
         int categoryId = fallDiagnosisCategory.getId();
 
@@ -52,56 +57,19 @@ public class SelfDiagnosisInteractorImpl implements SelfDiagnosisInteractor {
             public void onResponse(Call<ArrayList<FallDiagnosisContentCategory>> call, Response<ArrayList<FallDiagnosisContentCategory>> response) {
                 if (response.isSuccessful()) {
                     ArrayList<FallDiagnosisContentCategory> fallDiagnosisContentCategoryList = response.body();
-                    selfDiagnosisPresenter.onSuccessGetDiagnosisCategories(fallDiagnosisContentCategoryList);
+                    dangerEvaluationPresenter.onSuccessGetDiagnosisCategories(fallDiagnosisContentCategoryList);
                 } else {
-                    selfDiagnosisPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
+                    dangerEvaluationPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<FallDiagnosisContentCategory>> call, Throwable t) {
                 log(t);
-                selfDiagnosisPresenter.onNetworkError(null);
+                dangerEvaluationPresenter.onNetworkError(null);
             }
         });
-    }
 
-
-    @Override
-    public FallDiagnosisCategory getFallDiagnosisCategory() {
-        return fallDiagnosisCategory;
-    }
-
-    @Override
-    public void setFallDiagnosisCategory(FallDiagnosisCategory fallDiagnosisCategory) {
-        this.fallDiagnosisCategory = fallDiagnosisCategory;
-    }
-
-
-    @Override
-    public User getUser() {
-        return user;
-    }
-
-    @Override
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-
-    @Override
-    public ArrayList<Boolean> getAnswerList() {
-        return answerList;
-    }
-
-    @Override
-    public void setAnswerList(ArrayList<Boolean> answerList) {
-        this.answerList = answerList;
-    }
-
-    @Override
-    public void setAnswerAdded(boolean check) {
-        answerList.add(check);
     }
 
     private static void log(Throwable throwable) {
@@ -118,4 +86,5 @@ public class SelfDiagnosisInteractorImpl implements SelfDiagnosisInteractor {
             }
         }
     }
+
 }
