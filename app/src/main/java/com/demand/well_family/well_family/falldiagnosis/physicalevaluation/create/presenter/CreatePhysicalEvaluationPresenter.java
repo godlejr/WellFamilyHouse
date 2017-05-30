@@ -33,4 +33,6 @@ public interface CreatePhysicalEvaluationPresenter {
     void onClickReplay();
 
     void onClickNext(PhysicalEvaluation physicalEvaluation, int position);
+
+    void onBackPressed();
 }

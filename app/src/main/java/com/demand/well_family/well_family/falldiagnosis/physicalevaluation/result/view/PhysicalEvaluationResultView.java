@@ -19,4 +19,29 @@ public interface PhysicalEvaluationResultView {
 
     void showProgressbar(int score, int count);
 
+    void showTotalScore(String score);
+
+
+    void showTotalScoreTextChangeColorWithSafe();
+
+    void showTotalScoreTextChangeColorWithCaution();
+
+    void showTotalScoreTextChangeColorWithRisk();
+
+    void showProgressBarChangeColorWithSafe();
+
+    void showProgressBarChangeColorWithCaution();
+
+    void showProgressBarChangeColorWithRisk();
+
+    void showBalanceScore(String score);
+
+    void showMovementScore(String score);
+
+    void showLegStrengthScore(String score);
+
+    void showResult(String message);
+
+    void navigateToBack();
+
 }

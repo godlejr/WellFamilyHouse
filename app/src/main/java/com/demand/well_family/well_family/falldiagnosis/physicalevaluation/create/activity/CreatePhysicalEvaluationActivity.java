@@ -1,6 +1,7 @@
 package com.demand.well_family.well_family.falldiagnosis.physicalevaluation.create.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +23,7 @@ import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.creat
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.create.presenter.CreatePhysicalEvaluationPresenter;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.create.presenter.impl.CreatePhysicalEvaluationPresenterImpl;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.create.view.CreatePhysicalEvaluationView;
+import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.result.activity.PhysicalEvaluationResultActivity;
 import com.demand.well_family.well_family.flag.LogFlag;
 
 import org.slf4j.Logger;
@@ -105,7 +107,7 @@ public class CreatePhysicalEvaluationActivity extends Activity implements Create
         mediaPlayer.setOnPreparedListener(this);
         mediaPlayer.setOnCompletionListener(this);
         anim_slow_down = AnimationUtils.loadAnimation(this, R.anim.anim_slow_down);
-        anim_show_up  = AnimationUtils.loadAnimation(this, R.anim.anim_show_up);
+        anim_show_up = AnimationUtils.loadAnimation(this, R.anim.anim_show_up);
     }
 
     @Override
@@ -155,6 +157,13 @@ public class CreatePhysicalEvaluationActivity extends Activity implements Create
             mediaPlayer.start();
         } catch (IOException e) {
             log(e);
+        }
+    }
+
+    @Override
+    public void releaseCountDown() {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
         }
     }
 
@@ -235,10 +244,31 @@ public class CreatePhysicalEvaluationActivity extends Activity implements Create
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        createPhysicalEvaluationPresenter.onBackPressed();
+    }
+
+    @Override
+    public void navigateToBack() {
+        finish();
+    }
+
+    @Override
+    public void navigateToPhysicalEvaluationResultActivity(FallDiagnosisCategory fallDiagnosisCategory, ArrayList<PhysicalEvaluationCategory> physicalEvaluationCategoryList, ArrayList<PhysicalEvaluation> physicalEvaluationList) {
+        Intent intent = new Intent(this, PhysicalEvaluationResultActivity.class);
+        intent.putExtra("category_id", fallDiagnosisCategory.getId());
+        intent.putExtra("physicalEvaluationCategoryList", physicalEvaluationCategoryList);
+        intent.putExtra("physicalEvaluationList", physicalEvaluationList);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back:
-                finish();
+                createPhysicalEvaluationPresenter.onBackPressed();
                 break;
 
             case R.id.iv_createphysicalevaluation_replay:

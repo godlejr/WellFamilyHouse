@@ -18,6 +18,7 @@ public interface SelfDiagnosisResultView {
     void showTotalCount(int count);
 
     void showProgressbar(int score, int count);
+
     void showScore(int score);
 
     void showScoreTextChangeColorWithSafe();

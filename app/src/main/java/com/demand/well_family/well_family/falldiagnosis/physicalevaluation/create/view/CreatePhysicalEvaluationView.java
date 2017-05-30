@@ -2,6 +2,8 @@ package com.demand.well_family.well_family.falldiagnosis.physicalevaluation.crea
 
 import android.view.View;
 
+import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
+import com.demand.well_family.well_family.dto.PhysicalEvaluation;
 import com.demand.well_family.well_family.dto.PhysicalEvaluationCategory;
 
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ public interface CreatePhysicalEvaluationView {
     void setNextView(int position);
 
     void playCountDown();
+
+    void releaseCountDown();
 
     void showReplayAndNextButton();
 
@@ -58,6 +62,9 @@ public interface CreatePhysicalEvaluationView {
 
     void showMilliSecond(String milliSecond);
 
+    void navigateToBack();
+
+    void navigateToPhysicalEvaluationResultActivity(FallDiagnosisCategory fallDiagnosisCategory, ArrayList<PhysicalEvaluationCategory> physicalEvaluationCategoryList, ArrayList<PhysicalEvaluation> physicalEvaluationList);
 
 
 }

@@ -1,10 +1,12 @@
 package com.demand.well_family.well_family.dto;
 
+import java.io.Serializable;
+
 /**
  * Created by ㅇㅇ on 2017-05-26.
  */
 
-public class PhysicalEvaluationCategory {
+public class PhysicalEvaluationCategory implements Serializable {
     private int id;
     private int fall_diagnosis_content_category_id;
     private String name;

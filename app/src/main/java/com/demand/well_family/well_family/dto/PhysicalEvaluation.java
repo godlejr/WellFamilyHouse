@@ -1,10 +1,12 @@
 package com.demand.well_family.well_family.dto;
 
+import java.io.Serializable;
+
 /**
  * Created by Dev-0 on 2017-05-29.
  */
 
-public class PhysicalEvaluation {
+public class PhysicalEvaluation  implements Serializable {
 
     private int id;
     private int user_id;

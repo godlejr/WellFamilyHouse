@@ -34,12 +34,13 @@
 
             <TextView
                 android:id="@+id/tv_physicalevaluation_score_total"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
+                android:gravity="center_horizontal"
                 android:soundEffectsEnabled="true"
-                android:text="10점"
+                android:text="10SS"
                 android:textColor="@color/green"
                 android:textSize="50sp"
                 android:textStyle="italic" />
@@ -154,7 +155,7 @@
             android:layout_height="45dp"
             android:layout_margin="20dp"
             android:background="@drawable/round_corner_border_gray_r30"
-            android:text="Button" />
+            android:text="확인" />
 
     </LinearLayout>
 

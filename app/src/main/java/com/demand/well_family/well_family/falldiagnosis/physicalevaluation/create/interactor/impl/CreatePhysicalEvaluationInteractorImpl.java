@@ -29,13 +29,15 @@ import retrofit2.Response;
 public class CreatePhysicalEvaluationInteractorImpl implements CreatePhysicalEvaluationInteractor {
     private CreatePhysicalEvaluationPresenter createPhysicalEvaluationPresenter;
 
-    private FallDiagnosisServerConnection fallDiagnosisServerConnection;
-    private FallDiagnosisCategory fallDiagnosisCategory;
     private Timer timer;
     private TimerTask timerTask;
     private int minute;
     private int second;
     private int millisecond;
+
+    private FallDiagnosisServerConnection fallDiagnosisServerConnection;
+    private FallDiagnosisCategory fallDiagnosisCategory;
+
     private ArrayList<PhysicalEvaluationCategory> physicalEvaluationCategoryList;
     private ArrayList<PhysicalEvaluation> physicalEvaluationList;
 

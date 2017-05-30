@@ -130,7 +130,7 @@ public class CreatePhysicalEvaluationPresenterImpl implements CreatePhysicalEval
         int physicalEvaluationCategorySize = physicalEvaluationCategoryList.size();
         int physicalEvaluationCategoryId = physicalEvaluationCategoryList.get(position).getId();
 
-        if (position != physicalEvaluationCategorySize) {
+        if (position != physicalEvaluationCategorySize-1) {
             physicalEvaluation.setPhysical_evaluation_category_id(physicalEvaluationCategoryId);
             createPhysicalEvaluationInteractor.setPhysicalEvaluationAdded(physicalEvaluation);
             createPhysicalEvaluationView.gonewReplayAndNextButton();
@@ -140,8 +140,19 @@ public class CreatePhysicalEvaluationPresenterImpl implements CreatePhysicalEval
             createPhysicalEvaluationView.setNextView(position);
 
         } else {
-            // result
+            physicalEvaluation.setPhysical_evaluation_category_id(physicalEvaluationCategoryId);
+            createPhysicalEvaluationInteractor.setPhysicalEvaluationAdded(physicalEvaluation);
+
+            FallDiagnosisCategory fallDiagnosisCategory = createPhysicalEvaluationInteractor.getFallDiagnosisCategory();
+            ArrayList<PhysicalEvaluation> physicalEvaluationList = createPhysicalEvaluationInteractor.getPhysicalEvaluationList();
+            createPhysicalEvaluationView.navigateToPhysicalEvaluationResultActivity(fallDiagnosisCategory, physicalEvaluationCategoryList, physicalEvaluationList);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        createPhysicalEvaluationView.releaseCountDown();
+        createPhysicalEvaluationView.navigateToBack();
     }
 
     public class CountDownHandler extends Handler {
