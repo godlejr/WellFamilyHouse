@@ -60,7 +60,7 @@ public class PhysicalEvaluationResultActivity extends Activity implements Physic
 
     @Override
     public void init() {
-        tv_physicalevaluation_score_total = (TextView) findViewById(R.id.tv_physicalevaluation_score_total);
+        tv_physicalevaluation_score_total = (TextView) findViewById(R.id.tv_environmentevaluation_score);
         tv_physicalevaluation_result = (TextView) findViewById(R.id.tv_physicalevaluation_result);
         tv_physicalevaluation_result_leg = (TextView) findViewById(R.id.tv_physicalevaluation_result_leg);
         tv_physicalevaluation_result_move = (TextView) findViewById(R.id.tv_physicalevaluation_result_move);

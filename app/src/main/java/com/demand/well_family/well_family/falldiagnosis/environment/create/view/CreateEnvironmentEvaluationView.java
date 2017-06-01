@@ -4,6 +4,7 @@ import android.view.View;
 
 import com.demand.well_family.well_family.dto.EnvironmentEvaluationCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
+import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,6 @@ public interface CreateEnvironmentEvaluationView {
 
     void setNextView(int position);
 
-    void navigateToResultActivity(FallDiagnosisCategory fallDiagnosisCategory, ArrayList<Boolean> answerList);
 
-    void navigateToPhotoResultActivity(FallDiagnosisCategory fallDiagnosisCategory, ArrayList<Boolean> answerList);
+    void navigateToEnvironmentEvaluationAPhotoActivity(FallDiagnosisCategory fallDiagnosisCategory, FallDiagnosisContentCategory fallDiagnosisContentCategory, ArrayList<Integer> answerList, int environmentEvaluationCategorySize);
 }

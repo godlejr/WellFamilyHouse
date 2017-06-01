@@ -64,21 +64,22 @@ public class CreateEnvironmentEvaluationPresenterImpl implements CreateEnvironme
     }
 
     @Override
-    public void onClickAnswer(int position, int categorySize, int flag) {
+    public void onClickAnswer(int position, int categorySize, int environmentEvaluationCategoryId, int flag) {
         int endOfCategoryList = categorySize - 1;
 
         if (flag == CreateEnvironmentEvaluationCodeFlag.YES) {
-            createEnvironmentEvaluationInteractor.setAnswerAdded(true);
+            createEnvironmentEvaluationInteractor.setAnswerAdded(environmentEvaluationCategoryId);
         }
 
-        if (flag == CreateEnvironmentEvaluationCodeFlag.NO) {
-            createEnvironmentEvaluationInteractor.setAnswerAdded(false);
-        }
+        if (endOfCategoryList == position) {
 
-        if(endOfCategoryList == position){
+            ArrayList<EnvironmentEvaluationCategory> environmentEvaluationCategoryList = createEnvironmentEvaluationInteractor.getEnvironmentEvaluationCategoryList();
+            int environmentEvaluationCategorySize  = environmentEvaluationCategoryList.size();
             FallDiagnosisCategory fallDiagnosisCategory = createEnvironmentEvaluationInteractor.getFallDiagnosisCategory();
-            ArrayList<Boolean> answerList  = createEnvironmentEvaluationInteractor.getAnswerList();
-            createEnvironmentEvaluationView.navigateToPhotoResultActivity(fallDiagnosisCategory, answerList);
+            FallDiagnosisContentCategory fallDiagnosisContentCategory = createEnvironmentEvaluationInteractor.getFallDiagnosisContentCategory();
+            ArrayList<Integer> answerList = createEnvironmentEvaluationInteractor.getAnswerList();
+
+            createEnvironmentEvaluationView.navigateToEnvironmentEvaluationAPhotoActivity(fallDiagnosisCategory, fallDiagnosisContentCategory, answerList, environmentEvaluationCategorySize);
         } else {
             createEnvironmentEvaluationView.setNextView(position + 1);
         }

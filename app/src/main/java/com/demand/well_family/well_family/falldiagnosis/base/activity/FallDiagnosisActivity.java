@@ -18,7 +18,7 @@ import com.demand.well_family.well_family.falldiagnosis.base.presenter.FallDiagn
 import com.demand.well_family.well_family.falldiagnosis.base.presenter.impl.FallDiagnosisPresenterImpl;
 import com.demand.well_family.well_family.falldiagnosis.base.view.FallDiagnosisView;
 import com.demand.well_family.well_family.falldiagnosis.environment.base.activity.EnvironmentEvaluationActivity;
-import com.demand.well_family.well_family.falldiagnosis.fall.diagnosis.activity.SelfDiagnosisActivity;
+import com.demand.well_family.well_family.falldiagnosis.selfdiagnosis.create.activity.SelfDiagnosisActivity;
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.base.activity.PhysicalEvaluationActivity;
 
 import java.util.ArrayList;

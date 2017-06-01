@@ -42,7 +42,7 @@ public class CreateEnvironmentEvaluationAdapter extends PagerAdapter {
         Button btn_environment_evaluation_answer_ok = (Button) view.findViewById(R.id.btn_environment_evaluation_answer_ok);
         Button btn_environment_evaluation_answer_no = (Button) view.findViewById(R.id.btn_environment_evaluation_answer_no);
 
-        EnvironmentEvaluationCategory environmentEvaluationCategory = environmentEvaluationCategoryList.get(position);
+        final EnvironmentEvaluationCategory environmentEvaluationCategory = environmentEvaluationCategoryList.get(position);
         tv_environment_evaluation_num.setText(String.valueOf(position + 1));
         tv_environment_evaluation_question.setText(environmentEvaluationCategory.getName());
         Context context = inflater.getContext();
@@ -52,14 +52,14 @@ public class CreateEnvironmentEvaluationAdapter extends PagerAdapter {
         btn_environment_evaluation_answer_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createEnvironmentEvaluationPresenter.onClickAnswer(position, environmentEvaluationCategorySize, CreateEnvironmentEvaluationCodeFlag.YES);
+                createEnvironmentEvaluationPresenter.onClickAnswer(position, environmentEvaluationCategorySize, environmentEvaluationCategory.getId() , CreateEnvironmentEvaluationCodeFlag.YES);
             }
         });
 
         btn_environment_evaluation_answer_no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createEnvironmentEvaluationPresenter.onClickAnswer(position, environmentEvaluationCategorySize, CreateEnvironmentEvaluationCodeFlag.NO);
+                createEnvironmentEvaluationPresenter.onClickAnswer(position, environmentEvaluationCategorySize,environmentEvaluationCategory.getId() , CreateEnvironmentEvaluationCodeFlag.NO);
             }
         });
 

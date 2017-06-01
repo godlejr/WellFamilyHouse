@@ -1,6 +1,7 @@
 package com.demand.well_family.well_family.falldiagnosis.environment.create.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -18,6 +19,7 @@ import com.demand.well_family.well_family.falldiagnosis.environment.create.adapt
 import com.demand.well_family.well_family.falldiagnosis.environment.create.presenter.CreateEnvironmentEvaluationPresenter;
 import com.demand.well_family.well_family.falldiagnosis.environment.create.presenter.impl.CreateEnvironmentEvaluationPresenterImpl;
 import com.demand.well_family.well_family.falldiagnosis.environment.create.view.CreateEnvironmentEvaluationView;
+import com.demand.well_family.well_family.falldiagnosis.environment.photo.activity.EnvironmentEvaluationPhotoActivity;
 
 import java.util.ArrayList;
 
@@ -96,14 +98,18 @@ public class CreateEnvironmentEvaluationActivity extends Activity implements Cre
         vp_create_environment_evaluation.setCurrentItem(position);
     }
 
-    @Override
-    public void navigateToResultActivity(FallDiagnosisCategory fallDiagnosisCategory, ArrayList<Boolean> answerList) {
-
-    }
 
     @Override
-    public void navigateToPhotoResultActivity(FallDiagnosisCategory fallDiagnosisCategory, ArrayList<Boolean> answerList) {
+    public void navigateToEnvironmentEvaluationAPhotoActivity(FallDiagnosisCategory fallDiagnosisCategory, FallDiagnosisContentCategory fallDiagnosisContentCategory, ArrayList<Integer> answerList, int environmentEvaluationCategorySize) {
+        Intent intent = new Intent(this, EnvironmentEvaluationPhotoActivity.class);
 
+        intent.putExtra("category_id", fallDiagnosisCategory.getId());
+        intent.putExtra("fall_diagnosis_content_category_name", fallDiagnosisContentCategory.getName());
+        intent.putExtra("fall_diagnosis_content_category_id", fallDiagnosisContentCategory.getId());
+        intent.putExtra("environmentEvaluationCategorySize", environmentEvaluationCategorySize);
+        intent.putExtra("answerList", answerList);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -112,7 +118,6 @@ public class CreateEnvironmentEvaluationActivity extends Activity implements Cre
             case R.id.toolbar_back:
                 finish();
                 break;
-
         }
     }
 }

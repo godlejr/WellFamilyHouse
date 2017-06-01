@@ -6,6 +6,7 @@ import com.demand.well_family.well_family.dto.PhysicalEvaluationScore;
 
 import java.util.HashMap;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -31,5 +32,9 @@ public interface FallDiagnosisStoryServerConnection {
     @POST("{fall_diagnosis_story_id}/physical_evaluation_score")
     Call<ResponseBody> insertPhysicalEvaluationScore(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Body PhysicalEvaluationScore physicalEvaluationScore);
 
+    @POST("{fall_diagnosis_story_id}/environment_evaluation")
+    Call<ResponseBody> insertEnvironmentEvaluation(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @QueryMap HashMap<String, String> map);
 
+    @POST("{fall_diagnosis_story_id}/environment_photo")
+    Call<ResponseBody> insertEnvironmentPhoto(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Body RequestBody requestBody);
 }

@@ -1,5 +1,6 @@
 package com.demand.well_family.well_family.falldiagnosis.environment.create.interactor;
 
+import com.demand.well_family.well_family.dto.EnvironmentEvaluationCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.dto.User;
@@ -21,8 +22,13 @@ public interface CreateEnvironmentEvaluationInteractor {
 
     void setFallDiagnosisContentCategory(FallDiagnosisContentCategory fallDiagnosisContentCategory);
 
-    void setAnswerAdded(boolean answer);
+    void setAnswerAdded(int environmentEvaluationCategoryId);
 
-    ArrayList<Boolean> getAnswerList();
-    void setAnswerList( ArrayList<Boolean> answerList);
+    ArrayList<Integer> getAnswerList();
+
+    void setAnswerList(ArrayList<Integer> answerList);
+
+    ArrayList<EnvironmentEvaluationCategory> getEnvironmentEvaluationCategoryList();
+
+    void setEnvironmentEvaluationCategoryList(ArrayList<EnvironmentEvaluationCategory> environmentEvaluationCategoryList);
 }

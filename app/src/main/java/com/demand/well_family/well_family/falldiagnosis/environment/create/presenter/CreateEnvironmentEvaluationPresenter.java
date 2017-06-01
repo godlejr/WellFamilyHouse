@@ -17,5 +17,5 @@ public interface CreateEnvironmentEvaluationPresenter {
 
     void onLoadData();
     void onSuccessGetEnvironmentEvaluationCategories(ArrayList<EnvironmentEvaluationCategory> environmentEvaluationCategoryList);
-    void onClickAnswer(int position, int categorySize, int flag);
+    void onClickAnswer(int position, int categorySize, int environmentEvaluationCategoryId, int flag);
 }

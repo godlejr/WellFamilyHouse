@@ -30,7 +30,8 @@ public class CreateEnvironmentEvaluationInteractorImpl implements CreateEnvironm
     private FallDiagnosisCategory fallDiagnosisCategory;
     private FallDiagnosisContentCategory fallDiagnosisContentCategory;
 
-    private ArrayList<Boolean> answerList;
+    private ArrayList<Integer> answerList;
+    private  ArrayList<EnvironmentEvaluationCategory> environmentEvaluationCategoryList;
     private FallDiagnosisServerConnection fallDiagnosisServerConnection;
     private static final Logger logger = LoggerFactory.getLogger(CreateEnvironmentEvaluationInteractorImpl.class);
 
@@ -51,7 +52,7 @@ public class CreateEnvironmentEvaluationInteractorImpl implements CreateEnvironm
             @Override
             public void onResponse(Call<ArrayList<EnvironmentEvaluationCategory>> call, Response<ArrayList<EnvironmentEvaluationCategory>> response) {
                 if (response.isSuccessful()) {
-                    ArrayList<EnvironmentEvaluationCategory> environmentEvaluationCategoryList = response.body();
+                    environmentEvaluationCategoryList = response.body();
                     createEnvironmentEvaluationPresenter.onSuccessGetEnvironmentEvaluationCategories(environmentEvaluationCategoryList);
                 } else {
                     createEnvironmentEvaluationPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
@@ -81,23 +82,34 @@ public class CreateEnvironmentEvaluationInteractorImpl implements CreateEnvironm
         return fallDiagnosisContentCategory;
     }
 
+
+    @Override
+    public ArrayList<EnvironmentEvaluationCategory> getEnvironmentEvaluationCategoryList() {
+        return environmentEvaluationCategoryList;
+    }
+
+    @Override
+    public void setEnvironmentEvaluationCategoryList(ArrayList<EnvironmentEvaluationCategory> environmentEvaluationCategoryList) {
+        this.environmentEvaluationCategoryList = environmentEvaluationCategoryList;
+    }
+
     @Override
     public void setFallDiagnosisContentCategory(FallDiagnosisContentCategory fallDiagnosisContentCategory) {
         this.fallDiagnosisContentCategory = fallDiagnosisContentCategory;
     }
 
     @Override
-    public void setAnswerAdded(boolean check) {
-        answerList.add(check);
+    public void setAnswerAdded(int environmentEvaluationCategoryId) {
+        answerList.add(environmentEvaluationCategoryId);
     }
 
     @Override
-    public ArrayList<Boolean> getAnswerList() {
+    public ArrayList<Integer> getAnswerList() {
         return this.answerList;
     }
 
     @Override
-    public void setAnswerList(ArrayList<Boolean> answerList) {
+    public void setAnswerList(ArrayList<Integer> answerList) {
         this.answerList = answerList;
     }
 
