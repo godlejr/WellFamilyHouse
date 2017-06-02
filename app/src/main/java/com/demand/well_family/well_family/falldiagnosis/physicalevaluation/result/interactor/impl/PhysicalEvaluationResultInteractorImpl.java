@@ -41,6 +41,7 @@ public class PhysicalEvaluationResultInteractorImpl implements PhysicalEvaluatio
 
     private static final Logger logger = LoggerFactory.getLogger(PhysicalEvaluationResultInteractorImpl.class);
     private FallDiagnosisStoryServerConnection fallDiagnosisStoryServerConnection;
+    private int fallDiagnosisRiskCategoryId;
 
     public PhysicalEvaluationResultInteractorImpl(PhysicalEvaluationResultPresenter physicalEvaluationResultPresenter) {
         this.physicalEvaluationResultPresenter = physicalEvaluationResultPresenter;
@@ -85,7 +86,6 @@ public class PhysicalEvaluationResultInteractorImpl implements PhysicalEvaluatio
     public void setUser(User user) {
         this.user = user;
     }
-
 
 
     @Override
@@ -191,11 +191,24 @@ public class PhysicalEvaluationResultInteractorImpl implements PhysicalEvaluatio
         }
     }
 
+    @Override
     public PhysicalEvaluationScore getPhysicalEvaluationScore() {
         return physicalEvaluationScore;
     }
 
+    @Override
     public void setPhysicalEvaluationScore(PhysicalEvaluationScore physicalEvaluationScore) {
         this.physicalEvaluationScore = physicalEvaluationScore;
     }
+
+    @Override
+    public int getFallDiagnosisRiskCategoryId() {
+        return fallDiagnosisRiskCategoryId;
+    }
+
+    @Override
+    public void setFallDiagnosisRiskCategoryId(int fallDiagnosisRiskCategoryId) {
+        this.fallDiagnosisRiskCategoryId = fallDiagnosisRiskCategoryId;
+    }
+
 }

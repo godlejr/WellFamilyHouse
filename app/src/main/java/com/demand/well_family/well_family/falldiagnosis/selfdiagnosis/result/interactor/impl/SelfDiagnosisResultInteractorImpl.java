@@ -39,6 +39,7 @@ public class SelfDiagnosisResultInteractorImpl implements SelfDiagnosisResultInt
     private FallDiagnosisStoryServerConnection fallDiagnosisStoryServerConnection;
 
     private static final Logger logger = LoggerFactory.getLogger(SelfDiagnosisResultInteractorImpl.class);
+    private int fallDiagnosisRiskCategoryId;
 
 
     public SelfDiagnosisResultInteractorImpl(SelfDiagnosisResultPresenter selfDiagnosisResultPresenter) {
@@ -156,6 +157,16 @@ public class SelfDiagnosisResultInteractorImpl implements SelfDiagnosisResultInt
     @Override
     public void setFallDiagnosisContentCategorySize(int fallDiagnosisContentCategorySize) {
         this.fallDiagnosisContentCategorySize = fallDiagnosisContentCategorySize;
+    }
+
+    @Override
+    public int getFallDiagnosisRiskCategoryId() {
+        return fallDiagnosisRiskCategoryId;
+    }
+
+    @Override
+    public void setFallDiagnosisRiskCategoryId(int fallDiagnosisRiskCategoryId) {
+        this.fallDiagnosisRiskCategoryId = fallDiagnosisRiskCategoryId;
     }
 
     private static void log(Throwable throwable) {

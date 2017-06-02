@@ -15,4 +15,8 @@ public class EnvironmentEvaluationResultCodeFlag {
     public static final int BALCONY = 21;
     public static final int STAIR = 22;
 
+    public static final int SAFE = 1;
+    public static final int CAUTION = 2;
+    public static final int RISK = 3;
+
 }

@@ -14,4 +14,9 @@ public class PhysicalEvaluationResultCodeFlag {
 
     public static final int PERPECT_SCORE = 12;
 
+
+    public static final int SAFE = 1;
+    public static final int CAUTION = 2;
+    public static final int RISK = 3;
+
 }

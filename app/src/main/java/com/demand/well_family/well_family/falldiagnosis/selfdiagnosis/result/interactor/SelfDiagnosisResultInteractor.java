@@ -37,4 +37,8 @@ public interface SelfDiagnosisResultInteractor {
     int getFallDiagnosisContentCategorySize();
 
     void setFallDiagnosisContentCategorySize(int fallDiagnosisContentCategorySize);
+
+    int getFallDiagnosisRiskCategoryId();
+
+    void setFallDiagnosisRiskCategoryId(int fallDiagnosisRiskCategoryId);
 }

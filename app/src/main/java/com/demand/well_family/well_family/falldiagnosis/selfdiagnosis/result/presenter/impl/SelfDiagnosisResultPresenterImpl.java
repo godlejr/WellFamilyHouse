@@ -6,6 +6,7 @@ import android.view.View;
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisStory;
 import com.demand.well_family.well_family.dto.User;
+import com.demand.well_family.well_family.falldiagnosis.selfdiagnosis.result.flag.SelfDiagnosisCodeFlag;
 import com.demand.well_family.well_family.falldiagnosis.selfdiagnosis.result.interactor.SelfDiagnosisResultInteractor;
 import com.demand.well_family.well_family.falldiagnosis.selfdiagnosis.result.interactor.impl.SelfDiagnosisResultInteractorImpl;
 import com.demand.well_family.well_family.falldiagnosis.selfdiagnosis.result.presenter.SelfDiagnosisResultPresenter;
@@ -60,17 +61,23 @@ public class SelfDiagnosisResultPresenterImpl implements SelfDiagnosisResultPres
             fallDiagnosisResultView.showProgressBarChangeColorWithSafe();
             fallDiagnosisResultView.showScoreTextChangeColorWithSafe();
             fallDiagnosisResultView.showTotalCountTextChangeColorWithSafe();
+            selfDiagnosisResultInteractor.setFallDiagnosisRiskCategoryId(SelfDiagnosisCodeFlag.SAFE);
+
 
         } else if (answerSize <= 7) {
             fallDiagnosisResultView.showResult("주의 단계");
             fallDiagnosisResultView.showProgressBarChangeColorWithCaution();
             fallDiagnosisResultView.showScoreTextChangeColorWithCaution();
             fallDiagnosisResultView.showTotalCountTextChangeColorWithCaution();
+            selfDiagnosisResultInteractor.setFallDiagnosisRiskCategoryId(SelfDiagnosisCodeFlag.CAUTION);
+
         } else if (answerSize <= 11) {
             fallDiagnosisResultView.showResult("위험 단계");
             fallDiagnosisResultView.showProgressBarChangeColorWithRisk();
             fallDiagnosisResultView.showScoreTextChangeColorWithRisk();
             fallDiagnosisResultView.showTotalCountTextChangeColorWithRisk();
+            selfDiagnosisResultInteractor.setFallDiagnosisRiskCategoryId(SelfDiagnosisCodeFlag.RISK);
+
         }
 
     }
@@ -82,10 +89,12 @@ public class SelfDiagnosisResultPresenterImpl implements SelfDiagnosisResultPres
 
         int userId = user.getId();
         int fallDiagnosisCategoryId = fallDiagnosisCategory.getId();
+        int fallDiagnosisRiskCategoryId = selfDiagnosisResultInteractor.getFallDiagnosisRiskCategoryId();
 
         FallDiagnosisStory fallDiagnosisStory = new FallDiagnosisStory();
         fallDiagnosisStory.setUser_id(userId);
         fallDiagnosisStory.setFall_diagnosis_category_id(fallDiagnosisCategoryId);
+        fallDiagnosisStory.setFall_diagnosis_risk_category_id(fallDiagnosisRiskCategoryId);
 
         selfDiagnosisResultInteractor.setFallDiagnosisStory(fallDiagnosisStory);
         selfDiagnosisResultInteractor.setStoryAdded();

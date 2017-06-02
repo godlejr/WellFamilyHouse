@@ -64,10 +64,12 @@ public class PhysicalEvaluationResultPresenterImpl implements PhysicalEvaluation
 
         int userId = user.getId();
         int fallDiagnosisCategoryId = fallDiagnosisCategory.getId();
+        int fallDiagnosisRiskCategoryId = physicalEvaluationResultInteractor.getFallDiagnosisRiskCategoryId();
 
         FallDiagnosisStory fallDiagnosisStory = new FallDiagnosisStory();
         fallDiagnosisStory.setUser_id(userId);
         fallDiagnosisStory.setFall_diagnosis_category_id(fallDiagnosisCategoryId);
+        fallDiagnosisStory.setFall_diagnosis_risk_category_id(fallDiagnosisRiskCategoryId);
 
         physicalEvaluationResultInteractor.setFallDiagnosisStory(fallDiagnosisStory);
         physicalEvaluationResultInteractor.setStoryAdded();
@@ -146,14 +148,19 @@ public class PhysicalEvaluationResultPresenterImpl implements PhysicalEvaluation
             physicalEvaluationResultView.showProgressBarChangeColorWithSafe();
             physicalEvaluationResultView.showTotalScoreTextChangeColorWithSafe();
             physicalEvaluationResultView.showResult("안전 단계");
+            physicalEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(PhysicalEvaluationResultCodeFlag.SAFE);
         } else if (totalScore >= 5) {
             physicalEvaluationResultView.showProgressBarChangeColorWithCaution();
             physicalEvaluationResultView.showTotalScoreTextChangeColorWithCaution();
             physicalEvaluationResultView.showResult("주의 단계");
+            physicalEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(PhysicalEvaluationResultCodeFlag.CAUTION);
+
         } else {
             physicalEvaluationResultView.showProgressBarChangeColorWithRisk();
             physicalEvaluationResultView.showTotalScoreTextChangeColorWithRisk();
             physicalEvaluationResultView.showResult("위험 단계");
+            physicalEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(PhysicalEvaluationResultCodeFlag.RISK);
+
         }
 
         PhysicalEvaluationScore physicalEvaluationScore = new PhysicalEvaluationScore();

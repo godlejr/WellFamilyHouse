@@ -43,4 +43,8 @@ public interface PhysicalEvaluationResultInteractor {
     void setPhysicalEvaluationAdded(int storyId, PhysicalEvaluation physicalEvaluation);
 
     void setPhysicalEvaluationScoreAdded(int storyId);
+
+    int getFallDiagnosisRiskCategoryId();
+
+    void setFallDiagnosisRiskCategoryId(int fallDiagnosisRiskCategoryId);
 }

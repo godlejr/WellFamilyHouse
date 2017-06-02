@@ -53,4 +53,8 @@ public interface EnvironmentEvaluationResultInteractor {
     void setEnvironmentEvaluationAdded(int storyId, int environmentEvaluationCategoryId, int index);
 
     void setPhotoAdded(FileToBase64Util fileToBase64Util, int storyId, Uri photo, String path);
+
+    int getFallDiagnosisRiskCategoryId();
+
+    void setFallDiagnosisRiskCategoryId(int fallDiagnosisRiskCategoryId);
 }

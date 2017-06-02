@@ -46,6 +46,7 @@ public class EnvironmentEvaluationResultInteractorImpl implements EnvironmentEva
     private ArrayList<String> pathList;
 
     private FallDiagnosisStory fallDiagnosisStory;
+    private int fallDiagnosisRiskCategoryId;
 
     private static final Logger logger = LoggerFactory.getLogger(EnvironmentEvaluationResultInteractorImpl.class);
     private FallDiagnosisStoryServerConnection fallDiagnosisStoryServerConnection;
@@ -240,5 +241,13 @@ public class EnvironmentEvaluationResultInteractorImpl implements EnvironmentEva
         } catch (InterruptedException e) {
             log(e);
         }
+    }
+
+    public int getFallDiagnosisRiskCategoryId() {
+        return fallDiagnosisRiskCategoryId;
+    }
+
+    public void setFallDiagnosisRiskCategoryId(int fallDiagnosisRiskCategoryId) {
+        this.fallDiagnosisRiskCategoryId = fallDiagnosisRiskCategoryId;
     }
 }
