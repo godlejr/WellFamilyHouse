@@ -140,6 +140,8 @@
         <activity android:name=".falldiagnosis.environment.photo.activity.EnvironmentEvaluationPhotoActivity" />
         <activity android:name=".falldiagnosis.environment.result.activity.EnvironmentEvaluationResultActivity" />
 
+        <activity android:name=".falldiagnosistory.base.activity.FallDiagnosisStoryActivity" />
+
         <activity
             android:name=".market.MarketMainActivity"
             android:launchMode="singleInstance" />

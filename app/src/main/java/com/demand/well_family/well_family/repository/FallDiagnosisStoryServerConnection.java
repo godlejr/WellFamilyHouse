@@ -10,7 +10,10 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
@@ -37,4 +40,31 @@ public interface FallDiagnosisStoryServerConnection {
 
     @POST("{fall_diagnosis_story_id}/environment_photo")
     Call<ResponseBody> insertEnvironmentPhoto(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Body RequestBody requestBody);
+
+
+
+    @GET("{fall_diagnosis_story_id}/comment_count")
+    Call<Integer> selectFallDiagnosisStoryCommentCount(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
+
+    @GET("{fall_diagnosis_story_id}/like_count")
+    Call<Integer> selectFallDiagnosisStoryLikeCount(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
+
+
+    @POST("{fall_diagnosis_story_id}/likes")
+    Call<ResponseBody> insertFallDiagnosisStoryLikeUp(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @QueryMap HashMap<String, String> map);
+
+    @DELETE("{fall_diagnosis_story_id}/likes/{user_id}")
+    Call<ResponseBody> deleteFallDiagnosisStoryLikeDown(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
+
+
+    @GET("{fall_diagnosis_story_id}/like_check/{user_id}")
+    Call<ResponseBody> selectFallDiagnosisStoryLikeCheck(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
+
+    @PUT("{fall_diagnosis_story_id}/hits")
+    Call<ResponseBody> updateFallDiagnosisStoryHit(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
+
+    @GET("/{fall_diagnosis_story_id}/titles/{fall_diagnosis_category_id}")
+    Call<String> selectFallDiagnosisStoryTitle(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Path("fall_diagnosis_category_id") int fall_diagnosis_category_id);
+
+
 }

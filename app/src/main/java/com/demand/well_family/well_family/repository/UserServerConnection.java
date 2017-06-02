@@ -1,6 +1,7 @@
 package com.demand.well_family.well_family.repository;
 
 
+import com.demand.well_family.well_family.dto.FallDiagnosisStory;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.FamilyInfoForFamilyJoin;
 import com.demand.well_family.well_family.dto.FavoriteCategory;
@@ -118,4 +119,9 @@ public interface UserServerConnection {
 
     @PUT("{user_id}/password")  // map : pwd
     Call<Void> updatePassword(@Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
+
+
+    @GET("{user_id}/fall_diagnosis_stories")
+    Call<ArrayList<FallDiagnosisStory>> selectFallDiagnosisStoryList(@Path("user_id") int user_id);
+
 }

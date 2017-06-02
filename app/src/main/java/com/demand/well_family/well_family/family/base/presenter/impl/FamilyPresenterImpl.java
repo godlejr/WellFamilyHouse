@@ -96,7 +96,7 @@ public class FamilyPresenterImpl implements FamilyPresenter {
     }
 
     @Override
-    public void onSuccessSetThreadContentAdd(StoryInfo storyInfo) {
+public void onSuccessSetThreadContentAdd(StoryInfo storyInfo) {
         familyView.setContentAdapterContentAdd(storyInfo);
 
         Message message = new Message();

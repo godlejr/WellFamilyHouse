@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="8dp"
-            android:background="@drawable/round_corner">
+            android:background="@drawable/round_corner_white_r10">
 
             <android.support.v4.widget.NestedScrollView
                 android:id="@+id/nsv_sound_story_detail"
@@ -61,7 +61,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/round_corner"
+                    android:background="@drawable/round_corner_white_r10"
                     android:descendantFocusability="blocksDescendants"
                     android:orientation="vertical">
 
@@ -115,7 +115,7 @@
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="220dp"
-                        android:background="@drawable/round_corner">
+                        android:background="@drawable/round_corner_white_r10">
 
                         <ImageView
                             android:id="@+id/iv_sound_detail_song_img"
@@ -442,7 +442,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/round_corner"
+                    android:background="@drawable/round_corner_white_r10"
                     android:ems="10"
                     android:focusable="true"
 

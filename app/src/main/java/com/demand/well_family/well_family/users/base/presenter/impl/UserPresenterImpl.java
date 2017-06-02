@@ -103,4 +103,10 @@ public class UserPresenterImpl implements UserPresenter {
         User storyUser = userInteractor.getStoryUser();
         userView.navigateToCall(storyUser.getPhone());
     }
+
+    @Override
+    public void onClickFallDiagnosisStory() {
+        User storyUser = userInteractor.getStoryUser();
+        userView.navigateToFallDiagnosisStoryActivity(storyUser);
+    }
 }

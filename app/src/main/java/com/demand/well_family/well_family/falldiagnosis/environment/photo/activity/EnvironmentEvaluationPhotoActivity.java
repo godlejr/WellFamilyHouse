@@ -26,7 +26,7 @@ import com.demand.well_family.well_family.falldiagnosis.environment.photo.adapte
 import com.demand.well_family.well_family.falldiagnosis.environment.photo.flag.EnvironmentEvaluationPhotoCodeFlag;
 import com.demand.well_family.well_family.falldiagnosis.environment.photo.presenter.EnvironmentEvaluationPhotoPresenter;
 import com.demand.well_family.well_family.falldiagnosis.environment.photo.presenter.impl.EnvironmentEvaluationPhotoPresenterImpl;
-import com.demand.well_family.well_family.falldiagnosis.environment.photo.view.EnvironmentEvaluationPhotoVIew;
+import com.demand.well_family.well_family.falldiagnosis.environment.photo.view.EnvironmentEvaluationPhotoView;
 import com.demand.well_family.well_family.falldiagnosis.environment.result.activity.EnvironmentEvaluationResultActivity;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ import java.util.ArrayList;
  * Created by Dev-0 on 2017-05-30.
  */
 
-public class EnvironmentEvaluationPhotoActivity extends Activity implements EnvironmentEvaluationPhotoVIew, View.OnClickListener {
+public class EnvironmentEvaluationPhotoActivity extends Activity implements EnvironmentEvaluationPhotoView, View.OnClickListener {
     private EnvironmentEvaluationPhotoPresenter environmentEvaluationPhotoPresenter;
 
     private TextView tv_photoenvironmentevaluation_content;
@@ -59,6 +59,7 @@ public class EnvironmentEvaluationPhotoActivity extends Activity implements Envi
     private ImageView toolbarBack;
     private RecyclerView rv_environmentevaluation_photolist;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +76,7 @@ public class EnvironmentEvaluationPhotoActivity extends Activity implements Envi
         ArrayList<Integer> answerList = (ArrayList<Integer>) getIntent().getSerializableExtra("answerList");
 
         environmentEvaluationPhotoPresenter = new EnvironmentEvaluationPhotoPresenterImpl(this);
-        environmentEvaluationPhotoPresenter.onCreate(fallDiagnosisCategory, fallDiagnosisContentCategory, answerList , environmentEvaluationCategorySize);
-
+        environmentEvaluationPhotoPresenter.onCreate(fallDiagnosisCategory, fallDiagnosisContentCategory, answerList, environmentEvaluationCategorySize);
     }
 
     @Override
@@ -210,6 +210,7 @@ public class EnvironmentEvaluationPhotoActivity extends Activity implements Envi
         startActivity(intent);
         finish();
     }
+
 
     @Override
     public void showPhotoAdapterNotifyDataChanged() {

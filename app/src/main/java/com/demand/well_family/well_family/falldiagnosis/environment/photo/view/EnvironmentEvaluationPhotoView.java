@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Created by Dev-0 on 2017-05-30.
  */
 
-public interface EnvironmentEvaluationPhotoVIew {
+public interface EnvironmentEvaluationPhotoView {
 
     void init();
 

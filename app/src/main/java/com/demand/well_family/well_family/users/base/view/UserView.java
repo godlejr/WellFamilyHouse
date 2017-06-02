@@ -39,6 +39,8 @@ public interface UserView {
 
     void navigateToPhotoPopupActivity(User storyUser);
 
+    void navigateToFallDiagnosisStoryActivity(User storyUser);
+
 
 
 }

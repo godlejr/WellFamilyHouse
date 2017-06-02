@@ -26,4 +26,6 @@ public interface UserPresenter {
     void onSuccessGetFamilyCheck(int check);
 
     void onClickCall();
+
+    void onClickFallDiagnosisStory();
 }

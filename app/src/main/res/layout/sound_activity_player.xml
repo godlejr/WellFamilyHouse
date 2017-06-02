@@ -315,7 +315,7 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
             android:layout_weight="1"
-            android:background="@drawable/round_corner"
+            android:background="@drawable/round_corner_white_r10"
             android:ems="10"
             android:inputType="text"
             android:paddingLeft="10dp"
