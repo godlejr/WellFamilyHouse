@@ -25,6 +25,8 @@ public interface UserView {
 
     void goneUserEdit();
 
+    void goneFallDiagnosisStory();
+
     void showUserBirth(String date);
 
     void showUserPhone(String phone);

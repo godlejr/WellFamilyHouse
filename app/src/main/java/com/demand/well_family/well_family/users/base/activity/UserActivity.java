@@ -180,6 +180,11 @@ public class UserActivity extends Activity implements View.OnClickListener, User
     }
 
     @Override
+    public void goneFallDiagnosisStory() {
+        ll_falldiagnosisstory_list.setVisibility(View.GONE);
+    }
+
+    @Override
     public void showUserBirth(String date) {
         tv_family_activity_birth.setText(date);
     }

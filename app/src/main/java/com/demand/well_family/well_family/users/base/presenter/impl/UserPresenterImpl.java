@@ -65,6 +65,8 @@ public class UserPresenterImpl implements UserPresenter {
             userView.goneUserEdit();
         }
 
+        userInteractor.getFamilyCheck();
+
     }
 
     @Override
@@ -95,6 +97,7 @@ public class UserPresenterImpl implements UserPresenter {
             userView.setPhoneOnClickListener();
         } else {
             userView.goneUserPhone();
+            userView.goneFallDiagnosisStory();
         }
     }
 

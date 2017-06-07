@@ -11,13 +11,10 @@ public class StoryInfo implements Serializable {
     private String name;
     private String avatar;
     private int story_id;
-
     private String created_at;
     private String content;
-
     private Boolean first_checked; //  select first check
     private Boolean isChecked; // like cheched
-
     private int position;
 
     public StoryInfo() {

@@ -1,6 +1,7 @@
 package com.demand.well_family.well_family.repository;
 
 import com.demand.well_family.well_family.dto.FallDiagnosisStory;
+import com.demand.well_family.well_family.dto.FallDiagnosisStoryInfo;
 import com.demand.well_family.well_family.dto.PhysicalEvaluation;
 import com.demand.well_family.well_family.dto.PhysicalEvaluationScore;
 
@@ -43,6 +44,8 @@ public interface FallDiagnosisStoryServerConnection {
 
 
 
+
+
     @GET("{fall_diagnosis_story_id}/comment_count")
     Call<Integer> selectFallDiagnosisStoryCommentCount(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
 
@@ -50,21 +53,27 @@ public interface FallDiagnosisStoryServerConnection {
     Call<Integer> selectFallDiagnosisStoryLikeCount(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
 
 
+
+
+
     @POST("{fall_diagnosis_story_id}/likes")
     Call<ResponseBody> insertFallDiagnosisStoryLikeUp(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @QueryMap HashMap<String, String> map);
 
     @DELETE("{fall_diagnosis_story_id}/likes/{user_id}")
-    Call<ResponseBody> deleteFallDiagnosisStoryLikeDown(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
-
+    Call<ResponseBody> deleteFallDiagnosisStoryLikeDown(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Path("user_id") int user_id);
 
     @GET("{fall_diagnosis_story_id}/like_check/{user_id}")
-    Call<ResponseBody> selectFallDiagnosisStoryLikeCheck(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Path("user_id") int user_id, @QueryMap HashMap<String, String> map);
+    Call<Integer> selectFallDiagnosisStoryLikeCheck(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Path("user_id") int user_id);
+
+
+
+
 
     @PUT("{fall_diagnosis_story_id}/hits")
     Call<ResponseBody> updateFallDiagnosisStoryHit(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
 
-    @GET("/{fall_diagnosis_story_id}/titles/{fall_diagnosis_category_id}")
-    Call<String> selectFallDiagnosisStoryTitle(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Path("fall_diagnosis_category_id") int fall_diagnosis_category_id);
+    @GET("{fall_diagnosis_story_id}/infos")    //
+    Call<FallDiagnosisStoryInfo> selectFallDiagnosisStoryInfo(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @QueryMap HashMap<String, String> map);
 
 
 }

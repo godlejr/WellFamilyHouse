@@ -10,47 +10,61 @@
         android:layout_width="match_parent"
         android:layout_height="50dp" />
 
-    <View
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/nsv_falldiagnosisstory"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grayLine" />
+        android:layout_height="wrap_content">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:orientation="horizontal"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
-
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:padding="5dp"
-            android:src="@drawable/logo_selffeet" />
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="center"
-            android:text="낙상위험진단을 통한 낙상예방 서비스"
-            android:textColor="@color/defaultTextColor"
-            android:textSize="18sp" />
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grayLine" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="10dp"
-        android:background="@color/grayLine" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_falldiagnosisstory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:orientation="horizontal"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp">
+
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:padding="5dp"
+                    android:src="@drawable/logo_selffeet" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:text="낙상위험진단을 통한 낙상예방 서비스"
+                    android:textColor="@color/defaultTextColor"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/grayLine" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_falldiagnosisstory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 
 
 </LinearLayout>

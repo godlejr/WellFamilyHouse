@@ -75,6 +75,7 @@ public class UserInteractorImpl implements UserInteractor {
     public String getUserPhoneWithHyphen(String phone) {
         String phoneWithHyphen = "";
         int phone_length = phone.length();
+
         if (phone_length == 11) {
             phoneWithHyphen = phone.substring(0, 3) + "-" + phone.substring(3, 7) + "-" + phone.substring(7, 11);
         } else if (phone_length == 10) {

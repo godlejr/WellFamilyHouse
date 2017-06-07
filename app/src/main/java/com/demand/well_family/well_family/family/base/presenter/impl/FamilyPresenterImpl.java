@@ -253,7 +253,6 @@ public void onSuccessSetThreadContentAdd(StoryInfo storyInfo) {
         if (isFirstChecked) {
             if (isChecked) {
                 familyInteractor.setContentLikeCheck(holder, storyInfo);
-
             } else {
                 familyInteractor.setContentLikeUncheck(holder, storyInfo);
             }
