@@ -31,7 +31,6 @@ public interface FallDiagnosisStoryDetailInteractor {
     void setUser(User user);
 
     void setContentLikeUp();
-
     void setContentLikeDown();
 
     void getPhysicalEvaluationScore();
