@@ -13,4 +13,6 @@ public class NotificationFallDiagnosisStoryInteractorImpl implements Notificatio
     public NotificationFallDiagnosisStoryInteractorImpl(NotificationFallDiagnosisStoryPresenter notificationFallDiagnosisStoryPresenter) {
         this.notificationFallDiagnosisStoryPresenter = notificationFallDiagnosisStoryPresenter;
     }
+
+
 }
