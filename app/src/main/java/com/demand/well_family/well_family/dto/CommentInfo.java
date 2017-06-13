@@ -15,7 +15,8 @@ public class CommentInfo {
 
     private int position;
 
-
+    public CommentInfo() {
+    }
 
     public CommentInfo(int comment_id, int user_id, String user_name, String avatar, String content, String created_at) {
         this.comment_id = comment_id;

@@ -90,7 +90,7 @@ public class StoryDetailPresenterImpl implements StoryDetailPresenter {
         if (user.getId() == commentUserId) {
             storyDetailView.navigateToStoryCommentDialogActivityForOwner(commentInfo);
         } else {
-            storyDetailView.navigateToStoryDialogActivityForMember(commentInfo);
+            storyDetailView.navigateToStoryCommentDialogActivityForMember(commentInfo);
         }
 
     }
@@ -214,6 +214,7 @@ public class StoryDetailPresenterImpl implements StoryDetailPresenter {
 
     @Override
     public void onActivityResultForCommentEditResultOkDELETE(int position) {
+        storyDetailInteractor.getStoryCommentCount();
         storyDetailView.setCommentAdapterDelete(position);
         storyDetailView.showCommentAdapterNotifyItemDelete(position);
     }

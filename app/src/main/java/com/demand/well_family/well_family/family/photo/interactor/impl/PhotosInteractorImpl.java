@@ -7,7 +7,7 @@ import com.demand.well_family.well_family.family.photo.interactor.PhotosInteract
 import com.demand.well_family.well_family.family.photo.presenter.PhotosPresenter;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FamilyServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -56,7 +56,7 @@ public class PhotosInteractorImpl implements PhotosInteractor {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
+                familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
 
                 Call<ArrayList<Photo>> call_photo = familyServerConnection.family_photo_List(familyId);
                 call_photo.enqueue(new Callback<ArrayList<Photo>>() {

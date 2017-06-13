@@ -3,7 +3,7 @@ package com.demand.well_family.well_family.setting.sendPassword.interactor.impl;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.MainServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.setting.sendPassword.interactor.SendPasswordInteractor;
 import com.demand.well_family.well_family.setting.sendPassword.presenter.SendPasswordPresenter;
 import com.demand.well_family.well_family.util.ErrorUtil;
@@ -39,7 +39,7 @@ public class SendPasswordInteractorImpl implements SendPasswordInteractor {
         final String userEmail = user.getEmail();
         String userName = user.getName();
 
-        mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
+        mainServerConnection = new NetworkInterceptor().getClientForMainServer().create(MainServerConnection.class);
 
         HashMap<String, String> map = new HashMap<>();
         map.put("user_id", String.valueOf(userId));

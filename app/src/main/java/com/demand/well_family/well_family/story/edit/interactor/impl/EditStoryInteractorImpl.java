@@ -8,7 +8,7 @@ import com.demand.well_family.well_family.dto.Story;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.StoryServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.story.edit.async.UrlToBitmapAsyncTask;
 import com.demand.well_family.well_family.story.edit.flag.EditStoryCodeFlag;
 import com.demand.well_family.well_family.story.edit.interactor.EditStoryInteractor;
@@ -173,7 +173,7 @@ public class EditStoryInteractorImpl implements EditStoryInteractor {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("content", content);
 
-                storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+                storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
                 Call<Void> call_write_story = storyServerConnection.update_story(storyId, map);
                 call_write_story.enqueue(new Callback<Void>() {
                     @Override
@@ -208,7 +208,7 @@ public class EditStoryInteractorImpl implements EditStoryInteractor {
             sleepTime = EditStoryCodeFlag.ONE_PHOTO_FOR_TIME;
         }
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
 
         final RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), fileToBase64Util.addBase64Bitmap(bitmap));
         Call<ResponseBody> call_write_photo = storyServerConnection.insert_photos(storyId, requestBody);

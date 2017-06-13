@@ -9,7 +9,7 @@ import com.demand.well_family.well_family.repository.UserServerConnection;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.JoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.main.login.interactor.LoginInteracter;
 import com.demand.well_family.well_family.main.login.presenter.LoginPresenter;
 import com.demand.well_family.well_family.util.EncryptionUtil;
@@ -146,7 +146,7 @@ public class LoginInteractorImpl implements LoginInteracter {
         map.put("device_id", deviceId);
         map.put("token", firebaseToken);
 
-        userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
         Call<ResponseBody> call_update_deviceId_token = userServerConnection.update_deviceId_token(user.getId(), map);
         call_update_deviceId_token.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -173,7 +173,7 @@ public class LoginInteractorImpl implements LoginInteracter {
         map.put("email", email);
         map.put("password", encryptedPassword);
 
-        mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
+        mainServerConnection = new NetworkInterceptor().getClientForMainServer().create(MainServerConnection.class);
         Call<User> call_login = mainServerConnection.login(map);
 
         call_login.enqueue(new Callback<User>() {
@@ -262,7 +262,7 @@ public class LoginInteractorImpl implements LoginInteracter {
     };
 
     private void setSNSLogin(final User userForLogin) {
-        mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
+        mainServerConnection = new NetworkInterceptor().getClientForMainServer().create(MainServerConnection.class);
 
         HashMap<String, String> map = new HashMap<>();
         map.put("email", userForLogin.getEmail());

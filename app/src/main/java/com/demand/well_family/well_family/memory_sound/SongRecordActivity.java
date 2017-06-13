@@ -53,7 +53,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.repository.SongServerConnection;
 import com.demand.well_family.well_family.repository.SongStoryServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.dto.Range;
 import com.demand.well_family.well_family.dto.SongStory;
 import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
@@ -236,7 +236,7 @@ public class SongRecordActivity extends Activity {
 
         spList = new HashMap<Integer, String>();
 
-        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
         Call<ArrayList<Range>> call_song_range = songServerConnection.song_range_List();
         call_song_range.enqueue(new Callback<ArrayList<Range>>() {
             @Override
@@ -730,7 +730,7 @@ public class SongRecordActivity extends Activity {
                                 map.put("location", location);
 
 
-                                songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+                                songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
                                 Log.e("range_id", range_id + "");
                                 Call<SongStory> call_insert_song_story = songServerConnection.insert_song_story(map);
                                 call_insert_song_story.enqueue(new Callback<SongStory>() {
@@ -741,7 +741,7 @@ public class SongRecordActivity extends Activity {
 
                                             // photos
                                             for (int i = 0; i < photoListSize; i++) {
-                                                songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                                                songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
                                                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(photoList.get(i), i)));
                                                 Call<ResponseBody> call_write_photo = songStoryServerConnection.insert_song_photos(song_story_id, requestBody);
 
@@ -764,7 +764,7 @@ public class SongRecordActivity extends Activity {
 
                                             // audio
                                             if (file != null) {
-                                                songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                                                songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
                                                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Audio(file));
                                                 Call<ResponseBody> call_write_audio = songStoryServerConnection.insert_song_audio(song_story_id, requestBody);
                                                 call_write_audio.enqueue(new Callback<ResponseBody>() {
@@ -789,7 +789,7 @@ public class SongRecordActivity extends Activity {
                                                 int emotionListSize = emotionList.size();
 
                                                 for (int i = 0; i < emotionListSize; i++) {
-                                                    songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                                                    songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
                                                     HashMap<String, String> map = new HashMap<String, String>();
                                                     map.put("song_story_emotion_id", String.valueOf(emotionList.get(i).getId()));
                                                     Call<ResponseBody> call_insert_emotions = songStoryServerConnection.insert_emotion_into_song_story(song_story_id, map);

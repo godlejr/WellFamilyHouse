@@ -2,9 +2,11 @@ package com.demand.well_family.well_family.falldiagnosistory.base.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,7 +25,10 @@ import com.demand.well_family.well_family.falldiagnosistory.base.adapter.FallDia
 import com.demand.well_family.well_family.falldiagnosistory.base.presenter.FallDiagnosisStoryPresenter;
 import com.demand.well_family.well_family.falldiagnosistory.base.presenter.impl.FallDiagnosisStoryPresenterImpl;
 import com.demand.well_family.well_family.falldiagnosistory.base.view.FallDiagnosisStoryView;
+import com.demand.well_family.well_family.falldiagnosistory.detail.activity.FallDiagnosisStoryDetailActivity;
+import com.demand.well_family.well_family.falldiagnosistory.flag.FallDiagnosisStoryCodeFlag;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -62,6 +67,23 @@ public class FallDiagnosisStoryActivity extends Activity implements FallDiagnosi
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case FallDiagnosisStoryCodeFlag.DETAIL_REQUEST:
+                switch (resultCode) {
+                    case FallDiagnosisStoryCodeFlag.RESULT_OK:
+                        FallDiagnosisStory fallDiagnosisStory = (FallDiagnosisStory) data.getSerializableExtra("fallDiagnosisStory");
+                        int position = fallDiagnosisStory.getPosition();
+
+                        fallDiagnosisStoryAdapter.setLikeChange(position, fallDiagnosisStory.getChecked());
+                        fallDiagnosisStoryAdapter.notifyItemChanged(position);
+                        break;
+                }
+                break;
+        }
+    }
+
+    @Override
     public View getDecorView() {
         if (decorView == null) {
             decorView = this.getWindow().getDecorView();
@@ -93,24 +115,14 @@ public class FallDiagnosisStoryActivity extends Activity implements FallDiagnosi
     }
 
     @Override
-    public void setFallDiagnosisStoryAdapterCommentCount(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String count) {
+    public void showFallDiagnosisStoryAdapterCommentCount(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String count) {
         fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterCommentCount(holder, count);
     }
 
     @Override
-    public void setFallDiagnosisStoryAdapterLikeCount(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String count) {
+    public void showFallDiagnosisStoryAdapterLikeCount(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String count) {
         fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterLikeCount(holder, count);
     }
-
-//    @Override
-//    public void setFallDiagnosisStoryAdapterLikeUnChecked(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, int position) {
-//        fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterLikeUnChecked(holder, position);
-//    }
-//
-//    @Override
-//    public void setFallDiagnosisStoryAdapterLikeChecked(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, int position) {
-//        fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterLikeChecked(holder, position);
-//    }
 
     public void setFallDiagnosisStoryAdapterLikeIsChecked(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, int position) {
         fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterLikeIsChecked(holder, position);
@@ -132,7 +144,6 @@ public class FallDiagnosisStoryActivity extends Activity implements FallDiagnosi
         rv_falldiagnosisstory = (RecyclerView) findViewById(R.id.rv_falldiagnosisstory);
         nsv_falldiagnosisstory = (NestedScrollView) findViewById(R.id.nsv_falldiagnosisstory);
         nsv_falldiagnosisstory.setOnScrollChangeListener(this);
-
 
         fallDiagnosisStoryPresenter.onLoadData();
     }
@@ -196,20 +207,22 @@ public class FallDiagnosisStoryActivity extends Activity implements FallDiagnosi
     }
 
     @Override
-    public void setFallDiagnosisStoryAdapterResult(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String result) {
+    public void showFallDiagnosisStoryAdapterResult(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String result) {
         fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterResult(holder, result);
     }
 
     @Override
-    public void setFallDiagnosisStoryAdapterScore(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String score) {
+    public void showFallDiagnosisStoryAdapterScore(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String score) {
         fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterScore(holder, score);
     }
 
-
     @Override
-    public void navigateToFallDiagnosisStoryDetailActivity(FallDiagnosisStory fallDiagnosisStory) {
-
-
+    public void navigateToFallDiagnosisStoryDetailActivity(FallDiagnosisStory fallDiagnosisStory, FallDiagnosisStoryInfo fallDiagnosisStoryInfo) {
+        fallDiagnosisStory.setFirstChecked(false);
+        Intent intent = new Intent(this, FallDiagnosisStoryDetailActivity.class);
+        intent.putExtra("fallDiagnosisStory", fallDiagnosisStory);
+        intent.putExtra("fallDiagnosisStoryInfo", fallDiagnosisStoryInfo);
+        startActivityForResult(intent, FallDiagnosisStoryCodeFlag.DETAIL_REQUEST);
     }
 
     @Override

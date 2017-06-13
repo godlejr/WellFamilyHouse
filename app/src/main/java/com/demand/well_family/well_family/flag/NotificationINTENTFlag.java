@@ -10,5 +10,5 @@ public class NotificationINTENTFlag {
     public static final int SONG_STORY_DETAIL = 3;
     public static final int MANAGE_FAMILY = 4;
     public static final int MANAGE_FAMILY_DETAIL = 5;
-
+    public static final int FALL_DIAGNOSIS_DETAIL = 6;
 }

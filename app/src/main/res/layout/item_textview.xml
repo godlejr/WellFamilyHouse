@@ -4,12 +4,12 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:text="TextView"
+        android:id="@+id/tv_popup_list"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/tv_popup_comment_text"
         android:background="#fff"
-        android:textSize="20sp"
         android:gravity="center"
-        android:textColor="#000000" />
+        android:text="TextView"
+        android:textColor="#000000"
+        android:textSize="20sp" />
 </LinearLayout>

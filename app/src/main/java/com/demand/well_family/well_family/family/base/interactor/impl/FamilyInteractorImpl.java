@@ -11,7 +11,7 @@ import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FamilyServerConnection;
 import com.demand.well_family.well_family.repository.StoryServerConnection;
 import com.demand.well_family.well_family.repository.UserServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -91,7 +91,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
         int userId = user.getId();
         int familyId = family.getId();
 
-        familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
+        familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
         Call<ArrayList<User>> call_users = familyServerConnection.family_user_Info(familyId, userId);
         call_users.enqueue(new Callback<ArrayList<User>>() {
             @Override
@@ -120,7 +120,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
                 String accessToken = user.getAccess_token();
                 int familyId = family.getId();
 
-                familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
+                familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
                 Call<ArrayList<StoryInfo>> call = familyServerConnection.family_content_List(familyId);
                 call.enqueue(new Callback<ArrayList<StoryInfo>>() {
                     @Override
@@ -188,7 +188,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
     public void getContentUser(int contentUserId) {
         String accessToken = user.getAccess_token();
 
-        userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
 
         Call<User> call_user = userServerConnection.user_Info(contentUserId);
         call_user.enqueue(new Callback<User>() {
@@ -240,7 +240,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
         String accessToken = user.getAccess_token();
         int storyId = storyInfo.getStory_id();
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         Call<ArrayList<Photo>> call_photo = storyServerConnection.family_content_photo_List(storyId);
         call_photo.enqueue(new Callback<ArrayList<Photo>>() {
             @Override
@@ -266,7 +266,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
         String accessToken = user.getAccess_token();
         int storyId = storyInfo.getStory_id();
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         Call<Integer> call_like_count = storyServerConnection.family_like_Count(storyId);
         call_like_count.enqueue(new Callback<Integer>() {
             @Override
@@ -292,7 +292,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
         String accessToken = user.getAccess_token();
         int storyId = storyInfo.getStory_id();
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         Call<Integer> call_comment_count = storyServerConnection.family_comment_Count(storyId);
         call_comment_count.enqueue(new Callback<Integer>() {
             @Override
@@ -319,7 +319,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
         int userId = user.getId();
         int storyId = storyInfo.getStory_id();
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         Call<Integer> call_like_check = storyServerConnection.family_content_like_check(storyId, userId);
         call_like_check.enqueue(new Callback<Integer>() {
             @Override
@@ -368,7 +368,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
         int userId = user.getId();
         int storyId = storyInfo.getStory_id();
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         HashMap<String, String> map = new HashMap<>();
         map.put("user_id", String.valueOf(userId));
 
@@ -398,7 +398,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
         int userId = user.getId();
         int storyId = storyInfo.getStory_id();
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
 
         Call<ResponseBody> call_dislike = storyServerConnection.family_content_like_down(storyId, userId);
         call_dislike.enqueue(new Callback<ResponseBody>() {
@@ -425,7 +425,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
         String accessToken = user.getAccess_token();
         int familyId = family.getId();
 
-        familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServerAccessNull().create(FamilyServerConnection.class);
+        familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServerAccessNull().create(FamilyServerConnection.class);
         Call<Family> call_family = familyServerConnection.family(familyId);
         call_family.enqueue(new Callback<Family>() {
             @Override

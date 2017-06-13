@@ -5,7 +5,7 @@ import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FamilyServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.users.search.adapter.UserAdapter;
 import com.demand.well_family.well_family.users.search.interactor.SearchUserInteractor;
 import com.demand.well_family.well_family.users.search.presenter.SearchUserPresenter;
@@ -45,7 +45,7 @@ public class SearchUserInteractorImpl implements SearchUserInteractor {
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("search", searchKeyword);
 
-        familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
+        familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
         Call<ArrayList<UserInfoForFamilyJoin>> call_user = familyServerConnection.find_user(familyId, map);
         call_user.enqueue(new Callback<ArrayList<UserInfoForFamilyJoin>>() {
             @Override
@@ -82,7 +82,7 @@ public class SearchUserInteractorImpl implements SearchUserInteractor {
         int familyId = family.getId();
         int userFoundId = userFound.getId();
 
-        familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
+        familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
         Call<Void> call_update_user_for_familyjoin = familyServerConnection.update_user_for_familyjoin(familyId, userFoundId);
         call_update_user_for_familyjoin.enqueue(new Callback<Void>() {
             @Override
@@ -107,7 +107,7 @@ public class SearchUserInteractorImpl implements SearchUserInteractor {
         String accessToken = user.getAccess_token();
         int familyId = family.getId();
 
-        familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
+        familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
         HashMap<String, String> map = new HashMap<>();
         map.put("user_id", String.valueOf(userFound.getId()));
         Call<ResponseBody> call_invite = familyServerConnection.insert_user_into_family(familyId, map);

@@ -34,7 +34,7 @@ public class PhotoPopupPresenterImpl implements PhotoPopupPresenter {
     }
 
     @Override
-    public void onCreate(int intentFlag, ArrayList<Photo> photoList, String fromActivity) {
+    public void onCreate(int intentFlag, ArrayList<Photo> photoList) {
         photoPopupInteractor.setIntentFlag(intentFlag);
         photoPopupInteractor.setPhotoList(photoList);
 
@@ -72,6 +72,10 @@ public class PhotoPopupPresenterImpl implements PhotoPopupPresenter {
 
         if (intentFlag == PhotoPopupINTENTFlag.PHOTOSACTIVITY || intentFlag == PhotoPopupINTENTFlag.STORYDETAILACTIVITY) {
             cloudFront = photoPopupView.getCloudFrontStoryImages();
+        }
+
+        if(intentFlag == PhotoPopupINTENTFlag.FALLDIAGNOSISSTORYACTIVITY){
+            cloudFront = photoPopupView.getCloudFrontFallDiagnosisStoryImages();
         }
 
         photoPopupInteractor.setCloudFront(cloudFront);

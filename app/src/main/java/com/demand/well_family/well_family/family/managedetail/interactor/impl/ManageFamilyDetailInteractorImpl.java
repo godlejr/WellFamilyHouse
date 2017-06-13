@@ -7,7 +7,7 @@ import com.demand.well_family.well_family.family.managedetail.interactor.ManageF
 import com.demand.well_family.well_family.family.managedetail.presenter.ManageFamilyDetailPresenter;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FamilyServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -72,7 +72,7 @@ public class ManageFamilyDetailInteractorImpl implements ManageFamilyDetailInter
         String accessToken = user.getAccess_token();
         int familyId = family.getId();
 
-        familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
+        familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
 
         Call<ArrayList<UserInfoForFamilyJoin>> call_family_joiners = familyServerConnection.family_joiners(familyId);
         call_family_joiners.enqueue(new Callback<ArrayList<UserInfoForFamilyJoin>>() {

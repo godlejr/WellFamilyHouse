@@ -43,7 +43,7 @@ import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.repository.SongStoryServerConnection;
 import com.demand.well_family.well_family.repository.UserServerConnection;
 import com.demand.well_family.well_family.family.manage.activity.ManageFamilyActivity;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.setting.base.activity.SettingActivity;
 import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStory;
@@ -362,7 +362,7 @@ public class SongStoryActivity extends Activity {
             public void run() {
                 if (user_id == story_user_id) {
                     //me
-                    userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                    userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
                     call_content = userServerConnection.song_story_List_Me(story_user_id);
 
                     call_content.enqueue(new Callback<ArrayList<SongStory>>() {
@@ -423,7 +423,7 @@ public class SongStoryActivity extends Activity {
                         }
                     });
                 } else {
-                    userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                    userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
 
                     Call<Integer> call_family_check = userServerConnection.family_check(story_user_id, user_id);
                     call_family_check.enqueue(new Callback<Integer>() {
@@ -432,7 +432,7 @@ public class SongStoryActivity extends Activity {
                             if (response.isSuccessful()) {
                                 if (response.body() > 0) {
                                     //family
-                                    userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                                    userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
                                     call_content = userServerConnection.song_story_List_Family(story_user_id);
                                     call_content.enqueue(new Callback<ArrayList<SongStory>>() {
                                         @Override
@@ -493,7 +493,7 @@ public class SongStoryActivity extends Activity {
                                     });
                                 } else {
                                     //public
-                                    userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                                    userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
                                     call_content = userServerConnection.song_story_List_Public(story_user_id);
                                     call_content.enqueue(new Callback<ArrayList<SongStory>>() {
                                         @Override
@@ -696,7 +696,7 @@ public class SongStoryActivity extends Activity {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (storyList.get(getAdapterPosition()).getFirst_checked()) {
                         if (isChecked) {
-                            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                            songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
                             HashMap<String, String> map = new HashMap<>();
                             map.put("user_id", String.valueOf(user_id));
 
@@ -719,7 +719,7 @@ public class SongStoryActivity extends Activity {
                                 }
                             });
                         } else {
-                            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                            songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
                             Call<ResponseBody> call_dislike = songStoryServerConnection.song_story_like_down(storyList.get(getAdapterPosition()).getStory_id(), user_id);
                             call_dislike.enqueue(new Callback<ResponseBody>() {
                                 @Override
@@ -831,7 +831,7 @@ public class SongStoryActivity extends Activity {
             }
 
             // emotion
-            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+            songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
             Call<ArrayList<SongStoryEmotionData>> call_emotion_data = songStoryServerConnection.song_story_emotion_List(storyList.get(position).getStory_id());
             call_emotion_data.enqueue(new Callback<ArrayList<SongStoryEmotionData>>() {
                 @Override
@@ -855,7 +855,7 @@ public class SongStoryActivity extends Activity {
 
 
             //images
-            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+            songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
             Call<ArrayList<SongPhoto>> call_song_photo = songStoryServerConnection.song_story_photo_List(storyList.get(position).getStory_id());
             call_song_photo.enqueue(new Callback<ArrayList<SongPhoto>>() {
                 @Override
@@ -913,7 +913,7 @@ public class SongStoryActivity extends Activity {
                 }
             });
 
-            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+            songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
             Call<Integer> call_like_count = songStoryServerConnection.song_story_like_Count(storyList.get(position).getStory_id());
             call_like_count.enqueue(new Callback<Integer>() {
                 @Override
@@ -933,7 +933,7 @@ public class SongStoryActivity extends Activity {
                 }
             });
 
-            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+            songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
             Call<Integer> call_comment_count = songStoryServerConnection.song_story_comment_Count(storyList.get(position).getStory_id());
             call_comment_count.enqueue(new Callback<Integer>() {
                 @Override
@@ -953,7 +953,7 @@ public class SongStoryActivity extends Activity {
                 }
             });
 
-            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+            songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
             Call<Integer> call_like_check = songStoryServerConnection.song_story_like_check(storyList.get(position).getStory_id(), user_id);
             call_like_check.enqueue(new Callback<Integer>() {
                 @Override

@@ -3,7 +3,7 @@ package com.demand.well_family.well_family.setting.verifyAccount.interactor.impl
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.MainServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.setting.verifyAccount.interactor.VerifyAccountInteractor;
 import com.demand.well_family.well_family.setting.verifyAccount.presenter.VerifyAccountPresenter;
 import com.demand.well_family.well_family.util.EncryptionUtil;
@@ -42,7 +42,7 @@ public class VerifyAccountInteractorImpl implements VerifyAccountInteractor {
         map.put("email", email);
         map.put("password", encryptedPassword);
 
-        mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
+        mainServerConnection = new NetworkInterceptor().getClientForMainServer().create(MainServerConnection.class);
         Call<User> call_login = mainServerConnection.login(map);
         call_login.enqueue(new Callback<User>() {
             @Override

@@ -35,7 +35,7 @@ import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.StoryInfoForNotification;
 import com.demand.well_family.well_family.story.detail.activity.StoryDetailActivity;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.dialog.popup.photo.activity.PhotoPopupActivity;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
@@ -150,7 +150,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         finishList.add(this);
 
         // hit
-        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
         Call<Void> call_insert_story_hits = storyServerConnection.Insert_story_hit(story_id);
         call_insert_story_hits.enqueue(new Callback<Void>() {
             @Override
@@ -170,7 +170,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         });
 
 
-        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
         Call<StoryInfoForNotification> call_story_info = storyServerConnection.storyDetailForNotification(story_id);
         call_story_info.enqueue(new Callback<StoryInfoForNotification>() {
             @Override
@@ -182,7 +182,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
                     tv_item_story_date.setText(calculateTime(storyInfoForNotification.getCreated_at()));
                     tv_story_detail_content.setText(storyInfoForNotification.getContent());
 
-                    storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+                    storyServerConnection = new NetworkInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
                     Call<Integer> call_like_check = storyServerConnection.family_content_like_check(story_id, user_id);
                     call_like_check.enqueue(new Callback<Integer>() {
                         @Override
@@ -229,7 +229,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
     }
 
     private void getCommentCount() {
-        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
         Call<Integer> call_comment_count = storyServerConnection.family_comment_Count(story_id);
         call_comment_count.enqueue(new Callback<Integer>() {
             @Override
@@ -264,7 +264,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
                     map.put("user_id", String.valueOf(user_id));
                     map.put("content", content);
 
-                    storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+                    storyServerConnection = new NetworkInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
                     Call<Comment> call_insert_comment = storyServerConnection.insert_comment(story_id, map);
                     call_insert_comment.enqueue(new Callback<Comment>() {
                         @Override
@@ -300,7 +300,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         rv_story_comments = (RecyclerView) findViewById(R.id.rv_story_comments);
         //comment count
 
-        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
         Call<ArrayList<CommentInfo>> call_family = storyServerConnection.family_detail_comment_List(story_id);
         call_family.enqueue(new Callback<ArrayList<CommentInfo>>() {
             @Override
@@ -344,7 +344,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         rv_story_comments = (RecyclerView) findViewById(R.id.rv_story_comments);
 
         photoList = new ArrayList<>();
-        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
         Call<ArrayList<Photo>> call_photo = storyServerConnection.family_content_photo_List(story_id);
         call_photo.enqueue(new Callback<ArrayList<Photo>>() {
             @Override
@@ -371,7 +371,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         });
 
         // comment
-        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
         Call<ArrayList<CommentInfo>> call_family = storyServerConnection.family_detail_comment_List(story_id);
         call_family.enqueue(new Callback<ArrayList<CommentInfo>>() {
             @Override
@@ -396,7 +396,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         });
 
         // comment_count
-        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
         Call<Integer> call_comment_count = storyServerConnection.family_comment_Count(story_id);
         call_comment_count.enqueue(new Callback<Integer>() {
             @Override
@@ -417,7 +417,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
         });
 
         // like_count
-        storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
         Call<Integer> call_like_count = storyServerConnection.family_like_Count(story_id);
         call_like_count.enqueue(new Callback<Integer>() {
             @Override
@@ -565,7 +565,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (first_checked) {
             if (isChecked) {
-                storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+                storyServerConnection = new NetworkInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_id", String.valueOf(user_id));
 
@@ -588,7 +588,7 @@ public class NotificationFamilyStoryDetail extends Activity implements CompoundB
                 });
 
             } else {
-                storyServerConnection = new HeaderInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
+                storyServerConnection = new NetworkInterceptor(access_token).getClientForStoryServer().create(StoryServerConnection.class);
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_id", String.valueOf(user_id));
 

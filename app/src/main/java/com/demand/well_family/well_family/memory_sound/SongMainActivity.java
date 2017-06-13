@@ -34,7 +34,7 @@ import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.repository.SongServerConnection;
 import com.demand.well_family.well_family.family.manage.activity.ManageFamilyActivity;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.setting.base.activity.SettingActivity;
 import com.demand.well_family.well_family.dto.Song;
 import com.demand.well_family.well_family.dto.SongCategory;
@@ -302,7 +302,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
 
         iv_sound_random_avatar = (ImageView) findViewById(R.id.iv_sound_random_avatar);
 
-        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
         Call<Song> call_song_random = songServerConnection.song_random();
         call_song_random.enqueue(new Callback<Song>() {
             @Override
@@ -313,7 +313,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                     if (songInfo == null) {
 
                     } else {
-                        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+                        songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
                         random_id = songInfo.getId();
                         random_avatar = songInfo.getAvatar();
                         random_singer = songInfo.getSinger();
@@ -372,7 +372,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.ib_sound_today:
             case R.id.ll_sound_random:
-                songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+                songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
                 Call<ResponseBody> call_insert_song_hit = songServerConnection.Insert_Song_hit(random_id);
                 call_insert_song_hit.enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -422,7 +422,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
             iv_sound_chart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+                    songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
                     Call<ResponseBody> call_insert_song_hit = songServerConnection.Insert_Song_hit(songList.get(getAdapterPosition()).getId());
                     call_insert_song_hit.enqueue(new Callback<ResponseBody>() {
                         @Override
@@ -489,7 +489,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
     }
 
     private void getChartData() {
-        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
 
         Call<ArrayList<Song>> call_song_list_by_Hits = songServerConnection.song_list_by_Hits();
 
@@ -584,7 +584,7 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
     }
 
     private void getCategoryData() {
-        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
 
         Call<ArrayList<SongCategory>> call_song_category_List = songServerConnection.song_category_List();
 

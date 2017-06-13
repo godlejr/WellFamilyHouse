@@ -61,9 +61,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     public void setCommentSetContent(int position, String content) {
         commentInfoList.get(position).setContent(content);
-
-
-        Log.e(commentInfoList.get(position).getContent(), commentInfoList.get(position).getContent() + "sssssssssssssss");
     }
 
     public void setCommentDelete(int position) {

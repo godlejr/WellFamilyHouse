@@ -1,10 +1,17 @@
 package com.demand.well_family.well_family.repository;
 
+import com.demand.well_family.well_family.dto.CommentInfo;
+import com.demand.well_family.well_family.dto.EnvironmentEvaluationCategory;
+import com.demand.well_family.well_family.dto.EnvironmentEvaluationStatus;
+import com.demand.well_family.well_family.dto.EnvironmentPhoto;
+import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisStory;
+import com.demand.well_family.well_family.dto.FallDiagnosisStoryComment;
 import com.demand.well_family.well_family.dto.FallDiagnosisStoryInfo;
 import com.demand.well_family.well_family.dto.PhysicalEvaluation;
 import com.demand.well_family.well_family.dto.PhysicalEvaluationScore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import okhttp3.RequestBody;
@@ -43,17 +50,11 @@ public interface FallDiagnosisStoryServerConnection {
     Call<ResponseBody> insertEnvironmentPhoto(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Body RequestBody requestBody);
 
 
-
-
-
     @GET("{fall_diagnosis_story_id}/comment_count")
     Call<Integer> selectFallDiagnosisStoryCommentCount(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
 
     @GET("{fall_diagnosis_story_id}/like_count")
     Call<Integer> selectFallDiagnosisStoryLikeCount(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
-
-
-
 
 
     @POST("{fall_diagnosis_story_id}/likes")
@@ -66,14 +67,36 @@ public interface FallDiagnosisStoryServerConnection {
     Call<Integer> selectFallDiagnosisStoryLikeCheck(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Path("user_id") int user_id);
 
 
-
-
-
     @PUT("{fall_diagnosis_story_id}/hits")
     Call<ResponseBody> updateFallDiagnosisStoryHit(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
 
-    @GET("{fall_diagnosis_story_id}/infos")    //
+    @GET("{fall_diagnosis_story_id}/infos")
     Call<FallDiagnosisStoryInfo> selectFallDiagnosisStoryInfo(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @QueryMap HashMap<String, String> map);
+
+
+    //detail
+    @GET("{fall_diagnosis_story_id}/self_diagnosis")
+    Call<ArrayList<FallDiagnosisContentCategory>> selectSelfDiagnosisList(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
+
+    @GET("{fall_diagnosis_story_id}/physical_evaluation_score")
+    Call<PhysicalEvaluationScore> selectPhysicalEvaluationScore(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
+
+    @GET("{fall_diagnosis_story_id}/environment_photo")
+    Call<ArrayList<EnvironmentPhoto>> selectEnvironmentPhoto(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
+
+    @GET("{fall_diagnosis_story_id}/environment_evaluation")
+    Call<ArrayList<EnvironmentEvaluationCategory>> selectEnvironmentEvaluationList(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
+
+    @POST("{fall_diagnosis_story_id}/environment_evaluation_status")
+    Call<ResponseBody> insertEnvironmentEvaluationStatus(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Body EnvironmentEvaluationStatus environmentEvaluationStatus );
+
+    //comment
+    @GET("{fall_diagnosis_story_id}/comments")
+    Call<ArrayList<CommentInfo>> selectFalldiagnosisStoryCommentList(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
+
+    @POST("{fall_diagnosis_story_id}/comments")
+    Call<FallDiagnosisStoryComment> insertFalldiagnosisStoryComment(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @QueryMap HashMap<String, String> map);
+
 
 
 }

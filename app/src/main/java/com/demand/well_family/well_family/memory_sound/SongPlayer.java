@@ -32,7 +32,7 @@ import com.demand.well_family.well_family.repository.SongServerConnection;
 import com.demand.well_family.well_family.dialog.list.comment.activity.CommentDialogActivity;
 import com.demand.well_family.well_family.dto.CommentInfo;
 import com.demand.well_family.well_family.dto.SongComment;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
@@ -166,7 +166,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                     map.put("user_id", String.valueOf(user_id));
                     map.put("content", content);
 
-                    songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+                    songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
                     Call<SongComment> call_insert_Song_comment = songServerConnection.insert_song_comment(song_id, map);
                     call_insert_Song_comment.enqueue(new Callback<SongComment>() {
                         @Override
@@ -305,7 +305,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         HashMap<String, String> map = new HashMap<>();
         map.put("user_id", String.valueOf(user_id));
-        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
         if (first_checked) {
             if (isChecked) {
                 Call<ResponseBody> call_song_like_up = songServerConnection.song_like_up(song_id, map);
@@ -389,7 +389,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
         Glide.with(this).load(getString(R.string.cloud_front_songs_avatar) + song_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_player_album_bg);
 
         //like
-        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
         Call<Integer> call_song_like_count = songServerConnection.song_like_Count(song_id);
         call_song_like_count.enqueue(new Callback<Integer>() {
             @Override
@@ -411,7 +411,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
 
         //like
         cb_sound_player_like = (CheckBox) findViewById(R.id.cb_sound_player_like);
-        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
 
         Call<Integer> call_song_like_check = songServerConnection.song_like_check(song_id, user_id);
         call_song_like_check.enqueue(new Callback<Integer>() {
@@ -481,7 +481,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
     }
 
     private void getCommentCount() {
-        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
         Call<Integer> call_song_comment_count = songServerConnection.song_comment_Count(song_id);
         call_song_comment_count.enqueue(new Callback<Integer>() {
             @Override
@@ -505,7 +505,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
     private void getCommentData() {
         rv_sound_player_comment = (RecyclerView) findViewById(R.id.rv_sound_player_comment);
 
-        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
         Call<ArrayList<CommentInfo>> call_song_comment_List = songServerConnection.song_comment_List(song_id);
         call_song_comment_List.enqueue(new Callback<ArrayList<CommentInfo>>() {
             @Override

@@ -102,8 +102,7 @@
                                 android:layout_alignParentRight="true"
                                 android:layout_alignParentTop="true"
                                 android:layout_marginRight="10dp"
-                                android:gravity="right|center_vertical"
-                                android:text="77" />
+                                android:gravity="right|center_vertical" />
 
                         </RelativeLayout>
 
@@ -123,8 +122,7 @@
                                 android:layout_alignParentTop="true"
                                 android:layout_marginEnd="15dp"
                                 android:layout_marginRight="15dp"
-                                android:gravity="center"
-                                android:text="88" />
+                                android:gravity="center" />
 
                             <ImageView
                                 android:layout_width="wrap_content"

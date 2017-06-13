@@ -8,7 +8,7 @@ import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.StoryServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.story.create.flag.CreateStoryCodeFlag;
 import com.demand.well_family.well_family.story.create.interactor.CreateStoryInteractor;
 import com.demand.well_family.well_family.story.create.presenter.CreateStoryPresenter;
@@ -114,7 +114,7 @@ public class CreateStoryInteractorImpl implements CreateStoryInteractor {
                 map.put("family_name", familyName);
                 map.put("content", content);
 
-                storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+                storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
                 Call<Story> call_write_story = storyServerConnection.insert_story(map);
                 call_write_story.enqueue(new Callback<Story>() {
                     @Override
@@ -157,7 +157,7 @@ public class CreateStoryInteractorImpl implements CreateStoryInteractor {
             sleepTime = CreateStoryCodeFlag.ONE_PHOTO_FOR_TIME;
         }
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         final RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), fileToBase64Util.addBase64Bitmap(fileToBase64Util.encodeImage(photo, path)));
         Call<ResponseBody> call_write_photo = storyServerConnection.insert_photos(storyId, requestBody);
         call_write_photo.enqueue(new Callback<ResponseBody>() {

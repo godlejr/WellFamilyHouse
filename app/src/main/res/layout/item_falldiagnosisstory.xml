@@ -26,7 +26,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:text="낙상위험 자가진단"
                 android:textColor="@color/defaultTextColor"
                 android:textSize="18sp" />
 
@@ -36,10 +35,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:text="2017.06.01 17:40"
                 android:textColor="@color/gray" />
 
             <LinearLayout
+                android:id="@+id/ll_falldiagnosisstory"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="15dp"
@@ -67,16 +66,16 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical"
-                    android:weightSum="3">
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/tv_falldiagnosisstory_score"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:gravity="bottom|center_horizontal"
                         android:textColor="@color/red"
-                        android:textSize="50sp"
+                        android:textSize="34sp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -142,21 +141,21 @@
 
 
                 <ImageView
-                    android:id="@+id/imageView15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:src="@drawable/song_story_comment" />
+                    android:src="@drawable/song_story_comment"
+                    android:id="@+id/imageView16" />
 
                 <TextView
                     android:id="@+id/tv_falldiagnosisstory_commentcount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/imageView15"
-                    android:layout_toRightOf="@+id/imageView15"
+                    android:layout_toEndOf="@+id/imageView16"
+                    android:layout_toRightOf="@+id/imageView16"
                     android:gravity="center" />
 
             </RelativeLayout>

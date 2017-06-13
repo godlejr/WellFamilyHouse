@@ -40,7 +40,7 @@ public class CommentDialogActivity extends Activity implements CommentDialogView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.popup_comment);
+        setContentView(R.layout.dialog_list);
         getWindow().setLayout(android.view.WindowManager.LayoutParams.WRAP_CONTENT, android.view.WindowManager.LayoutParams.WRAP_CONTENT);
 
         Report report = new Report();
@@ -54,6 +54,7 @@ public class CommentDialogActivity extends Activity implements CommentDialogView
         comment.setPosition(getIntent().getIntExtra("position", 0));
         comment.setContent(getIntent().getStringExtra("comment_content"));
         comment.setId(getIntent().getIntExtra("comment_id", 0));
+
         int authorIsMe = getIntent().getIntExtra("act_flag", 0);
 
         commentDialogPresenter = new CommentDialogPresenterImpl(this);
@@ -62,7 +63,7 @@ public class CommentDialogActivity extends Activity implements CommentDialogView
 
     @Override
     public void init() {
-        rv_popup_comment = (RecyclerView) findViewById(R.id.rv_popup_comment);
+        rv_popup_comment = (RecyclerView) findViewById(R.id.rv_dialog_list);
         commentDialogPresenter.onLoadData();
     }
 

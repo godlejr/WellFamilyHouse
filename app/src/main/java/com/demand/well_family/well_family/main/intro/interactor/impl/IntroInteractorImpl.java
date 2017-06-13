@@ -3,7 +3,7 @@ package com.demand.well_family.well_family.main.intro.interactor.impl;
 import com.demand.well_family.well_family.repository.UserServerConnection;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.main.intro.interactor.IntroInteractor;
 import com.demand.well_family.well_family.main.intro.presenter.IntroPresenter;
 import com.demand.well_family.well_family.util.ErrorUtil;
@@ -40,7 +40,7 @@ public class IntroInteractorImpl implements IntroInteractor {
 
         HashMap<String,String> map =new HashMap<>();
         map.put("device_id",deviceId);
-        userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
         Call<Integer> call_device_check = userServerConnection.check_device_id(userId,map);
         call_device_check.enqueue(new Callback<Integer>() {
             @Override

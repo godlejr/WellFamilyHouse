@@ -18,10 +18,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -44,7 +42,7 @@ import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.repository.SongStoryServerConnection;
 import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
@@ -301,7 +299,7 @@ public class ModifySongStoryActivity extends Activity {
                                 }
 
                             }
-                            songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                            songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
                             final int bitmapPhotosSize = bitmapPhotos.size();
 
                             Call<Void> call_write_story = songStoryServerConnection.update_story(story_id, map);
@@ -313,7 +311,7 @@ public class ModifySongStoryActivity extends Activity {
 
                                             for (int i = 0; i < bitmapPhotosSize; i++) {
                                                 progressDialog.setProgress(i + 1);
-                                                songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                                                songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
 
                                                 final RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(bitmapPhotos.get(i)));
                                                 Call<ResponseBody> call_insert_song_photo = songStoryServerConnection.insert_song_photos(story_id, requestBody);

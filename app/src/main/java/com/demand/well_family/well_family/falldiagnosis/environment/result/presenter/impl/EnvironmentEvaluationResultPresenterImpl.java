@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.view.View;
 
+import com.demand.well_family.well_family.dto.EnvironmentEvaluationStatus;
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisStory;
@@ -277,19 +278,24 @@ public class EnvironmentEvaluationResultPresenterImpl implements EnvironmentEval
     @Override
     public void onSuccessSetStoryAdded(int storyId) {
         ArrayList<Integer> answerList = environmentEvaluationResultInteractor.getAnswerList();
-        int answerSize = answerList.size();
-
-        for (int i = 0; i < answerSize; i++) {
-            environmentEvaluationResultInteractor.setEnvironmentEvaluationAdded(storyId, answerList.get(i), i);
-        }
-    }
-
-    @Override
-    public void onSuccessSetEnvironmentEvaluationAdded(int storyId) {
         ArrayList<Uri> photoList = environmentEvaluationResultInteractor.getPhotoList();
         ArrayList<String> pathList = environmentEvaluationResultInteractor.getPathList();
+        int answerSize = answerList.size();
 
-        if(photoList != null) {
+        FallDiagnosisContentCategory fallDiagnosisContentCategory = environmentEvaluationResultInteractor.getFallDiagnosisContentCategory();
+
+        EnvironmentEvaluationStatus environmentEvaluationStatus = new EnvironmentEvaluationStatus();
+        environmentEvaluationStatus.setFall_diagnosis_story_id(storyId);
+        environmentEvaluationStatus.setFall_diagnosis_content_category_id(fallDiagnosisContentCategory.getId());
+
+        environmentEvaluationResultInteractor.setEnvironmentEvaluationStatus(environmentEvaluationStatus);
+
+
+        for (int i = 0; i < answerSize; i++) {
+            environmentEvaluationResultInteractor.setEnvironmentEvaluationAdded(storyId, answerList.get(i));
+        }
+
+        if (photoList != null) {
             int photoSize = photoList.size();
 
             for (int i = 0; i < photoSize; i++) {
@@ -301,5 +307,7 @@ public class EnvironmentEvaluationResultPresenterImpl implements EnvironmentEval
         environmentEvaluationResultView.goneProgressDialog();
         environmentEvaluationResultView.showMessage("낙상 위험환경 평가가 등록되었습니다.");
         environmentEvaluationResultView.navigateToBack();
+
     }
+
 }

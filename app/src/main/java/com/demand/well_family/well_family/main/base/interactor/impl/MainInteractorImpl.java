@@ -6,7 +6,7 @@ import com.demand.well_family.well_family.dto.App;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.main.base.interactor.MainInteractor;
 import com.demand.well_family.well_family.main.base.presenter.MainPresenter;
 import com.demand.well_family.well_family.util.ErrorUtil;
@@ -43,7 +43,7 @@ public class MainInteractorImpl implements MainInteractor {
         String accessToken = user.getAccess_token();
         int user_id = user.getId();
 
-        userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
         Call<ArrayList<Family>> call = userServerConnection.family_Info(user_id);
         call.enqueue(new Callback<ArrayList<Family>>() {
             @Override
@@ -82,7 +82,7 @@ public class MainInteractorImpl implements MainInteractor {
         int user_id = user.getId();
         String access_token = user.getAccess_token();
 
-        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
         Call<User> call_user_info = userServerConnection.user_Info(user_id);
         call_user_info.enqueue(new Callback<User>() {
             @Override

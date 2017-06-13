@@ -8,7 +8,7 @@ import com.demand.well_family.well_family.falldiagnosis.environment.create.inter
 import com.demand.well_family.well_family.falldiagnosis.environment.create.presenter.impl.CreateEnvironmentEvaluationPresenterImpl;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FallDiagnosisServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -46,7 +46,7 @@ public class CreateEnvironmentEvaluationInteractorImpl implements CreateEnvironm
         int fallDiagnosisCategoryId = fallDiagnosisCategory.getId();
         int fallDiagnosisContentCategoryId = fallDiagnosisContentCategory.getId();
 
-        fallDiagnosisServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisServer().create(FallDiagnosisServerConnection.class);
+        fallDiagnosisServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisServer().create(FallDiagnosisServerConnection.class);
         Call<ArrayList<EnvironmentEvaluationCategory>> callGetEnvironmentEvaluationCategories = fallDiagnosisServerConnection.getEnvironmentEvaluationCategories(fallDiagnosisCategoryId, fallDiagnosisContentCategoryId);
         callGetEnvironmentEvaluationCategories.enqueue(new Callback<ArrayList<EnvironmentEvaluationCategory>>() {
             @Override

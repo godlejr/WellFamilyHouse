@@ -8,7 +8,7 @@ import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.creat
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.create.presenter.CreatePhysicalEvaluationPresenter;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FallDiagnosisServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -135,7 +135,7 @@ public class CreatePhysicalEvaluationInteractorImpl implements CreatePhysicalEva
     public void getPhysicalEvaluationCategories(User user) {
         String accessToken = user.getAccess_token();
 
-        fallDiagnosisServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisServer().create(FallDiagnosisServerConnection.class);
+        fallDiagnosisServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisServer().create(FallDiagnosisServerConnection.class);
         Call<ArrayList<PhysicalEvaluationCategory>> callGetPhysicalEvaluationCategories = fallDiagnosisServerConnection.getPhysicalEvaluationCategories(fallDiagnosisCategory.getId());
         callGetPhysicalEvaluationCategories.enqueue(new Callback<ArrayList<PhysicalEvaluationCategory>>() {
             @Override

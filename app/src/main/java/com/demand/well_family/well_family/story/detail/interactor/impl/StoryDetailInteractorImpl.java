@@ -7,7 +7,7 @@ import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.StoryServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.story.detail.interactor.StoryDetailInteractor;
 import com.demand.well_family.well_family.story.detail.presenter.StoryDetailPresenter;
 import com.demand.well_family.well_family.util.ErrorUtil;
@@ -52,7 +52,7 @@ public class StoryDetailInteractorImpl implements StoryDetailInteractor {
     }
 
     @Override
-    public User getUser(){
+    public User getUser() {
         return this.user;
     }
 
@@ -91,7 +91,7 @@ public class StoryDetailInteractorImpl implements StoryDetailInteractor {
         String accessToken = user.getAccess_token();
         int storyId = storyInfo.getStory_id();
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         Call<ArrayList<Photo>> call_photo = storyServerConnection.family_content_photo_List(storyId);
         call_photo.enqueue(new Callback<ArrayList<Photo>>() {
             @Override
@@ -117,7 +117,7 @@ public class StoryDetailInteractorImpl implements StoryDetailInteractor {
         String accessToken = user.getAccess_token();
         int storyId = storyInfo.getStory_id();
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         Call<ArrayList<CommentInfo>> call_family = storyServerConnection.family_detail_comment_List(storyId);
         call_family.enqueue(new Callback<ArrayList<CommentInfo>>() {
             @Override
@@ -144,7 +144,7 @@ public class StoryDetailInteractorImpl implements StoryDetailInteractor {
         int userId = user.getId();
         int storyId = storyInfo.getStory_id();
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         HashMap<String, String> map = new HashMap<>();
         map.put("user_id", String.valueOf(userId));
 
@@ -173,7 +173,7 @@ public class StoryDetailInteractorImpl implements StoryDetailInteractor {
         int userId = user.getId();
         int storyId = storyInfo.getStory_id();
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         Call<ResponseBody> call_dislike = storyServerConnection.family_content_like_down(storyId, userId);
         call_dislike.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -198,7 +198,7 @@ public class StoryDetailInteractorImpl implements StoryDetailInteractor {
         String accessToken = user.getAccess_token();
         int storyId = storyInfo.getStory_id();
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         Call<Void> call_insert_story_hits = storyServerConnection.Insert_story_hit(storyId);
         call_insert_story_hits.enqueue(new Callback<Void>() {
             @Override
@@ -223,7 +223,7 @@ public class StoryDetailInteractorImpl implements StoryDetailInteractor {
         String accessToken = user.getAccess_token();
         int storyId = storyInfo.getStory_id();
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         Call<Integer> call_like_count = storyServerConnection.family_like_Count(storyId);
         call_like_count.enqueue(new Callback<Integer>() {
             @Override
@@ -247,14 +247,14 @@ public class StoryDetailInteractorImpl implements StoryDetailInteractor {
     @Override
     public void setCommentAdded(String content) {
         String accessToken = user.getAccess_token();
-        int userId  = user.getId();
+        int userId = user.getId();
         int storyId = storyInfo.getStory_id();
 
         HashMap<String, String> map = new HashMap<>();
         map.put("user_id", String.valueOf(userId));
         map.put("content", content);
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         Call<Comment> call_insert_comment = storyServerConnection.insert_comment(storyId, map);
         call_insert_comment.enqueue(new Callback<Comment>() {
             @Override
@@ -280,7 +280,7 @@ public class StoryDetailInteractorImpl implements StoryDetailInteractor {
         String accessToken = user.getAccess_token();
         int storyId = storyInfo.getStory_id();
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         Call<Integer> call_comment_count = storyServerConnection.family_comment_Count(storyId);
         call_comment_count.enqueue(new Callback<Integer>() {
             @Override

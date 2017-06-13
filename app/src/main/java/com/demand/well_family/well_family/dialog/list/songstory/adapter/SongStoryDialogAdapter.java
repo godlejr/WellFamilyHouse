@@ -57,7 +57,7 @@ public class SongStoryDialogAdapter extends RecyclerView.Adapter<SongStoryDialog
 
         public SongStoryDialogViewHolder(View itemView) {
             super(itemView);
-            tv_popup_comment_text = (TextView) itemView.findViewById(R.id.tv_popup_comment_text);
+            tv_popup_comment_text = (TextView) itemView.findViewById(R.id.tv_popup_list);
         }
     }
 }

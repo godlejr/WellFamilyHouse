@@ -7,7 +7,7 @@ import com.demand.well_family.well_family.family.search.interactor.SearchFamilyI
 import com.demand.well_family.well_family.family.search.presenter.SearchFamilyPresenter;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.UserServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class SearchFamilyInteractorImpl implements SearchFamilyInteractor {
         HashMap<String, String> map = new HashMap<>();
         map.put("search", keyword);
 
-        userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
         Call<ArrayList<FamilyInfoForFamilyJoin>> call_find_family = userServerConnection.find_family(userId, map);
         call_find_family.enqueue(new Callback<ArrayList<FamilyInfoForFamilyJoin>>() {
             @Override
@@ -73,7 +73,7 @@ public class SearchFamilyInteractorImpl implements SearchFamilyInteractor {
         map.put("family_id", String.valueOf(family.getId()));
         map.put("family_name", String.valueOf(family.getName()));
 
-        userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
         Call<ResponseBody> call_join_family = userServerConnection.join_family(userId, map);
         call_join_family.enqueue(new Callback<ResponseBody>() {
             @Override

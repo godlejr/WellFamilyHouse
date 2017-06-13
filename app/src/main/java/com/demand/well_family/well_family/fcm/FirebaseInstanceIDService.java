@@ -7,7 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.repository.UserServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.util.ErrorUtil;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -70,7 +70,7 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
 
     private void sendRegistrationToServer(String token) {
         Log.e("service",3+"");
-        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
 
         Call<ResponseBody> call_update_token = userServerConnection.update_token(user_id, token);
         call_update_token.enqueue(new Callback<ResponseBody>() {

@@ -8,7 +8,7 @@ import com.demand.well_family.well_family.main.report.interactor.ReportInteracto
 import com.demand.well_family.well_family.main.report.presenter.ReportPresenter;
 import com.demand.well_family.well_family.repository.MainServerConnection;
 import com.demand.well_family.well_family.repository.UserServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -63,7 +63,7 @@ public class ReportInteractorImpl implements ReportInteractor{
         map.put("report_category_id", String.valueOf(reportCategoryId));
         map.put("story_id", String.valueOf(storyId));
 
-        userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
         final Call<ResponseBody> call_report = userServerConnection.insert_story_report(userId, map);
         call_report.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -106,7 +106,7 @@ public class ReportInteractorImpl implements ReportInteractor{
         map.put("report_category_id", String.valueOf(reportCategoryId));
         map.put("comment_id", String.valueOf(commentId));
 
-        userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
         final Call<ResponseBody> call_report = userServerConnection.insert_comment_report(userId, map);
         call_report.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -129,7 +129,7 @@ public class ReportInteractorImpl implements ReportInteractor{
     public void getReportCategoryList(User user) {
         String accessToken = user.getAccess_token();
 
-        mainServerConnection = new HeaderInterceptor(accessToken).getClientForMainServer().create(MainServerConnection.class);
+        mainServerConnection = new NetworkInterceptor(accessToken).getClientForMainServer().create(MainServerConnection.class);
         final Call<ArrayList<Category>> call_report_category_list = mainServerConnection.report_category_List();
         call_report_category_list.enqueue(new Callback<ArrayList<Category>>() {
             @Override

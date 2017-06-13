@@ -40,7 +40,7 @@ public class StoryDialogActivity extends Activity implements StoryDialogView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.popup_comment);
+        setContentView(R.layout.dialog_list);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getWindow().setLayout(android.view.WindowManager.LayoutParams.WRAP_CONTENT, android.view.WindowManager.LayoutParams.WRAP_CONTENT);
 
@@ -66,7 +66,7 @@ public class StoryDialogActivity extends Activity implements StoryDialogView {
 
     @Override
     public void init() {
-        rv_popup_comment = (RecyclerView) findViewById(R.id.rv_popup_comment);
+        rv_popup_comment = (RecyclerView) findViewById(R.id.rv_dialog_list);
         storyDialogPresenter.onLoadData();
     }
 

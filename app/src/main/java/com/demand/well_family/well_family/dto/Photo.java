@@ -13,6 +13,8 @@ public class Photo implements Serializable{
     private String name;
     private String ext;
 
+    public Photo() {
+    }
 
     public Photo(int id, int story_id, int type, String name, String ext) {
         this.id = id;

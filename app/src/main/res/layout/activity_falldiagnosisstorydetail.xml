@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/toolbar_register"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nsv_falldiagnosisstorydetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/grayLine" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:orientation="horizontal"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp">
+
+                    <ImageView
+                        android:layout_width="64dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:padding="5dp"
+                        android:src="@drawable/logo_selffeet" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        android:text="낙상위험진단을 통한 낙상예방 서비스"
+                        android:textColor="@color/defaultTextColor"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/grayLine" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/round_corner_beige_r10"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_corner_white_r10"
+                        android:orientation="vertical"
+                        android:padding="10dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="45dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tv_falldiagnosisstorydetail_title"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="1dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:textColor="@color/defaultTextColor"
+                                    android:textSize="18sp" />
+
+                                <TextView
+                                    android:id="@+id/tv_falldiagnosisstorydetail_date"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="1dp"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"
+                                    android:textColor="@color/gray" />
+                            </LinearLayout>
+
+                            <ImageView
+                                android:id="@+id/iv_falldiagnosisstory_menu"
+                                android:layout_width="35dp"
+                                android:layout_height="45dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_gravity="right"
+                                android:padding="2dp"
+                                android:src="@drawable/story_memu"
+                                android:tint="#7e7e7e" />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_falldiagnosisstorydetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginTop="15dp"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
+
+                            <TextView
+                                android:id="@+id/blank"
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <ImageView
+                                android:id="@+id/iv_falldiagnosisstorydetail_img"
+                                android:layout_width="1dp"
+                                android:layout_height="98dp"
+                                android:layout_weight="1"
+                                android:paddingLeft="12dp"
+                                android:paddingRight="12dp"
+                                android:scaleType="fitXY" />
+
+                            <LinearLayout
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:weightSum="2">
+
+                                <TextView
+                                    android:id="@+id/tv_falldiagnosisstorydetail_score"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_weight="1"
+                                    android:gravity="bottom|center_horizontal"
+                                    android:textColor="@color/red"
+                                    android:textSize="34sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_falldiagnosisstorydetail_result"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:layout_weight="1"
+                                    android:gravity="top|center_horizontal"
+                                    android:textColor="@color/defaultTextColor"
+                                    android:textSize="28sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_falldiagnosisstorydetail_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:weightSum="6">
+
+
+                        <RelativeLayout
+                            android:layout_width="1dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:elevation="1dp">
+
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_gravity="right"
+                                android:layout_marginEnd="30dp"
+                                android:layout_marginRight="30dp"
+                                android:src="@drawable/song_story_like_count" />
+
+                            <TextView
+                                android:id="@+id/tv_falldiagnosisstorydetail_likecount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="12dp"
+                                android:layout_marginRight="12dp"
+                                android:gravity="right|center_vertical"
+                                android:textColor="@color/defaultTextColor" />
+                        </RelativeLayout>
+
+
+                        <RelativeLayout
+                            android:layout_width="1dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_weight="1"
+                            android:elevation="1dp">
+
+
+                            <ImageView
+                                android:id="@+id/imageView15"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="5dp"
+                                android:layout_marginRight="5dp"
+                                android:src="@drawable/song_story_comment" />
+
+                            <TextView
+                                android:id="@+id/tv_falldiagnosisstorydetail_commentcount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toEndOf="@+id/imageView15"
+                                android:layout_toRightOf="@+id/imageView15"
+                                android:gravity="center"
+                                android:textColor="@color/defaultTextColor" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/cb_falldiagnosisstorydetail_likebtn"
+                            android:layout_width="1dp"
+                            android:layout_height="45dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/selector_checkbox_like"
+                            android:button="@null" />
+
+                        <ImageView
+                            android:id="@+id/iv_falldiagnosisstorydetail_sharebtn"
+                            android:layout_width="1dp"
+                            android:layout_height="45dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/btn_share" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_falldiagnosisstorydetail_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:background="#fff" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp" />
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="bottom"
+            android:background="#e5e5e5"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_falldiagnosisstorydetail_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/round_corner_white_r10"
+                android:ems="10"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+
+                android:inputType="textPersonName"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="#424242" />
+
+            <Button
+                android:id="@+id/btn_falldiagnosisstorydetail_comment"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/round_corner_brown_r10"
+                android:text="전송"
+                android:textColor="#fff" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+</LinearLayout>

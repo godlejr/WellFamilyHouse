@@ -7,9 +7,9 @@
     android:layout_width="150dp">
 
     <ImageView
-        android:layout_height="150dp"
         android:id="@+id/iv_main_story_content"
-        android:src="@drawable/main2"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:scaleType="centerCrop"
-        android:layout_width="150dp" />
+        android:src="@drawable/main2" />
 </LinearLayout>

@@ -43,7 +43,7 @@ import com.demand.well_family.well_family.dto.SongPhoto;
 import com.demand.well_family.well_family.dto.SongStoryComment;
 import com.demand.well_family.well_family.dto.SongStoryEmotionData;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.dialog.popup.songphoto.activity.SongPhotoPopupActivity;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
@@ -246,7 +246,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     private void getCommentCount() {
         tv_sound_story_detail_comment_count = (TextView) findViewById(R.id.tv_sound_story_detail_comment_count);
 
-        songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+        songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
         Call<Integer> call_comment_count = songStoryServerConnection.song_story_comment_Count(story_id);
         call_comment_count.enqueue(new Callback<Integer>() {
             @Override
@@ -298,7 +298,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
 
 
         // hit
-        songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+        songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
         Call<Void> call_insert_story_hits = songStoryServerConnection.Insert_song_story_hit(story_id);
         call_insert_story_hits.enqueue(new Callback<Void>() {
             @Override
@@ -320,7 +320,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
 
 
 
-        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
         Call<String> call_song_avatar = songServerConnection.song_story_avatar(song_id);
         call_song_avatar.enqueue(new Callback<String>() {
             @Override
@@ -367,7 +367,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         // like
         tv_sound_story_detail_like_count = (TextView) findViewById(R.id.tv_sound_story_detail_like_count);
 
-        songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+        songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
         Call<Integer> call_like_count = songStoryServerConnection.song_story_like_Count(story_id);
         call_like_count.enqueue(new Callback<Integer>() {
             @Override
@@ -429,7 +429,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         });
 
         iv_sound_story_menu = (ImageView) findViewById(R.id.iv_sound_story_menu);
-        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
         Call<Integer> call_family_check = userServerConnection.family_check(story_user_id, user_id);
         call_family_check.enqueue(new Callback<Integer>() {
             @Override
@@ -619,7 +619,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
         rv_sound_story_detail = (RecyclerView) findViewById(R.id.rv_sound_story_detail);
 
         //images
-        songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+        songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
         Call<ArrayList<SongPhoto>> call_song_photo = songStoryServerConnection.song_story_photo_List(story_id);
         call_song_photo.enqueue(new Callback<ArrayList<SongPhoto>>() {
             @Override
@@ -652,7 +652,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     private void getEmotionData() {
         rv_detail_emotion = (RecyclerView) findViewById(R.id.rv_detail_emotion);
 
-        songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+        songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
         Call<ArrayList<SongStoryEmotionData>> call_emotion_data = songStoryServerConnection.song_story_emotion_List(story_id);
         call_emotion_data.enqueue(new Callback<ArrayList<SongStoryEmotionData>>() {
             @Override
@@ -731,7 +731,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
             public void onClick(View v) {
                 final String content = et_sound_story_comment.getText().toString();
                 if (content.length() != 0) {
-                    songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                    songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
                     final HashMap<String, String> map = new HashMap<>();
                     map.put("user_id", String.valueOf(user_id));
                     map.put("content", content);
@@ -770,7 +770,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     private void getCommentData() {
         rv_sound_story_detail_comments = (RecyclerView) findViewById(R.id.rv_sound_story_detail_comments);
 
-        songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+        songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
         Call<ArrayList<CommentInfo>> call_family = songStoryServerConnection.song_story_comment_List(story_id);
         call_family.enqueue(new Callback<ArrayList<CommentInfo>>() {
             @Override
@@ -1004,7 +1004,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (first_checked) {
             if (isChecked) {
-                songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_id", String.valueOf(user_id));
 
@@ -1027,7 +1027,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                     }
                 });
             } else {
-                songStoryServerConnection = new HeaderInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+                songStoryServerConnection = new NetworkInterceptor(access_token).getClientForSongStoryServer().create(SongStoryServerConnection.class);
                 HashMap<String, String> map = new HashMap<>();
                 map.put("user_id", String.valueOf(user_id));
 

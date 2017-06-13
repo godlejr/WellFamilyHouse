@@ -46,7 +46,7 @@ import com.demand.well_family.well_family.repository.UserServerConnection;
 import com.demand.well_family.well_family.dto.FavoriteCategory;
 import com.demand.well_family.well_family.dto.SongCategory;
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.util.ErrorUtil;
 import com.demand.well_family.well_family.util.RealPathUtil;
@@ -286,7 +286,7 @@ public class EditUserActivity extends Activity {
         });
 
 
-        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
         Call<Integer> call_gender_check = userServerConnection.check_gender(user_id);
         call_gender_check.enqueue(new Callback<Integer>() {
             @Override
@@ -338,7 +338,7 @@ public class EditUserActivity extends Activity {
             }
         });
 
-        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
         Call<ArrayList<FavoriteCategory>> call_favorite_list = userServerConnection.favorite_category_List();
         call_favorite_list.enqueue(new Callback<ArrayList<FavoriteCategory>>() {
             @Override
@@ -361,7 +361,7 @@ public class EditUserActivity extends Activity {
             }
         });
 
-        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
         Call<ArrayList<SongCategory>> call_song_category_list = songServerConnection.song_category_List();
         call_song_category_list.enqueue(new Callback<ArrayList<SongCategory>>() {
             @Override
@@ -403,7 +403,7 @@ public class EditUserActivity extends Activity {
                 map.put("profile_phone", user_phone);
                 map.put("gender", String.valueOf(user_gender));
 
-                userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
                 Call<ResponseBody> call_update_user_info = userServerConnection.update_user_info(user_id, map);
                 call_update_user_info.enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -413,7 +413,7 @@ public class EditUserActivity extends Activity {
 
                             //avatar
                             if (uri != null) {
-                                userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                                userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
                                 RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), addBase64Bitmap(encodeImage(uri)));
                                 Call<ResponseBody> call_update_user_avatar = userServerConnection.update_user_avatar(user_id, requestBody);
                                 call_update_user_avatar.enqueue(new Callback<ResponseBody>() {
@@ -442,7 +442,7 @@ public class EditUserActivity extends Activity {
                             //favorite and song category
                             final int favorite_size = favoriteList.size();
                             //photo_delete prior favorite list
-                            userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                            userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
                             Call<ResponseBody> call_delete_favorite_list = userServerConnection.delete_favorite(user_id);
                             call_delete_favorite_list.enqueue(new Callback<ResponseBody>() {
                                 @Override
@@ -450,7 +450,7 @@ public class EditUserActivity extends Activity {
                                     if (response.isSuccessful()) {
                                         for (int i = 0; i < favorite_size; i++) {
                                             if (favoriteList.get(i).isChecked()) {
-                                                userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                                                userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
                                                 HashMap<String, String> map = new HashMap<>();
                                                 map.put("favorite_id", String.valueOf(favoriteList.get(i).getId()));
 
@@ -487,7 +487,7 @@ public class EditUserActivity extends Activity {
 
                             final int song_size = songList.size();
                             //photo_delete prior song category list
-                            userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                            userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
                             Call<ResponseBody> call_delete_song_list = userServerConnection.delete_song_category(user_id);
                             call_delete_song_list.enqueue(new Callback<ResponseBody>() {
                                 @Override
@@ -495,7 +495,7 @@ public class EditUserActivity extends Activity {
                                     if (response.isSuccessful()) {
                                         for (int i = 0; i < song_size; i++) {
                                             if (songList.get(i).isChecked()) {
-                                                userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+                                                userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
                                                 HashMap<String, String> map = new HashMap<>();
                                                 map.put("song_category_id", String.valueOf(songList.get(i).getId()));
                                                 Call<ResponseBody> call_insert_song_category = userServerConnection.insert_song_category(user_id, map);
@@ -586,7 +586,7 @@ public class EditUserActivity extends Activity {
     }
 
     private void resetUserinfo() {
-        userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
         Call<User> call_user_info = userServerConnection.user_Info(user_id);
         call_user_info.enqueue(new Callback<User>() {
             @Override
@@ -664,7 +664,7 @@ public class EditUserActivity extends Activity {
         public void onBindViewHolder(final ProfileOptionViewHolder holder, final int position) {
             holder.tv_option.setText(favoriteList.get(position).getName());
 
-            userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+            userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
             Call<Integer> call_check_favorite = userServerConnection.check_favorite(user_id, favoriteList.get(position).getId());
             call_check_favorite.enqueue(new Callback<Integer>() {
                 @Override
@@ -744,7 +744,7 @@ public class EditUserActivity extends Activity {
         @Override
         public void onBindViewHolder(final ProfileSongViewHolder holder, final int position) {
             holder.tv_option.setText(songList.get(position).getName());
-            userServerConnection = new HeaderInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
+            userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
 
             Call<Integer> call_check_song_category = userServerConnection.check_song_category(user_id, songList.get(position).getId());
             call_check_song_category.enqueue(new Callback<Integer>() {

@@ -9,7 +9,7 @@ import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FamilyServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -64,7 +64,7 @@ public class FamilyPopupInteractorImpl implements FamilyPopupInteractor {
         String accessToken = user.getAccess_token();
         int familyId = family.getId();
 
-        familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
+        familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
         Call<Void> call_update_user_for_familyjoin = familyServerConnection.update_user_for_familyjoin(familyId, userId);
         call_update_user_for_familyjoin.enqueue(new Callback<Void>() {
             @Override
@@ -92,7 +92,7 @@ public class FamilyPopupInteractorImpl implements FamilyPopupInteractor {
 
         familyPopupPresenter.setPopupButtonBackground(R.drawable.round_corner_red_r10);
 
-        familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
+        familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
         Call<ResponseBody> call_delete_user_from_family = familyServerConnection.delete_user_from_family(familyId, userId);
         call_delete_user_from_family.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -118,7 +118,7 @@ public class FamilyPopupInteractorImpl implements FamilyPopupInteractor {
         int familyId = family.getId();
         int joinerId = userInfoForFamilyJoin.getId();
 
-        familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
+        familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
         Call<Void> call_update_user_for_familyjoin = familyServerConnection.update_user_for_familyjoin(familyId, joinerId);
         call_update_user_for_familyjoin.enqueue(new Callback<Void>() {
             @Override
@@ -143,7 +143,7 @@ public class FamilyPopupInteractorImpl implements FamilyPopupInteractor {
         String accessToken = user.getAccess_token();
         int familyId = family.getId();
 
-        familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
+        familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
         Call<ResponseBody> call_delete_family = familyServerConnection.delete_family(familyId);
         call_delete_family.enqueue(new Callback<ResponseBody>() {
             @Override

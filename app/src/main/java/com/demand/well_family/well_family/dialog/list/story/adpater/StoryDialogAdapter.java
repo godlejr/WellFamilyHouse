@@ -56,7 +56,7 @@ public class StoryDialogAdapter extends RecyclerView.Adapter<StoryDialogAdapter.
 
         public StoryDialogViewHolder(View itemView) {
             super(itemView);
-            tv_popup_comment_text = (TextView) itemView.findViewById(R.id.tv_popup_comment_text);
+            tv_popup_comment_text = (TextView) itemView.findViewById(R.id.tv_popup_list);
         }
     }
 

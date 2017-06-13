@@ -24,7 +24,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.repository.SongServerConnection;
 import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
@@ -89,7 +89,7 @@ public class EmotionActivity extends Activity {
         rv_emotion = (RecyclerView) findViewById(R.id.rv_emotion);
 
 //        songServerConnection = SongServerConnection.retrofit.create(SongServerConnection.class);
-        songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+        songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
         Call<ArrayList<SongStoryEmotionInfo>> call_emotions = songServerConnection.song_story_emotion_List();
         call_emotions.enqueue(new Callback<ArrayList<SongStoryEmotionInfo>>() {
             @Override

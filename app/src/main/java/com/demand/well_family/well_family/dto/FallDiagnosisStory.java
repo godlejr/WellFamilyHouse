@@ -1,9 +1,11 @@
 package com.demand.well_family.well_family.dto;
 
+import java.io.Serializable;
+
 /**
  * Created by Dev-0 on 2017-05-26.
  */
-public class FallDiagnosisStory {
+public class FallDiagnosisStory implements Serializable {
     private int id;
     private int user_id;
     private int fall_diagnosis_category_id;
@@ -12,8 +14,10 @@ public class FallDiagnosisStory {
     private String created_at;
     private String updated_at;
 
-    private Boolean first_checked;
+    private Boolean isChecked;
+    private Boolean firstChecked;
 
+    private FallDiagnosisStoryInfo fallDiagnosisStoryInfo;
     private int position;
 
 
@@ -42,12 +46,12 @@ public class FallDiagnosisStory {
         this.position = position;
     }
 
-    public Boolean getFirst_checked() {
-        return first_checked;
+    public Boolean getFirstChecked() {
+        return firstChecked;
     }
 
-    public void setFirst_checked(Boolean first_checked) {
-        this.first_checked = first_checked;
+    public void setFirstChecked(Boolean firstChecked) {
+        this.firstChecked = firstChecked;
     }
 
     public int getId() {
@@ -108,4 +112,19 @@ public class FallDiagnosisStory {
         this.fall_diagnosis_risk_category_id = fall_diagnosis_risk_category_id;
     }
 
+    public FallDiagnosisStoryInfo getFallDiagnosisStoryInfo() {
+        return fallDiagnosisStoryInfo;
+    }
+
+    public void setFallDiagnosisStoryInfo(FallDiagnosisStoryInfo fallDiagnosisStoryInfo) {
+        this.fallDiagnosisStoryInfo = fallDiagnosisStoryInfo;
+    }
+
+    public Boolean getChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(Boolean checked) {
+        isChecked = checked;
+    }
 }

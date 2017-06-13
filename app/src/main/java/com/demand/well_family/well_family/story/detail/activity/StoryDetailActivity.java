@@ -317,7 +317,7 @@ public class StoryDetailActivity extends Activity implements StoryDetailView, Co
     }
 
     @Override
-    public void navigateToStoryDialogActivityForMember(CommentInfo commentInfo) {
+    public void navigateToStoryCommentDialogActivityForMember(CommentInfo commentInfo) {
         Intent intent = new Intent(StoryDetailActivity.this, CommentDialogActivity.class);
         intent.putExtra("comment_id", commentInfo.getComment_id());
         intent.putExtra("comment_user_name", commentInfo.getUser_name());

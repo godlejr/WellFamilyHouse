@@ -6,7 +6,7 @@ import com.demand.well_family.well_family.dto.Comment;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.CommentServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -37,7 +37,7 @@ public class CommentDeleteInteractorImpl implements CommentDeleteInteractor {
         String accessToken = user.getAccess_token();
         int commentId = comment.getId();
 
-        commentServerConnection = new HeaderInterceptor(accessToken).getClientForCommentServer().create(CommentServerConnection.class);
+        commentServerConnection = new NetworkInterceptor(accessToken).getClientForCommentServer().create(CommentServerConnection.class);
         HashMap<String, String> map = new HashMap<>();
         map.put("flag",String.valueOf(actFlag));
         Call<ResponseBody> call_delete_comment = commentServerConnection.delete_comment(commentId, map);

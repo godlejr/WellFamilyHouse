@@ -1,6 +1,5 @@
 package com.demand.well_family.well_family.falldiagnosis.environment.base.interactor.impl;
 
-import com.demand.well_family.well_family.dto.Evaluation;
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.dto.User;
@@ -8,7 +7,7 @@ import com.demand.well_family.well_family.falldiagnosis.environment.base.interac
 import com.demand.well_family.well_family.falldiagnosis.environment.base.presenter.EnvironmentEvaluationPresenter;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FallDiagnosisServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -50,7 +49,7 @@ public class EnvironmentEvaluationInteractorImpl implements EnvironmentEvaluatio
         String accessToken = user.getAccess_token();
         int categoryId = fallDiagnosisCategory.getId();
 
-        fallDiagnosisServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisServer().create(FallDiagnosisServerConnection.class);
+        fallDiagnosisServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisServer().create(FallDiagnosisServerConnection.class);
         Call<ArrayList<FallDiagnosisContentCategory>> callGetDiagnosisCategories = fallDiagnosisServerConnection.getDiagnosisCategories(categoryId);
         callGetDiagnosisCategories.enqueue(new Callback<ArrayList<FallDiagnosisContentCategory>>() {
             @Override

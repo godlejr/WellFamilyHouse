@@ -31,7 +31,7 @@ import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.repository.SongServerConnection;
 import com.demand.well_family.well_family.family.manage.activity.ManageFamilyActivity;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.setting.base.activity.SettingActivity;
 import com.demand.well_family.well_family.dto.Song;
 import com.demand.well_family.well_family.flag.LogFlag;
@@ -292,7 +292,7 @@ public class SongChartListActivity extends Activity {
             ll_item_song.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    songServerConnection = new HeaderInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
+                    songServerConnection = new NetworkInterceptor(access_token).getClientForSongServer().create(SongServerConnection.class);
                     Call<ResponseBody> call_insert_song_hit = songServerConnection.Insert_Song_hit(songList.get(getAdapterPosition()).getId());
                     call_insert_song_hit.enqueue(new Callback<ResponseBody>() {
                         @Override

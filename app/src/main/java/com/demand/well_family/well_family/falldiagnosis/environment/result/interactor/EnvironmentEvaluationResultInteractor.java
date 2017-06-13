@@ -2,6 +2,7 @@ package com.demand.well_family.well_family.falldiagnosis.environment.result.inte
 
 import android.net.Uri;
 
+import com.demand.well_family.well_family.dto.EnvironmentEvaluationStatus;
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisStory;
@@ -50,11 +51,14 @@ public interface EnvironmentEvaluationResultInteractor {
 
     void setStoryAdded();
 
-    void setEnvironmentEvaluationAdded(int storyId, int environmentEvaluationCategoryId, int index);
+    void setEnvironmentEvaluationAdded(int storyId, int environmentEvaluationCategoryId);
 
     void setPhotoAdded(FileToBase64Util fileToBase64Util, int storyId, Uri photo, String path);
 
     int getFallDiagnosisRiskCategoryId();
 
     void setFallDiagnosisRiskCategoryId(int fallDiagnosisRiskCategoryId);
+
+
+    void setEnvironmentEvaluationStatus(EnvironmentEvaluationStatus environmentEvaluationStatus);
 }

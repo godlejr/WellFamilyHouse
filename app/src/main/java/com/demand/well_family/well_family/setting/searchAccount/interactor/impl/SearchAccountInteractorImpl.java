@@ -3,7 +3,7 @@ package com.demand.well_family.well_family.setting.searchAccount.interactor.impl
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.MainServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.setting.searchAccount.interactor.SearchAccountInteractor;
 import com.demand.well_family.well_family.setting.searchAccount.presenter.SearchAccountPresenter;
 import com.demand.well_family.well_family.util.ErrorUtil;
@@ -32,7 +32,7 @@ public class SearchAccountInteractorImpl implements SearchAccountInteractor {
 
     @Override
     public void getUserInfoFromEmail(String email) {
-        mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
+        mainServerConnection = new NetworkInterceptor().getClientForMainServer().create(MainServerConnection.class);
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("email", email);
 

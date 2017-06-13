@@ -4,7 +4,7 @@ import com.demand.well_family.well_family.repository.MainServerConnection;
 import com.demand.well_family.well_family.repository.UserServerConnection;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.main.sns.interactor.JoinFromSNSInteractor;
 import com.demand.well_family.well_family.main.sns.presenter.JoinFromSNSPresenter;
 import com.demand.well_family.well_family.util.ErrorUtil;
@@ -62,7 +62,7 @@ public class JoinFromSNSInteractorImpl implements JoinFromSNSInteractor {
         map.put("phone", phone);
         map.put("login_category_id", String.valueOf(loginCategoryId));
 
-        mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
+        mainServerConnection = new NetworkInterceptor().getClientForMainServer().create(MainServerConnection.class);
         Call<ResponseBody> call_join = mainServerConnection.join(map);
         call_join.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -88,7 +88,7 @@ public class JoinFromSNSInteractorImpl implements JoinFromSNSInteractor {
         map.put("email", email);
         map.put("password", password);
 
-        mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
+        mainServerConnection = new NetworkInterceptor().getClientForMainServer().create(MainServerConnection.class);
         Call<User> call_login = mainServerConnection.login(map);
         call_login.enqueue(new Callback<User>() {
             @Override
@@ -117,7 +117,7 @@ public class JoinFromSNSInteractorImpl implements JoinFromSNSInteractor {
         map.put("device_id", deviceId);
         map.put("token", firebaseToken);
 
-        userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
         Call<ResponseBody> call_update_deviceId_token = userServerConnection.update_deviceId_token(user.getId(), map);
 
         call_update_deviceId_token.enqueue(new Callback<ResponseBody>() {

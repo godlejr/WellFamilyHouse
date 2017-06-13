@@ -1,10 +1,12 @@
 package com.demand.well_family.well_family.dto;
 
+import java.io.Serializable;
+
 /**
  * Created by ㅇㅇ on 2017-06-02.
  */
 
-public class FallDiagnosisStoryInfo {
+public class FallDiagnosisStoryInfo implements Serializable {
     private int story_id;
     private int user_id;
     private String title;
@@ -12,6 +14,7 @@ public class FallDiagnosisStoryInfo {
     private int score;
     private int total_count;
     private String risk_comment;
+
 
     public FallDiagnosisStoryInfo(int story_id, int user_id, String title, String avatar, int score, int total_count,
                                   String risk_comment) {

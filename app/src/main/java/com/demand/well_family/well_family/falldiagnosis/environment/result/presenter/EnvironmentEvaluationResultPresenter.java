@@ -25,5 +25,4 @@ public interface EnvironmentEvaluationResultPresenter {
 
     void onSuccessSetStoryAdded(int storyId);
 
-    void onSuccessSetEnvironmentEvaluationAdded(int storyId);
 }

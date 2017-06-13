@@ -7,7 +7,7 @@ import com.demand.well_family.well_family.falldiagnosis.selfdiagnosis.result.int
 import com.demand.well_family.well_family.falldiagnosis.selfdiagnosis.result.presenter.SelfDiagnosisResultPresenter;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FallDiagnosisStoryServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -93,7 +93,7 @@ public class SelfDiagnosisResultInteractorImpl implements SelfDiagnosisResultInt
     public void setStoryAdded() {
         String accessToken = user.getAccess_token();
 
-        fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
         Call<Integer> call_story = fallDiagnosisStoryServerConnection.insertFallDiagnosisStory(fallDiagnosisStory);
         call_story.enqueue(new Callback<Integer>() {
             @Override
@@ -126,7 +126,7 @@ public class SelfDiagnosisResultInteractorImpl implements SelfDiagnosisResultInt
         map.put("fall_diagnosis_content_category_id",String.valueOf(fallDiagnosisContentCategoryId));
 
 
-        fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
         Call<ResponseBody> call_self_diagnosis = fallDiagnosisStoryServerConnection.insertSelfDiagnosis(storyId,map);
 
         call_self_diagnosis.enqueue(new Callback<ResponseBody>() {

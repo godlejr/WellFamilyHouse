@@ -28,15 +28,16 @@ public interface FallDiagnosisStoryView {
 
     void setFallDiagnosisStoryAdapterItem(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, FallDiagnosisStoryInfo fallDiagnosisStoryInfo, FallDiagnosisStory fallDiagnosisStory);
 
-    void setFallDiagnosisStoryAdapterCommentCount(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String count);
+    void showFallDiagnosisStoryAdapterCommentCount(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String count);
 
-    void setFallDiagnosisStoryAdapterLikeCount(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String count);
+    void showFallDiagnosisStoryAdapterLikeCount(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String count);
 
 //    void setFallDiagnosisStoryAdapterLikeChecked(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, int position);
 //
 //    void setFallDiagnosisStoryAdapterLikeUnChecked(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, int position);
 
     void setFallDiagnosisStoryAdapterLikeIsChecked(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, int position);
+
     void setFallDiagnosisStoryAdapterLikeIsUnChecked(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, int position);
 
 
@@ -56,12 +57,11 @@ public interface FallDiagnosisStoryView {
 
     void setFallDiagnosisStoryAdapterLikeUp(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, int position);
 
-    void setFallDiagnosisStoryAdapterResult(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String result);
+    void showFallDiagnosisStoryAdapterResult(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String result);
 
-    void setFallDiagnosisStoryAdapterScore(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String score);
+    void showFallDiagnosisStoryAdapterScore(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String score);
 
-    void navigateToFallDiagnosisStoryDetailActivity(FallDiagnosisStory fallDiagnosisStory);
-
+    void navigateToFallDiagnosisStoryDetailActivity(FallDiagnosisStory fallDiagnosisStory, FallDiagnosisStoryInfo fallDiagnosisStoryInfo);
 
     void showScoreTextChangeColorWithSafe(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder);
 

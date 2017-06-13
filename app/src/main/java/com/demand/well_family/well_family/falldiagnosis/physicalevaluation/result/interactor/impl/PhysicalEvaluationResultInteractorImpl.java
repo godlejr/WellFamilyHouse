@@ -10,7 +10,7 @@ import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.resul
 import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.result.presenter.PhysicalEvaluationResultPresenter;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FallDiagnosisStoryServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -97,7 +97,7 @@ public class PhysicalEvaluationResultInteractorImpl implements PhysicalEvaluatio
     public void setStoryAdded() {
         String accessToken = user.getAccess_token();
 
-        fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
         Call<Integer> call_story = fallDiagnosisStoryServerConnection.insertFallDiagnosisStory(fallDiagnosisStory);
         call_story.enqueue(new Callback<Integer>() {
             @Override
@@ -126,7 +126,7 @@ public class PhysicalEvaluationResultInteractorImpl implements PhysicalEvaluatio
         physicalEvaluation.setFall_diagnosis_story_id(storyId);
         physicalEvaluation.setUser_id(userId);
 
-        fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
         Call<ResponseBody> call_physical_evaluation = fallDiagnosisStoryServerConnection.insertPhysicalEvaluation(storyId, physicalEvaluation);
 
         call_physical_evaluation.enqueue(new Callback<ResponseBody>() {
@@ -154,7 +154,7 @@ public class PhysicalEvaluationResultInteractorImpl implements PhysicalEvaluatio
         physicalEvaluationScore.setFall_diagnosis_story_id(storyId);
 
 
-        fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
         Call<ResponseBody> call_physical_evaluationn_score = fallDiagnosisStoryServerConnection.insertPhysicalEvaluationScore(storyId, physicalEvaluationScore);
 
         call_physical_evaluationn_score.enqueue(new Callback<ResponseBody>() {

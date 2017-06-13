@@ -36,6 +36,8 @@ public interface PhotoPopupView {
 
     String getCloudFrontStoryImages();
 
+    String getCloudFrontFallDiagnosisStoryImages();
+
     void showImage(String avatar);
 
     void showImages();

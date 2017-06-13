@@ -2,6 +2,7 @@ package com.demand.well_family.well_family.falldiagnosis.environment.result.inte
 
 import android.net.Uri;
 
+import com.demand.well_family.well_family.dto.EnvironmentEvaluationStatus;
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisStory;
@@ -10,7 +11,7 @@ import com.demand.well_family.well_family.falldiagnosis.environment.result.inter
 import com.demand.well_family.well_family.falldiagnosis.environment.result.presenter.EnvironmentEvaluationResultPresenter;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FallDiagnosisStoryServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 import com.demand.well_family.well_family.util.FileToBase64Util;
 
@@ -155,7 +156,7 @@ public class EnvironmentEvaluationResultInteractorImpl implements EnvironmentEva
     public void setStoryAdded() {
         String accessToken = user.getAccess_token();
 
-        fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
         Call<Integer> call_story = fallDiagnosisStoryServerConnection.insertFallDiagnosisStory(fallDiagnosisStory);
         call_story.enqueue(new Callback<Integer>() {
             @Override
@@ -177,7 +178,7 @@ public class EnvironmentEvaluationResultInteractorImpl implements EnvironmentEva
     }
 
     @Override
-    public void setEnvironmentEvaluationAdded(final int storyId, int environmentEvaluationCategoryId, final int index) {
+    public void setEnvironmentEvaluationAdded(final int storyId, int environmentEvaluationCategoryId) {
         String accessToken = user.getAccess_token();
         int userId = user.getId();
         final int endOfAnswerList = answerList.size() - 1;
@@ -187,7 +188,7 @@ public class EnvironmentEvaluationResultInteractorImpl implements EnvironmentEva
         map.put("environment_evaluation_category_id", String.valueOf(environmentEvaluationCategoryId));
 
 
-        fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
 
         Call<ResponseBody> call_enviroment_evaluation = fallDiagnosisStoryServerConnection.insertEnvironmentEvaluation(storyId, map);
 
@@ -195,9 +196,7 @@ public class EnvironmentEvaluationResultInteractorImpl implements EnvironmentEva
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
-                    if (endOfAnswerList == index) {
-                        environmentEvaluationResultPresenter.onSuccessSetEnvironmentEvaluationAdded(storyId);
-                    }
+
                 } else {
                     environmentEvaluationResultPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
@@ -215,7 +214,7 @@ public class EnvironmentEvaluationResultInteractorImpl implements EnvironmentEva
     @Override
     public void setPhotoAdded(FileToBase64Util fileToBase64Util, int storyId, Uri photo, String path) {
         String accessToken = user.getAccess_token();
-        fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
         final RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), fileToBase64Util.addBase64Bitmap(fileToBase64Util.encodeImage(photo, path)));
         Call<ResponseBody> call_environment_photo = fallDiagnosisStoryServerConnection.insertEnvironmentPhoto(storyId, requestBody);
 
@@ -249,5 +248,30 @@ public class EnvironmentEvaluationResultInteractorImpl implements EnvironmentEva
 
     public void setFallDiagnosisRiskCategoryId(int fallDiagnosisRiskCategoryId) {
         this.fallDiagnosisRiskCategoryId = fallDiagnosisRiskCategoryId;
+    }
+
+    @Override
+    public void setEnvironmentEvaluationStatus(EnvironmentEvaluationStatus environmentEvaluationStatus) {
+        String accessToken = user.getAccess_token();
+        int storyId = environmentEvaluationStatus.getFall_diagnosis_story_id();
+
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        Call<ResponseBody> callInsertEnvironmentEvaluationStatus = fallDiagnosisStoryServerConnection.insertEnvironmentEvaluationStatus(storyId, environmentEvaluationStatus);
+        callInsertEnvironmentEvaluationStatus.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    //성공
+                } else {
+                    environmentEvaluationResultPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                log(t);
+                environmentEvaluationResultPresenter.onNetworkError(null);
+            }
+        });
     }
 }

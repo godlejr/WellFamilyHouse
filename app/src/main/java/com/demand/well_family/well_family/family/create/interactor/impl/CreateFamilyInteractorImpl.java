@@ -9,7 +9,7 @@ import com.demand.well_family.well_family.family.create.presenter.CreateFamilyPr
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FamilyServerConnection;
 import com.demand.well_family.well_family.repository.UserServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 import com.demand.well_family.well_family.util.FileToBase64Util;
 import com.demand.well_family.well_family.util.RealPathUtil;
@@ -80,7 +80,7 @@ public class CreateFamilyInteractorImpl implements CreateFamilyInteractor {
         map.put("family_name", familyName);
         map.put("family_content", familyContent);
 
-        userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
         Call<Integer> call = userServerConnection.insert_family(userId, map);
         call.enqueue(new Callback<Integer>() {
             @Override
@@ -106,7 +106,7 @@ public class CreateFamilyInteractorImpl implements CreateFamilyInteractor {
     public void setFamilyAvatarAdded(final int familyId, FileToBase64Util fileToBase64Util) {
         String accessToken = user.getAccess_token();
 
-        familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
+        familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), fileToBase64Util.addBase64Bitmap(fileToBase64Util.encodeImage(uri, path)));
 
         Call<ResponseBody> call_photo = familyServerConnection.update_family_avatar(familyId, requestBody);
@@ -132,7 +132,7 @@ public class CreateFamilyInteractorImpl implements CreateFamilyInteractor {
     public void getFamilyData(int familyId) {
         String accessToken = user.getAccess_token();
 
-        familyServerConnection = new HeaderInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
+        familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
         Call<Family> call_family = familyServerConnection.family(familyId);
         call_family.enqueue(new Callback<Family>() {
             @Override

@@ -3,7 +3,7 @@ package com.demand.well_family.well_family.users.base.interactor.impl;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.UserServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.users.base.interactor.UserInteractor;
 import com.demand.well_family.well_family.users.base.presenter.UserPresenter;
 import com.demand.well_family.well_family.util.ErrorUtil;
@@ -74,13 +74,16 @@ public class UserInteractorImpl implements UserInteractor {
     @Override
     public String getUserPhoneWithHyphen(String phone) {
         String phoneWithHyphen = "";
-        int phone_length = phone.length();
+        if (phone != null) {
+            int phone_length = phone.length();
 
-        if (phone_length == 11) {
-            phoneWithHyphen = phone.substring(0, 3) + "-" + phone.substring(3, 7) + "-" + phone.substring(7, 11);
-        } else if (phone_length == 10) {
-            phoneWithHyphen = phone.substring(0, 3) + "-" + phone.substring(3, 6) + "-" + phone.substring(6, 10);
+            if (phone_length == 11) {
+                phoneWithHyphen = phone.substring(0, 3) + "-" + phone.substring(3, 7) + "-" + phone.substring(7, 11);
+            } else if (phone_length == 10) {
+                phoneWithHyphen = phone.substring(0, 3) + "-" + phone.substring(3, 6) + "-" + phone.substring(6, 10);
+            }
         }
+
         return phoneWithHyphen;
     }
 
@@ -91,7 +94,7 @@ public class UserInteractorImpl implements UserInteractor {
         int userId = user.getId();
 
 
-        userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
 
         Call<Integer> call_family_check = userServerConnection.family_check(storyUserid, userId);
         call_family_check.enqueue(new Callback<Integer>() {

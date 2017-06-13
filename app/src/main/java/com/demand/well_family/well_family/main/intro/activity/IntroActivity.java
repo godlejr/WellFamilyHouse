@@ -1,6 +1,7 @@
 package com.demand.well_family.well_family.main.intro.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,10 +18,14 @@ import com.demand.well_family.well_family.main.intro.view.IntroView;
 public class IntroActivity extends Activity implements IntroView {
     private IntroPresenter introPresenter;
 
+    public static Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
+
+        context =  this.getApplicationContext();
         introPresenter = new IntroPresenterImpl(this);
         introPresenter.onCreate();
     }

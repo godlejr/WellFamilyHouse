@@ -8,7 +8,7 @@ import com.demand.well_family.well_family.dto.Story;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.StoryServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -72,7 +72,7 @@ public class StoryDialogInteractorImpl implements StoryDialogInteractor {
     public void setStoryDeleted(int storyId) {
         String accessToken = user.getAccess_token();
 
-        storyServerConnection = new HeaderInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         Call<Void> call_delete_story = storyServerConnection.delete_story(storyId);
         call_delete_story.enqueue(new Callback<Void>() {
             @Override

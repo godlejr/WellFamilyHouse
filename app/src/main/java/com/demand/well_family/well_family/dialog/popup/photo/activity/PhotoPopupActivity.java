@@ -48,12 +48,11 @@ public class PhotoPopupActivity extends Activity implements PhotoPopupView, View
         getWindow().setLayout(android.view.WindowManager.LayoutParams.MATCH_PARENT, android.view.WindowManager.LayoutParams.MATCH_PARENT);
 
 
-        String fromActivity = getIntent().getStringExtra("from");
         ArrayList<Photo> photoList = (ArrayList<Photo>) getIntent().getSerializableExtra("photoList");
         int intentFlag = getIntent().getIntExtra("intent_flag", 0);
 
         photoPopupPresenter = new PhotoPopupPresenterImpl(this);
-        photoPopupPresenter.onCreate(intentFlag, photoList, fromActivity);
+        photoPopupPresenter.onCreate(intentFlag, photoList);
     }
 
     @Override
@@ -163,6 +162,12 @@ public class PhotoPopupActivity extends Activity implements PhotoPopupView, View
     public String getCloudFrontStoryImages() {
         return getString(R.string.cloud_front_stories_images);
     }
+
+    @Override
+    public String getCloudFrontFallDiagnosisStoryImages() {
+        return getString(R.string.cloud_front_stories_environment);
+    }
+
 
     @Override
     public void showImage(String avatar) {

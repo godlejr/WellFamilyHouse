@@ -8,7 +8,7 @@ import com.demand.well_family.well_family.dto.SongStory;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.SongStoryServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -112,7 +112,7 @@ public class SongStoryDialogInteractorImpl implements SongStoryDialogInteractor 
     public void setSongStoryDeleted(int songStoryId) {
         String accessToken = user.getAccess_token();
 
-        songStoryServerConnection = new HeaderInterceptor(accessToken).getClientForSongStoryServer().create(SongStoryServerConnection.class);
+        songStoryServerConnection = new NetworkInterceptor(accessToken).getClientForSongStoryServer().create(SongStoryServerConnection.class);
         Call<Void> call_delete_story = songStoryServerConnection.delete_story(songStoryId);
         call_delete_story.enqueue(new Callback<Void>() {
             @Override

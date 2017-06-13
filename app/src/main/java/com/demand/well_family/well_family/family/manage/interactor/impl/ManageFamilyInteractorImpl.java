@@ -7,7 +7,7 @@ import com.demand.well_family.well_family.family.manage.interactor.ManageFamilyI
 import com.demand.well_family.well_family.family.manage.presenter.ManageFamilyPresenter;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.UserServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ public class ManageFamilyInteractorImpl implements ManageFamilyInteractor {
         String accessToken = user.getAccess_token();
         int userId = user.getId();
 
-        userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
         Call<ArrayList<Family>> call_manage_families = userServerConnection.manage_families(userId);
         call_manage_families.enqueue(new Callback<ArrayList<Family>>() {
             @Override
@@ -74,7 +74,7 @@ public class ManageFamilyInteractorImpl implements ManageFamilyInteractor {
         String accessToken = user.getAccess_token();
         int userId = user.getId();
 
-        userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
         Call<ArrayList<FamilyInfoForFamilyJoin>> call_family_info = userServerConnection.join_families(userId);
         call_family_info.enqueue(new Callback<ArrayList<FamilyInfoForFamilyJoin>>() {
             @Override

@@ -14,7 +14,7 @@ import com.demand.well_family.well_family.falldiagnosistory.base.interactor.Fall
 import com.demand.well_family.well_family.falldiagnosistory.base.interactor.impl.FallDiagnosisStoryInteractorImpl;
 import com.demand.well_family.well_family.falldiagnosistory.base.presenter.FallDiagnosisStoryPresenter;
 import com.demand.well_family.well_family.falldiagnosistory.base.view.FallDiagnosisStoryView;
-import com.demand.well_family.well_family.falldiagnosistory.flag.FallDiagnosisStoryCodFlag;
+import com.demand.well_family.well_family.falldiagnosistory.flag.FallDiagnosisStoryCodeFlag;
 import com.demand.well_family.well_family.flag.FallDiagnosisFlag;
 import com.demand.well_family.well_family.util.APIErrorUtil;
 import com.demand.well_family.well_family.util.PreferenceUtil;
@@ -113,12 +113,12 @@ public class FallDiagnosisStoryPresenterImpl implements FallDiagnosisStoryPresen
 
     @Override
     public void onSuccessGetFallDiagnosisStoryCommentCount(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, int count) {
-        fallDiagnosisStoryView.setFallDiagnosisStoryAdapterCommentCount(holder, String.valueOf(count));
+        fallDiagnosisStoryView.showFallDiagnosisStoryAdapterCommentCount(holder, String.valueOf(count));
     }
 
     @Override
     public void onSuccessGetFallDiagnosisStoryLikeCount(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, int count) {
-        fallDiagnosisStoryView.setFallDiagnosisStoryAdapterLikeCount(holder, String.valueOf(count));
+        fallDiagnosisStoryView.showFallDiagnosisStoryAdapterLikeCount(holder, String.valueOf(count));
     }
 
     @Override
@@ -137,8 +137,11 @@ public class FallDiagnosisStoryPresenterImpl implements FallDiagnosisStoryPresen
 
     @Override
     public void onClickContentBody(FallDiagnosisStory fallDiagnosisStory) {
+        FallDiagnosisStoryInfo fallDiagnosisStoryInfo = fallDiagnosisStory.getFallDiagnosisStoryInfo();
+
         fallDiagnosisStoryInteractor.setFallDiagnosisStoryHit(fallDiagnosisStory);
-        fallDiagnosisStoryView.navigateToFallDiagnosisStoryDetailActivity(fallDiagnosisStory);
+
+        fallDiagnosisStoryView.navigateToFallDiagnosisStoryDetailActivity(fallDiagnosisStory, fallDiagnosisStoryInfo );
     }
 
     @Override
@@ -205,7 +208,7 @@ public class FallDiagnosisStoryPresenterImpl implements FallDiagnosisStoryPresen
 
     @Override
     public void onCheckedChangeForLike(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, FallDiagnosisStory fallDiagnosisStory, boolean isChecked) {
-        boolean isFirstChecked = fallDiagnosisStory.getFirst_checked();
+        boolean isFirstChecked = fallDiagnosisStory.getFirstChecked();
 
         if (isFirstChecked) {
             if (isChecked) {
@@ -220,7 +223,7 @@ public class FallDiagnosisStoryPresenterImpl implements FallDiagnosisStoryPresen
     @Override
     public void setResult(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder) {
         FallDiagnosisStoryInfo fallDiagnosisStoryInfo = fallDiagnosisStoryInteractor.getFallDiagnosisStoryInfo();
-        fallDiagnosisStoryView.setFallDiagnosisStoryAdapterResult(holder, fallDiagnosisStoryInfo.getRisk_comment());
+        fallDiagnosisStoryView.showFallDiagnosisStoryAdapterResult(holder, fallDiagnosisStoryInfo.getRisk_comment());
     }
 
     @Override
@@ -233,20 +236,20 @@ public class FallDiagnosisStoryPresenterImpl implements FallDiagnosisStoryPresen
         int score = fallDiagnosisStoryInfo.getScore();
 
         if (categoryId == FallDiagnosisFlag.PHYSICAL_EVALUATION) {
-            fallDiagnosisStoryView.setFallDiagnosisStoryAdapterScore(holder, score + "점");
+            fallDiagnosisStoryView.showFallDiagnosisStoryAdapterScore(holder, score + "점");
         }
 
         if (categoryId == FallDiagnosisFlag.SELF_DIAGNOSIS || categoryId == FallDiagnosisFlag.RISK_EVALUATION) {
-            fallDiagnosisStoryView.setFallDiagnosisStoryAdapterScore(holder, score + "/" + totalCount);
+            fallDiagnosisStoryView.showFallDiagnosisStoryAdapterScore(holder, score + "/" + totalCount);
         }
 
-        if (riskCategoryId == FallDiagnosisStoryCodFlag.SAFE) {
+        if (riskCategoryId == FallDiagnosisStoryCodeFlag.SAFE) {
             fallDiagnosisStoryView.showScoreTextChangeColorWithSafe(holder);
         }
-        if (riskCategoryId == FallDiagnosisStoryCodFlag.CAUTION) {
+        if (riskCategoryId == FallDiagnosisStoryCodeFlag.CAUTION) {
             fallDiagnosisStoryView.showScoreTextChangeColorWithCaution(holder);
         }
-        if (riskCategoryId == FallDiagnosisStoryCodFlag.RISK) {
+        if (riskCategoryId == FallDiagnosisStoryCodeFlag.RISK) {
             fallDiagnosisStoryView.showScoreTextChangeColorWithRisk(holder);
         }
 

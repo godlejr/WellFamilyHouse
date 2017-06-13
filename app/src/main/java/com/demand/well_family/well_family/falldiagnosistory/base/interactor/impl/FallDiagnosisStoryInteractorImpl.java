@@ -9,7 +9,7 @@ import com.demand.well_family.well_family.falldiagnosistory.base.presenter.FallD
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.FallDiagnosisStoryServerConnection;
 import com.demand.well_family.well_family.repository.UserServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -121,7 +121,7 @@ public class FallDiagnosisStoryInteractorImpl implements FallDiagnosisStoryInter
                 String accessToken = user.getAccess_token();
                 int storyUserId = storyUser.getId();
 
-                userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+                userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
                 Call<ArrayList<FallDiagnosisStory>> callSelectFallDiagnosisStoryList = userServerConnection.selectFallDiagnosisStoryList(storyUserId);
                 callSelectFallDiagnosisStoryList.enqueue(new Callback<ArrayList<FallDiagnosisStory>>() {
                     @Override
@@ -149,7 +149,7 @@ public class FallDiagnosisStoryInteractorImpl implements FallDiagnosisStoryInter
         String accessToken = user.getAccess_token();
         int StoryId = fallDiagnosisStory.getId();
 
-        fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
         Call<Integer> callSelectFallDiagnosisStoryCommentCount = fallDiagnosisStoryServerConnection.selectFallDiagnosisStoryCommentCount(StoryId);
         callSelectFallDiagnosisStoryCommentCount.enqueue(new Callback<Integer>() {
             @Override
@@ -175,7 +175,7 @@ public class FallDiagnosisStoryInteractorImpl implements FallDiagnosisStoryInter
         String accessToken = user.getAccess_token();
         int StoryId = fallDiagnosisStory.getId();
 
-        fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
         Call<Integer> callSelectFallDiagnosisStoryCommentCount = fallDiagnosisStoryServerConnection.selectFallDiagnosisStoryLikeCount(StoryId);
         callSelectFallDiagnosisStoryCommentCount.enqueue(new Callback<Integer>() {
             @Override
@@ -268,7 +268,7 @@ public class FallDiagnosisStoryInteractorImpl implements FallDiagnosisStoryInter
         map.put("fall_diagnosis_category_id", String.valueOf(fallDiagnosisStory.getFall_diagnosis_category_id()));
         map.put("fall_diagnosis_risk_category_id", String.valueOf(fallDiagnosisStory.getFall_diagnosis_risk_category_id()));
 
-        fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
         Call<FallDiagnosisStoryInfo> callSelectFallDiagnosisStoryInfo = fallDiagnosisStoryServerConnection.selectFallDiagnosisStoryInfo(storyId, map);
         callSelectFallDiagnosisStoryInfo.enqueue(new Callback<FallDiagnosisStoryInfo>() {
             @Override
@@ -295,7 +295,7 @@ public class FallDiagnosisStoryInteractorImpl implements FallDiagnosisStoryInter
         int storyId = fallDiagnosisStory.getId();
         int userId = user.getId();
 
-        fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
         Call<Integer> callSelectFallDiagnosisStoryInfo = fallDiagnosisStoryServerConnection.selectFallDiagnosisStoryLikeCheck(storyId, userId);
         callSelectFallDiagnosisStoryInfo.enqueue(new Callback<Integer>() {
             @Override
@@ -326,7 +326,7 @@ public class FallDiagnosisStoryInteractorImpl implements FallDiagnosisStoryInter
         HashMap<String, String> map = new HashMap<>();
         map.put("user_id", String.valueOf(userId));
 
-        fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
         Call<ResponseBody> callSelectFallDiagnosisStoryInfo = fallDiagnosisStoryServerConnection.insertFallDiagnosisStoryLikeUp(storyId, map);
         callSelectFallDiagnosisStoryInfo.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -353,7 +353,7 @@ public class FallDiagnosisStoryInteractorImpl implements FallDiagnosisStoryInter
         int storyId = fallDiagnosisStory.getId();
         int userId = user.getId();
 
-        fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
         Call<ResponseBody> callSelectFallDiagnosisStoryInfo = fallDiagnosisStoryServerConnection.deleteFallDiagnosisStoryLikeDown(storyId, userId);
         callSelectFallDiagnosisStoryInfo.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -379,7 +379,7 @@ public class FallDiagnosisStoryInteractorImpl implements FallDiagnosisStoryInter
         String accessToken = user.getAccess_token();
         int storyId = fallDiagnosisStory.getId();
 
-        fallDiagnosisStoryServerConnection = new HeaderInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+        fallDiagnosisStoryServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
         Call<ResponseBody> callSelectFallDiagnosisStoryInfo = fallDiagnosisStoryServerConnection.updateFallDiagnosisStoryHit(storyId);
         callSelectFallDiagnosisStoryInfo.enqueue(new Callback<ResponseBody>() {
             @Override

@@ -6,7 +6,7 @@ import android.text.Spanned;
 import com.demand.well_family.well_family.repository.MainServerConnection;
 import com.demand.well_family.well_family.flag.JoinFlag;
 import com.demand.well_family.well_family.flag.LogFlag;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.main.base.interactor.impl.MainInteractorImpl;
 import com.demand.well_family.well_family.main.join.interactor.JoinInteractor;
 import com.demand.well_family.well_family.main.join.presenter.JoinPresenter;
@@ -107,7 +107,7 @@ public class JoinInteractorImpl implements JoinInteractor {
         map.put("login_category_id", String.valueOf(JoinFlag.DEMAND));
 
 
-        mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
+        mainServerConnection = new NetworkInterceptor().getClientForMainServer().create(MainServerConnection.class);
         Call<ResponseBody> call_join = mainServerConnection.join(map);
         call_join.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -133,7 +133,7 @@ public class JoinInteractorImpl implements JoinInteractor {
         HashMap<String, String> map = new HashMap<>();
         map.put("email", email);
 
-        mainServerConnection = new HeaderInterceptor().getClientForMainServer().create(MainServerConnection.class);
+        mainServerConnection = new NetworkInterceptor().getClientForMainServer().create(MainServerConnection.class);
         Call<Integer> call_email_check = mainServerConnection.email_check(map);
         call_email_check.enqueue(new Callback<Integer>() {
             @Override

@@ -6,7 +6,7 @@ import com.demand.well_family.well_family.dto.Comment;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.CommentServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
 import org.slf4j.Logger;
@@ -32,7 +32,7 @@ public class CommentEditInteractorImpl implements CommentEditInteractor {
         String commentContent = commentAfterEdited.getContent();
         int commentId = commentAfterEdited.getId();
 
-        commentServerConnection = new HeaderInterceptor(accessToken).getClientForCommentServer().create(CommentServerConnection.class);
+        commentServerConnection = new NetworkInterceptor(accessToken).getClientForCommentServer().create(CommentServerConnection.class);
         HashMap<String, String> map = new HashMap<String, String>();
         map.put("content", commentContent);
         map.put("flag", String.valueOf(intentFlag));

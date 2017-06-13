@@ -64,7 +64,7 @@ public interface StoryDetailView {
 
     void navigateToStoryCommentDialogActivityForOwner(CommentInfo commentInfo);
 
-    void navigateToStoryDialogActivityForMember(CommentInfo commentInfo);
+    void navigateToStoryCommentDialogActivityForMember(CommentInfo commentInfo);
 
     void navigateToPhotoPopupActivity(int position);
 

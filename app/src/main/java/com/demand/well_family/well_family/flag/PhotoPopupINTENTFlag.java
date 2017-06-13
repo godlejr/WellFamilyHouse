@@ -9,4 +9,5 @@ public class PhotoPopupINTENTFlag {
     public static final int USERACTIVITY = 2;
     public static final int PHOTOSACTIVITY =3;
     public static final int STORYDETAILACTIVITY = 4;
+    public static final int FALLDIAGNOSISSTORYACTIVITY=5;
 }

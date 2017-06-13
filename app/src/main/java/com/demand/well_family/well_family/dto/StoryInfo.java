@@ -14,7 +14,7 @@ public class StoryInfo implements Serializable {
     private String created_at;
     private String content;
     private Boolean first_checked; //  select first check
-    private Boolean isChecked; // like cheched
+    private Boolean isChecked; // like checked
     private int position;
 
     public StoryInfo() {

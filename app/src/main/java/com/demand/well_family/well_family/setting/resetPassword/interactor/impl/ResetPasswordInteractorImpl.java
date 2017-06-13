@@ -3,7 +3,7 @@ package com.demand.well_family.well_family.setting.resetPassword.interactor.impl
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.UserServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.HeaderInterceptor;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.setting.resetPassword.interactor.ResetPasswordInteractor;
 import com.demand.well_family.well_family.setting.resetPassword.presenter.ResetPasswordPresenter;
 import com.demand.well_family.well_family.util.EncryptionUtil;
@@ -52,7 +52,7 @@ public class ResetPasswordInteractorImpl implements ResetPasswordInteractor {
         HashMap<String, String> map = new HashMap<>();
         map.put("password", encryptedPassword);
 
-        userServerConnection = new HeaderInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
         Call<Void> call_reset_password = userServerConnection.updatePassword(userId, map);
         call_reset_password.enqueue(new Callback<Void>() {
             @Override
