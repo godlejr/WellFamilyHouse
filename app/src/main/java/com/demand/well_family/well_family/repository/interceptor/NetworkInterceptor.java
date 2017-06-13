@@ -1,15 +1,11 @@
 package com.demand.well_family.well_family.repository.interceptor;
 
-import com.demand.well_family.well_family.main.intro.activity.IntroActivity;
 import com.demand.well_family.well_family.repository.converter.NullOnEmptyConverterFactory;
-import com.demand.well_family.well_family.util.NetworkUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.File;
 import java.io.IOException;
 
-import okhttp3.Cache;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -34,45 +30,10 @@ public class NetworkInterceptor implements Interceptor {
     public NetworkInterceptor(String access_token) {
         this.access_token = access_token;
 
-        int cacheSize = 10 * 1024 * 1024; // 10 MB
-        Cache cache = new Cache(new File(IntroActivity.context.getCacheDir().toString()), cacheSize);
-
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.addInterceptor(this);
-        builder.cache(cache);
-        builder.networkInterceptors().add(mCacheControlInterceptor);
-
-        client = builder.build();
+        client = new OkHttpClient.Builder()
+                .addInterceptor(this)
+                .build();
     }
-
-    private static final Interceptor mCacheControlInterceptor = new Interceptor() {
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            Request request = chain.request();
-
-            // Add Cache Control only for GET methods
-            if (request.method().equals("GET")) {
-                if (NetworkUtil.isNetworkAvailable(IntroActivity.context)) {
-                    // 1 day
-                    request.newBuilder()
-                            .header("Cache-Control", "only-if-cached")
-                            .build();
-                } else {
-                    // 4 weeks stale
-                    request.newBuilder()
-                            .header("Cache-Control", "public, max-stale=2419200")
-                            .build();
-                }
-            }
-
-            Response response = chain.proceed(request);
-
-            // Re-write response CC header to force use of cache
-            return response.newBuilder()
-                    .header("Cache-Control", "public, max-age=86400") // 1 day
-                    .build();
-        }
-    };
 
 
     @Override
