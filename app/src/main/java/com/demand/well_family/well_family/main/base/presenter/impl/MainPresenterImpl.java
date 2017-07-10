@@ -97,10 +97,8 @@ public class MainPresenterImpl implements MainPresenter {
             mainView.navigateToSongMainActivity();
         } else if (position == 1) {
             mainView.navigateToFallDiagnosisActivity();
-
         } else if (position == 2) {
-
-
+            mainView.navigateToExerciseActivity();
         } else {
             mainView.navigateToAppGame(app.getPackageName());
         }

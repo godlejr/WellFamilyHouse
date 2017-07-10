@@ -8,9 +8,13 @@ import com.demand.well_family.well_family.dto.User;
  */
 
 public interface PhysicalEvaluationInteractor {
-    void getPhysicalEvaluationCategories(User user);
+    void getPhysicalEvaluationCategories();
 
     FallDiagnosisCategory getFallDiagnosisCategory();
 
     void setFallDiagnosisCategory(FallDiagnosisCategory fallDiagnosisCategory);
+
+    User getUser();
+
+    void setUser(User user);
 }

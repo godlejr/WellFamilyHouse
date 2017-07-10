@@ -43,7 +43,7 @@ public class SelfDiagnosisInteractorImpl implements SelfDiagnosisInteractor {
     }
 
     @Override
-    public void getDiagnosisCategories(User user) {
+    public void getDiagnosisCategories() {
         String accessToken = user.getAccess_token();
         int categoryId = fallDiagnosisCategory.getId();
 
@@ -78,7 +78,6 @@ public class SelfDiagnosisInteractorImpl implements SelfDiagnosisInteractor {
     public void setFallDiagnosisCategory(FallDiagnosisCategory fallDiagnosisCategory) {
         this.fallDiagnosisCategory = fallDiagnosisCategory;
     }
-
 
 
     @Override

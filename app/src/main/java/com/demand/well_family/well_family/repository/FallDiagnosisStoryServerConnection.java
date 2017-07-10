@@ -73,6 +73,11 @@ public interface FallDiagnosisStoryServerConnection {
     @GET("{fall_diagnosis_story_id}/infos")
     Call<FallDiagnosisStoryInfo> selectFallDiagnosisStoryInfo(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @QueryMap HashMap<String, String> map);
 
+    @GET("{fall_diagnosis_story_id}")
+    Call<FallDiagnosisStory> selectFallDiagnosisStory(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
+
+    @DELETE("{fall_diagnosis_story_id}")
+    Call<ResponseBody> deleteFalldiagnosisStory(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
 
     //detail
     @GET("{fall_diagnosis_story_id}/self_diagnosis")
@@ -88,7 +93,7 @@ public interface FallDiagnosisStoryServerConnection {
     Call<ArrayList<EnvironmentEvaluationCategory>> selectEnvironmentEvaluationList(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id);
 
     @POST("{fall_diagnosis_story_id}/environment_evaluation_status")
-    Call<ResponseBody> insertEnvironmentEvaluationStatus(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Body EnvironmentEvaluationStatus environmentEvaluationStatus );
+    Call<ResponseBody> insertEnvironmentEvaluationStatus(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @Body EnvironmentEvaluationStatus environmentEvaluationStatus);
 
     //comment
     @GET("{fall_diagnosis_story_id}/comments")
@@ -96,7 +101,6 @@ public interface FallDiagnosisStoryServerConnection {
 
     @POST("{fall_diagnosis_story_id}/comments")
     Call<FallDiagnosisStoryComment> insertFalldiagnosisStoryComment(@Path("fall_diagnosis_story_id") int fall_diagnosis_story_id, @QueryMap HashMap<String, String> map);
-
 
 
 }

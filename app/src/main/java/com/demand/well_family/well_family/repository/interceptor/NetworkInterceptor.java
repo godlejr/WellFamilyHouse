@@ -172,4 +172,25 @@ public class NetworkInterceptor implements Interceptor {
     }
 
 
+    public Retrofit getExerciseServer() {
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/exercises/")
+                .addConverterFactory(new NullOnEmptyConverterFactory())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(client)
+                .build();
+
+        return retrofit;
+    }
+
+    public Retrofit getExerciseStoryServer() {
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/exercisestories/")
+                .addConverterFactory(new NullOnEmptyConverterFactory())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(client)
+                .build();
+
+        return retrofit;
+    }
 }

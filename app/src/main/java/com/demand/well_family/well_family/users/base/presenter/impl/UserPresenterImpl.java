@@ -98,6 +98,7 @@ public class UserPresenterImpl implements UserPresenter {
         } else {
             userView.goneUserPhone();
             userView.goneFallDiagnosisStory();
+            userView.goneExerciseStory();
         }
     }
 
@@ -111,5 +112,11 @@ public class UserPresenterImpl implements UserPresenter {
     public void onClickFallDiagnosisStory() {
         User storyUser = userInteractor.getStoryUser();
         userView.navigateToFallDiagnosisStoryActivity(storyUser);
+    }
+
+    @Override
+    public void onClickExerciseStory_list() {
+        User storyUser = userInteractor.getStoryUser();
+        userView.navigateToExerciseStoryActivity(storyUser);
     }
 }

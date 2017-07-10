@@ -9,4 +9,5 @@ public class CommentINTENTFlag {
     public static final int SONG_PLAYER = 2;
     public static final int SONG_STORY = 3;
     public static final int FALL_DIAGNOSIS_STORY = 4;
+    public static final int EXERCISE_STORY = 5;
 }

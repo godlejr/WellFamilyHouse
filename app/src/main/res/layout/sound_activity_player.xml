@@ -303,7 +303,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
-        android:background="@drawable/round_corner_bottom_light_gray_r5"
+        android:background="@drawable/round_corner_bottom_beige_r5"
         android:orientation="horizontal">
 
         <EditText

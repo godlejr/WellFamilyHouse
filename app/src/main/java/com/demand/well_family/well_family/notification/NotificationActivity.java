@@ -21,6 +21,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.dto.ExerciseStory;
+import com.demand.well_family.well_family.dto.FallDiagnosisStory;
+import com.demand.well_family.well_family.dto.FallDiagnosisStoryInfo;
+import com.demand.well_family.well_family.exercisestory.detail.activity.ExerciseStoryDetailActivity;
+import com.demand.well_family.well_family.falldiagnosisstory.detail.activity.FallDiagnosisStoryDetailActivity;
+import com.demand.well_family.well_family.repository.ExerciseStoryServerConnection;
+import com.demand.well_family.well_family.repository.FallDiagnosisStoryServerConnection;
 import com.demand.well_family.well_family.repository.FamilyServerConnection;
 import com.demand.well_family.well_family.repository.NotificationServerConnection;
 import com.demand.well_family.well_family.repository.UserServerConnection;
@@ -43,6 +50,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -67,6 +75,7 @@ public class NotificationActivity extends Activity {
     private String user_avatar;
     private String access_token;
 
+    private FallDiagnosisStoryServerConnection fallDiagnosisStoryServerConnection;
     private NotificationServerConnection notificationServerConnection;
     private FamilyServerConnection familyServerConnection;
     private UserServerConnection userServerConnection;
@@ -74,6 +83,7 @@ public class NotificationActivity extends Activity {
 
 
     private static final Logger logger = LoggerFactory.getLogger(NotificationActivity.class);
+    private ExerciseStoryServerConnection exerciseStoryServerConnection;
 
 
     @Override
@@ -116,7 +126,6 @@ public class NotificationActivity extends Activity {
     }
 
     private void init() {
-
         rv_notification = (RecyclerView) findViewById(R.id.rv_notification);
 
         userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);
@@ -420,6 +429,40 @@ public class NotificationActivity extends Activity {
                 }
 
 
+                if (intent_flag == NotificationINTENTFlag.EXERCISE_DETAIL) {
+                    notificationServerConnection = new NetworkInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
+                    Call<NotificationInfo> call_notificationForWritingExerciseStroy = notificationServerConnection.NotificationForWritingExerciseStroy(id);
+                    call_notificationForWritingExerciseStroy.enqueue(new Callback<NotificationInfo>() {
+                        @Override
+                        public void onResponse(Call<NotificationInfo> call, Response<NotificationInfo> response) {
+                            if (response.isSuccessful()) {
+                                NotificationInfo notificationInfo = response.body();
+                                if (response.raw().cacheResponse() != null) {
+                                    Log.e("ㅋㅅ) cacheResponse", response.raw().cacheResponse() + " /" + notificationInfo.getName());
+                                }
+
+                                if (notificationInfo != null) {
+                                    if (!activity.isFinishing()) {
+                                        Glide.with(NotificationActivity.this).load(getString(R.string.cloud_front_user_avatar) + notificationInfo.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_notification_avatar);
+                                    }
+                                    holder.tv_notification_content.setText(notificationInfo.getName() + "님이 <" + notificationInfo.getContent() + "> 에 게시글을 남겼습니다.");
+                                    holder.ll_noti_photo.setVisibility(View.GONE);
+                                }
+
+                            } else {
+                                Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<NotificationInfo> call, Throwable t) {
+                            log(t);
+                            Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+
+
             }
 
             if (checked == 1) {
@@ -610,7 +653,132 @@ public class NotificationActivity extends Activity {
                                 Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
                             }
                         });
+                    }
 
+                    if (intent_flag == NotificationINTENTFlag.FALL_DIAGNOSIS_DETAIL) {
+                        final int storyId = notificationList.get(position).getIntent_id();
+
+                        notificationServerConnection = new NetworkInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
+                        Call<ResponseBody> call_update_check = notificationServerConnection.notificationInfo(id);
+                        call_update_check.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()) {
+                                    if (checked == 0) {
+                                        holder.ll_notification.setBackgroundColor(Color.parseColor("#ffffff"));
+                                    }
+
+                                    fallDiagnosisStoryServerConnection = new NetworkInterceptor(access_token).getFallDiagnosisStoryServer().create(FallDiagnosisStoryServerConnection.class);
+                                    Call<FallDiagnosisStory> callGetSelectFallDiagnosisStory = fallDiagnosisStoryServerConnection.selectFallDiagnosisStory(storyId);
+                                    callGetSelectFallDiagnosisStory.enqueue(new Callback<FallDiagnosisStory>() {
+                                        @Override
+                                        public void onResponse(Call<FallDiagnosisStory> call, Response<FallDiagnosisStory> response) {
+                                            if (response.isSuccessful()) {
+                                                final FallDiagnosisStory fallDiagnosisStory = response.body();
+
+                                                int storyId = fallDiagnosisStory.getId();
+                                                HashMap<String, String> map = new HashMap<>();
+                                                map.put("user_id", String.valueOf(fallDiagnosisStory.getUser_id()));
+                                                map.put("fall_diagnosis_category_id", String.valueOf(fallDiagnosisStory.getFall_diagnosis_category_id()));
+                                                map.put("fall_diagnosis_risk_category_id", String.valueOf(fallDiagnosisStory.getFall_diagnosis_risk_category_id()));
+
+                                                Call<FallDiagnosisStoryInfo> callGetSelectFallDiagnosisStoryInfo = fallDiagnosisStoryServerConnection.selectFallDiagnosisStoryInfo(storyId, map);
+                                                callGetSelectFallDiagnosisStoryInfo.enqueue(new Callback<FallDiagnosisStoryInfo>() {
+                                                    @Override
+                                                    public void onResponse(Call<FallDiagnosisStoryInfo> call, Response<FallDiagnosisStoryInfo> response) {
+                                                        if (response.isSuccessful()) {
+                                                            FallDiagnosisStoryInfo fallDiagnosisStoryInfo = response.body();
+                                                            Intent intent = new Intent(context, FallDiagnosisStoryDetailActivity.class);
+                                                            intent.putExtra("fallDiagnosisStoryInfo", fallDiagnosisStoryInfo);
+                                                            intent.putExtra("fallDiagnosisStory", fallDiagnosisStory);
+                                                            startActivity(intent);
+                                                        } else {
+                                                            Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<FallDiagnosisStoryInfo> call, Throwable t) {
+                                                        log(t);
+                                                        Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+
+
+                                            } else {
+                                                Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<FallDiagnosisStory> call, Throwable t) {
+                                            log(t);
+                                            Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+
+                                } else {
+                                    Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                log(t);
+                                Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    }
+
+
+                    if (intent_flag == NotificationINTENTFlag.EXERCISE_DETAIL) {
+                        final int storyId = notificationList.get(position).getIntent_id();
+
+                        notificationServerConnection = new NetworkInterceptor(access_token).getClientForNotificationServer().create(NotificationServerConnection.class);
+                        Call<ResponseBody> call_update_check = notificationServerConnection.notificationInfo(id);
+                        call_update_check.enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()) {
+                                    if (checked == 0) {
+                                        holder.ll_notification.setBackgroundColor(Color.parseColor("#ffffff"));
+                                    }
+
+                                    exerciseStoryServerConnection = new NetworkInterceptor(access_token).getExerciseStoryServer().create(ExerciseStoryServerConnection.class);
+                                    Call<ExerciseStory> call_selectExerciseStory = exerciseStoryServerConnection.selectExerciseStory(storyId);
+                                    call_selectExerciseStory.enqueue(new Callback<ExerciseStory>() {
+                                        @Override
+                                        public void onResponse(Call<ExerciseStory> call, Response<ExerciseStory> response) {
+                                            if (response.isSuccessful()) {
+                                                ExerciseStory exerciseStory = response.body();
+
+                                                Intent intent = new Intent(context, ExerciseStoryDetailActivity.class);
+                                                intent.putExtra("exerciseStory", exerciseStory);
+                                                startActivity(intent);
+                                            } else {
+                                                Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ExerciseStory> call, Throwable t) {
+                                            log(t);
+                                            Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+
+
+                                } else {
+                                    Toast.makeText(NotificationActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                log(t);
+                                Toast.makeText(NotificationActivity.this, "네트워크 불안정합니다. 다시 시도하세요.", Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
 
                 }

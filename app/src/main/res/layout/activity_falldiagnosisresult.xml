@@ -20,36 +20,47 @@
         android:layout_height="1dp"
         android:layout_weight="3.5">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_total_count"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/tv_environmentevaluation_score"
-                android:layout_alignBottom="@+id/tv_environmentevaluation_score"
-                android:layout_toRightOf="@+id/tv_environmentevaluation_score"
-                android:text="/ 11"
-                android:textColor="@color/green"
-                android:textSize="24sp"
-                android:textStyle="italic" />
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
-            <TextView
-                android:id="@+id/tv_environmentevaluation_score"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="142dp"
-                android:layout_marginStart="142dp"
-                android:soundEffectsEnabled="true"
-                android:text="10"
-                android:textColor="@color/green"
-                android:textSize="50sp"
-                android:textStyle="italic" />
+                <TextView
+                    android:id="@+id/tv_environmentevaluation_score"
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:soundEffectsEnabled="true"
+                    android:text="10"
+                    android:textColor="@color/green"
+                    android:textSize="50sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/tv_total_count"
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/tv_environmentevaluation_score"
+                    android:layout_alignBottom="@+id/tv_environmentevaluation_score"
+                    android:layout_weight="1"
+                    android:text="/ 11"
+                    android:textColor="@color/green"
+                    android:textSize="24sp"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_result"
@@ -57,21 +68,23 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_environmentevaluation_score"
                 android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
                 android:text="SSSSS" />
 
-            <ProgressBar
-                android:id="@+id/pb_score"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                android:background="@drawable/fall_result_circleshape"
-                android:elevation="0dp"
-                android:progressDrawable="@drawable/fall_result_progressbar_safe"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
+        <ProgressBar
+            android:id="@+id/pb_score"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:background="@drawable/fall_result_circleshape"
+            android:elevation="0dp"
+            android:progressDrawable="@drawable/fall_result_progressbar_safe" />
     </FrameLayout>
 
     <LinearLayout

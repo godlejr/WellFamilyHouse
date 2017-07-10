@@ -10,4 +10,5 @@ public class CommentActFlag{
     public static final int PLAYER = 2;
     public static final int SONG_STORY = 3;
     public static final int FALL_DIAGNOSIS_STORY = 4;
+    public static final int EXERCISE_STORY = 5;
 }

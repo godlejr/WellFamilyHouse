@@ -27,6 +27,7 @@ public class EnvironmentEvaluationInteractorImpl implements EnvironmentEvaluatio
     private EnvironmentEvaluationPresenter dangerEvaluationPresenter;
     private FallDiagnosisServerConnection fallDiagnosisServerConnection;
 
+    private User user;
     private FallDiagnosisCategory fallDiagnosisCategory;
     private static final Logger logger = LoggerFactory.getLogger(EnvironmentEvaluationInteractorImpl.class);
 
@@ -45,7 +46,7 @@ public class EnvironmentEvaluationInteractorImpl implements EnvironmentEvaluatio
     }
 
     @Override
-    public void getDangerEvaluationList(User user) {
+    public void getDangerEvaluationList() {
         String accessToken = user.getAccess_token();
         int categoryId = fallDiagnosisCategory.getId();
 
@@ -71,6 +72,16 @@ public class EnvironmentEvaluationInteractorImpl implements EnvironmentEvaluatio
 
     }
 
+    @Override
+    public User getUser() {
+        return user;
+    }
+
+    @Override
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     private static void log(Throwable throwable) {
         StackTraceElement[] ste = throwable.getStackTrace();
         String className = ste[0].getClassName();
@@ -85,5 +96,4 @@ public class EnvironmentEvaluationInteractorImpl implements EnvironmentEvaluatio
             }
         }
     }
-
 }

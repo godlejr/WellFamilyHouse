@@ -25,9 +25,6 @@ import retrofit2.http.QueryMap;
  */
 
 public interface StoryServerConnection {
-
-
-
     @GET("{story_id}/comment_count")
     Call<Integer> family_comment_Count(@Path("story_id") int story_id);
 

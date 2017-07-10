@@ -21,13 +21,15 @@
 
 
     <style name="NavigationDrawer">
-        <item name ="android:textColor">#424242</item>
+        <item name="android:textColor">#424242</item>
         <item name="android:textSize">16sp</item>
     </style>
 
     <style name="Base.Widget.AppCompat.Toolbar" parent="android:Widget">
         <item name="titleTextAppearance">@style/TextAppearance.Widget.AppCompat.Toolbar.Title</item>
-        <item name="subtitleTextAppearance">@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle</item>
+        <item name="subtitleTextAppearance">
+            @style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle
+        </item>
         <item name="android:minHeight">?attr/actionBarSize</item>
         <item name="titleMargins">4dp</item>
         <item name="maxButtonHeight">56dp</item>
@@ -44,11 +46,20 @@
         <item name="android:maxHeight">8dp</item>
     </style>
 
+    <style name="ExerciseSeekBarStyle" parent="@android:style/Widget.SeekBar">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/exercise_seekbar</item>
+        <item name="android:indeterminateDrawable">@android:drawable/progress_horizontal</item>
+        <item name="android:minHeight">8dp</item>
+        <item name="android:maxHeight">10dp</item>
+    </style>
+
     <style name="popupStyle" parent="android:Theme.Holo.Light">
         <item name="android:popupMenuStyle">@android:color/background_light</item>
         <item name="android:popupBackground">@android:color/white</item>
         <!-- etc etc -->
     </style>
+
     <style name="Base.Widget.AppCompat.PopupMenu." parent="android:Widget">
         <item name="android:popupBackground">@android:color/background_light</item>
     </style>
@@ -60,7 +71,13 @@
         <item name="colorSwitchThumbNormal">#ffffff</item>
 
         <!-- inactive track color (30% transparency) -->
-        <item name="android:colorForeground">#939393 </item>
+        <item name="android:colorForeground">#939393</item>
     </style>
+
+    <style name="customRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/selector_exercise_rb_full</item>
+        <item name="android:thumb">@null</item>
+    </style>
+
 
 </resources>

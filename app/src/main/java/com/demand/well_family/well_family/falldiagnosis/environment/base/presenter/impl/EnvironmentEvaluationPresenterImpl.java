@@ -33,6 +33,8 @@ public class EnvironmentEvaluationPresenterImpl implements EnvironmentEvaluation
 
     @Override
     public void onCreate(FallDiagnosisCategory fallDiagnosisCategory) {
+        User user = preferenceUtil.getUserInfo();
+        dangerEvaluationInteractor.setUser(user);
         dangerEvaluationInteractor.setFallDiagnosisCategory(fallDiagnosisCategory);
         dangerEvaluationView.init();
 
@@ -43,8 +45,7 @@ public class EnvironmentEvaluationPresenterImpl implements EnvironmentEvaluation
 
     @Override
     public void onLoadData() {
-        User user = preferenceUtil.getUserInfo();
-        dangerEvaluationInteractor.getDangerEvaluationList(user);
+        dangerEvaluationInteractor.getDangerEvaluationList();
     }
 
     @Override

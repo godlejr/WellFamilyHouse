@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 
 public interface SelfDiagnosisInteractor {
-    void getDiagnosisCategories(User user);
+    void getDiagnosisCategories();
 
     FallDiagnosisCategory getFallDiagnosisCategory();
 

@@ -15,7 +15,7 @@ public class FallDiagnosisStory implements Serializable {
     private String updated_at;
 
     private Boolean isChecked;
-    private Boolean firstChecked;
+    private Boolean firstChecked = false;
 
     private FallDiagnosisStoryInfo fallDiagnosisStoryInfo;
     private int position;

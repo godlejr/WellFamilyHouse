@@ -32,7 +32,15 @@ public interface NotificationServerConnection {
     @GET("{notification_id}/falldiagnosisstories")
     Call<NotificationInfo> NotificationForWritingFallDiagnosisStory(@Path("notification_id") int notification_id);
 
-
     @PUT("{notification_id}")
     Call<ResponseBody> notificationInfo (@Path("notification_id") int notification_id);
+
+
+
+
+    @GET("{notification_id}/exercisestories")
+    Call<NotificationInfo> NotificationForWritingExerciseStroy(@Path("notification_id") int notification_id);
+
+
+
 }

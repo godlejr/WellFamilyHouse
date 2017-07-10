@@ -18,9 +18,7 @@ public class FallDiagnosisCategory {
         this.updated_at = updated_at;
     }
 
-    public FallDiagnosisCategory() {
-
-    }
+    public FallDiagnosisCategory() { }
 
     public int getId() {
         return id;

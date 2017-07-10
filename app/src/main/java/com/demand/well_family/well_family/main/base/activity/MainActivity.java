@@ -32,6 +32,7 @@ import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dto.App;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.User;
+import com.demand.well_family.well_family.exercise.base.activity.ExerciseActivity;
 import com.demand.well_family.well_family.falldiagnosis.base.activity.FallDiagnosisActivity;
 import com.demand.well_family.well_family.family.base.activity.FamilyActivity;
 import com.demand.well_family.well_family.family.create.activity.CreateFamilyActivity;
@@ -424,7 +425,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
     public void navigateToUserActivity(User user) {
         Intent intent = new Intent(this, UserActivity.class);
 
-
         intent.putExtra("story_user_id", user.getId());
         intent.putExtra("story_user_email", user.getEmail());
         intent.putExtra("story_user_birth", user.getBirth());
@@ -439,6 +439,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
     @Override
     public void navigateToFallDiagnosisActivity() {
         Intent intent = new Intent(MainActivity.this, FallDiagnosisActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToExerciseActivity() {
+        Intent intent = new Intent(MainActivity.this, ExerciseActivity.class);
         startActivity(intent);
     }
 }

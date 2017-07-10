@@ -43,6 +43,7 @@ public class EnvironmentEvaluationAdapter extends RecyclerView.Adapter<Environme
         final FallDiagnosisContentCategory fallDiagnosisContentCategory = fallDiagnosisContentCategoryList.get(position);
 
         holder.tv_item_environment_evaluation.setText(fallDiagnosisContentCategory.getName());
+        holder.tv_item_environment_evaluation_content.setText(fallDiagnosisContentCategory.getContent());
         Glide.with(context).load(context.getString(R.string.cloud_front_self_diagnosis) + fallDiagnosisContentCategory.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.iv_item_environment_evaluation);
 
     }
@@ -56,11 +57,13 @@ public class EnvironmentEvaluationAdapter extends RecyclerView.Adapter<Environme
         private ImageView iv_item_environment_evaluation;
         private TextView tv_item_environment_evaluation;
         private LinearLayout ll_item_environment_evaluation;
+        private TextView tv_item_environment_evaluation_content;
 
         public DangerEvaluationViewHolder(View itemView) {
             super(itemView);
             iv_item_environment_evaluation = (ImageView) itemView.findViewById(R.id.iv_item_environment_evaluation);
-            tv_item_environment_evaluation = (TextView) itemView.findViewById(R.id.tv_item_environment_evaluation);
+            tv_item_environment_evaluation = (TextView) itemView.findViewById(R.id.tv_item_environment_evaluation_title);
+            tv_item_environment_evaluation_content = (TextView) itemView.findViewById(R.id.tv_item_environment_evaluation_content);
             ll_item_environment_evaluation = (LinearLayout) itemView.findViewById(R.id.ll_item_environment_evaluation);
 
             ll_item_environment_evaluation.setOnClickListener(this);

@@ -27,6 +27,7 @@ public class PhysicalEvaluationInteractorImpl implements PhysicalEvaluationInter
     private PhysicalEvaluationPresenter physicalEvaluationPresenter;
     private static final Logger logger = LoggerFactory.getLogger(PhysicalEvaluationInteractorImpl.class);
 
+    private User user;
     private FallDiagnosisCategory fallDiagnosisCategory;
     private FallDiagnosisServerConnection fallDiagnosisServerConnection;
 
@@ -45,7 +46,7 @@ public class PhysicalEvaluationInteractorImpl implements PhysicalEvaluationInter
     }
 
     @Override
-    public void getPhysicalEvaluationCategories(User user) {
+    public void getPhysicalEvaluationCategories() {
         String accessToken = user.getAccess_token();
         int fallDiagnosisCategoryId = fallDiagnosisCategory.getId();
 
@@ -85,5 +86,13 @@ public class PhysicalEvaluationInteractorImpl implements PhysicalEvaluationInter
         }
     }
 
+    @Override
+    public User getUser() {
+        return user;
+    }
 
+    @Override
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

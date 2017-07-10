@@ -3,6 +3,7 @@ package com.demand.well_family.well_family.falldiagnosis.environment.photo.activ
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -133,8 +134,11 @@ public class EnvironmentEvaluationPhotoActivity extends Activity implements Envi
 
     @Override
     public void setPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE}, EnvironmentEvaluationPhotoCodeFlag.CAMERA_EXTERNAL_STORAGE_PERMISSION);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, EnvironmentEvaluationPhotoCodeFlag.CAMERA_EXTERNAL_STORAGE_PERMISSION);
+        } else {
+            init();
+        }
     }
 
     @Override
@@ -160,6 +164,7 @@ public class EnvironmentEvaluationPhotoActivity extends Activity implements Envi
     @Override
     public void setPhotoItem(ArrayList<Uri> photoList) {
         layoutInflater.inflate(R.layout.item_environmentevaluation_photolist, ll_photoenvironmentevaluation_inflate, true);
+
         rv_environmentevaluation_photolist = (RecyclerView) ll_photoenvironmentevaluation_inflate.findViewById(R.id.rv_environmentevaluation_photolist);
         photoAdapter = new PhotoAdapter(photoList, this, R.layout.item_write_upload_image, environmentEvaluationPhotoPresenter);
         rv_environmentevaluation_photolist.setAdapter(photoAdapter);

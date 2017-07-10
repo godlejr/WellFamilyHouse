@@ -6,7 +6,6 @@ package com.demand.well_family.well_family.dto;
 
 
 public class FallDiagnosisContentCategory {
-
     private int id;
     private int fall_diagnosis_category_id;
     private String name;

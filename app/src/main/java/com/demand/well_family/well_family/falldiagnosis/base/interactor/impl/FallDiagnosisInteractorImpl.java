@@ -25,6 +25,7 @@ import retrofit2.Response;
 public class FallDiagnosisInteractorImpl implements FallDiagnosisInteractor {
     private FallDiagnosisPresenter fallDiagnosisPresenter;
 
+    private User user;
     private FallDiagnosisServerConnection fallDiagnosisServerConnection;
     private static final Logger logger = LoggerFactory.getLogger(FallDiagnosisInteractorImpl.class);
 
@@ -33,7 +34,7 @@ public class FallDiagnosisInteractorImpl implements FallDiagnosisInteractor {
     }
 
     @Override
-    public void getCategoryList(User user) {
+    public void getCategoryList() {
         String accessToken = user.getAccess_token();
 
         fallDiagnosisServerConnection = new NetworkInterceptor(accessToken).getFallDiagnosisServer().create(FallDiagnosisServerConnection.class);
@@ -58,6 +59,14 @@ public class FallDiagnosisInteractorImpl implements FallDiagnosisInteractor {
 
     }
 
+    @Override
+    public User getUser() {
+        return user;
+    }
+    @Override
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     private static void log(Throwable throwable) {
         StackTraceElement[] ste = throwable.getStackTrace();

@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 
     <application
@@ -140,10 +141,21 @@
         <activity android:name=".falldiagnosis.environment.photo.activity.EnvironmentEvaluationPhotoActivity" />
         <activity android:name=".falldiagnosis.environment.result.activity.EnvironmentEvaluationResultActivity" />
 
-        <activity android:name=".falldiagnosistory.base.activity.FallDiagnosisStoryActivity" />
-        <activity android:name=".falldiagnosistory.detail.activity.FallDiagnosisStoryDetailActivity" />
-        <activity android:name=".dialog.list.falldiagnosisstory.activity.FallDiagnosisStoryDialogActivity"
-            android:theme="@style/Theme.AppCompat.Dialog"  />
+        <activity android:name=".falldiagnosisstory.base.activity.FallDiagnosisStoryActivity" />
+        <activity android:name=".falldiagnosisstory.detail.activity.FallDiagnosisStoryDetailActivity" />
+        <activity
+            android:name=".dialog.list.falldiagnosisstory.activity.FallDiagnosisStoryDialogActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity android:name=".exercise.base.activity.ExerciseActivity" />
+        <activity android:name=".exercise.create.activity.CreateExerciseActivity" />
+        <activity
+            android:name=".dialog.popup.exercise.activity.ExercisePopupActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity android:name=".exercisestory.base.activity.ExerciseStoryActivity" />
+        <activity android:name=".exercisestory.detail.activity.ExerciseStoryDetailActivity" />
+        <activity
+            android:name=".dialog.list.exercise.activity.ExerciseStoryDialogActivity"
+            android:theme="@style/Theme.AppCompat.Dialog" />
 
         <activity
             android:name=".market.MarketMainActivity"

@@ -30,7 +30,6 @@ public interface MainServerConnection {
     @GET("report_categories") // token 필요
     Call<ArrayList<Category>> report_category_List();
 
-
     @POST("find_password")  // token 불필요
     Call<ResponseBody> findPassword( @QueryMap HashMap<String, String> map);
 

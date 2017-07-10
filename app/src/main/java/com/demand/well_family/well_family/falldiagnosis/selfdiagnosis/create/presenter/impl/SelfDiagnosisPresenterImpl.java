@@ -83,7 +83,6 @@ public class SelfDiagnosisPresenterImpl implements SelfDiagnosisPresenter {
 
     @Override
     public void onLoadData() {
-        User user = preferenceUtil.getUserInfo();
-        selfDiagnosisInteractor.getDiagnosisCategories(user);
+        selfDiagnosisInteractor.getDiagnosisCategories();
     }
 }

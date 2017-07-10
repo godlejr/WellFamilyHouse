@@ -58,6 +58,8 @@ public class EnvironmentEvaluationResultActivity extends Activity implements Env
         fallDiagnosisContentCategory.setId(getIntent().getIntExtra("fall_diagnosis_content_category_id", 0));
 
         FallDiagnosisCategory fallDiagnosisCategory = new FallDiagnosisCategory();
+
+
         fallDiagnosisCategory.setId(getIntent().getIntExtra("category_id", 0));
         ArrayList<Integer> answerList = (ArrayList<Integer>) getIntent().getSerializableExtra("answerList");
 

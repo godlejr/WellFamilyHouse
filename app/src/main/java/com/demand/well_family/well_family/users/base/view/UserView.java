@@ -27,6 +27,8 @@ public interface UserView {
 
     void goneFallDiagnosisStory();
 
+    void goneExerciseStory();
+
     void showUserBirth(String date);
 
     void showUserPhone(String phone);
@@ -44,5 +46,5 @@ public interface UserView {
     void navigateToFallDiagnosisStoryActivity(User storyUser);
 
 
-
+    void navigateToExerciseStoryActivity(User storyUser);
 }

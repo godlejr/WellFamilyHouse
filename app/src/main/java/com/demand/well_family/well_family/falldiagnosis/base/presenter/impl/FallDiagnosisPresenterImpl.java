@@ -33,6 +33,9 @@ public class FallDiagnosisPresenterImpl implements FallDiagnosisPresenter {
 
     @Override
     public void onCreate() {
+        User user = preferenceUtil.getUserInfo();
+        fallDiagnosisInteractor.setUser(user);
+
         View decorView = fallDiagnosisView.getDecorView();
         fallDiagnosisView.setToolbar(decorView);
         fallDiagnosisView.showToolbarTitle("낙상 위험 진단");
@@ -44,17 +47,17 @@ public class FallDiagnosisPresenterImpl implements FallDiagnosisPresenter {
     public String setCategoryContent(FallDiagnosisCategoryAdapter.FallDiagnosisCategoryViewHolder holder, int categoryId) {
         String content = null;
 
-        if(categoryId  == FallDiagnosisFlag.SELF_DIAGNOSIS){
+        if (categoryId == FallDiagnosisFlag.SELF_DIAGNOSIS) {
             content = "자가진단 설문지를 통해\n나의 낙상위험정도를 알아봅시다.";
             fallDiagnosisView.setBackgroundColorForSelfDiagnosis(holder);
         }
 
-        if (categoryId == FallDiagnosisFlag.PHYSICAL_EVALUATION){
+        if (categoryId == FallDiagnosisFlag.PHYSICAL_EVALUATION) {
             content = "낙상 예방의 중요한 운동 능력인\n균형감, 움직임, 하지근력의 기능을 평가합니다.";
             fallDiagnosisView.setBackgroundColorForBodyEvaluation(holder);
         }
 
-        if(categoryId == FallDiagnosisFlag.RISK_EVALUATION){
+        if (categoryId == FallDiagnosisFlag.RISK_EVALUATION) {
             content = "실내 환경을 점검하여\n낙상 위험 요인을 진단합니다.";
             fallDiagnosisView.setBackgroundColorForEvEvaluation(holder);
         }
@@ -64,8 +67,7 @@ public class FallDiagnosisPresenterImpl implements FallDiagnosisPresenter {
 
     @Override
     public void getDiagnosisCategory() {
-        User user = preferenceUtil.getUserInfo();
-        fallDiagnosisInteractor.getCategoryList(user);
+        fallDiagnosisInteractor.getCategoryList();
     }
 
 
@@ -87,13 +89,13 @@ public class FallDiagnosisPresenterImpl implements FallDiagnosisPresenter {
     public void onClickCategory(FallDiagnosisCategory fallDiagnosisCategory) {
         int categoryId = fallDiagnosisCategory.getId();
 
-        if(categoryId  == FallDiagnosisFlag.SELF_DIAGNOSIS){
+        if (categoryId == FallDiagnosisFlag.SELF_DIAGNOSIS) {
             fallDiagnosisView.navigateToFallEvaluationActivity(fallDiagnosisCategory);
         }
-        if (categoryId == FallDiagnosisFlag.PHYSICAL_EVALUATION){
+        if (categoryId == FallDiagnosisFlag.PHYSICAL_EVALUATION) {
             fallDiagnosisView.navigateToPhysicalEvaluationActivity(fallDiagnosisCategory);
         }
-        if(categoryId == FallDiagnosisFlag.RISK_EVALUATION){
+        if (categoryId == FallDiagnosisFlag.RISK_EVALUATION) {
             fallDiagnosisView.navigateToEvEvaluationActivity(fallDiagnosisCategory);
         }
     }

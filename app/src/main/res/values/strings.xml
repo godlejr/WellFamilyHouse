@@ -31,11 +31,11 @@
     <string name="cloud_front_self_diagnosis">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/falldiagnosis/selfdiagnosis/</string>
     <string name="cloud_front_self_diagnosis_audio">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/audios/falldiagnosis/countdown.mp3</string>
     <string name="cloud_front_stories_environment">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/falldiagnosis/stories/environments/</string>
+    <string name="cloud_front_exercise">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/video/exercises/</string>
 
     <string name="bubblefeet">com.demand.bubblefeet</string>
     <string name="happyfeet">com.demand.happyfeet</string>
     <string name="market_front">market://details?id=</string>
-
 
     <string name="facebook_app_id">1663836690577214</string>
     <string name="account_disable">계정을 비활성화하면 프로필과 마이페이지를 이용할 수 없게 되며, 웰 패밀리에서 공유했던 게시물 대부분에서 회원님의 이름과 사진이 사라집니다.\n그러나 기존의 가족 구성원 리스트나 회원님이 작성한 댓글에서는 회원님의 이름이 표시되는 등 다른 사람이 회원님의 정보 일부를 계속 보게 될 수 있습니다.</string>

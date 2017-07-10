@@ -1,6 +1,7 @@
 package com.demand.well_family.well_family.repository;
 
 
+import com.demand.well_family.well_family.dto.ExerciseStory;
 import com.demand.well_family.well_family.dto.FallDiagnosisStory;
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.FamilyInfoForFamilyJoin;
@@ -123,5 +124,9 @@ public interface UserServerConnection {
 
     @GET("{user_id}/fall_diagnosis_stories")
     Call<ArrayList<FallDiagnosisStory>> selectFallDiagnosisStoryList(@Path("user_id") int user_id);
+
+
+    @GET("{user_id}/exercise_stories")
+    Call<ArrayList<ExerciseStory>> selectExerciseStoryList(@Path("user_id") int user_id);
 
 }

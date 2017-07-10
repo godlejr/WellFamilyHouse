@@ -57,16 +57,16 @@ public class FallDiagnosisCategoryAdapter extends RecyclerView.Adapter<FallDiagn
     }
 
 
-    public void setBackgroundColorBeige(FallDiagnosisCategoryViewHolder holder) {
-        holder.ll_category.setBackgroundResource(R.drawable.round_corner_beige_r10);
+    public void setBackgroundColorForSelfDiagnosis(FallDiagnosisCategoryViewHolder holder) {
+        holder.ll_category.setBackgroundResource(R.drawable.round_corner_lightgreen_r10);
     }
 
-    public void setBackgroundColorBeigegray(FallDiagnosisCategoryViewHolder holder) {
-        holder.ll_category.setBackgroundResource(R.drawable.round_corner_beigegray_r10);
+    public void setBackgroundColorForPhysicalEvaluation(FallDiagnosisCategoryViewHolder holder) {
+        holder.ll_category.setBackgroundResource(R.drawable.round_corner_skyblue_r10);
     }
 
-    public void setBackgroundColorIndipink(FallDiagnosisCategoryViewHolder holder) {
-        holder.ll_category.setBackgroundResource(R.drawable.round_corner_indipink_r10);
+    public void setBackgroundColorEnvEvaluation(FallDiagnosisCategoryViewHolder holder) {
+        holder.ll_category.setBackgroundResource(R.drawable.round_corner_deepskyblue_r10);
     }
 
     public class FallDiagnosisCategoryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

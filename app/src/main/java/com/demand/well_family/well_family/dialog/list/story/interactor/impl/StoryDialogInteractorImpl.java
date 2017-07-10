@@ -67,7 +67,6 @@ public class StoryDialogInteractorImpl implements StoryDialogInteractor {
         return report;
     }
 
-
     @Override
     public void setStoryDeleted(int storyId) {
         String accessToken = user.getAccess_token();

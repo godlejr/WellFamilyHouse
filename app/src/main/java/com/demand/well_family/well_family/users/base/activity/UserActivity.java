@@ -17,7 +17,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dialog.popup.photo.activity.PhotoPopupActivity;
 import com.demand.well_family.well_family.dto.User;
-import com.demand.well_family.well_family.falldiagnosistory.base.activity.FallDiagnosisStoryActivity;
+import com.demand.well_family.well_family.exercisestory.base.activity.ExerciseStoryActivity;
+import com.demand.well_family.well_family.falldiagnosisstory.base.activity.FallDiagnosisStoryActivity;
 import com.demand.well_family.well_family.flag.PhotoPopupINTENTFlag;
 import com.demand.well_family.well_family.users.EditUserActivity;
 import com.demand.well_family.well_family.users.SongStoryActivity;
@@ -52,6 +53,7 @@ public class UserActivity extends Activity implements View.OnClickListener, User
     private ImageView iv_user_call;
 
     private LinearLayout ll_falldiagnosisstory_list;
+    private LinearLayout ll_exercisestory_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +88,7 @@ public class UserActivity extends Activity implements View.OnClickListener, User
         tv_family_activity_name = (TextView) findViewById(R.id.tv_family_activity_name);
         tv_family_activity_birth = (TextView) findViewById(R.id.tv_family_activity_birth);
         ll_falldiagnosisstory_list=(LinearLayout)findViewById(R.id.ll_falldiagnosisstory_list);
+        ll_exercisestory_list = (LinearLayout)findViewById(R.id.ll_exercisestory_list);
 
         userPresenter.onLoadData();
         userPresenter.setUserPhone(storyUser.getPhone());
@@ -99,6 +102,7 @@ public class UserActivity extends Activity implements View.OnClickListener, User
         ll_memory_sound_story_list.setOnClickListener(this);
         iv_family_activity_avatar.setOnClickListener(this);
         ll_falldiagnosisstory_list.setOnClickListener(this);
+        ll_exercisestory_list.setOnClickListener(this);
     }
 
 
@@ -125,6 +129,9 @@ public class UserActivity extends Activity implements View.OnClickListener, User
                 userPresenter.onClickAvatar();
                 break;
 
+            case R.id.ll_exercisestory_list:
+                userPresenter.onClickExerciseStory_list();
+                break;
 
             case R.id.tv_family_activity_phone2:
             case R.id.iv_user_call:
@@ -182,6 +189,11 @@ public class UserActivity extends Activity implements View.OnClickListener, User
     @Override
     public void goneFallDiagnosisStory() {
         ll_falldiagnosisstory_list.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void goneExerciseStory() {
+        ll_exercisestory_list.setVisibility(View.GONE);
     }
 
     @Override
@@ -244,6 +256,13 @@ public class UserActivity extends Activity implements View.OnClickListener, User
         intent.putExtra("story_user_level", storyUser.getLevel());
         intent.putExtra("story_user_avatar", storyUser.getAvatar());
 
+        startActivity(intent);
+    }
+
+    @Override
+    public void navigateToExerciseStoryActivity(User storyUser) {
+        Intent intent = new Intent(this, ExerciseStoryActivity.class);
+        intent.putExtra("story_user_id", storyUser.getId());
         startActivity(intent);
     }
 }

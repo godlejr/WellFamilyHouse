@@ -28,4 +28,6 @@ public interface UserPresenter {
     void onClickCall();
 
     void onClickFallDiagnosisStory();
+
+    void onClickExerciseStory_list();
 }

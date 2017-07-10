@@ -7,5 +7,9 @@ import com.demand.well_family.well_family.dto.User;
  */
 
 public interface FallDiagnosisInteractor {
-    void getCategoryList(User user);
+    void getCategoryList();
+
+    User getUser();
+
+    void setUser(User user);
 }

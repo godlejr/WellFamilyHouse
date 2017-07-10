@@ -32,6 +32,8 @@ public class PhysicalEvaluationPresenterImpl implements PhysicalEvaluationPresen
 
     @Override
     public void onCreate(FallDiagnosisCategory fallDiagnosisCategory) {
+        User user = preferenceUtil.getUserInfo();
+        physicalEvaluationInteractor.setUser(user);
         physicalEvaluationInteractor.setFallDiagnosisCategory(fallDiagnosisCategory);
         physicalEvaluationView.init();
 
@@ -51,8 +53,7 @@ public class PhysicalEvaluationPresenterImpl implements PhysicalEvaluationPresen
 
     @Override
     public void onLoadData() {
-        User user = preferenceUtil.getUserInfo();
-        physicalEvaluationInteractor.getPhysicalEvaluationCategories(user);
+        physicalEvaluationInteractor.getPhysicalEvaluationCategories();
     }
 
     @Override

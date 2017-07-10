@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    android:background="@drawable/round_corner_white_r10"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_popupexercise_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:textColor="@color/defaultTextColor"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_popupexercise_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="정말 못했어요. 몸이 말을 듣지 않아요."
+        android:textColor="@color/defaultTextColor"
+        android:textSize="20sp" />
+
+
+    <RatingBar
+        android:id="@+id/rb_popupexercise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:isIndicator="false"
+        android:max="5"
+        android:numStars="5"
+        android:progressDrawable="@drawable/selector_exercise_rb_full"
+        android:rating="1"
+        android:stepSize="1" />
+
+    <Button
+        android:id="@+id/btn_popupexercise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        android:background="@drawable/round_corner_border_gray_r30"
+        android:text="완료"
+        android:textColor="@color/defaultTextColor"
+        android:textSize="20sp" />
+</LinearLayout>

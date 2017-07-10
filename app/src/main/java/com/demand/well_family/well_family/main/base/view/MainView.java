@@ -63,4 +63,6 @@ public interface MainView {
     void navigateToBackground();
 
     void navigateToUserActivity(User user);
+
+    void navigateToExerciseActivity();
 }

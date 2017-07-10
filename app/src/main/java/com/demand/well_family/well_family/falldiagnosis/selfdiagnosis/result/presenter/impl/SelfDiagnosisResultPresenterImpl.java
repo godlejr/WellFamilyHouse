@@ -115,9 +115,15 @@ public class SelfDiagnosisResultPresenterImpl implements SelfDiagnosisResultPres
         ArrayList<Integer> answerList = selfDiagnosisResultInteractor.getAnswerList();
         int answerSize = answerList.size();
 
-        for (int i = 0; i < answerSize; i++) {
-            selfDiagnosisResultInteractor.setSelfDiagnosisAdded(storyId, answerList.get(i),i);
+        if (answerSize == 0) {
+            fallDiagnosisResultView.showMessage("낙상 자가진단기록이 등록되었습니다.");
+            fallDiagnosisResultView.navigateToBack();
+        } else {
+            for (int i = 0; i < answerSize; i++) {
+                selfDiagnosisResultInteractor.setSelfDiagnosisAdded(storyId, answerList.get(i), i);
+            }
         }
+
     }
 
     @Override
