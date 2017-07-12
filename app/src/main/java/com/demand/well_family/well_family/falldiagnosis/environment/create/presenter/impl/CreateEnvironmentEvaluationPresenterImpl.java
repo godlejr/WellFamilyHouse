@@ -67,7 +67,7 @@ public class CreateEnvironmentEvaluationPresenterImpl implements CreateEnvironme
     public void onClickAnswer(int position, int categorySize, int environmentEvaluationCategoryId, int flag) {
         int endOfCategoryList = categorySize - 1;
 
-        if (flag == CreateEnvironmentEvaluationCodeFlag.YES) {
+        if (flag == CreateEnvironmentEvaluationCodeFlag.NO) {
             createEnvironmentEvaluationInteractor.setAnswerAdded(environmentEvaluationCategoryId);
         }
 

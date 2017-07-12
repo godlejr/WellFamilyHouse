@@ -73,11 +73,11 @@ public class EnvironmentEvaluationResultPresenterImpl implements EnvironmentEval
 
         if (fallDiagnosisContentCategoryId == EnvironmentEvaluationResultCodeFlag.INNER_ROOM) {
             if (answerSize == 4) {
-                environmentEvaluationResultView.showResult("안전 단계");
-                environmentEvaluationResultView.showProgressBarChangeColorWithSafe();
-                environmentEvaluationResultView.showScoreTextChangeColorWithSafe();
-                environmentEvaluationResultView.showTotalCountTextChangeColorWithSafe();
-                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.SAFE);
+                environmentEvaluationResultView.showResult("위험 단계");
+                environmentEvaluationResultView.showProgressBarChangeColorWithRisk();
+                environmentEvaluationResultView.showScoreTextChangeColorWithRisk();
+                environmentEvaluationResultView.showTotalCountTextChangeColorWithRisk();
+                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.RISK);
             } else if (answerSize >= 2) {
                 environmentEvaluationResultView.showResult("주의 단계");
                 environmentEvaluationResultView.showProgressBarChangeColorWithCaution();
@@ -86,22 +86,22 @@ public class EnvironmentEvaluationResultPresenterImpl implements EnvironmentEval
                 environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.CAUTION);
 
             } else {
-                environmentEvaluationResultView.showResult("위험 단계");
-                environmentEvaluationResultView.showProgressBarChangeColorWithRisk();
-                environmentEvaluationResultView.showScoreTextChangeColorWithRisk();
-                environmentEvaluationResultView.showTotalCountTextChangeColorWithRisk();
-                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.RISK);
 
-            }
-        }
-
-        if (fallDiagnosisContentCategoryId == EnvironmentEvaluationResultCodeFlag.BATH_ROOM) {
-            if (answerSize == 9) {
                 environmentEvaluationResultView.showResult("안전 단계");
                 environmentEvaluationResultView.showProgressBarChangeColorWithSafe();
                 environmentEvaluationResultView.showScoreTextChangeColorWithSafe();
                 environmentEvaluationResultView.showTotalCountTextChangeColorWithSafe();
                 environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.SAFE);
+            }
+        }
+
+        if (fallDiagnosisContentCategoryId == EnvironmentEvaluationResultCodeFlag.BATH_ROOM) {
+            if (answerSize == 9) {
+                environmentEvaluationResultView.showResult("위험 단계");
+                environmentEvaluationResultView.showProgressBarChangeColorWithRisk();
+                environmentEvaluationResultView.showScoreTextChangeColorWithRisk();
+                environmentEvaluationResultView.showTotalCountTextChangeColorWithRisk();
+                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.RISK);
 
             } else if (answerSize >= 6) {
                 environmentEvaluationResultView.showResult("주의 단계");
@@ -111,22 +111,22 @@ public class EnvironmentEvaluationResultPresenterImpl implements EnvironmentEval
                 environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.CAUTION);
 
             } else {
-                environmentEvaluationResultView.showResult("위험 단계");
-                environmentEvaluationResultView.showProgressBarChangeColorWithRisk();
-                environmentEvaluationResultView.showScoreTextChangeColorWithRisk();
-                environmentEvaluationResultView.showTotalCountTextChangeColorWithRisk();
-                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.RISK);
 
+                environmentEvaluationResultView.showResult("안전 단계");
+                environmentEvaluationResultView.showProgressBarChangeColorWithSafe();
+                environmentEvaluationResultView.showScoreTextChangeColorWithSafe();
+                environmentEvaluationResultView.showTotalCountTextChangeColorWithSafe();
+                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.SAFE);
             }
         }
 
         if (fallDiagnosisContentCategoryId == EnvironmentEvaluationResultCodeFlag.LIVING_ROOM) {
             if (answerSize == 6) {
-                environmentEvaluationResultView.showResult("안전 단계");
-                environmentEvaluationResultView.showProgressBarChangeColorWithSafe();
-                environmentEvaluationResultView.showScoreTextChangeColorWithSafe();
-                environmentEvaluationResultView.showTotalCountTextChangeColorWithSafe();
-                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.SAFE);
+                environmentEvaluationResultView.showResult("위험 단계");
+                environmentEvaluationResultView.showProgressBarChangeColorWithRisk();
+                environmentEvaluationResultView.showScoreTextChangeColorWithRisk();
+                environmentEvaluationResultView.showTotalCountTextChangeColorWithRisk();
+                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.RISK);
 
             } else if (answerSize >= 4) {
                 environmentEvaluationResultView.showResult("주의 단계");
@@ -136,22 +136,22 @@ public class EnvironmentEvaluationResultPresenterImpl implements EnvironmentEval
                 environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.CAUTION);
 
             } else {
-                environmentEvaluationResultView.showResult("위험 단계");
-                environmentEvaluationResultView.showProgressBarChangeColorWithRisk();
-                environmentEvaluationResultView.showScoreTextChangeColorWithRisk();
-                environmentEvaluationResultView.showTotalCountTextChangeColorWithRisk();
-                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.RISK);
 
+                environmentEvaluationResultView.showResult("안전 단계");
+                environmentEvaluationResultView.showProgressBarChangeColorWithSafe();
+                environmentEvaluationResultView.showScoreTextChangeColorWithSafe();
+                environmentEvaluationResultView.showTotalCountTextChangeColorWithSafe();
+                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.SAFE);
             }
         }
 
         if (fallDiagnosisContentCategoryId == EnvironmentEvaluationResultCodeFlag.FRONT_DOOR) {
             if (answerSize == 6) {
-                environmentEvaluationResultView.showResult("안전 단계");
-                environmentEvaluationResultView.showProgressBarChangeColorWithSafe();
-                environmentEvaluationResultView.showScoreTextChangeColorWithSafe();
-                environmentEvaluationResultView.showTotalCountTextChangeColorWithSafe();
-                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.SAFE);
+                environmentEvaluationResultView.showResult("위험 단계");
+                environmentEvaluationResultView.showProgressBarChangeColorWithRisk();
+                environmentEvaluationResultView.showScoreTextChangeColorWithRisk();
+                environmentEvaluationResultView.showTotalCountTextChangeColorWithRisk();
+                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.RISK);
 
             } else if (answerSize >= 4) {
                 environmentEvaluationResultView.showResult("주의 단계");
@@ -161,22 +161,22 @@ public class EnvironmentEvaluationResultPresenterImpl implements EnvironmentEval
                 environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.CAUTION);
 
             } else {
-                environmentEvaluationResultView.showResult("위험 단계");
-                environmentEvaluationResultView.showProgressBarChangeColorWithRisk();
-                environmentEvaluationResultView.showScoreTextChangeColorWithRisk();
-                environmentEvaluationResultView.showTotalCountTextChangeColorWithRisk();
-                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.RISK);
 
+                environmentEvaluationResultView.showResult("안전 단계");
+                environmentEvaluationResultView.showProgressBarChangeColorWithSafe();
+                environmentEvaluationResultView.showScoreTextChangeColorWithSafe();
+                environmentEvaluationResultView.showTotalCountTextChangeColorWithSafe();
+                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.SAFE);
             }
         }
 
         if (fallDiagnosisContentCategoryId == EnvironmentEvaluationResultCodeFlag.KITCHEN) {
             if (answerSize == 5) {
-                environmentEvaluationResultView.showResult("안전 단계");
-                environmentEvaluationResultView.showProgressBarChangeColorWithSafe();
-                environmentEvaluationResultView.showScoreTextChangeColorWithSafe();
-                environmentEvaluationResultView.showTotalCountTextChangeColorWithSafe();
-                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.SAFE);
+                environmentEvaluationResultView.showResult("위험 단계");
+                environmentEvaluationResultView.showProgressBarChangeColorWithRisk();
+                environmentEvaluationResultView.showScoreTextChangeColorWithRisk();
+                environmentEvaluationResultView.showTotalCountTextChangeColorWithRisk();
+                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.RISK);
 
             } else if (answerSize >= 3) {
                 environmentEvaluationResultView.showResult("주의 단계");
@@ -186,22 +186,22 @@ public class EnvironmentEvaluationResultPresenterImpl implements EnvironmentEval
                 environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.CAUTION);
 
             } else {
-                environmentEvaluationResultView.showResult("위험 단계");
-                environmentEvaluationResultView.showProgressBarChangeColorWithRisk();
-                environmentEvaluationResultView.showScoreTextChangeColorWithRisk();
-                environmentEvaluationResultView.showTotalCountTextChangeColorWithRisk();
-                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.RISK);
 
+                environmentEvaluationResultView.showResult("안전 단계");
+                environmentEvaluationResultView.showProgressBarChangeColorWithSafe();
+                environmentEvaluationResultView.showScoreTextChangeColorWithSafe();
+                environmentEvaluationResultView.showTotalCountTextChangeColorWithSafe();
+                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.SAFE);
             }
         }
 
         if (fallDiagnosisContentCategoryId == EnvironmentEvaluationResultCodeFlag.BALCONY) {
             if (answerSize == 5) {
-                environmentEvaluationResultView.showResult("안전 단계");
-                environmentEvaluationResultView.showProgressBarChangeColorWithSafe();
-                environmentEvaluationResultView.showScoreTextChangeColorWithSafe();
-                environmentEvaluationResultView.showTotalCountTextChangeColorWithSafe();
-                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.SAFE);
+                environmentEvaluationResultView.showResult("위험 단계");
+                environmentEvaluationResultView.showProgressBarChangeColorWithRisk();
+                environmentEvaluationResultView.showScoreTextChangeColorWithRisk();
+                environmentEvaluationResultView.showTotalCountTextChangeColorWithRisk();
+                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.RISK);
 
             } else if (answerSize >= 3) {
                 environmentEvaluationResultView.showResult("주의 단계");
@@ -211,22 +211,22 @@ public class EnvironmentEvaluationResultPresenterImpl implements EnvironmentEval
                 environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.CAUTION);
 
             } else {
-                environmentEvaluationResultView.showResult("위험 단계");
-                environmentEvaluationResultView.showProgressBarChangeColorWithRisk();
-                environmentEvaluationResultView.showScoreTextChangeColorWithRisk();
-                environmentEvaluationResultView.showTotalCountTextChangeColorWithRisk();
-                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.RISK);
 
-            }
-        }
-
-        if (fallDiagnosisContentCategoryId == EnvironmentEvaluationResultCodeFlag.STAIR) {
-            if (answerSize == 7) {
                 environmentEvaluationResultView.showResult("안전 단계");
                 environmentEvaluationResultView.showProgressBarChangeColorWithSafe();
                 environmentEvaluationResultView.showScoreTextChangeColorWithSafe();
                 environmentEvaluationResultView.showTotalCountTextChangeColorWithSafe();
                 environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.SAFE);
+            }
+        }
+
+        if (fallDiagnosisContentCategoryId == EnvironmentEvaluationResultCodeFlag.STAIR) {
+            if (answerSize == 7) {
+                environmentEvaluationResultView.showResult("위험 단계");
+                environmentEvaluationResultView.showProgressBarChangeColorWithRisk();
+                environmentEvaluationResultView.showScoreTextChangeColorWithRisk();
+                environmentEvaluationResultView.showTotalCountTextChangeColorWithRisk();
+                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.RISK);
 
             } else if (answerSize >= 5) {
                 environmentEvaluationResultView.showResult("주의 단계");
@@ -236,12 +236,12 @@ public class EnvironmentEvaluationResultPresenterImpl implements EnvironmentEval
                 environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.CAUTION);
 
             } else {
-                environmentEvaluationResultView.showResult("위험 단계");
-                environmentEvaluationResultView.showProgressBarChangeColorWithRisk();
-                environmentEvaluationResultView.showScoreTextChangeColorWithRisk();
-                environmentEvaluationResultView.showTotalCountTextChangeColorWithRisk();
-                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.RISK);
 
+                environmentEvaluationResultView.showResult("안전 단계");
+                environmentEvaluationResultView.showProgressBarChangeColorWithSafe();
+                environmentEvaluationResultView.showScoreTextChangeColorWithSafe();
+                environmentEvaluationResultView.showTotalCountTextChangeColorWithSafe();
+                environmentEvaluationResultInteractor.setFallDiagnosisRiskCategoryId(EnvironmentEvaluationResultCodeFlag.SAFE);
             }
         }
     }

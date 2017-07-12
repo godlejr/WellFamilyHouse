@@ -73,6 +73,7 @@ public class MainInteractorImpl implements MainInteractor {
         appList.add(new App("해핏", R.drawable.happyfeet, "com.demand.happyfeet"));
         appList.add(new App("버블핏", R.drawable.logo_bubblefeet, "com.demand.bubblefeet"));
         appList.add(new App("Good Buddy", R.drawable.goodbuddy, "healthcare.nhis.GoodBuddy"));
+        appList.add(new App("h2o", R.drawable.h2o, "healthcare.demand.H2Ov2"));
 
         return appList;
     }
