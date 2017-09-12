@@ -64,4 +64,24 @@ public class SettingPresenterImpl implements SettingPresenter {
             settingView.goneResetPassword();
         }
     }
+
+    @Override
+    public void onClickAgreement() {
+        settingView.navigateToAgreementActivity();
+    }
+
+    @Override
+    public void onClickDeactivation() {
+        settingView.navigateToDeactivationActivity();
+    }
+
+    @Override
+    public void onClickResetPassword() {
+        settingView.navigateToResetPasswordActivity();
+    }
+
+    @Override
+    public void onClickBack() {
+        settingView.navigateToBack();
+    }
 }

@@ -90,6 +90,12 @@ public class CreateStoryPresenterImpl implements CreateStoryPresenter {
     }
 
     @Override
+    public void onActivityResultForPhotoUriResultOk1(Uri uri) {
+        createStoryInteractor.setPhotoPath1(realPathUtil, uri);
+        createStoryView.showPhotoAdapterNotifyDataChanged();
+    }
+
+    @Override
     public void onSuccessSetStoryAdded(StoryInfo storyInfo) {
         ArrayList<Uri> photoList = createStoryInteractor.getPhotoList();
         ArrayList<String> pathList = createStoryInteractor.getPathList();

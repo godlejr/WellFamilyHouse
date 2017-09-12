@@ -13,6 +13,7 @@ public interface LoginView {
 
     void initNaverLogin(OAuthLogin oAuthLogin, String naverClientId, String naverClientSecret, String naverClientName);
 
+
     void init();
 
     String getDeviceId();
@@ -35,4 +36,9 @@ public interface LoginView {
 
     String getOAuthLoginResponse(OAuthLogin oAuthLogin, String url);
 
+    void isKakaoLogin();
+
+    void showProgressDialog();
+
+    void goneProgressDialog();
 }

@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
@@ -33,11 +35,13 @@ public class FileToBase64Util {
         Bitmap bm = null;
         try {
             bm = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
-            ExifInterface exifInterface = new ExifInterface(path);
-            int exifOrientation = exifInterface.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-            int exifDegree = exifOrientationToDegrees(exifOrientation);
+            if (path != null) {
+                ExifInterface exifInterface = new ExifInterface(path);
+                int exifOrientation = exifInterface.getAttributeInt(
+                        ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                int exifDegree = exifOrientationToDegrees(exifOrientation);
             bm = rotate(bm, exifDegree);
+            }
         } catch (IOException e) {
             log(e);
         }
@@ -62,6 +66,7 @@ public class FileToBase64Util {
         return bitmap;
     }
 
+
     public int exifOrientationToDegrees(int exifOrientation) {
         if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
             return 90;
@@ -73,12 +78,13 @@ public class FileToBase64Util {
         return 0;
     }
 
-    public String addBase64Bitmap(Bitmap bm) {
+    public String addBase64Bitmap(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 40, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 40, baos);
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b, Base64.NO_WRAP | Base64.URL_SAFE);
     }
+
 
     private static void log(Throwable throwable) {
         StackTraceElement[] ste = throwable.getStackTrace();
@@ -94,4 +100,5 @@ public class FileToBase64Util {
             }
         }
     }
+
 }

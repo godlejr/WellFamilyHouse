@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.demand.well_family.well_family.exercise.base.activity.ExerciseActivity;
+import com.demand.well_family.well_family.falldiagnosis.base.activity.FallDiagnosisActivity;
 import com.demand.well_family.well_family.main.login.activity.LoginActivity;
 import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
@@ -90,7 +92,7 @@ public class SongCategoryListActivity extends Activity {
 
         setUserInfo();
 
-        category_id = getIntent().getIntExtra("category_id",0);
+        category_id = getIntent().getIntExtra("category_id", 0);
         category_name = getIntent().getStringExtra("category_name");
 
         finishList.add(this);
@@ -140,7 +142,7 @@ public class SongCategoryListActivity extends Activity {
 
         // header
         View nv_header_view = nv.getHeaderView(0);
-        LinearLayout ll_menu_mypage = (LinearLayout)nv_header_view.findViewById(R.id.ll_menu_mypage);
+        LinearLayout ll_menu_mypage = (LinearLayout) nv_header_view.findViewById(R.id.ll_menu_mypage);
         ll_menu_mypage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,7 +202,7 @@ public class SongCategoryListActivity extends Activity {
                 Intent intent;
                 switch (item.getItemId()) {
                     case R.id.menu_home:
-                        intent  = new Intent(SongCategoryListActivity.this, MainActivity.class);
+                        intent = new Intent(SongCategoryListActivity.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
@@ -247,9 +249,11 @@ public class SongCategoryListActivity extends Activity {
                         break;
 
 //                    App 이용하기
-                    case R.id.menu_selffeet:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
-
+                    case R.id.menu_falldiagnosis:
+                        navigateToFallDiagnosisActivity();
+                        break;
+                    case R.id.menu_exercise:
+                        navigateToExerciseActivity();
                         break;
                     case R.id.menu_bubblefeet:
                         startLink = getPackageManager().getLaunchIntentForPackage(getString(R.string.bubblefeet));
@@ -278,7 +282,18 @@ public class SongCategoryListActivity extends Activity {
             }
         });
     }
-    private void setBack(){
+
+    public void navigateToFallDiagnosisActivity() {
+        Intent intent = new Intent(this, FallDiagnosisActivity.class);
+        startActivity(intent);
+    }
+
+    public void navigateToExerciseActivity() {
+        Intent intent = new Intent(this, ExerciseActivity.class);
+        startActivity(intent);
+    }
+
+    private void setBack() {
         finish();
     }
 
@@ -289,7 +304,7 @@ public class SongCategoryListActivity extends Activity {
 
         public SongViewHolder(View itemView) {
             super(itemView);
-            ll_item_song =(LinearLayout)itemView.findViewById(R.id.ll_item_song);
+            ll_item_song = (LinearLayout) itemView.findViewById(R.id.ll_item_song);
             iv_item_song_avatar = (ImageView) itemView.findViewById(R.id.iv_item_song_avatar);
             tv_item_song_title = (TextView) itemView.findViewById(R.id.tv_item_song_title);
             tv_item_song_singer = (TextView) itemView.findViewById(R.id.tv_item_song_singer);
@@ -302,7 +317,7 @@ public class SongCategoryListActivity extends Activity {
                     call_insert_song_hit.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            if(!response.isSuccessful()){
+                            if (!response.isSuccessful()) {
                                 Toast.makeText(SongCategoryListActivity.this, new ErrorUtil(getClass()).parseError(response).message(), Toast.LENGTH_SHORT).show();
                             }
                             //scess
@@ -374,7 +389,7 @@ public class SongCategoryListActivity extends Activity {
         call_song_list_by_Category.enqueue(new Callback<ArrayList<Song>>() {
             @Override
             public void onResponse(Call<ArrayList<Song>> call, Response<ArrayList<Song>> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     songList = response.body();
                     rv_song_list.setAdapter(new SongAdapter(SongCategoryListActivity.this, songList, R.layout.item_song));
                     rv_song_list.setLayoutManager(new LinearLayoutManager(SongCategoryListActivity.this, LinearLayoutManager.VERTICAL, false));
@@ -396,17 +411,17 @@ public class SongCategoryListActivity extends Activity {
         toolbar_title.setText(category_name);
     }
 
-    private static void log(Throwable throwable){
-        StackTraceElement[] ste =  throwable.getStackTrace();
+    private static void log(Throwable throwable) {
+        StackTraceElement[] ste = throwable.getStackTrace();
         String className = ste[0].getClassName();
         String methodName = ste[0].getMethodName();
         int lineNumber = ste[0].getLineNumber();
         String fileName = ste[0].getFileName();
 
-        if(LogFlag.printFlag){
-            if(logger.isInfoEnabled()){
+        if (LogFlag.printFlag) {
+            if (logger.isInfoEnabled()) {
                 logger.info("Exception: " + throwable.getMessage());
-                logger.info(className + "."+ methodName+" "+ fileName +" "+ lineNumber +" "+ "line" );
+                logger.info(className + "." + methodName + " " + fileName + " " + lineNumber + " " + "line");
             }
         }
     }

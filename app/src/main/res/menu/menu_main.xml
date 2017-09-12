@@ -21,10 +21,11 @@
                    />
                 <item
                     android:id="@+id/menu_market"
+                    android:checkable="true"
+                    android:checked="false"
                     android:icon="@drawable/menu_market"
                     android:title="웰 패밀리 스토어"
-                    android:checked="false"
-                    android:checkable="true" />
+                    android:visible="false" />
                 <item
                     android:id="@+id/menu_setting"
                     android:icon="@drawable/menu_setting"
@@ -53,11 +54,17 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/menu_selffeet"
-                    android:icon="@drawable/logo_selffeet"
-                    android:title="낙상예방 셀핏"
+                    android:id="@+id/menu_falldiagnosis"
+                    android:checkable="true"
                     android:checked="false"
-                    android:checkable="true" />
+                    android:icon="@drawable/logo_selffeet"
+                    android:title="낙상진단" />
+                <item
+                    android:id="@+id/menu_exercise"
+                    android:checkable="true"
+                    android:checked="false"
+                    android:icon="@drawable/logo_selffeet_1"
+                    android:title="신체운동" />
                 <item
                     android:id="@+id/menu_memory_sound"
                     android:icon="@drawable/memory_sound"

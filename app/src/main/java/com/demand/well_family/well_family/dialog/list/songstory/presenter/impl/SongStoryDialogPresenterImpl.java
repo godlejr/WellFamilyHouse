@@ -17,7 +17,7 @@ import com.demand.well_family.well_family.util.PreferenceUtil;
 import java.util.ArrayList;
 
 /**
- * Created by ㅇㅇ on 2017-04-20.
+ * Created by ㅇㅇ on 2017-04-20.,int position
  */
 
 public class SongStoryDialogPresenterImpl implements SongStoryDialogPresenter {
@@ -45,8 +45,7 @@ public class SongStoryDialogPresenterImpl implements SongStoryDialogPresenter {
 
     @Override
     public void onLoadData() {
-        ArrayList<String> songStoryDialogList = songStoryDialogInteractor.getSongStoryDialogList();
-        songStoryDialogView.setSongStoryDialogAdapterInit(songStoryDialogList);
+        songStoryDialogInteractor.getFamilyCheck();
     }
 
     @Override
@@ -61,6 +60,79 @@ public class SongStoryDialogPresenterImpl implements SongStoryDialogPresenter {
     public void onClickBack() {
         SongStory songStory = songStoryDialogInteractor.getSongStory();
         songStoryDialogView.navigateToBack(songStory);
+    }
+
+    @Override
+    public void onSuccessGetSongStoryDialogList(int isFamily) {
+        User user = songStoryDialogInteractor.getUser();
+        int userId = user.getId();
+        SongStory songStory = songStoryDialogInteractor.getSongStory();
+        int songStoryUserId = songStory.getUser_id();
+
+        ArrayList<String> songStoryDialogList = new ArrayList<>();
+        songStoryDialogList.add("본문 복사");
+        if ((userId == songStoryUserId) || (isFamily > 0)) {
+            songStoryDialogList.add("수정");
+            if (userId == songStoryUserId) {
+                songStoryDialogList.add("삭제");
+            }
+        } else {
+            songStoryDialogList.add("신고 하기");
+        }
+        songStoryDialogList.add("취소");
+
+        songStoryDialogView.setSongStoryDialogAdapterInit(songStoryDialogList);
+    }
+
+    @Override
+    public void onSuccessGetFamilyCheckForClick(int isFamily, int position) {
+        SongStory songStory = songStoryDialogInteractor.getSongStory();
+        Song song = songStoryDialogInteractor.getSong();
+        Report report = songStoryDialogInteractor.getReport();
+        User user = songStoryDialogInteractor.getUser();
+
+        int userId = user.getId();
+        int storyUserId = songStory.getUser_id();
+
+        if (position == SongStoryDialogFlag.COPY) {
+            songStoryDialogView.setSongStoryCopied(songStory);
+        }
+
+        if (userId == storyUserId || isFamily > 0) {
+            if (userId == storyUserId) {
+                if (position == SongStoryDialogFlag.EDIT) {
+                    songStoryDialogView.navigateToModifySongStoryActivity(songStory, song);
+                }
+                if (position == SongStoryDialogFlag.DELETE) {
+                    songStoryDialogView.setSongStoryDeleted();
+                }
+                if (position == 3) {
+                    songStoryDialogView.navigateToBack(songStory);
+                }
+            } else {
+                if (position == SongStoryDialogFlag.EDIT) {
+                    songStoryDialogView.navigateToModifySongStoryActivity(songStory, song);
+                }
+                if (position == 2) {
+                    songStoryDialogView.navigateToBack(songStory);
+                }
+
+            }
+        } else {
+            if (position == SongStoryDialogFlag.REPORT) {
+                songStoryDialogView.navigateToReportActivity(report);
+            }
+
+            if (position == 2) {
+                songStoryDialogView.navigateToBack(songStory);
+            }
+        }
+
+    }
+
+    @Override
+    public void onClickSongStoryDialog(int dialogPosition) {
+        songStoryDialogInteractor.getFamilyCheckForClick(dialogPosition);
     }
 
     @Override
@@ -84,42 +156,6 @@ public class SongStoryDialogPresenterImpl implements SongStoryDialogPresenter {
         songStoryDialogView.showMessage("클립보드에 복사되었습니다.");
     }
 
-    @Override
-    public void onClickSongStoryDialog(int dialogPosition) {
-        SongStory songStory = songStoryDialogInteractor.getSongStory();
-        Song song = songStoryDialogInteractor.getSong();
-        Report report = songStoryDialogInteractor.getReport();
-        User user = songStoryDialogInteractor.getUser();
-
-        int userId = user.getId();
-        int storyUserId = songStory.getUser_id();
-
-        if (dialogPosition == SongStoryDialogFlag.COPY) {
-            songStoryDialogView.setSongStoryCopied(songStory);
-        }
-
-        if (userId == storyUserId) {
-            if (dialogPosition == SongStoryDialogFlag.EDIT) {
-                songStoryDialogView.navigateToModifySongStoryActivity(songStory, song);
-            }
-
-            if (dialogPosition == SongStoryDialogFlag.DELETE) {
-                songStoryDialogView.setSongStoryDeleted();
-            }
-
-            if (dialogPosition == SongStoryDialogFlag.CANCEL) {
-                songStoryDialogView.navigateToBack(songStory);
-            }
-        } else {
-            if (dialogPosition == SongStoryDialogFlag.REPORT) {
-                songStoryDialogView.navigateToReportActivity(report);
-            }
-
-            if (dialogPosition == 2) {
-                songStoryDialogView.navigateToBack(songStory);
-            }
-        }
-    }
 
     @Override
     public void onNetworkError(APIErrorUtil apiErrorUtil) {

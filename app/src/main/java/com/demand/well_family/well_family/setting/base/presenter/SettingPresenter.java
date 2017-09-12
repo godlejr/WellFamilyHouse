@@ -12,4 +12,12 @@ public interface SettingPresenter {
     void setToolbar();
 
     void validateLoginCategoryId();
+
+    void onClickAgreement();
+
+    void onClickDeactivation();
+
+    void onClickResetPassword();
+
+    void onClickBack();
 }

@@ -1,5 +1,7 @@
 package com.demand.well_family.well_family.main.sns.interactor.impl;
 
+import android.util.Log;
+
 import com.demand.well_family.well_family.repository.MainServerConnection;
 import com.demand.well_family.well_family.repository.UserServerConnection;
 import com.demand.well_family.well_family.dto.User;
@@ -12,6 +14,7 @@ import com.demand.well_family.well_family.util.ErrorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -71,6 +74,12 @@ public class JoinFromSNSInteractorImpl implements JoinFromSNSInteractor {
                     joinFromSNSPresenter.onSuccessJoin(email, password);
                 } else {
                     joinFromSNSPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
+
+                    try {
+                        Log.e("ㅇㅇㅇㅇ", response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 

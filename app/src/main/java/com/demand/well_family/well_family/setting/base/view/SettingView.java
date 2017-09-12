@@ -15,6 +15,8 @@ public interface SettingView {
     View getDecorView();
     void showToolbarTitle(String message);
 
+    void navigateToAgreementActivity();
+
     void navigateToDeactivationActivity();
     void navigateToResetPasswordActivity();
     void navigateToBack();

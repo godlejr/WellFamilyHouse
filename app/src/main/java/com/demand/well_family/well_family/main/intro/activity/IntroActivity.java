@@ -3,8 +3,13 @@ package com.demand.well_family.well_family.main.intro.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.demand.well_family.well_family.main.login.activity.LoginActivity;
@@ -13,6 +18,11 @@ import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.main.intro.presenter.IntroPresenter;
 import com.demand.well_family.well_family.main.intro.presenter.impl.IntroPresenterImpl;
 import com.demand.well_family.well_family.main.intro.view.IntroView;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import static com.kakao.util.helper.Utility.getPackageInfo;
 
 
 public class IntroActivity extends Activity implements IntroView {
@@ -28,6 +38,7 @@ public class IntroActivity extends Activity implements IntroView {
         context =  this.getApplicationContext();
         introPresenter = new IntroPresenterImpl(this);
         introPresenter.onCreate();
+
     }
 
     @Override
@@ -58,4 +69,5 @@ public class IntroActivity extends Activity implements IntroView {
         startActivity(intent);
         finish();
     }
+
 }

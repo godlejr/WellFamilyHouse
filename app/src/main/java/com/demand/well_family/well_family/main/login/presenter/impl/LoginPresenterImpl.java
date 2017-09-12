@@ -10,6 +10,7 @@ import com.demand.well_family.well_family.main.login.view.LoginView;
 import com.demand.well_family.well_family.util.APIErrorUtil;
 import com.demand.well_family.well_family.util.PreferenceUtil;
 import com.facebook.CallbackManager;
+import com.kakao.usermgmt.response.model.UserProfile;
 import com.nhn.android.naverlogin.OAuthLogin;
 import com.nhn.android.naverlogin.OAuthLoginHandler;
 
@@ -42,6 +43,7 @@ public class LoginPresenterImpl implements LoginPresenter {
         String naverClientName = loginInteracter.getNaverClientName();
 
         loginView.initNaverLogin(oAuthLogin, naverClientId, naverClientSecret, naverClientName);
+
     }
 
     @Override
@@ -69,6 +71,8 @@ public class LoginPresenterImpl implements LoginPresenter {
 
             loginInteracter.setDeviceIdAndToken(userFromLogin, deviceId, firebaseToken);
         }
+
+        loginView.goneProgressDialog();
     }
 
     @Override
@@ -129,6 +133,17 @@ public class LoginPresenterImpl implements LoginPresenter {
         } else {
             loginView.showMessage(apiErrorUtil.message());
         }
+    }
+
+    @Override
+    public void onClickKakaoLogin() {
+        loginView.showProgressDialog();
+        loginView.isKakaoLogin();
+    }
+
+    @Override
+    public void onSuccessKakaoLogin(UserProfile userProfile) {
+        loginInteracter.setKakaoLogin(userProfile);
     }
 
 

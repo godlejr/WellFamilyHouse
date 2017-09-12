@@ -1,7 +1,5 @@
 package com.demand.well_family.well_family.setting.deactivation.interator.impl;
 
-import android.app.Activity;
-
 import com.demand.well_family.well_family.setting.deactivation.interator.DeactivationInterator;
 import com.demand.well_family.well_family.setting.deactivation.presenter.DeactivationPresenter;
 

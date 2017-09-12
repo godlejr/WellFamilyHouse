@@ -133,7 +133,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
     public void onClick(View v) {
         int position;
         switch (v.getId()) {
-            //view pager
             case R.id.iv_viewPager_prev:
                 position = viewPager.getCurrentItem();
                 viewPager.setCurrentItem(position - 1, true);
@@ -144,17 +143,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
                 viewPager.setCurrentItem(position + 1, true);
                 break;
 
-            //add family for exist
             case R.id.btn_family_add_exist:
                 navigateToCreateFamilyActivity();
                 break;
 
-            //add family
             case R.id.ll_family_make:
                 navigateToCreateFamilyActivity();
                 break;
 
-            //toobar
             case R.id.toolbar_market:
                 drawerLayout.closeDrawers();
                 navigateToMarketMainActivity();
@@ -209,8 +205,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
                 mainPresenter.onClickLogout();
                 break;
 
-            case R.id.menu_selffeet:
-                showMessage("준비중입니다");
+            case R.id.menu_falldiagnosis:
+                mainPresenter.onClickFallDiagnosis();
+                break;
+            case R.id.menu_exercise:
+                mainPresenter.onClickExercise();
                 break;
             case R.id.menu_bubblefeet:
                 mainPresenter.onClickAppGames(getString(R.string.bubblefeet));

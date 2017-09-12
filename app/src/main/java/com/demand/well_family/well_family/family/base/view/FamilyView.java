@@ -113,4 +113,7 @@ public interface FamilyView {
 
     void navigateToAppGame(String appPackageName);
 
+    void navigateToFallDiagnosisActivity();
+
+    void navigateToExerciseActivity();
 }

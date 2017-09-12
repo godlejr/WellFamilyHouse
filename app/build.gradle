@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
 
 android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
     signingConfigs {
         release {
             keyAlias 'wellfamily_keystore'
@@ -9,8 +12,7 @@ android {
             storePassword 'demand8312'
         }
     }
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
@@ -19,6 +21,7 @@ android {
 
         multiDexEnabled = true
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -28,6 +31,12 @@ android {
         debug {
             signingConfig signingConfigs.release
         }
+    }
+
+
+    repositories {
+        jcenter()
+        maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
     }
 }
 
@@ -57,13 +66,12 @@ dependencies {
     compile files('src/main/libs/slf4j-android-1.6.1-RC1.jar')
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile 'com.google.firebase:firebase-messaging:10.0.1'
-
-    //    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
-    compile 'com.facebook.android:facebook-android-sdk:4.5.0'
-
     compile files('src/main/libs/3rdparty_login_library_android_4.1.4.jar')
 
+    compile 'com.facebook.android:facebook-android-sdk:4.5.0'
 
+    compile group: project.KAKAO_SDK_GROUP, name: 'kakaotalk', version: project.KAKAO_SDK_VERSION
+    compile group: project.KAKAO_SDK_GROUP, name: 'usermgmt', version: project.KAKAO_SDK_VERSION
 }
 apply plugin: 'com.google.gms.google-services'
 

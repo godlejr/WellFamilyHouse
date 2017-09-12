@@ -53,13 +53,17 @@ public class SongStoryDialogActivity extends Activity implements SongStoryDialog
         String songStoryContent = getIntent().getStringExtra("content");
         int position = getIntent().getIntExtra("position", 0);
         int songStoryId = getIntent().getIntExtra("story_id", 0);
+        String location = getIntent().getStringExtra("location");
 
         SongStory songStory = new SongStory();
         songStory.setContent(songStoryContent);
         songStory.setId(songStoryId);
         songStory.setPosition(position);
-        songStory.setLocation(getIntent().getStringExtra("location"));
         songStory.setUser_id(getIntent().getIntExtra("story_user_id", 0));
+
+        if (location != null) {
+            songStory.setLocation(location);
+        }
 
         Song song = new Song();
         song.setId(getIntent().getIntExtra("song_id", 0));

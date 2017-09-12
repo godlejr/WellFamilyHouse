@@ -2,13 +2,22 @@ package com.demand.well_family.well_family.falldiagnosis.environment.photo.activ
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.demand.well_family.well_family.BuildConfig;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
@@ -30,6 +40,7 @@ import com.demand.well_family.well_family.falldiagnosis.environment.photo.presen
 import com.demand.well_family.well_family.falldiagnosis.environment.photo.view.EnvironmentEvaluationPhotoView;
 import com.demand.well_family.well_family.falldiagnosis.environment.result.activity.EnvironmentEvaluationResultActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -59,6 +70,8 @@ public class EnvironmentEvaluationPhotoActivity extends Activity implements Envi
     private TextView toolbarTitle;
     private ImageView toolbarBack;
     private RecyclerView rv_environmentevaluation_photolist;
+    private File file;
+    private ProgressDialog progressDialog;
 
 
     @Override
@@ -132,6 +145,7 @@ public class EnvironmentEvaluationPhotoActivity extends Activity implements Envi
         toolbarTitle.setText(message);
     }
 
+
     @Override
     public void setPermission() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -156,6 +170,14 @@ public class EnvironmentEvaluationPhotoActivity extends Activity implements Envi
     public void showCamera() {
         Intent intent = new Intent();
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        String url = "wellfamily_" + System.currentTimeMillis() + ".jpg";
+        Uri uri = null;
+
+        file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath() + "/Camera", url);
+
+        uri = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", file);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         intent.putExtra("scale", true);
         intent.putExtra("return-data", true);
         startActivityForResult(intent, EnvironmentEvaluationPhotoCodeFlag.TAKE_A_PICTURE);
@@ -237,11 +259,114 @@ public class EnvironmentEvaluationPhotoActivity extends Activity implements Envi
             case EnvironmentEvaluationPhotoCodeFlag.TAKE_A_PICTURE:
                 switch (resultCode) {
                     case EnvironmentEvaluationPhotoCodeFlag.RESULT_OK:
-                        Uri uri = data.getData();
+                        Uri uri = null;
+                        if (data != null) {
+                            uri = data.getData();
+                        } else {
+                            try {
+                                showProgressDialog();
+                                boolean isBroadCast = (new SendBroadcastTask()).execute().get();
+
+                                if (isBroadCast) {
+//                                    Uri uri = null;
+                                    uri = getLastPhotoUri();
+                                    goneProgressDialog();
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
                         environmentEvaluationPhotoPresenter.onActivityResultForCameraUriResultOk(uri);
+
                         break;
                 }
                 break;
+        }
+    }
+
+    public class SendBroadcastTask extends AsyncTask<Object, Object, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Object... urls) {
+
+            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file));
+            intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+            sendBroadcast(intent);
+
+            try {
+                Thread.sleep(700);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            return true;
+        }
+
+    }
+
+
+    @Override
+    public void showProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.show();
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        progressDialog.setContentView(R.layout.progress_dialog);
+    }
+
+    @Override
+    public void goneProgressDialog() {
+        progressDialog.dismiss();
+    }
+
+
+    public Uri getLastPhotoUri() {
+        Uri uri = null;
+
+        String[] column = {MediaStore.Images.Media.DATA};
+
+        // where id is equal to
+
+        try {
+            Cursor cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, column, null, null, null);
+
+            if (cursor != null && cursor.moveToLast()) {
+                Uri u = Uri.parse(cursor.getString(0));
+
+                File wallpaper_file = new File(u.getPath());
+                uri = getImageContentUri(this, wallpaper_file.getAbsolutePath());
+
+
+                int id = cursor.getInt(1);
+                cursor.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return uri;
+    }
+
+    public static Uri getImageContentUri(Context context, String absPath) {
+
+        Cursor cursor = context.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                , new String[]{MediaStore.Images.Media._ID}
+                , MediaStore.Images.Media.DATA + "=? "
+                , new String[]{absPath}, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+            return Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, Integer.toString(id));
+
+        } else if (!absPath.isEmpty()) {
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.DATA, absPath);
+            return context.getContentResolver().insert(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        } else {
+            return null;
         }
     }
 

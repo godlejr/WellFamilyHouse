@@ -151,7 +151,7 @@ public class JoinFromSNSActivity extends Activity implements JoinFromSNSView, Vi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back:
-                navigateToBack();
+                finish();
                 break;
 
             case R.id.et_sns_birth:

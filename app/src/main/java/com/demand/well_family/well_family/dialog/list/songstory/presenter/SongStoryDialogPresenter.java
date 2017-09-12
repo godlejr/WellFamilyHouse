@@ -27,4 +27,8 @@ public interface SongStoryDialogPresenter {
     void onClickSongStoryDialog(int dialogPosition);
 
     void onClickBack();
+
+    void onSuccessGetSongStoryDialogList(int isFamily);
+
+    void onSuccessGetFamilyCheckForClick(int isFamily, int position);
 }

@@ -24,7 +24,10 @@ import com.demand.well_family.well_family.falldiagnosis.physicalevaluation.base.
 import java.util.ArrayList;
 
 /**
- * Created by ㅇㅇ on 2017-04-24.
+ * Created by ㅇㅇ on 2017-04-
+ *
+ *
+ * 24.
  */
 
 public class FallDiagnosisActivity extends Activity implements FallDiagnosisView, View.OnClickListener {

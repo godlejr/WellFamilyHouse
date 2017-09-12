@@ -154,6 +154,7 @@ public class CreateStoryActivity extends Activity implements CreateStoryView, Vi
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Photo"), CreateStoryCodeFlag.PICK_PHOTO);
     }
@@ -161,6 +162,7 @@ public class CreateStoryActivity extends Activity implements CreateStoryView, Vi
     @Override
     public void navigateToMediaStore() {
         Intent intent = new Intent();
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         intent.setAction(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         startActivityForResult(intent, CreateStoryCodeFlag.PICK_PHOTO);
@@ -230,7 +232,7 @@ public class CreateStoryActivity extends Activity implements CreateStoryView, Vi
                             }
                         } else {
                             Uri uri = data.getData();
-                            createStoryPresenter.onActivityResultForPhotoUriResultOk(uri);
+                            createStoryPresenter.onActivityResultForPhotoUriResultOk1(uri);
                         }
                         break;
                 }

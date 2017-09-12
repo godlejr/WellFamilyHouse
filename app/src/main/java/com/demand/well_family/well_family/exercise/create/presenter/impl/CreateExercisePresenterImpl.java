@@ -76,6 +76,9 @@ public class CreateExercisePresenterImpl implements CreateExercisePresenter {
         createExerciseView.navigateToExercisePopupActivity(exerciseCategory);
     }
 
+
+
+
     @Override
     public void onBackPressed() {
         createExerciseInteractor.setPlaying(false);

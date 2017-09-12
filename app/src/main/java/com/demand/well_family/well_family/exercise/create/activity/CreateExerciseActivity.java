@@ -35,7 +35,6 @@ import java.io.IOException;
 public class CreateExerciseActivity extends Activity implements CreateExerciseView, View.OnClickListener, MediaPlayer.OnPreparedListener, SurfaceHolder.Callback, SeekBar.OnSeekBarChangeListener, MediaPlayer.OnCompletionListener {
     private CreateExercisePresenter createExercisePresenter;
 
-
     private SurfaceHolder surfaceHolder;
     private SurfaceView sv_exercise;
     private ImageButton ib_exercise;

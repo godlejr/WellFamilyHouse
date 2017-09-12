@@ -145,7 +145,7 @@
                                 android:layout_weight="1"
                                 android:paddingLeft="12dp"
                                 android:paddingRight="12dp"
-                                android:scaleType="fitXY"
+                                android:scaleType="fitCenter"
                                 android:src="@drawable/exercise_story" />
 
                             <TextView
@@ -272,7 +272,7 @@
                         <CheckBox
                             android:id="@+id/cb_exercisestorydetail_like"
                             android:layout_width="1dp"
-                            android:layout_height="45dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:background="@drawable/selector_checkbox_like"
                             android:button="@null" />
@@ -280,8 +280,9 @@
                         <ImageView
                             android:id="@+id/iv_exercisestorydetail_share"
                             android:layout_width="1dp"
-                            android:layout_height="45dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:scaleType="fitXY"
                             android:src="@drawable/btn_share" />
 
                     </LinearLayout>

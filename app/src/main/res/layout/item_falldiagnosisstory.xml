@@ -59,7 +59,8 @@
                     android:layout_height="98dp"
                     android:layout_weight="1"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp" />
+                    android:paddingRight="10dp"
+                    android:scaleType="fitCenter" />
 
                 <LinearLayout
                     android:layout_width="1dp"
@@ -170,7 +171,7 @@
             <CheckBox
                 android:id="@+id/cb_falldiagnosisstory_likebtn"
                 android:layout_width="1dp"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/selector_checkbox_like"
                 android:button="@null" />
@@ -178,8 +179,9 @@
             <ImageView
                 android:id="@+id/iv_falldiagnosisstory_commentbtn"
                 android:layout_width="1dp"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:scaleType="fitXY"
                 android:src="@drawable/btn_comment" />
 
         </LinearLayout>

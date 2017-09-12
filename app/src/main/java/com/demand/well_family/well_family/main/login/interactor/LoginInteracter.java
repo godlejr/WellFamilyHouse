@@ -2,6 +2,7 @@ package com.demand.well_family.well_family.main.login.interactor;
 
 import com.demand.well_family.well_family.dto.User;
 import com.facebook.CallbackManager;
+import com.kakao.usermgmt.response.model.UserProfile;
 import com.nhn.android.naverlogin.OAuthLogin;
 import com.nhn.android.naverlogin.OAuthLoginHandler;
 
@@ -33,4 +34,6 @@ public interface LoginInteracter {
     String getNaverClientName();
 
     OAuthLoginHandler getOAuthLoginHandler();
+
+    void setKakaoLogin(UserProfile userProfile);
 }

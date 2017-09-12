@@ -9,6 +9,6 @@
     <ImageView
         android:id="@+id/iv_environmentevaluation_nophoto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="180dp"
         android:src="@drawable/environmentevaluation_nophoto" />
 </LinearLayout>

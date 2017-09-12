@@ -29,6 +29,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.demand.well_family.well_family.exercise.base.activity.ExerciseActivity;
+import com.demand.well_family.well_family.falldiagnosis.base.activity.FallDiagnosisActivity;
 import com.demand.well_family.well_family.main.login.activity.LoginActivity;
 import com.demand.well_family.well_family.main.base.activity.MainActivity;
 import com.demand.well_family.well_family.R;
@@ -261,9 +263,11 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
                         break;
 
 //                    App 이용하기
-                    case R.id.menu_selffeet:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
-
+                    case R.id.menu_falldiagnosis:
+                        navigateToFallDiagnosisActivity();
+                        break;
+                    case R.id.menu_exercise:
+                        navigateToExerciseActivity();
                         break;
                     case R.id.menu_bubblefeet:
                         startLink = getPackageManager().getLaunchIntentForPackage(getString(R.string.bubblefeet));
@@ -291,6 +295,15 @@ public class SongMainActivity extends Activity implements View.OnClickListener {
         });
     }
 
+    public void navigateToFallDiagnosisActivity() {
+        Intent intent = new Intent(this, FallDiagnosisActivity.class);
+        startActivity(intent);
+    }
+
+    public void navigateToExerciseActivity() {
+        Intent intent = new Intent(this, ExerciseActivity.class);
+        startActivity(intent);
+    }
     private void setBack() {
         finish();
     }

@@ -194,14 +194,14 @@
 
             <Button
                 android:id="@+id/btn_sns_register"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginBottom="12dp"
-                android:background="@drawable/round_corner_gray_r10"
+                android:background="@drawable/round_corner_brown_r10"
                 android:gravity="center_vertical|center"
                 android:text="확인"
-                android:textColor="#fff"
-                style="?android:attr/borderlessButtonStyle"/>
+                android:textColor="#fff" />
 
         </LinearLayout>
 

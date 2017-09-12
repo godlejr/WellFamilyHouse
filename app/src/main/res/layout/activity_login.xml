@@ -232,6 +232,16 @@
                     android:background="@drawable/login_facebook_btn"
                     android:scaleType="fitCenter"
                     android:text="페이스북로그인" />
+
+                <Button
+                    android:id="@+id/kakaoLoginButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/login_kakao"
+                    android:scaleType="fitCenter" />
+
             </LinearLayout>
 
         </LinearLayout>

@@ -31,9 +31,10 @@ public class RealPathUtil {
         // where id is equal to
         String sel = MediaStore.Images.Media._ID + "=?";
 
-        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                column, sel, new String[]{ id }, null);
 
+
+
+        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, column, sel, new String[]{ id }, null);
         int columnIndex = cursor.getColumnIndex(column[0]);
 
         if (cursor.moveToFirst()) {

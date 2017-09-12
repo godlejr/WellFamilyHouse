@@ -400,7 +400,7 @@ public class EditUserActivity extends Activity {
                 HashMap<String, String> map = new HashMap<>();
                 map.put("name", user_name);
                 map.put("birth", user_birth);
-                map.put("profile_phone", user_phone);
+                map.put("phone", user_phone);
                 map.put("gender", String.valueOf(user_gender));
 
                 userServerConnection = new NetworkInterceptor(access_token).getClientForUserServer().create(UserServerConnection.class);

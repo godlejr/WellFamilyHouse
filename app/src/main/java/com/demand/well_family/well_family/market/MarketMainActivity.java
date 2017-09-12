@@ -79,9 +79,7 @@ public class MarketMainActivity extends Activity {
     }
 
 
-    // toolbar_main & menu
     public void setToolbar(View view) {
-        // toolbar_main
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolBar);
         TextView toolbar_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
         toolbar_title.setText("웰 패밀리 스토어");
@@ -89,7 +87,6 @@ public class MarketMainActivity extends Activity {
         toolbar_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 함수 호출
                 setBack();
             }
         });

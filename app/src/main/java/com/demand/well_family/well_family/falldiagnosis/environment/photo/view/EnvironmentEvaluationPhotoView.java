@@ -48,4 +48,7 @@ public interface EnvironmentEvaluationPhotoView {
 
     void navigateToEnvironmentEvaluationResultActivity(FallDiagnosisCategory fallDiagnosisCategory, FallDiagnosisContentCategory fallDiagnosisContentCategory, ArrayList<Integer> answerList, ArrayList<Uri> photoList, ArrayList<String> pathList, int environmentEvaluationCategorySize);
 
+    void showProgressDialog();
+
+    void goneProgressDialog();
 }

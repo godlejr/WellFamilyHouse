@@ -1,6 +1,7 @@
 package com.demand.well_family.well_family.story.create.interactor.impl;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.Story;
@@ -16,10 +17,12 @@ import com.demand.well_family.well_family.story.create.presenter.impl.CreateStor
 import com.demand.well_family.well_family.util.ErrorUtil;
 import com.demand.well_family.well_family.util.FileToBase64Util;
 import com.demand.well_family.well_family.util.RealPathUtil;
+import com.google.gson.Gson;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -87,7 +90,7 @@ public class CreateStoryInteractorImpl implements CreateStoryInteractor {
         String path = null;
         try {
             path = realPathUtil.getRealPathFromURI_API19(uri);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             log(e);
             path = realPathUtil.getRealPathFromURI_API11to18(uri);
         }
@@ -159,6 +162,8 @@ public class CreateStoryInteractorImpl implements CreateStoryInteractor {
 
         storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
         final RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), fileToBase64Util.addBase64Bitmap(fileToBase64Util.encodeImage(photo, path)));
+
+
         Call<ResponseBody> call_write_photo = storyServerConnection.insert_photos(storyId, requestBody);
         call_write_photo.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -166,6 +171,11 @@ public class CreateStoryInteractorImpl implements CreateStoryInteractor {
                 if (response.isSuccessful()) {
                     //성공
                 } else {
+                    try {
+                        Log.e("ㅇㅇㅇ", response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     createStoryPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
             }
@@ -182,6 +192,16 @@ public class CreateStoryInteractorImpl implements CreateStoryInteractor {
         } catch (InterruptedException e) {
             log(e);
         }
+    }
+
+    @Override
+    public void setPhotoPath1(RealPathUtil realPathUtil, Uri uri) {
+        String path = null;
+
+        path = realPathUtil.getRealPathFromURI_API11to18(uri);
+
+        pathList.add(path);
+        photoList.add(uri);
     }
 
 

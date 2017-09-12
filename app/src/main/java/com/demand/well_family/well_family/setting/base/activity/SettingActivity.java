@@ -12,6 +12,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.setting.agreement.activity.AgreementActivity;
 import com.demand.well_family.well_family.setting.deactivation.activity.DeactivationActivity;
 import com.demand.well_family.well_family.setting.verifyAccount.activity.VerifyAccountActivity;
 import com.demand.well_family.well_family.setting.base.presenter.SettingPresenter;
@@ -30,6 +31,7 @@ public class SettingActivity extends Activity implements SettingView, View.OnCli
     private Switch sw_setting_family;
     private LinearLayout ll_setting_deactivation;
     private LinearLayout ll_setting_pwd;
+    private LinearLayout ll_setting_agreement;
     private View decorView;
 
     //toolbar
@@ -53,9 +55,11 @@ public class SettingActivity extends Activity implements SettingView, View.OnCli
         sw_setting_family = (Switch) findViewById(R.id.sw_setting_family);
         ll_setting_deactivation = (LinearLayout) findViewById(R.id.ll_setting_disable);
         ll_setting_pwd = (LinearLayout) findViewById(R.id.ll_setting_pwd);
+        ll_setting_agreement = (LinearLayout)findViewById(R.id.ll_setting_agreement);
 
         sw_setting_family.setOnCheckedChangeListener(this);
         ll_setting_deactivation.setOnClickListener(this);
+        ll_setting_agreement.setOnClickListener(this);
     }
 
     @Override
@@ -94,17 +98,26 @@ public class SettingActivity extends Activity implements SettingView, View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.toolbar_back:
-                navigateToBack();
+                settingPresenter.onClickBack();
                 break;
 
             case R.id.ll_setting_disable:
-                navigateToDeactivationActivity();
+                settingPresenter.onClickDeactivation();
                 break;
 
             case R.id.ll_setting_pwd:
-                navigateToResetPasswordActivity();
+                settingPresenter.onClickResetPassword();
+                break;
+
+            case R.id.ll_setting_agreement:
+               settingPresenter.onClickAgreement();
                 break;
         }
+    }
+    @Override
+    public void navigateToAgreementActivity() {
+        Intent intent = new Intent(this, AgreementActivity.class);
+        startActivity(intent);
     }
 
     @Override

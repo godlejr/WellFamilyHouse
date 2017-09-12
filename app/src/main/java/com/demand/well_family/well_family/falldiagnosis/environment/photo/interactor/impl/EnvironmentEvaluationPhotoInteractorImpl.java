@@ -119,6 +119,12 @@ public class EnvironmentEvaluationPhotoInteractorImpl implements EnvironmentEval
         photoList.add(uri);
     }
 
+    @Override
+    public void setPhotoPathAndUri(String path, Uri uri) {
+        pathList.add(path);
+        photoList.add(uri);
+    }
+
 
     private static void log(Throwable throwable) {
         StackTraceElement[] ste = throwable.getStackTrace();

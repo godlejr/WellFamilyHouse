@@ -23,6 +23,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.kakao.usermgmt.response.model.UserProfile;
 import com.nhn.android.naverlogin.OAuthLogin;
 import com.nhn.android.naverlogin.OAuthLoginHandler;
 
@@ -84,6 +85,20 @@ public class LoginInteractorImpl implements LoginInteracter {
     @Override
     public void setNaverOAuthLogin() {
         this.oAuthLogin = OAuthLogin.getInstance();
+    }
+
+    @Override
+    public void setKakaoLogin(UserProfile userProfile) {
+        long id = userProfile.getId();
+        String name = userProfile.getNickname();
+
+        User user = new User();
+        user.setEmail(String.valueOf(id));
+        user.setPassword(String.valueOf(id));
+        user.setName(name);
+        user.setLogin_category_id(JoinFlag.KAKAO);
+
+        setSNSLogin(user);
     }
 
     @Override
@@ -225,6 +240,7 @@ public class LoginInteractorImpl implements LoginInteracter {
     public OAuthLoginHandler getOAuthLoginHandler() {
         return oAuthLoginHandler;
     }
+
 
 
     private OAuthLoginHandler oAuthLoginHandler = new OAuthLoginHandler() {

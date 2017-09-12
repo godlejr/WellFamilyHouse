@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.dialog.list.comment.flag.CommentActFlag;
 import com.demand.well_family.well_family.repository.SongServerConnection;
 import com.demand.well_family.well_family.dialog.list.comment.activity.CommentDialogActivity;
 import com.demand.well_family.well_family.dto.CommentInfo;
@@ -587,7 +588,7 @@ public class SongPlayer extends Activity implements CompoundButton.OnCheckedChan
                         intent.putExtra("comment_id", commentInfoList.get(position).getComment_id());
                         intent.putExtra("comment_user_name", commentInfoList.get(position).getUser_name());
                         intent.putExtra("comment_content", commentInfoList.get(position).getContent());
-                        intent.putExtra("act_flag", 4);
+                        intent.putExtra("act_flag", CommentActFlag.PUBLIC);
                         intent.putExtra("comment_category_id", 2);
                         startActivity(intent);
                     }

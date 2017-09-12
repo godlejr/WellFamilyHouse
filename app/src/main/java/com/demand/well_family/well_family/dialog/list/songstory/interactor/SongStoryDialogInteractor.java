@@ -13,9 +13,11 @@ import java.util.ArrayList;
  */
 
 public interface SongStoryDialogInteractor {
-    ArrayList<String> getSongStoryDialogList();
+    void getFamilyCheck();
 
     void setSongStoryDeleted(int songStoryId);
+
+    void getFamilyCheckForClick(int position);
 
     void setUser(User user);
     User getUser();

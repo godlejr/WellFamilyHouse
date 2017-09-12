@@ -195,6 +195,9 @@ public class EditStoryInteractorImpl implements EditStoryInteractor {
         }).start();
     }
 
+
+
+
     @Override
     public void setPhotoAdded(FileToBase64Util fileToBase64Util, Bitmap bitmap) {
         String accessToken = user.getAccess_token();

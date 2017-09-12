@@ -35,6 +35,8 @@ import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.Photo;
 import com.demand.well_family.well_family.dto.StoryInfo;
 import com.demand.well_family.well_family.dto.User;
+import com.demand.well_family.well_family.exercise.base.activity.ExerciseActivity;
+import com.demand.well_family.well_family.falldiagnosis.base.activity.FallDiagnosisActivity;
 import com.demand.well_family.well_family.family.base.adapter.content.ContentAdapter;
 import com.demand.well_family.well_family.family.base.adapter.user.UserAdapter;
 import com.demand.well_family.well_family.family.base.flag.FamilyCodeFlag;
@@ -551,8 +553,11 @@ public class FamilyActivity extends Activity implements FamilyView, NestedScroll
                 familyPresenter.onClickLogout();
                 break;
 
-            case R.id.menu_selffeet:
-                showMessage("준비중입니다");
+            case R.id.menu_falldiagnosis:
+                familyPresenter.onClickFallDiagnosis();
+                break;
+            case R.id.menu_exercise:
+                familyPresenter.onClickExercise();
                 break;
             case R.id.menu_bubblefeet:
                 familyPresenter.onClickAppGames(getString(R.string.bubblefeet));
@@ -568,7 +573,17 @@ public class FamilyActivity extends Activity implements FamilyView, NestedScroll
         }
         return true;
     }
+    @Override
+    public void navigateToFallDiagnosisActivity() {
+        Intent intent = new Intent(this, FallDiagnosisActivity.class);
+        startActivity(intent);
+    }
 
+    @Override
+    public void navigateToExerciseActivity() {
+        Intent intent = new Intent(this, ExerciseActivity.class);
+        startActivity(intent);
+    }
     @Override
     public void onClick(View v) {
         Family family = new Family();

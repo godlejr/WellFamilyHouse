@@ -3,6 +3,7 @@ package com.demand.well_family.well_family.main.login.presenter;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.util.APIErrorUtil;
 import com.facebook.CallbackManager;
+import com.kakao.usermgmt.response.model.UserProfile;
 import com.nhn.android.naverlogin.OAuthLogin;
 import com.nhn.android.naverlogin.OAuthLoginHandler;
 
@@ -39,4 +40,8 @@ public interface LoginPresenter {
     String getOAuthLoginResponse(OAuthLogin oAuthLogin, String url);
 
     void onNetworkError(APIErrorUtil apiErrorUtil);
+
+    void onClickKakaoLogin();
+
+    void onSuccessKakaoLogin(UserProfile userProfile);
 }

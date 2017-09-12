@@ -73,11 +73,11 @@
                 android:layout_width="25dp" />
 
             <TextView
-                android:text="55"
+                android:id="@+id/tv_item_main_story_like"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:id="@+id/tv_item_main_story_like"
                 android:gravity="center|right"
+                android:text="0"
                 android:textColor="#000" />
 
         </LinearLayout>
@@ -97,11 +97,11 @@
                 android:layout_height="25dp" />
 
             <TextView
-                android:text="88"
-                android:layout_width="wrap_content"
                 android:id="@+id/tv_item_main_comment_story_count"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center|right"
+                android:text="0"
                 android:textColor="#000" />
 
         </LinearLayout>

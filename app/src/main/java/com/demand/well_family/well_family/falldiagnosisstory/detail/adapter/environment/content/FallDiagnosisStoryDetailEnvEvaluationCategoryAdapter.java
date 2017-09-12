@@ -37,7 +37,7 @@ public class FallDiagnosisStoryDetailEnvEvaluationCategoryAdapter extends Recycl
     @Override
     public void onBindViewHolder(FallDiagnosisStoryDetailEnvEvaluationCategoryViewHolder holder, int position) {
         EnvironmentEvaluationCategory environmentEvaluationCategory = environmentEvaluationCategoryList.get(position);
-        holder.tv_item_falldiagnosisstorydetail_selfdiagnosis.setText(environmentEvaluationCategory.getId() + ". " + environmentEvaluationCategory.getName());
+        holder.tv_item_falldiagnosisstorydetail_selfdiagnosis.setText(environmentEvaluationCategory.getName());
     }
 
     @Override

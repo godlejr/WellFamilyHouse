@@ -45,6 +45,11 @@ public class ViewPagerAdapter extends PagerAdapter implements View.OnTouchListen
         tv_viewPager_indicator = (TextView) view.findViewById(R.id.tv_viewPager_position);
 
         iv_viewPager_childView.setOnTouchListener(this);
+
+
+
+
+
         container.addView(view);
 
         String imageURL = photoPopupPresenter.getImageURL(position);

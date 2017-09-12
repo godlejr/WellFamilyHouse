@@ -41,6 +41,8 @@ public interface EnvironmentEvaluationPhotoInteractor {
 
     void setPhotoPath(RealPathUtil realPathUtil, Uri uri);
 
+    void setPhotoPathAndUri(String path, Uri uri);
+
     int getEnvironmentEvaluationCategorySize();
 
     void setEnvironmentEvaluationCategorySize(int environmentEvaluationCategorySize);

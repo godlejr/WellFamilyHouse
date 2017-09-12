@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
+import com.demand.well_family.well_family.dialog.list.comment.flag.CommentActFlag;
 import com.demand.well_family.well_family.repository.SongServerConnection;
 import com.demand.well_family.well_family.repository.SongStoryServerConnection;
 import com.demand.well_family.well_family.repository.UserServerConnection;
@@ -358,7 +359,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
 
         // content, location
         tv_sound_story_detail_content.setText(content);
-        if (location.length() != 0 && location != null) {
+        if (location != null && location.length() != 0) {
             tv_sound_story_detail_location.setText(location);
         } else {
             ll_sound_story_detail_location.setVisibility(View.GONE);
@@ -851,7 +852,7 @@ public class SongStoryDetailActivity extends Activity implements CompoundButton.
                         intent.putExtra("comment_id", commentInfoList.get(position).getComment_id());
                         intent.putExtra("comment_user_name", commentInfoList.get(position).getUser_name());
                         intent.putExtra("comment_content", commentInfoList.get(position).getContent());
-                        intent.putExtra("act_flag", 4);
+                        intent.putExtra("act_flag", CommentActFlag.PUBLIC);
                         intent.putExtra("comment_category_id", 3);
                         startActivity(intent);
                     }

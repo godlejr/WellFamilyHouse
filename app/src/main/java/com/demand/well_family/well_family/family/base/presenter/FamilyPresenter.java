@@ -87,4 +87,7 @@ public interface FamilyPresenter {
 
     void onActivityResultForEditFamilyResultOk(String familyName, String familyContent, String familyAvatar);
 
+    void onClickExercise();
+
+    void onClickFallDiagnosis();
 }

@@ -181,6 +181,7 @@ public class SongRecordActivity extends Activity {
     private static final Logger logger = LoggerFactory.getLogger(SongRecordActivity.class);
     private SharedPreferences loginInfo;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -657,7 +658,7 @@ public class SongRecordActivity extends Activity {
             public void onClick(View v) {
                 if (ll_sound_record_location.getVisibility() == View.VISIBLE) {
                     ll_sound_record_location.setVisibility(View.GONE);
-                    iv_sound_record_location_btn.setImageResource(R.drawable.arrow_bottom);
+                    iv_sound_record_location_btn.setImageResource(R.drawable.arrow_down);
                 } else {
                     ll_sound_record_location.setVisibility(View.VISIBLE);
                     iv_sound_record_location_btn.setImageResource(R.drawable.arrow_top);
@@ -674,13 +675,17 @@ public class SongRecordActivity extends Activity {
 //                        버전 체크 (키캣 이상 : 다중 선택O)
                     intent.setType("image/*");
                     intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                    intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
                     intent.setAction(Intent.ACTION_GET_CONTENT);
+
                     startActivityForResult(Intent.createChooser(intent, "Select Photo"), PICK_PHOTO);
                 } else {
 //                       키캣 이하 (다중 선택 X)
                     intent.setAction(Intent.ACTION_PICK);
+                    intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
                     intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
                     startActivityForResult(intent, PICK_PHOTO);
+
                 }
             }
         });
@@ -693,9 +698,8 @@ public class SongRecordActivity extends Activity {
                 } else {
                     final int photoListSize = photoList.size();
 
-                    if (location != null) {
-                        location = et_sound_record_location.getText().toString();
-                    }
+                    location = et_sound_record_location.getText().toString();
+
 
                     // 등록버튼
                     if (photoListSize == 0 && et_sound_record_memory.getText().toString().length() == 0 && file == null && location == null && emotionList == null) {
@@ -963,12 +967,7 @@ public class SongRecordActivity extends Activity {
                         }
                     } else {
                         Uri uri = data.getData();
-                        try {
-                            path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
-                        } catch (RuntimeException e) {
-                            log(e);
-                            path = realPathUtil.getRealPathFromURI_API19(this, uri);
-                        }
+                        path = realPathUtil.getRealPathFromURI_API11to18(this, uri);
 
                         if (photoListSize <= 10) {
                             pathList.add(path);
@@ -987,11 +986,13 @@ public class SongRecordActivity extends Activity {
         Bitmap bm = null;
         try {
             bm = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-            ExifInterface exifInterface = new ExifInterface(pathList.get(i));
-            int exifOrientation = exifInterface.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-            int exifDegree = exifOrientationToDegrees(exifOrientation);
-            bm = rotate(bm, exifDegree);
+            if (pathList.get(i) != null) {
+                ExifInterface exifInterface = new ExifInterface(pathList.get(i));
+                int exifOrientation = exifInterface.getAttributeInt(
+                        ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                int exifDegree = exifOrientationToDegrees(exifOrientation);
+                bm = rotate(bm, exifDegree);
+            }
         } catch (IOException e) {
             log(e);
         }

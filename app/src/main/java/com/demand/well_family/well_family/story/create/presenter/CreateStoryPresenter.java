@@ -32,4 +32,5 @@ public interface CreateStoryPresenter {
     void onClickPhotoDelete(int position);
 
 
+    void onActivityResultForPhotoUriResultOk1(Uri uri);
 }

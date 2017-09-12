@@ -84,6 +84,11 @@ public class EnvironmentEvaluationPhotoPresenterImpl implements EnvironmentEvalu
     }
 
     @Override
+    public void onActivityResultForCameraUriResultOk(Uri uri, String path) {
+
+    }
+
+    @Override
     public void onActivityResultForCameraUriResultOk(Uri uri) {
         environmentEvaluationPhotoInteractor.setPhotoPath(realPathUtil, uri);
         ArrayList<Uri> photoList = environmentEvaluationPhotoInteractor.getPhotoList();

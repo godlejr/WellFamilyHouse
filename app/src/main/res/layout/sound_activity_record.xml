@@ -105,12 +105,12 @@
                     android:background="@null"
                     android:gravity="top"
                     android:hint="어떤 추억들이 떠오르나요?"
-                    android:inputType="textMultiLine|textPersonName"
-                    android:maxLength="49"
+                    android:inputType="textMultiLine"
                     android:padding="10dp"
                     android:singleLine="false"
                     android:textColor="#424242"
-                    android:textColorHint="#7e7e7e" />
+                    android:textColorHint="#7e7e7e"
+                    android:textCursorDrawable="@drawable/edittext_cursor" />
 
                 <View
                     android:layout_width="match_parent"
@@ -119,6 +119,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_sound_record_location_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -169,7 +170,7 @@
                         android:layout_weight="0.7"
                         android:padding="10dp"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/arrow_bottom"
+                        android:src="@drawable/arrow_down"
                         android:tint="#542920" />
                 </LinearLayout>
 
@@ -195,6 +196,7 @@
                         android:inputType="text"
                         android:textColor="#542920"
                         android:textColorHint="#7e7e7e"
+                        android:textCursorDrawable="@drawable/edittext_cursor"
                         android:textSize="16sp" />
 
                     <ImageView

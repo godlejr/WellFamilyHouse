@@ -2,6 +2,7 @@ package com.demand.well_family.well_family.main.join.interactor.impl;
 
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.util.Log;
 
 import com.demand.well_family.well_family.repository.MainServerConnection;
 import com.demand.well_family.well_family.flag.JoinFlag;
@@ -16,6 +17,7 @@ import com.demand.well_family.well_family.util.ErrorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,29 +57,29 @@ public class JoinInteractorImpl implements JoinInteractor {
                 Pattern pattern = Pattern.compile("^[a-zA-Z0-9가-힣ㄱ-ㅎㅏ-ㅣ\\u318D\\u119E\\u11A2\\u2022\\u2025a\\u00B7\\uFE55]+$");
                 if (!pattern.matcher(source).matches()) {
                         joinPresenter.onNameFilter();
-                    return "";
-                }
-            }
+        return "";
+    }
+}
             return null;
-        }
-    };
+                    }
+                    };
 
-    @Override
-    public String getUserBirth(String birth) {
+@Override
+public String getUserBirth(String birth) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            Date date = formatter.parse(birth);
-            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String birthDate = transFormat.format(date);
-            return birthDate;
+        Date date = formatter.parse(birth);
+        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String birthDate = transFormat.format(date);
+        return birthDate;
         } catch (ParseException e) {
-            log(e);
-            return null;
+        log(e);
+        return null;
         }
-    }
+        }
 
-    @Override
-    public boolean getEmailValidation(String email) {
+@Override
+public boolean getEmailValidation(String email) {
         String regex = "^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
@@ -123,6 +125,7 @@ public class JoinInteractorImpl implements JoinInteractor {
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 log(t);
                 joinPresenter.onNetworkError(null);
+
             }
         });
     }

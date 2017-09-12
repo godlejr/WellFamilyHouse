@@ -50,7 +50,6 @@ public class SelfDiagnosisViewPagerAdapter extends PagerAdapter {
         tv_falldiagnosis_question.setText(category.getName());
 
 
-
         Context context = inflater.getContext();
 
         Glide.with(context).load(context.getString(R.string.cloud_front_self_diagnosis) + category.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_falldiagnosis_question);
@@ -70,8 +69,6 @@ public class SelfDiagnosisViewPagerAdapter extends PagerAdapter {
         });
 
         container.addView(view);
-
-
 
         return view;
     }

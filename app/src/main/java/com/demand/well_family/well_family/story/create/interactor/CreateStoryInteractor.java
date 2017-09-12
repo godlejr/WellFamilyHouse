@@ -32,4 +32,6 @@ public interface CreateStoryInteractor {
     void setStoryAdded(String content);
 
     void setPhotoAdded(FileToBase64Util fileToBase64Util, StoryInfo storyInfo, Uri photo, String path);
+
+    void setPhotoPath1(RealPathUtil realPathUtil, Uri uri);
 }

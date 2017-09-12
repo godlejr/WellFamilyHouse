@@ -13,6 +13,7 @@
 
 
     <application
+        android:name=".main.login.kakao.GlobalApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
@@ -33,7 +34,8 @@
 
         <activity android:name=".main.base.activity.MainActivity" />
         <activity android:name=".main.join.activity.JoinActivity" />
-        <activity android:name=".main.sns.activity.JoinFromSNSActivity" />
+        <activity android:name=".main.sns.activity.JoinFromSNSActivity"
+            android:launchMode="singleTask"/>
         <activity android:name=".main.agreement.activity.AgreementActivity" />
         <activity
             android:name=".main.login.activity.LoginActivity"
@@ -84,6 +86,7 @@
         <activity android:name=".setting.base.activity.SettingActivity" />
         <activity android:name=".setting.searchAccount.activity.SearchAccountActivity" />
         <activity android:name=".setting.resetPassword.activity.ResetPasswordActivity" />
+        <activity android:name=".setting.agreement.activity.AgreementActivity"/>
         <activity
             android:name=".setting.sendPassword.activity.SendPasswordActivity"
             android:theme="@style/CustomAppTheme" />
@@ -138,7 +141,8 @@
         <activity android:name=".falldiagnosis.physicalevaluation.create.activity.CreatePhysicalEvaluationActivity" />
         <activity android:name=".falldiagnosis.physicalevaluation.result.activity.PhysicalEvaluationResultActivity" />
         <activity android:name=".falldiagnosis.environment.create.activity.CreateEnvironmentEvaluationActivity" />
-        <activity android:name=".falldiagnosis.environment.photo.activity.EnvironmentEvaluationPhotoActivity" />
+        <activity android:name=".falldiagnosis.environment.photo.activity.EnvironmentEvaluationPhotoActivity"
+            android:configChanges="orientation|screenSize"/>
         <activity android:name=".falldiagnosis.environment.result.activity.EnvironmentEvaluationResultActivity" />
 
         <activity android:name=".falldiagnosisstory.base.activity.FallDiagnosisStoryActivity" />
@@ -182,6 +186,12 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
+        <!-- kakao -->
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" />
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -198,6 +208,20 @@
         <activity
             android:name="com.nhn.android.naverlogin.ui.OAuthLoginInAppBrowserActivity"
             android:label="OAuth2.0 In-app" />
+
+
+
+
+        <provider
+            android:name=".util.GenericFileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
 
     </application>
 </manifest>

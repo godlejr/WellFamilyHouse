@@ -18,12 +18,12 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="660dp">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/iv_market"
             android:layout_width="match_parent"
-            android:layout_height="600dp"
+            android:layout_height="match_parent"
             android:scaleType="fitStart"
             android:src="@drawable/market" />
 

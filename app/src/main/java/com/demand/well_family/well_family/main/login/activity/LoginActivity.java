@@ -1,9 +1,14 @@
 package com.demand.well_family.well_family.main.login.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +28,14 @@ import com.demand.well_family.well_family.setting.searchAccount.activity.SearchA
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.kakao.auth.AuthType;
+import com.kakao.auth.ISessionCallback;
+import com.kakao.auth.Session;
+import com.kakao.network.ErrorResult;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.MeResponseCallback;
+import com.kakao.usermgmt.response.model.UserProfile;
+import com.kakao.util.exception.KakaoException;
 import com.nhn.android.naverlogin.OAuthLogin;
 import com.nhn.android.naverlogin.ui.view.OAuthLoginButton;
 
@@ -32,6 +45,8 @@ import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity implements LoginView, View.OnClickListener, View.OnFocusChangeListener {
     private LoginPresenter loginPresenter;
+    private Handler progressDialogHandler;
+    private ProgressDialog progressDialog;
 
     //demand
     private ImageButton btn_main_login;
@@ -43,12 +58,17 @@ public class LoginActivity extends AppCompatActivity implements LoginView, View.
     //facebook
     private ImageButton facebookLoginButton;
 
+    //kakao
+    private Button kakaoLoginButton;
+    private SessionCallback mKakaocallback;
+
+
     //naver
     private OAuthLoginButton oAuthLoginButton;
     private ImageButton naverLoginButton;
 
     //activity list
-    public static ArrayList<Activity> finishList = new ArrayList<Activity>();
+    public static ArrayList<Activity> finishList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +91,13 @@ public class LoginActivity extends AppCompatActivity implements LoginView, View.
         oAuthLogin.init(this, naverClientId, naverClientSecret, naverClientName);
     }
 
+
     @Override
     public void init() {
         finishList.add(this);
+
+        this.progressDialogHandler = new Handler();
+        this.progressDialog = new ProgressDialog(this);
 
         btn_main_login = (ImageButton) findViewById(R.id.btn_main_login);
         btn_main_register = (Button) findViewById(R.id.btn_main_register);
@@ -85,6 +109,10 @@ public class LoginActivity extends AppCompatActivity implements LoginView, View.
         //facebook
         facebookLoginButton = (ImageButton) findViewById(R.id.facebookLoginButton);
         facebookLoginButton.setOnClickListener(this);
+
+        //kakao
+        kakaoLoginButton = (Button) findViewById(R.id.kakaoLoginButton);
+        kakaoLoginButton.setOnClickListener(this);
 
         //naver
         oAuthLoginButton = (OAuthLoginButton) findViewById(R.id.oAuthLoginButton);
@@ -158,6 +186,14 @@ public class LoginActivity extends AppCompatActivity implements LoginView, View.
     }
 
     @Override
+    public void isKakaoLogin() {
+        mKakaocallback = new SessionCallback();
+        com.kakao.auth.Session.getCurrentSession().addCallback(mKakaocallback);
+        com.kakao.auth.Session.getCurrentSession().checkAndImplicitOpen();
+        com.kakao.auth.Session.getCurrentSession().open(AuthType.KAKAO_TALK_EXCLUDE_NATIVE_LOGIN, LoginActivity.this);
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_main_find_pwd:
@@ -167,7 +203,10 @@ public class LoginActivity extends AppCompatActivity implements LoginView, View.
             case R.id.facebookLoginButton:
                 LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
                 loginPresenter.onClickFacebookLogin();
+                break;
 
+            case R.id.kakaoLoginButton:
+                loginPresenter.onClickKakaoLogin();
                 break;
 
             case R.id.naverLoginButton:
@@ -200,6 +239,9 @@ public class LoginActivity extends AppCompatActivity implements LoginView, View.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
+            return;
+        }
         loginPresenter.getCallbackManager().onActivityResult(requestCode, resultCode, data);
     }
 
@@ -211,5 +253,70 @@ public class LoginActivity extends AppCompatActivity implements LoginView, View.
                 loginPresenter.onLoginFocusChange(hasFocus);
                 break;
         }
+    }
+
+    public class SessionCallback implements ISessionCallback {
+        @Override
+        public void onSessionOpened() {
+            KakaoRequestMe();
+        }
+
+        @Override
+        public void onSessionOpenFailed(KakaoException exception) {
+            if (exception != null) {
+                Log.e("KAKAO_LOGIN", exception.getMessage());
+            }
+        }
+    }
+
+    protected void KakaoRequestMe() {
+        UserManagement.requestMe(new MeResponseCallback() {
+            @Override
+            public void onFailure(ErrorResult errorResult) {
+                int ErrorCode = errorResult.getErrorCode();
+                int ClientErrorCode = -777;
+
+                if (ErrorCode == ClientErrorCode) {
+                    Toast.makeText(getApplicationContext(), "카카오톡 서버의 네트워크가 불안정합니다. 잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d("KAKAO_LOGIN", "오류로 카카오로그인 실패 ");
+                }
+            }
+
+            @Override
+            public void onSessionClosed(ErrorResult errorResult) {
+                Log.d("KAKAO_LOGIN", "오류로 카카오로그인 실패 ");
+            }
+
+            @Override
+            public void onSuccess(UserProfile userProfile) {
+                loginPresenter.onSuccessKakaoLogin(userProfile);
+            }
+
+            @Override
+            public void onNotSignedUp() {
+                // 자동가입이 아닐경우 동의창
+            }
+        });
+    }
+
+
+    @Override
+    public void showProgressDialog() {
+        progressDialog.show();
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        progressDialog.setContentView(R.layout.progress_dialog);
+    }
+
+    @Override
+    public void goneProgressDialog() {
+        progressDialogHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+            }
+        }, 200);
     }
 }

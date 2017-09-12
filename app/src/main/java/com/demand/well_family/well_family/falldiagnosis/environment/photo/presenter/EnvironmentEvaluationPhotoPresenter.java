@@ -20,6 +20,8 @@ public interface EnvironmentEvaluationPhotoPresenter {
 
     void onClickCamera();
 
+    void onActivityResultForCameraUriResultOk(Uri uri, String path);
+
     void onActivityResultForCameraUriResultOk(Uri uri);
 
     void onClickPhotoDelete(int position);

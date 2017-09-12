@@ -167,6 +167,16 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
+    public void onClickExercise() {
+        mainView.navigateToExerciseActivity();
+    }
+
+    @Override
+    public void onClickFallDiagnosis() {
+        mainView.navigateToFallDiagnosisActivity();
+    }
+
+    @Override
     public void onBackPressed() {
         if (mainView != null) {
             mainView.navigateToBackground();

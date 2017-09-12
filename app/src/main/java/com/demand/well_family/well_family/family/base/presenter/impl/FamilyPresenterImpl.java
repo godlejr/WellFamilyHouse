@@ -29,7 +29,7 @@ public class FamilyPresenterImpl implements FamilyPresenter {
     private FamilyInteractor familyInteractor;
     private PreferenceUtil preferenceUtil;
 
-    private MainHanlder mainHanlder;
+    private MainHandler mainHandler;
     private ContentChangeHandler contentChangeHandler;
     private ContentAddHandler contentAddHandler;
 
@@ -177,9 +177,9 @@ public void onSuccessSetThreadContentAdd(StoryInfo storyInfo) {
 
         Message message = new Message();
         message.setData(bundle);
-        mainHanlder.sendMessage(message);
+        mainHandler.sendMessage(message);
 
-        mainHanlder.postDelayed(new Runnable() {
+        mainHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 familyView.goneProgressDialog();
@@ -195,7 +195,7 @@ public void onSuccessSetThreadContentAdd(StoryInfo storyInfo) {
 
         int userSize = tempUserList.size();
         if (userSize == 0) {
-            //there are no users in family but me
+
         } else {
             for (int i = 0; i < userSize; i++) {
                 userList.add(new User(tempUserList.get(i).getId(), tempUserList.get(i).getEmail(), tempUserList.get(i).getName(),
@@ -215,7 +215,7 @@ public void onSuccessSetThreadContentAdd(StoryInfo storyInfo) {
             familyView.init(user, family);
             familyInteractor.getUserData();
 
-            mainHanlder = new MainHanlder();
+            mainHandler = new MainHandler();
             familyView.showProgressDialog();
             familyInteractor.getContentData();
         }
@@ -361,8 +361,18 @@ public void onSuccessSetThreadContentAdd(StoryInfo storyInfo) {
         familyView.init(user, family);
     }
 
+    @Override
+    public void onClickExercise() {
+        familyView.navigateToExerciseActivity();
+    }
 
-    public class MainHanlder extends Handler {
+    @Override
+    public void onClickFallDiagnosis() {
+        familyView.navigateToFallDiagnosisActivity();
+    }
+
+
+    public class MainHandler extends Handler {
         @Override
         public void handleMessage(Message message) {
             super.handleMessage(message);

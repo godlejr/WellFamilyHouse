@@ -21,19 +21,12 @@
             android:padding="8dp" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/toolbar_blank"
-            android:layout_weight="0.8" />
-
-        <TextView
             android:id="@+id/toolbar_title"
             android:layout_width="1dp"
             android:layout_height="50dp"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="TITLE"
-            android:textColor="#542920"
             android:layout_weight="4"
+            android:gravity="center_vertical|center_horizontal"
+            android:textColor="#542920"
             android:textSize="22sp"
             android:textStyle="normal|bold" />
 
@@ -51,10 +44,10 @@
                 android:textStyle="normal|bold" />
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/toolbar_notification"
-                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="12dp"
                 android:src="@drawable/toolbar_notification" />
 
         </FrameLayout>
@@ -63,11 +56,12 @@
             android:id="@+id/toolbar_market"
             android:layout_width="1dp"
             android:layout_height="50dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/toolbar_market"
             android:layout_weight="0.8"
             android:padding="10dp"
-            android:tint="#542920" />
+            android:scaleType="fitCenter"
+            android:src="@drawable/toolbar_market"
+            android:tint="#542920"
+            android:visibility="gone" />
 
     </LinearLayout>
 </android.support.v7.widget.Toolbar>

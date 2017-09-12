@@ -211,7 +211,6 @@ public class ModifySongStoryActivity extends Activity {
         btn_sound_record_image_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 사진 업로드
                 Intent intent;
                 if (photoList.size() >= 10) {
                     Toast.makeText(ModifySongStoryActivity.this, "사진은 최대 10개까지 등록이 가능합니다.", Toast.LENGTH_SHORT).show();
@@ -239,7 +238,7 @@ public class ModifySongStoryActivity extends Activity {
             public void onClick(View v) {
                 if (ll_sound_record_location.getVisibility() == View.VISIBLE) {
                     ll_sound_record_location.setVisibility(View.GONE);
-                    iv_sound_record_location_btn.setImageResource(R.drawable.arrow_bottom);
+                    iv_sound_record_location_btn.setImageResource(R.drawable.arrow_down);
                 } else {
                     ll_sound_record_location.setVisibility(View.VISIBLE);
                     iv_sound_record_location_btn.setImageResource(R.drawable.arrow_top);
@@ -455,14 +454,12 @@ public class ModifySongStoryActivity extends Activity {
     private void getContentData() {
         et_sound_record_memory.setText(content);
 
-        //photoList
         pathList = new ArrayList<>();
         photoList = new ArrayList<>(); // 갤러리 이미지
         cdnPhotoList = new ArrayList<>(); // 서버 이미지
         ArrayList<SongPhoto> photos = (ArrayList<SongPhoto>) getIntent().getSerializableExtra("photoList");
         int photosSize = photos.size();
         for (int i = 0; i < photosSize; i++) {
-//            cdnPhotoList.add(Uri.parse(getString(R.string.cloud_front_stories_images) + photos.get(i).getName() + "." + photos.get(i).getExt()));
             try {
                 cdnPhotoList.add(new URL(getString(R.string.cloud_front_song_stories_images) + photos.get(i).getName() + "." + photos.get(i).getExt()));
             } catch (MalformedURLException e) {
@@ -585,15 +582,7 @@ public class ModifySongStoryActivity extends Activity {
     }
 
     private void checkPermission() {
-        int readPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE);
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, READ_EXTERNAL_STORAGE_PERMISSION);
-
-        if (readPermission == PackageManager.PERMISSION_DENIED) {
-            Log.e("WRITE PERMISSION", "권한X");
-
-        } else {
-            Log.e("WRITE PERMISSION", "권한O");
-        }
     }
 
     @Override
@@ -613,6 +602,10 @@ public class ModifySongStoryActivity extends Activity {
             ExifInterface exifInterface = new ExifInterface(pathList.get(i));
             int exifOrientation = exifInterface.getAttributeInt(
                     ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+
+
+
             int exifDegree = exifOrientationToDegrees(exifOrientation);
             bm = rotate(bm, exifDegree);
         } catch (IOException e) {
@@ -652,17 +645,13 @@ public class ModifySongStoryActivity extends Activity {
     }
 
     public String addBase64Bitmap(Bitmap bm) {
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 40, baos);
-        byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b, Base64.NO_WRAP | Base64.URL_SAFE);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 40, byteArrayOutputStream);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(bytes, Base64.NO_WRAP | Base64.URL_SAFE);
     }
 
-    // toolbar & menu
     public void setToolbar(View view, Context context, String title) {
-
-        // toolbar menu, title, back
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolBar);
         TextView toolbar_title = (TextView) toolbar.findViewById(R.id.toolbar_title);
         toolbar_title.setText(title);
@@ -673,8 +662,6 @@ public class ModifySongStoryActivity extends Activity {
                 setBack();
             }
         });
-
-
     }
 
     private void setBack() {

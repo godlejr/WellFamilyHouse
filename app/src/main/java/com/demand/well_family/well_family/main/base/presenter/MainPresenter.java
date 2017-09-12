@@ -47,4 +47,8 @@ public interface MainPresenter {
     void onBackPressed();
 
     void onNetworkError(APIErrorUtil apiErrorUtil);
+
+    void onClickExercise();
+
+    void onClickFallDiagnosis();
 }

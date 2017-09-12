@@ -8,6 +8,7 @@ import com.demand.well_family.well_family.dto.SongStory;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.flag.LogFlag;
 import com.demand.well_family.well_family.repository.SongStoryServerConnection;
+import com.demand.well_family.well_family.repository.UserServerConnection;
 import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.util.ErrorUtil;
 
@@ -27,6 +28,7 @@ import retrofit2.Response;
 public class SongStoryDialogInteractorImpl implements SongStoryDialogInteractor {
     private SongStoryDialogPresenter songStoryDialogPresenter;
 
+    private UserServerConnection userServerConnection;
     private SongStoryServerConnection songStoryServerConnection;
     private User user;
     private SongStory songStory;
@@ -41,21 +43,48 @@ public class SongStoryDialogInteractorImpl implements SongStoryDialogInteractor 
     }
 
     @Override
-    public ArrayList<String> getSongStoryDialogList() {
+    public void getFamilyCheck() {
         int userId = user.getId();
+        String accessToken = user.getAccess_token();
         int songStoryUserId = songStory.getUser_id();
 
-        ArrayList<String> songStoryDialogList = new ArrayList<>();
-        songStoryDialogList.add("본문 복사");
-        if (userId == songStoryUserId) {
-            songStoryDialogList.add("수정");
-            songStoryDialogList.add("삭제");
-        } else {
-            songStoryDialogList.add("신고 하기");
-        }
-        songStoryDialogList.add("취소");
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        Call<Integer> call = userServerConnection.family_check(songStoryUserId, userId);
+        call.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                int isFamily = response.body();
+                songStoryDialogPresenter.onSuccessGetSongStoryDialogList(isFamily);
+            }
 
-        return songStoryDialogList;
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+
+            }
+        });
+    }
+
+    @Override
+    public void getFamilyCheckForClick(final int position) {
+        int userId = user.getId();
+        String accessToken = user.getAccess_token();
+        int songStoryUserId = songStory.getUser_id();
+
+        userServerConnection = new NetworkInterceptor(accessToken).getClientForUserServer().create(UserServerConnection.class);
+        Call<Integer> call = userServerConnection.family_check(songStoryUserId, userId);
+        call.enqueue(new Callback<Integer>() {
+            @Override
+            public void onResponse(Call<Integer> call, Response<Integer> response) {
+                int isFamily = response.body();
+                songStoryDialogPresenter.onSuccessGetFamilyCheckForClick(isFamily, position);
+            }
+
+            @Override
+            public void onFailure(Call<Integer> call, Throwable t) {
+
+            }
+        });
+
     }
 
     @Override
@@ -132,6 +161,7 @@ public class SongStoryDialogInteractorImpl implements SongStoryDialogInteractor 
         });
 
     }
+
 
     private static void log(Throwable throwable) {
         StackTraceElement[] ste = throwable.getStackTrace();

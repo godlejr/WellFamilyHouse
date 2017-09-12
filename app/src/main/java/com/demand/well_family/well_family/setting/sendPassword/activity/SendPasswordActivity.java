@@ -47,6 +47,7 @@ public class SendPasswordActivity extends Activity implements SendPasswordView, 
         setContentView(R.layout.activity_confirm_account);
 
         User user = new User();
+        user.setId(getIntent().getIntExtra("user_id",0));
         user.setName(getIntent().getStringExtra("name"));
         user.setAvatar(getIntent().getStringExtra("avatar"));
         user.setEmail(getIntent().getStringExtra("email"));
