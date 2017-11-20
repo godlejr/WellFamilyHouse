@@ -43,7 +43,7 @@ public class JoinPresenterImpl implements JoinPresenter {
     @Override
     public void setUserBirth(String birth) {
         String date = joinInteractor.getUserBirth(birth);
-        joinView.showBrith(date);
+        joinView.showBirth(date);
     }
 
     @Override

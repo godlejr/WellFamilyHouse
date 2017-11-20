@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
 import com.demand.well_family.well_family.dto.App;
@@ -65,6 +66,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
     private ViewPager viewPager;
     private ImageView viewPager_prev, viewPager_next;
     private RecyclerView rv_family, rv_apps;
+    private RequestManager requestManager;
 
     //family data
     private LinearLayout ll_family_container_family;
@@ -99,6 +101,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.requestManager= Glide.with(this);
+
         mainPresenter = new MainPresenterImpl(this);
         mainPresenter.onCreate();
     }
@@ -197,8 +202,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
                 overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
                 break;
 
+            case R.id.menu_notice:
+                Intent noticeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.noticeUrl)));
+                startActivity(noticeIntent);
+                break;
+
             case R.id.menu_help:
-                showMessage("준비중입니다");
+                Intent questionIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.questionUrl)));
+                startActivity(questionIntent);
                 break;
 
             case R.id.menu_logout:
@@ -317,7 +328,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Main
     public void showMenuUserInfo(User user) {
         tv_menu_name.setText(user.getName());
         mainPresenter.setUserBirth(user.getBirth());
-        Glide.with(this).load(getString(R.string.cloud_front_user_avatar) + user.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_menu_avatar);
+        requestManager.load(getString(R.string.cloud_front_user_avatar) + user.getAvatar()).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_menu_avatar);
     }
 
     @Override

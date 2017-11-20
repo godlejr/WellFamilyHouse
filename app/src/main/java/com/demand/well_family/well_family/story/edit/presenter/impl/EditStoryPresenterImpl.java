@@ -175,4 +175,9 @@ public class EditStoryPresenterImpl implements EditStoryPresenter {
             editStoryView.showMessage(apiErrorUtil.message());
         }
     }
+
+    @Override
+    public void onCatchOutOfMemoryException() {
+        editStoryView.showMessage("업로드 용량을 초과했습니다.");
+    }
 }

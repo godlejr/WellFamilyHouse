@@ -60,7 +60,6 @@
                     android:layout_height="1dp"
                     android:layout_weight="1"
                     android:gravity="bottom"
-                    android:text="NAME"
                     android:textColor="#000"
                     android:textStyle="normal|bold" />
 
@@ -70,7 +69,9 @@
                     android:layout_height="1dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="CONTENT"
+                    android:autoLink="web"
+                    android:linksClickable="true"
+                    android:textColorLink="@color/colorPrimary"
                     android:textColor="#000"
                     android:textSize="14sp" />
 

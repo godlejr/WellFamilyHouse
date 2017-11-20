@@ -78,13 +78,13 @@ public String getUserBirth(String birth) {
         }
         }
 
-@Override
-public boolean getEmailValidation(String email) {
+    @Override
+    public boolean getEmailValidation(String email) {
         String regex = "^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(email);
-        boolean isNormal = matcher.matches();
-        return isNormal;
+        boolean check = matcher.matches();
+        return check;
     }
 
     @Override
@@ -92,8 +92,8 @@ public boolean getEmailValidation(String email) {
         String regex = "^(?=.*[a-zA-Z])((?=.*\\d)|(?=.*\\W)).{6,20}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(password);
-        boolean isNormal = matcher.matches();
-        return isNormal;
+        boolean check = matcher.matches();
+        return check;
     }
 
     @Override

@@ -2,9 +2,11 @@ package com.demand.well_family.well_family.dialog.popup.photo.activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -25,6 +27,8 @@ import com.demand.well_family.well_family.flag.PermissionFlag;
 
 import java.util.ArrayList;
 
+import uk.co.senab.photoview.PhotoView;
+
 /**
  * Created by ㅇㅇ on 2017-01-23.
  */
@@ -32,7 +36,7 @@ import java.util.ArrayList;
 public class PhotoPopupActivity extends Activity implements PhotoPopupView, View.OnClickListener {
     private PhotoPopupPresenter photoPopupPresenter;
 
-    private ImageView iv_photo_popup_image;
+    private PhotoView iv_photo_popup_image;
     private ImageView iv_popup_close;
     private ImageView iv_popup_download;
     private LinearLayout ll_popup_top;
@@ -50,20 +54,21 @@ public class PhotoPopupActivity extends Activity implements PhotoPopupView, View
 
         ArrayList<Photo> photoList = (ArrayList<Photo>) getIntent().getSerializableExtra("photoList");
         int intentFlag = getIntent().getIntExtra("intent_flag", 0);
+        String avatar = getIntent().getStringExtra("avatar");
 
         photoPopupPresenter = new PhotoPopupPresenterImpl(this);
-        photoPopupPresenter.onCreate(intentFlag, photoList);
+        photoPopupPresenter.onCreate(intentFlag, photoList, avatar);
     }
 
     @Override
-    public void setPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PermissionFlag.WRITE_EXTERNAL_STORAGE_PERMISSION);
+    public void setPermission(int position) {
+        ActivityCompat.requestPermissions(this, new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE},  PermissionFlag.WRITE_EXTERNAL_STORAGE_PERMISSION);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case EditFamilyCodeFlag.WRITE_EXTERNAL_STORAGE_PERMISSION:
+            case PermissionFlag.WRITE_EXTERNAL_STORAGE_PERMISSION:
                 photoPopupPresenter.onRequestPermissionsResultForWriteExternalStorage(grantResults);
                 break;
         }
@@ -71,7 +76,7 @@ public class PhotoPopupActivity extends Activity implements PhotoPopupView, View
 
     @Override
     public void init() {
-        iv_photo_popup_image = (ImageView)findViewById(R.id.iv_photo_popup_image);
+        iv_photo_popup_image = (PhotoView) findViewById(R.id.iv_photo_popup_image);
         iv_popup_close = (ImageView) findViewById(R.id.iv_popup_close);
         iv_popup_download = (ImageView) findViewById(R.id.iv_popup_download);
         photo_viewPager = (ViewPager) findViewById(R.id.photo_viewPager);
@@ -82,8 +87,6 @@ public class PhotoPopupActivity extends Activity implements PhotoPopupView, View
 
         photoPopupPresenter.setPopupTitleBar();
 
-        String avatar = getIntent().getStringExtra("avatar");
-        photoPopupPresenter.setImage(avatar);
     }
 
     @Override
@@ -142,9 +145,18 @@ public class PhotoPopupActivity extends Activity implements PhotoPopupView, View
     }
 
     @Override
-    public void setImageDownload(ArrayList<Photo> photoList, String cloudFront, int position) {
-        String imageURL = cloudFront + photoList.get(position).getName() + "." + photoList.get(position).getExt();
-        ImageDownloadAsyncTask imageDownloadAsyncTask = new ImageDownloadAsyncTask(PhotoPopupActivity.this, photoList.get(position).getName() + "." + photoList.get(position).getExt());
+    public void setImageDownload(String avatar, ArrayList<Photo> photoList, String cloudFront, int position) {
+        String imageURL;
+        ImageDownloadAsyncTask imageDownloadAsyncTask;
+
+        if (photoList != null) {
+            imageURL = cloudFront + photoList.get(position).getName() + "." + photoList.get(position).getExt();
+            imageDownloadAsyncTask = new ImageDownloadAsyncTask(PhotoPopupActivity.this, photoList.get(position).getName() + "." + photoList.get(position).getExt());
+        } else {
+            imageURL = cloudFront + avatar;
+            imageDownloadAsyncTask = new ImageDownloadAsyncTask(PhotoPopupActivity.this, avatar);
+        }
+        Log.e("ㅇㅇㅇㅇ", imageURL);
         imageDownloadAsyncTask.execute(imageURL);
     }
 

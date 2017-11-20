@@ -257,8 +257,7 @@ public class FallDiagnosisStoryDetailActivity extends Activity implements FallDi
         inflater.inflate(R.layout.item_falldiagnosisstorydetail_envenvironment_list, ll_falldiagnosisstorydetail_container, true);
 
         RecyclerView rv_item_falldiagnosisstorydetail_envevaluation_photo = (RecyclerView) ll_falldiagnosisstorydetail_container.findViewById(R.id.rv_item_falldiagnosisstorydetail_envevaluation_photo);
-        fallDiagnosisStoryDetailEnvEvaluationPhotoAdapter =
-                new FallDiagnosisStoryDetailEnvEvaluationPhotoAdapter(this, environmentPhotoList, fallDiagnosisStoryDetailPresenter);
+        fallDiagnosisStoryDetailEnvEvaluationPhotoAdapter = new FallDiagnosisStoryDetailEnvEvaluationPhotoAdapter(this, environmentPhotoList, fallDiagnosisStoryDetailPresenter);
 
         rv_item_falldiagnosisstorydetail_envevaluation_photo.setAdapter(fallDiagnosisStoryDetailEnvEvaluationPhotoAdapter);
         rv_item_falldiagnosisstorydetail_envevaluation_photo.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -269,8 +268,7 @@ public class FallDiagnosisStoryDetailActivity extends Activity implements FallDi
         inflater.inflate(R.layout.item_falldiagnosisstorydetail_envenvironment_list, ll_falldiagnosisstorydetail_container, true);
 
         RecyclerView rv_item_falldiagnosisstorydetail_envevaluation_category = (RecyclerView) ll_falldiagnosisstorydetail_container.findViewById(R.id.rv_item_falldiagnosisstorydetail_envevaluation_category);
-        fallDiagnosisStoryDetailEnvEvaluationCategoryAdapter =
-                new FallDiagnosisStoryDetailEnvEvaluationCategoryAdapter(this, environmentEvaluationCategoryList, fallDiagnosisStoryDetailPresenter);
+        fallDiagnosisStoryDetailEnvEvaluationCategoryAdapter = new FallDiagnosisStoryDetailEnvEvaluationCategoryAdapter(this, environmentEvaluationCategoryList, fallDiagnosisStoryDetailPresenter);
         rv_item_falldiagnosisstorydetail_envevaluation_category.setAdapter(fallDiagnosisStoryDetailEnvEvaluationCategoryAdapter);
         rv_item_falldiagnosisstorydetail_envevaluation_category.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
     }
@@ -316,7 +314,9 @@ public class FallDiagnosisStoryDetailActivity extends Activity implements FallDi
 
     @Override
     public void showCommentAdapterNotifyItemInserted() {
-        fallDiagnosisStoryDetailCommentAdapter.notifyItemInserted(fallDiagnosisStoryDetailCommentAdapter.getItemCount() - 1);
+        if (fallDiagnosisStoryDetailCommentAdapter != null){
+            fallDiagnosisStoryDetailCommentAdapter.notifyItemInserted(fallDiagnosisStoryDetailCommentAdapter.getItemCount() - 1);
+        }
     }
 
     @Override
@@ -331,7 +331,9 @@ public class FallDiagnosisStoryDetailActivity extends Activity implements FallDi
 
     @Override
     public void setCommentAdapterAdded(CommentInfo commentInfo) {
-        fallDiagnosisStoryDetailCommentAdapter.setCommentAdded(commentInfo);
+        if(fallDiagnosisStoryDetailCommentAdapter != null) {
+            fallDiagnosisStoryDetailCommentAdapter.setCommentAdded(commentInfo);
+        }
     }
 
     @Override
@@ -367,23 +369,31 @@ public class FallDiagnosisStoryDetailActivity extends Activity implements FallDi
 
     @Override
     public void showCommentAdapterNotifyItemDelete(int position) {
-        fallDiagnosisStoryDetailCommentAdapter.notifyItemRemoved(position);
-        fallDiagnosisStoryDetailCommentAdapter.notifyItemRangeChanged(position, fallDiagnosisStoryDetailCommentAdapter.getItemCount());
+        if(fallDiagnosisStoryDetailCommentAdapter != null) {
+            fallDiagnosisStoryDetailCommentAdapter.notifyItemRemoved(position);
+            fallDiagnosisStoryDetailCommentAdapter.notifyItemRangeChanged(position, fallDiagnosisStoryDetailCommentAdapter.getItemCount());
+        }
     }
 
     @Override
     public void setCommentAdapterDelete(int position) {
-        fallDiagnosisStoryDetailCommentAdapter.setCommentDelete(position);
+        if(fallDiagnosisStoryDetailCommentAdapter != null) {
+            fallDiagnosisStoryDetailCommentAdapter.setCommentDelete(position);
+        }
     }
 
     @Override
     public void setCommentAdapterSetContent(int position, String content) {
-        fallDiagnosisStoryDetailCommentAdapter.setCommentSetContent(position, content);
+        if(fallDiagnosisStoryDetailCommentAdapter != null) {
+            fallDiagnosisStoryDetailCommentAdapter.setCommentSetContent(position, content);
+        }
     }
 
     @Override
     public void showCommentAdapterNotifyItemChanged(int position) {
-        fallDiagnosisStoryDetailCommentAdapter.notifyItemChanged(position);
+        if(fallDiagnosisStoryDetailCommentAdapter != null) {
+            fallDiagnosisStoryDetailCommentAdapter.notifyItemChanged(position);
+        }
     }
 
     @Override

@@ -115,7 +115,7 @@ public class JoinActivity extends AppCompatActivity implements JoinView, View.On
     }
 
     @Override
-    public void showBrith(String birth) {
+    public void showBirth(String birth) {
         et_join_birthday.setText(birth);
     }
 

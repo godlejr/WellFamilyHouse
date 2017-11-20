@@ -26,7 +26,9 @@
         android:layout_marginRight="15dp"
         android:gravity="center_vertical"
         android:maxLines="2"
-        android:text="CONTENT"
+        android:autoLink="web"
+        android:linksClickable="true"
+        android:textColorLink="@color/colorPrimary"
         android:textColor="#000" />
 
     <LinearLayout

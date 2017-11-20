@@ -128,47 +128,55 @@
                             android:layout_marginBottom="15dp"
                             android:layout_marginTop="15dp"
                             android:orientation="horizontal"
-                            android:weightSum="3">
+                            android:weightSum="5.5">
 
                             <TextView
                                 android:id="@+id/blank"
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="1" />
+                                android:layout_weight="2" />
 
-                            <ImageView
-                                android:id="@+id/iv_falldiagnosisstorydetail_img"
+                            <RelativeLayout
                                 android:layout_width="1dp"
-                                android:layout_height="98dp"
-                                android:layout_weight="1"
-                                android:paddingLeft="5dp"
-                                android:paddingRight="5dp"
-                                android:scaleType="fitXY"
-                                android:src="@drawable/exercise_story" />
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="5dp"
+                                android:layout_weight="1.5">
+
+                                <ImageView
+                                    android:id="@+id/iv_falldiagnosisstorydetail_img"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="98dp"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:scaleType="fitXY"
+                                    android:src="@drawable/exercise_story" />
+                            </RelativeLayout>
 
                             <LinearLayout
                                 android:layout_width="1dp"
                                 android:layout_height="match_parent"
-                                android:layout_weight="1"
+                                android:layout_weight="2"
                                 android:orientation="vertical"
                                 android:weightSum="2">
 
                                 <TextView
                                     android:id="@+id/tv_falldiagnosisstorydetail_score"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="1dp"
+                                    android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:gravity="bottom|center_horizontal"
+                                    android:gravity="center"
                                     android:textColor="@color/red"
                                     android:textSize="34sp"
                                     android:textStyle="bold" />
 
                                 <TextView
                                     android:id="@+id/tv_falldiagnosisstorydetail_result"
-                                    android:layout_width="match_parent"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="1dp"
+                                    android:layout_gravity="center"
                                     android:layout_weight="1"
-                                    android:gravity="top|center_horizontal"
+                                    android:gravity="center"
                                     android:textColor="@color/defaultTextColor"
                                     android:textSize="28sp"
                                     android:textStyle="bold" />

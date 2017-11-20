@@ -98,6 +98,7 @@ public class FamilyPresenterImpl implements FamilyPresenter {
     @Override
 public void onSuccessSetThreadContentAdd(StoryInfo storyInfo) {
         familyView.setContentAdapterContentAdd(storyInfo);
+        familyView.goneProgressDialog();
 
         Message message = new Message();
         Bundle bundle = new Bundle();

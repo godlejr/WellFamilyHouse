@@ -1,6 +1,7 @@
 package com.demand.well_family.well_family.story.detail.presenter.impl;
 
 import android.content.Context;
+import android.content.pm.ResolveInfo;
 import android.view.View;
 
 import com.demand.well_family.well_family.dto.Comment;
@@ -16,6 +17,7 @@ import com.demand.well_family.well_family.util.APIErrorUtil;
 import com.demand.well_family.well_family.util.PreferenceUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dev-0 on 2017-04-21.
@@ -38,6 +40,7 @@ public class StoryDetailPresenterImpl implements StoryDetailPresenter {
         storyDetailInteractor.setUser(user);
         storyDetailInteractor.setStoryInfo(storyInfo);
         storyDetailInteractor.setLikeChecked(likeChecked);
+
         storyDetailView.init(storyInfo);
 
         View decorView = storyDetailView.getDecorView();
@@ -99,8 +102,6 @@ public class StoryDetailPresenterImpl implements StoryDetailPresenter {
     public void onClickCommentAdd(String content) {
         if (content.length() != 0) {
             storyDetailInteractor.setCommentAdded(content);
-        } else {
-            return;
         }
     }
 
@@ -218,4 +219,6 @@ public class StoryDetailPresenterImpl implements StoryDetailPresenter {
         storyDetailView.setCommentAdapterDelete(position);
         storyDetailView.showCommentAdapterNotifyItemDelete(position);
     }
+
+
 }

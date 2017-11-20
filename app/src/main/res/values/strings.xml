@@ -5,8 +5,6 @@
 
     <string name="app_name">웰패밀리 하우스</string>
 
-
-
     <string name="server_url">http://ec2-52-78-186-215.ap-northeast-2.compute.amazonaws.com/family/</string>
     <string name="cloud_front_family_avatar">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/avatars/familys/</string>
     <string name="cloud_front_user_avatar">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/avatars/users/</string>
@@ -22,6 +20,9 @@
     <string name="cloud_front_self_diagnosis_audio">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/audios/falldiagnosis/countdown.mp3</string>
     <string name="cloud_front_stories_environment">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/images/falldiagnosis/stories/environments/</string>
     <string name="cloud_front_exercise">http://d1mluvx5hwpxr3.cloudfront.net/apps/well_family_house/video/exercises/</string>
+
+    <string name="noticeUrl">http://dev.demand.co.kr/notices?noticeCategoryId=1</string>
+    <string name="questionUrl">http://dev.demand.co.kr/questions?questionCategoryId=1</string>
 
     <string name="bubblefeet">com.demand.bubblefeet</string>
     <string name="happyfeet">com.demand.happyfeet</string>

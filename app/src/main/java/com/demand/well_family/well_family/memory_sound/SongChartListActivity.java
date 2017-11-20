@@ -220,8 +220,14 @@ public class SongChartListActivity extends Activity {
                         overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
                         break;
 
+                    case R.id.menu_notice:
+                        Intent noticeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.noticeUrl)));
+                        startActivity(noticeIntent);
+                        break;
+
                     case R.id.menu_help:
-                        Toast.makeText(getApplicationContext(), "준비중입니다.", Toast.LENGTH_SHORT).show();
+                        Intent questionIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.questionUrl)));
+                        startActivity(questionIntent);
                         break;
 
                     case R.id.menu_logout:

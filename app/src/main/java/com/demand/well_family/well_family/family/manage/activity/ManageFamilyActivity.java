@@ -107,49 +107,67 @@ public class ManageFamilyActivity extends Activity implements ManageFamilyView, 
 
     @Override
     public void setFamilyForMemberAdapterSecession(FamilyForMemberAdapter.FamilyForMemberViewHolder holder, String message) {
-        familyForMemberAdapter.setFamilyForMemberSecession(holder, message);
+        if(familyForMemberAdapter != null) {
+            familyForMemberAdapter.setFamilyForMemberSecession(holder, message);
+        }
     }
 
     @Override
     public void setFamilyForMemberAdapterHold(FamilyForMemberAdapter.FamilyForMemberViewHolder holder, String message) {
-        familyForMemberAdapter.setFamilyForMemberHold(holder, message);
+        if(familyForMemberAdapter != null) {
+            familyForMemberAdapter.setFamilyForMemberHold(holder, message);
+        }
     }
 
     @Override
     public void setFamilyForMemberAdapterAgree(FamilyForMemberAdapter.FamilyForMemberViewHolder holder, String message) {
-        familyForMemberAdapter.setFamilyForMemberAgree(holder, message);
+        if(familyForMemberAdapter != null) {
+            familyForMemberAdapter.setFamilyForMemberAgree(holder, message);
+        }
     }
 
     @Override
     public void showFamilyForOwnerAdapterNotifyItemDelete(int position) {
-        familyForOwnerAdapter.notifyItemRemoved(position);
-        familyForOwnerAdapter.notifyItemRangeChanged(position, familyForOwnerAdapter.getItemCount());
+        if(familyForOwnerAdapter != null) {
+            familyForOwnerAdapter.notifyItemRemoved(position);
+            familyForOwnerAdapter.notifyItemRangeChanged(position, familyForOwnerAdapter.getItemCount());
+        }
     }
 
     @Override
     public void showFamilyForMemberAdapterNotifyItemDelete(int position) {
-        familyForMemberAdapter.notifyItemRemoved(position);
-        familyForMemberAdapter.notifyItemRangeChanged(position, familyForMemberAdapter.getItemCount());
+        if(familyForMemberAdapter != null) {
+            familyForMemberAdapter.notifyItemRemoved(position);
+            familyForMemberAdapter.notifyItemRangeChanged(position, familyForMemberAdapter.getItemCount());
+        }
     }
 
     @Override
     public void showFamilyForMemberAdapterNotifyItemChange(int position) {
-        familyForMemberAdapter.notifyItemChanged(position);
+        if(familyForMemberAdapter != null) {
+            familyForMemberAdapter.notifyItemChanged(position);
+        }
     }
 
     @Override
     public void setFamilyForOwnerAdapterDelete(int position) {
-        familyForOwnerAdapter.setFamilyForOwnerDelete(position);
+        if(familyForOwnerAdapter != null) {
+            familyForOwnerAdapter.setFamilyForOwnerDelete(position);
+        }
     }
 
     @Override
     public void setFamilyForMemberAdapterDelete(int position) {
-        familyForMemberAdapter.setFamilyForMemberDelete(position);
+        if(familyForMemberAdapter != null) {
+            familyForMemberAdapter.setFamilyForMemberDelete(position);
+        }
     }
 
     @Override
     public void setFamilyForMemberAdapterChangeForJoinFlag(int position, int joinFlag) {
-        familyForMemberAdapter.setFamilyForMemberChangeForJoinFlag(position, joinFlag);
+        if(familyForMemberAdapter != null) {
+            familyForMemberAdapter.setFamilyForMemberChangeForJoinFlag(position, joinFlag);
+        }
     }
 
     @Override

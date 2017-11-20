@@ -1,6 +1,7 @@
 package com.demand.well_family.well_family.falldiagnosis.environment.photo.interactor.impl;
 
 import android.net.Uri;
+import android.widget.Toast;
 
 import com.demand.well_family.well_family.dto.FallDiagnosisCategory;
 import com.demand.well_family.well_family.dto.FallDiagnosisContentCategory;
@@ -115,8 +116,13 @@ public class EnvironmentEvaluationPhotoInteractorImpl implements EnvironmentEval
             log(e);
             path = realPathUtil.getRealPathFromURI_API11to18(uri);
         }
-        pathList.add(path);
-        photoList.add(uri);
+
+        if(path != null) {
+            pathList.add(path);
+            photoList.add(uri);
+        } else {
+            environmentEvaluationPhotoPresenter.onClickNotDefaultCamera();
+        }
     }
 
     @Override

@@ -22,7 +22,7 @@ public interface JoinView {
     void showDatePicker(Calendar calendar);
 
 
-    void showBrith(String birth);
+    void showBirth(String birth);
 
     void showEmailCheckNotification();
 

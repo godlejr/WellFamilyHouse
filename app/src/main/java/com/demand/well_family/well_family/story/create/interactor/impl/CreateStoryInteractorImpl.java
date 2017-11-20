@@ -107,43 +107,43 @@ public class CreateStoryInteractorImpl implements CreateStoryInteractor {
         final int familyId = family.getId();
         final String familyName = family.getName();
 
-        new Thread(new Runnable() {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("user_id", String.valueOf(userId));
+        map.put("family_id", String.valueOf(familyId));
+        map.put("family_name", familyName);
+        map.put("content", content);
+
+        storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
+        Call<Story> call_write_story = storyServerConnection.insert_story(map);
+        call_write_story.enqueue(new Callback<Story>() {
             @Override
-            public void run() {
+            public void onResponse(Call<Story> call, Response<Story> response) {
+                if (response.isSuccessful()) {
+                    Story story = response.body();
+                    int storyId = story.getId();
+                    String createdAt = story.getCreated_at();
+                    String content = story.getContent();
+                    StoryInfo storyInfo = new StoryInfo(userId, userName, userAvatar, storyId, createdAt, content);
 
-                HashMap<String, String> map = new HashMap<>();
-                map.put("user_id", String.valueOf(userId));
-                map.put("family_id", String.valueOf(familyId));
-                map.put("family_name", familyName);
-                map.put("content", content);
+                    createStoryPresenter.onSuccessSetStoryAdded(storyInfo);
 
-                storyServerConnection = new NetworkInterceptor(accessToken).getClientForStoryServer().create(StoryServerConnection.class);
-                Call<Story> call_write_story = storyServerConnection.insert_story(map);
-                call_write_story.enqueue(new Callback<Story>() {
-                    @Override
-                    public void onResponse(Call<Story> call, Response<Story> response) {
-                        if (response.isSuccessful()) {
-                            Story story = response.body();
-                            int storyId = story.getId();
-                            String createdAt = story.getCreated_at();
-                            String content = story.getContent();
-                            StoryInfo storyInfo = new StoryInfo(userId, userName, userAvatar, storyId, createdAt, content);
-
-                            createStoryPresenter.onSuccessSetStoryAdded(storyInfo);
-
-                        } else {
-                            createStoryPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Story> call, Throwable t) {
-                        log(t);
-                        createStoryPresenter.onNetworkError(null);
-                    }
-                });
+                } else {
+                    createStoryPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
+                }
             }
-        }).start();
+
+            @Override
+            public void onFailure(Call<Story> call, Throwable t) {
+                log(t);
+                createStoryPresenter.onNetworkError(null);
+            }
+        });
+          /*  }
+        }).start();*/
 
     }
 

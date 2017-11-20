@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -42,6 +43,7 @@ import com.demand.well_family.well_family.falldiagnosis.environment.result.activ
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dev-0 on 2017-05-30.
@@ -148,7 +150,8 @@ public class EnvironmentEvaluationPhotoActivity extends Activity implements Envi
 
     @Override
     public void setPermission() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, EnvironmentEvaluationPhotoCodeFlag.CAMERA_EXTERNAL_STORAGE_PERMISSION);
         } else {
             init();
@@ -170,6 +173,7 @@ public class EnvironmentEvaluationPhotoActivity extends Activity implements Envi
     public void showCamera() {
         Intent intent = new Intent();
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+
         String url = "wellfamily_" + System.currentTimeMillis() + ".jpg";
         Uri uri = null;
 
@@ -195,7 +199,9 @@ public class EnvironmentEvaluationPhotoActivity extends Activity implements Envi
 
     @Override
     public void setPhotoAdapterDelete(int position) {
-        photoAdapter.setPhotoDelete(position);
+        if(photoAdapter != null) {
+            photoAdapter.setPhotoDelete(position);
+        }
     }
 
     @Override
@@ -241,7 +247,9 @@ public class EnvironmentEvaluationPhotoActivity extends Activity implements Envi
 
     @Override
     public void showPhotoAdapterNotifyDataChanged() {
-        photoAdapter.notifyDataSetChanged();
+        if(photoAdapter != null) {
+            photoAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -268,7 +276,6 @@ public class EnvironmentEvaluationPhotoActivity extends Activity implements Envi
                                 boolean isBroadCast = (new SendBroadcastTask()).execute().get();
 
                                 if (isBroadCast) {
-//                                    Uri uri = null;
                                     uri = getLastPhotoUri();
                                     goneProgressDialog();
                                 }

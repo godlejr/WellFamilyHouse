@@ -32,6 +32,14 @@ public interface FamilyInteractor {
     void setContentLikeUncheck(ContentAdapter.ContentViewHolder holder, StoryInfo storyInfo);
 
 
+    ArrayList<StoryInfo> getStoryInfoList();
+
+    void setStoryInfoList(ArrayList<StoryInfo> storyInfoList);
+
+    ArrayList<StoryInfo> getStoryList();
+
+    void setStoryList(ArrayList<StoryInfo> storyList);
+
     void getUserData();
 
     void getContentData();

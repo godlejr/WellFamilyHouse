@@ -23,12 +23,11 @@
                 android:layout_height="520dp">
 
                 <ImageView
+                    android:id="@+id/iv_sound_player_album_bg"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:srcCompat="@drawable/song_story_back"
-                    android:id="@+id/iv_sound_player_album_bg"
-                    android:tint="#6f020202"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:tint="#6f020202" />
 
                 <ImageView
                     android:id="@+id/iv_sound_player_close"
@@ -53,11 +52,10 @@
                     <ImageView
                         android:id="@+id/iv_sound_player_album"
                         android:layout_width="match_parent"
-                        android:focusable="false"
-                        android:src="@drawable/main2"
-                        android:scaleType="centerCrop"
+                        android:layout_height="216dp"
                         android:layout_margin="55dp"
-                        android:layout_height="216dp" />
+                        android:focusable="false"
+                        android:scaleType="centerCrop" />
 
                     <LinearLayout
                         android:orientation="vertical"
@@ -164,14 +162,14 @@
 
                                 <ImageView
                                     android:id="@+id/iv_sound_player_start"
+                                    android:layout_width="55dp"
                                     android:layout_height="match_parent"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_centerHorizontal="true"
                                     android:background="#00ffffff"
                                     android:focusable="false"
                                     android:focusableInTouchMode="false"
-                                    android:src="@drawable/song_story_pause_player"
-                                    android:layout_width="wrap_content"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_centerHorizontal="true" />
+                                    android:src="@drawable/song_story_pause_player" />
                             </RelativeLayout>
 
                             <RelativeLayout android:layout_height="match_parent"
@@ -227,12 +225,11 @@
                         android:id="@+id/tv_sound_like_count"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="77"
-                        android:gravity="right|center_vertical"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
                         android:layout_marginRight="10dp"
+                        android:gravity="right|center_vertical"
                         android:textColor="#000" />
                 </RelativeLayout>
 
@@ -256,11 +253,10 @@
                         android:id="@+id/tv_sound_comment_count"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="88"
-                        android:gravity="center"
                         android:layout_alignTop="@+id/imageView24"
-                        android:layout_toRightOf="@+id/imageView24"
                         android:layout_toEndOf="@+id/imageView24"
+                        android:layout_toRightOf="@+id/imageView24"
+                        android:gravity="center"
                         android:textColor="#000" />
 
                 </RelativeLayout>

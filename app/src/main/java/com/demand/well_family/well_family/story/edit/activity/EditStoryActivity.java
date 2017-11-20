@@ -118,22 +118,30 @@ public class EditStoryActivity extends Activity implements EditStoryView, View.O
 
     @Override
     public void showPhotoAdapterNotifyDataChanged() {
-        photoAdapter.notifyDataSetChanged();
+        if(photoAdapter != null) {
+            photoAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void showPrevPhotoAdapterNotifyDataChanged() {
-        prevPhotoAdapter.notifyDataSetChanged();
+        if(prevPhotoAdapter != null) {
+            prevPhotoAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void setPhotoAdapterDelete(int position) {
-        photoAdapter.setPhotoDelete(position);
+        if(photoAdapter != null) {
+            photoAdapter.setPhotoDelete(position);
+        }
     }
 
     @Override
     public void setPrevPhotoAdapterDelete(int position) {
-        prevPhotoAdapter.setPhotoDelete(position);
+        if(prevPhotoAdapter != null) {
+            prevPhotoAdapter.setPhotoDelete(position);
+        }
     }
 
     @Override

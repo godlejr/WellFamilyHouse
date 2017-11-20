@@ -33,6 +33,7 @@ public class FileToBase64Util {
 
     public Bitmap encodeImage(Uri uri, String path) {
         Bitmap bm = null;
+
         try {
             bm = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
             if (path != null) {
@@ -40,11 +41,13 @@ public class FileToBase64Util {
                 int exifOrientation = exifInterface.getAttributeInt(
                         ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
                 int exifDegree = exifOrientationToDegrees(exifOrientation);
-            bm = rotate(bm, exifDegree);
+                bm = rotate(bm, exifDegree);
             }
-        } catch (IOException e) {
-            log(e);
+        } catch (Exception e) {
+           log(e);
         }
+
+
         return bm;
     }
 

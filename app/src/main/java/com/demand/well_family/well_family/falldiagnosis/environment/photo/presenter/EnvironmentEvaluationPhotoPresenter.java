@@ -29,4 +29,6 @@ public interface EnvironmentEvaluationPhotoPresenter {
     void onClickJump();
 
     void onClickSave();
+
+    void onClickNotDefaultCamera();
 }

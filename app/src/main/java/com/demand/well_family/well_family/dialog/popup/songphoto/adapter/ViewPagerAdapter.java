@@ -17,6 +17,8 @@ import com.demand.well_family.well_family.dto.SongPhoto;
 
 import java.util.ArrayList;
 
+import uk.co.senab.photoview.PhotoView;
+
 /**
  * Created by ㅇㅇ on 2017-05-22.
  */
@@ -40,10 +42,10 @@ public class ViewPagerAdapter extends PagerAdapter implements View.OnTouchListen
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View view = inflater.inflate(R.layout.viewpager_childview, null);
-        ImageView iv_viewPager_childView = (ImageView) view.findViewById(R.id.iv_viewPager_childView);
+        PhotoView iv_viewPager_childView = (PhotoView) view.findViewById(R.id.iv_viewPager_childView);
         TextView tv_viewPager_position = (TextView) view.findViewById(R.id.tv_viewPager_position);
 
-        iv_viewPager_childView.setOnTouchListener(this);
+        //iv_viewPager_childView.setOnTouchListener(this);
 
         Context context = container.getContext();
         String imageURL = context.getString(R.string.cloud_front_song_stories_images) + photoList.get(position).getName() + "." + photoList.get(position).getExt();
@@ -70,13 +72,17 @@ public class ViewPagerAdapter extends PagerAdapter implements View.OnTouchListen
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        switch (v.getId()) {
-            case R.id.iv_viewPager_childView:
-                songPhotoPresenter.onTouch(event);
-                break;
+        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            switch (v.getId()) {
+                case R.id.iv_viewPager_childView:
+                    songPhotoPresenter.onTouch(event);
+                    break;
+            }
         }
 
         return true;
 
     }
+
+
 }

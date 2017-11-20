@@ -24,4 +24,11 @@ public interface PhotoPopupInteractor {
     void setCloudFront(String cloudFront);
 
 
+    String getAvatar();
+
+    void setAvatar(String avatar);
+
+    int getPosition();
+
+    void setPosition(int position);
 }

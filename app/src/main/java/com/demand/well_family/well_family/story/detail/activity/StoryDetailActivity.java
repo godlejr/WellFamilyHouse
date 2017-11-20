@@ -1,8 +1,11 @@
 package com.demand.well_family.well_family.story.detail.activity;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,6 +43,7 @@ import com.demand.well_family.well_family.story.detail.view.StoryDetailView;
 import com.demand.well_family.well_family.util.CalculateDateUtil;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.demand.well_family.well_family.main.login.activity.LoginActivity.finishList;
 
@@ -66,6 +70,7 @@ public class StoryDetailActivity extends Activity implements StoryDetailView, Co
     private TextView tv_story_detail_like_count;
     private TextView tv_story_detail_comment_count;
     private CheckBox btn_item_main_story_detail_like;
+    private ImageView iv_item_main_story_detail_share;
 
     //recycler
     private RecyclerView rv_story_comments;
@@ -76,11 +81,6 @@ public class StoryDetailActivity extends Activity implements StoryDetailView, Co
     //adapter
     private PhotoAdapter photoAdapter;
     private CommentAdapter commentAdapter;
-
-    //toolbar
-    private DrawerLayout dl;
-    private StoryServerConnection storyServerConnection;
-
 
     private ImageView iv_item_story_menu;
 
@@ -111,7 +111,6 @@ public class StoryDetailActivity extends Activity implements StoryDetailView, Co
 
         finishList.add(this);
 
-
     }
 
     @Override
@@ -129,6 +128,7 @@ public class StoryDetailActivity extends Activity implements StoryDetailView, Co
 
         //like
         btn_item_main_story_detail_like = (CheckBox) findViewById(R.id.btn_item_main_story_detail_like);
+        iv_item_main_story_detail_share = (ImageView)findViewById(R.id.iv_item_main_story_detail_share);
 
         //menu
         iv_item_story_menu = (ImageView) findViewById(R.id.iv_item_story_menu);
@@ -155,6 +155,7 @@ public class StoryDetailActivity extends Activity implements StoryDetailView, Co
         iv_item_story_menu.setOnClickListener(this);
         btn_story_detail_send_comment.setOnClickListener(this);
         btn_item_main_story_detail_like.setOnCheckedChangeListener(this);
+        iv_item_main_story_detail_share.setOnClickListener(this);
     }
 
 
@@ -210,7 +211,9 @@ public class StoryDetailActivity extends Activity implements StoryDetailView, Co
 
     @Override
     public void setCommentAdapterAdded(CommentInfo commentInfo) {
-        commentAdapter.setCommentAdded(commentInfo);
+        if(commentAdapter != null) {
+            commentAdapter.setCommentAdded(commentInfo);
+        }
     }
 
     @Override
@@ -220,28 +223,38 @@ public class StoryDetailActivity extends Activity implements StoryDetailView, Co
 
     @Override
     public void setCommentAdapterSetContent(int position, String content) {
-        commentAdapter.setCommentSetContent(position, content);
+        if(commentAdapter != null) {
+            commentAdapter.setCommentSetContent(position, content);
+        }
     }
 
     @Override
     public void setCommentAdapterDelete(int position) {
-        commentAdapter.setCommentDelete(position);
+        if(commentAdapter != null) {
+            commentAdapter.setCommentDelete(position);
+        }
     }
 
     @Override
     public void showCommentAdapterNotifyItemInserted() {
-        commentAdapter.notifyItemInserted(commentAdapter.getItemCount() - 1);
+        if(commentAdapter != null) {
+            commentAdapter.notifyItemInserted(commentAdapter.getItemCount() - 1);
+        }
     }
 
     @Override
     public void showCommentAdapterNotifyItemDelete(int position) {
-        commentAdapter.notifyItemRemoved(position);
-        commentAdapter.notifyItemRangeChanged(position, commentAdapter.getItemCount());
+        if(commentAdapter != null) {
+            commentAdapter.notifyItemRemoved(position);
+            commentAdapter.notifyItemRangeChanged(position, commentAdapter.getItemCount());
+        }
     }
 
     @Override
     public void showCommentAdapterNotifyItemChanged(int position) {
-        commentAdapter.notifyItemChanged(position);
+        if(commentAdapter != null) {
+            commentAdapter.notifyItemChanged(position);
+        }
     }
 
 
@@ -386,7 +399,6 @@ public class StoryDetailActivity extends Activity implements StoryDetailView, Co
     @Override
     public void onBackPressed() {
         storyDetailPresenter.onBackPressed();
-        super.onBackPressed();
     }
 
 
@@ -403,6 +415,34 @@ public class StoryDetailActivity extends Activity implements StoryDetailView, Co
                 String content = et_story_detail_write_comment.getText().toString();
                 storyDetailPresenter.onClickCommentAdd(content);
                 break;
+
+            case R.id.iv_item_main_story_detail_share:
+                Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                List<ResolveInfo> resInfo = getApplicationContext().getPackageManager().queryIntentActivities(intent, 0);
+
+                List shareIntentList = new ArrayList();
+                for (int i = 0; i < resInfo.size(); i++) {
+                    Intent shareIntent = (Intent) intent.clone();
+                    ResolveInfo info = resInfo.get(i);
+                    final ComponentName name = new ComponentName(info.activityInfo.applicationInfo.packageName, info.activityInfo.name);
+
+                    String contentText = tv_story_detail_content.getText().toString();
+                    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, contentText);
+
+                    shareIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    shareIntent.setComponent(name);
+
+                    shareIntent.setPackage(info.activityInfo.packageName);
+                    shareIntentList.add(shareIntent);
+                }
+
+                Intent chooser = Intent.createChooser((Intent) shareIntentList.remove(0), "btn_share");
+                chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, shareIntentList.toArray(new Parcelable[]{}));
+                startActivity(chooser);
+                break;
         }
     }
+
 }

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -131,7 +132,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView, View.
 
     @Override
     public String getDeviceId() {
-        return android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID).toString();
+        return Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID).toString();
     }
 
     @Override
@@ -191,6 +192,8 @@ public class LoginActivity extends AppCompatActivity implements LoginView, View.
         com.kakao.auth.Session.getCurrentSession().addCallback(mKakaocallback);
         com.kakao.auth.Session.getCurrentSession().checkAndImplicitOpen();
         com.kakao.auth.Session.getCurrentSession().open(AuthType.KAKAO_TALK_EXCLUDE_NATIVE_LOGIN, LoginActivity.this);
+
+        goneProgressDialog();
     }
 
     @Override

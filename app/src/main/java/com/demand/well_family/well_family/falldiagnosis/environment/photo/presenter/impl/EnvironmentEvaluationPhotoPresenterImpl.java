@@ -63,7 +63,7 @@ public class EnvironmentEvaluationPhotoPresenterImpl implements EnvironmentEvalu
 
     @Override
     public void onRequestPermissionsResultForCameraExternalStorage(int[] grantResults) {
-        if (grantResults.length > 0 && grantResults[0] == CreateStoryCodeFlag.PERMISSION_DENIED) {
+        if (grantResults.length > 1 && (grantResults[0] == CreateStoryCodeFlag.PERMISSION_DENIED || grantResults[1] == CreateStoryCodeFlag.PERMISSION_DENIED)) {
             environmentEvaluationPhotoView.showMessage("권한을 허가해주세요.");
             environmentEvaluationPhotoView.navigateToBack();
         } else {
@@ -151,5 +151,10 @@ public class EnvironmentEvaluationPhotoPresenterImpl implements EnvironmentEvalu
         }
 
 
+    }
+
+    @Override
+    public void onClickNotDefaultCamera() {
+        environmentEvaluationPhotoView.showMessage("다른 카메라 앱으로 촬영해주세요.");
     }
 }

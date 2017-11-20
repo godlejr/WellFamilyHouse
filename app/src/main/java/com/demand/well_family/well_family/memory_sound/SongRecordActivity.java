@@ -51,13 +51,14 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.repository.SongServerConnection;
-import com.demand.well_family.well_family.repository.SongStoryServerConnection;
-import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
 import com.demand.well_family.well_family.dto.Range;
 import com.demand.well_family.well_family.dto.SongStory;
 import com.demand.well_family.well_family.dto.SongStoryEmotionInfo;
 import com.demand.well_family.well_family.flag.LogFlag;
+import com.demand.well_family.well_family.repository.SongServerConnection;
+import com.demand.well_family.well_family.repository.SongStoryServerConnection;
+import com.demand.well_family.well_family.repository.interceptor.NetworkInterceptor;
+import com.demand.well_family.well_family.story.create.flag.CreateStoryCodeFlag;
 import com.demand.well_family.well_family.util.ErrorUtil;
 import com.demand.well_family.well_family.util.RealPathUtil;
 
@@ -90,7 +91,7 @@ import static com.demand.well_family.well_family.main.login.activity.LoginActivi
  * Created by ㅇㅇ on 2017-02-01.
  */
 
-public class SongRecordActivity extends Activity {
+public class SongRecordActivity extends Activity implements View.OnClickListener,SeekBar.OnSeekBarChangeListener {
     private TextView tv_record_song_title;
     private TextView tv_record_song_singer;
     private ImageView iv_record_user_avatar;
@@ -243,17 +244,17 @@ public class SongRecordActivity extends Activity {
             @Override
             public void onResponse(Call<ArrayList<Range>> call, Response<ArrayList<Range>> response) {
                 if (response.isSuccessful()) {
-                    ArrayList<Range> rangeList = response.body();
+                    final ArrayList<Range> rangeList = response.body();
                     int rangeListSize = rangeList.size();
 
                     for (int i = 0; i < rangeListSize; i++) {
                         spList.put(rangeList.get(i).getId(), rangeList.get(i).getName());
                     }
 
-                    String[] spinnerArray = new String[rangeListSize];
-                    for (int i = 0; i < rangeListSize; i++) {
-                        spinnerArray[i] = spList.get(i + 1);
-                    }
+                    final String[] spinnerArray = new String[rangeListSize];
+                    spinnerArray[0] = spList.get(2);
+                    spinnerArray[1] = spList.get(1);
+                    spinnerArray[2] = spList.get(3);
 
                     spinnerAdapter = new ArrayAdapter<String>(SongRecordActivity.this, R.layout.custom_spinner_item, spinnerArray) {
                         @Override
@@ -282,12 +283,22 @@ public class SongRecordActivity extends Activity {
                     sp_sound.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            range_id = position + 1;
+                            if (position == 0) {
+                                range_id = 2;
+                            }
+
+                            if (position == 1) {
+                                range_id = 1;
+                            }
+
+                            if (position == 2) {
+                                range_id = 3;
+                            }
                         }
 
                         @Override
                         public void onNothingSelected(AdapterView<?> parent) {
-                            range_id = 1;
+                            range_id = 2;
                         }
                     });
                 } else {
@@ -349,6 +360,7 @@ public class SongRecordActivity extends Activity {
         timer.schedule(timeTask, 0, 1000);
     }
 
+
     class TimerHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -381,110 +393,71 @@ public class SongRecordActivity extends Activity {
             log(e);
         }
 
-        file = new File(path);
-        Uri recordUri = Uri.fromFile(file);
-
         timer.cancel();
         timer_sec = timer_min = 0;
+
+
 
 //       재생 ======= 다시녹음
         ll_sound_record_container.removeAllViews();
         getLayoutInflater().inflate(R.layout.sound_item_record2, ll_sound_record_container, true);
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(path);
-        String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-
-        long timeInmillisec = Long.parseLong(time);
-        long duration = timeInmillisec / 1000;
-        long hours = duration / 3600;
-        long minutes = (duration - hours * 3600) / 60;
-        final long seconds = duration - (hours * 3600 + minutes * 60) + 1;
-
         tv_sound_record_complete = (TextView) ll_sound_record_container.findViewById(R.id.tv_sound_record_complete);
-
         iv_sound_record_complete_play = (ImageView) ll_sound_record_container.findViewById(R.id.iv_sound_record_complete_play);
         iv_sound_record_complete_replay = (ImageView) ll_sound_record_container.findViewById(R.id.iv_sound_record_complete_replay);
-
         tv_record_song_title = (TextView) ll_sound_record_container.findViewById(R.id.tv_record_song_title);
-        tv_record_song_title.setText(song_title);
         tv_record_song_singer = (TextView) ll_sound_record_container.findViewById(R.id.tv_record_song_singer);
-        tv_record_song_singer.setText(song_singer);
-
         iv_sound_record_avatar = (ImageView) ll_sound_record_container.findViewById(R.id.iv_sound_record_avatar);
+        sb_sound_record = (SeekBar) ll_sound_record_container.findViewById(R.id.sb_sound_record);
+
+        tv_record_song_singer.setText(song_singer);
+        tv_record_song_title.setText(song_title);
         Glide.with(this).load(getString(R.string.cloud_front_songs_avatar) + song_avatar).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(iv_sound_record_avatar);
 
-        tv_sound_record_complete.setText(String.format(Locale.getDefault(), "%02d : %02d", minutes, seconds));
+        sb_sound_record.setOnSeekBarChangeListener(this);
+        iv_sound_record_complete_play.setOnClickListener(this);
+        iv_sound_record_complete_replay.setOnClickListener(this);
 
-        sb_sound_record = (SeekBar) ll_sound_record_container.findViewById(R.id.sb_sound_record);
-        sb_sound_record.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-            }
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        file = new File(path);
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                isPlaying = false;
+        if (file.exists()) {
+            retriever.setDataSource(path);
+            String time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+            long timeInmillisec = Long.parseLong(time);
+            long duration = timeInmillisec / 1000;
+            long hours = duration / 3600;
+            long minutes = (duration - hours * 3600) / 60;
+            final long seconds = duration - (hours * 3600 + minutes * 60) + 1;
+
+            tv_sound_record_complete.setText(String.format(Locale.getDefault(), "%02d : %02d", minutes, seconds));
+        } else {
+            Toast.makeText(this, "일시적인 장애입니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.iv_sound_record_complete_replay:
+                ll_sound_record_container.removeAllViews();
+                recordInflate();
+
+                file.delete();
+                file = null;
+                isPlaying = isPaused = false;
+
                 if (mp != null) {
-                    mp.pause();
-                }
-            }
-
-            @Override
-            public void onStopTrackingTouch(final SeekBar seekBar) {
-                if (isPaused) {
-                    pausePos = seekBar.getProgress();
-                    mp.seekTo(pausePos);
-                    mp.start();
-                    seekBar.setProgress(pausePos);
-                } else {
-                    pausePos = seekBar.getProgress();
-
-                    mp = new MediaPlayer();
-                    try {
-                        mp.setDataSource(path);
-                    } catch (IOException e) {
-                        log(e);
-                    }
-
-                    mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                        @Override
-                        public void onPrepared(MediaPlayer mp) {
-                            seekBar.setMax(mp.getDuration());
-                            seekBar.setProgress(pausePos);
-
-                            mp.seekTo(pausePos);
-                            mp.start();
-                        }
-                    });
-
-                    mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
-                            isPlaying = isPaused = false;
-
-                            iv_sound_record_complete_play.setImageResource(R.drawable.song_story_play);
-                            seekBar.setProgress(0);
-                            mp.pause();
-                            mp.stop();
-                            mp.reset();
-                        }
-                    });
-
-                    mp.prepareAsync();
+                    mp.stop();
+                    mp.release();
+                    mp = null;
                 }
 
-                isPlaying = true;
-                isPaused = false;
-                new SeekBarThread().start();
-                iv_sound_record_complete_play.setImageResource(R.drawable.song_story_pause);
+                break;
 
-            }
-        });
-
-        iv_sound_record_complete_play.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            case R.id.iv_sound_record_complete_play:
                 if (isPlaying) {
                     mp.pause();
                     pausePos = mp.getCurrentPosition();
@@ -536,26 +509,73 @@ public class SongRecordActivity extends Activity {
 
                     iv_sound_record_complete_play.setImageResource(R.drawable.song_story_pause);
                 }
+                break;
+        }
+
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        isPlaying = false;
+        if (mp != null) {
+            mp.pause();
+        }
+    }
+
+    @Override
+    public void onStopTrackingTouch(final SeekBar seekBar) {
+        if (isPaused) {
+            pausePos = seekBar.getProgress();
+            mp.seekTo(pausePos);
+            mp.start();
+            seekBar.setProgress(pausePos);
+        } else {
+            pausePos = seekBar.getProgress();
+
+            mp = new MediaPlayer();
+            try {
+                mp.setDataSource(path);
+            } catch (IOException e) {
+                log(e);
             }
-        });
 
-        iv_sound_record_complete_replay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ll_sound_record_container.removeAllViews();
-                recordInflate();
+            mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    seekBar.setMax(mp.getDuration());
+                    seekBar.setProgress(pausePos);
 
-                file.delete();
-                file = null;
-                isPlaying = isPaused = false;
-
-                if (mp != null) {
-                    mp.stop();
-                    mp.release();
-                    mp = null;
+                    mp.seekTo(pausePos);
+                    mp.start();
                 }
-            }
-        });
+            });
+
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    isPlaying = isPaused = false;
+
+                    iv_sound_record_complete_play.setImageResource(R.drawable.song_story_play);
+                    seekBar.setProgress(0);
+                    mp.pause();
+                    mp.stop();
+                    mp.reset();
+                }
+            });
+
+            mp.prepareAsync();
+        }
+
+        isPlaying = true;
+        isPaused = false;
+        new SeekBarThread().start();
+        iv_sound_record_complete_play.setImageResource(R.drawable.song_story_pause);
+
     }
 
     private void recordInflate() {
@@ -588,14 +608,9 @@ public class SongRecordActivity extends Activity {
     private void checkPermission() {
         if ((ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED)
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            Log.e("checkSelfPermission", "RECORD_AUDIO  or WRITE_EXTERNAL_STORAGE: NOT GRANTED");
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.RECORD_AUDIO)) {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.RECORD_AUDIO,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, RECORD_EXTERNAL_STORAGE_PERMISSION);
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.RECORD_AUDIO
-                        , Manifest.permission.WRITE_EXTERNAL_STORAGE}, RECORD_EXTERNAL_STORAGE_PERMISSION);
-            }
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE}, RECORD_EXTERNAL_STORAGE_PERMISSION);
+
         } else {
             Log.e("checkSelfPermission", "RECORD_AUDIO or WRITE_EXTERNAL_STORAGE: GRANTED");
         }
@@ -607,11 +622,11 @@ public class SongRecordActivity extends Activity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case RECORD_EXTERNAL_STORAGE_PERMISSION:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.e("권한 사용 동의 O", " ");
-                } else {
-                    Log.e("권한 사용 동의 X", " ");
+                if (grantResults.length > 1 && (grantResults[0] == CreateStoryCodeFlag.PERMISSION_DENIED || grantResults[1] == CreateStoryCodeFlag.PERMISSION_DENIED)) {
+                    Toast.makeText(this, "권한을 허가해주세요.", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
+
                 break;
         }
     }

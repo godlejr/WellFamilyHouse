@@ -66,11 +66,7 @@
 
     <style name="SCBSwitch" parent="Theme.AppCompat.Light">
         <item name="colorControlActivated">#ffcc33</item>
-
-        <!-- inactive thumb color -->
         <item name="colorSwitchThumbNormal">#ffffff</item>
-
-        <!-- inactive track color (30% transparency) -->
         <item name="android:colorForeground">#939393</item>
     </style>
 
@@ -78,6 +74,5 @@
         <item name="android:progressDrawable">@drawable/selector_exercise_rb_full</item>
         <item name="android:thumb">@null</item>
     </style>
-
 
 </resources>

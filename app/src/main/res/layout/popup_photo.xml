@@ -45,21 +45,21 @@
 
         </LinearLayout>
 
-        <android.support.v4.view.ViewPager
+        <com.demand.well_family.well_family.dialog.popup.photo.viewpager.PhotoViewPager
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/photo_viewPager">
 
-            <ImageView
+            <uk.co.senab.photoview.PhotoView
                 android:id="@+id/iv_popup_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitCenter"
                 android:src="@drawable/main2"
                 android:visibility="visible" />
-        </android.support.v4.view.ViewPager>
+        </com.demand.well_family.well_family.dialog.popup.photo.viewpager.PhotoViewPager>
 
-        <ImageView
+        <uk.co.senab.photoview.PhotoView
             android:id="@+id/iv_photo_popup_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

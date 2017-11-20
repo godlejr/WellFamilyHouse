@@ -101,10 +101,12 @@ public class CreateStoryPresenterImpl implements CreateStoryPresenter {
         ArrayList<String> pathList = createStoryInteractor.getPathList();
 
         int photoSize = photoList.size();
+        if(photoSize > 0) {
+            for (int i = 0; i < photoSize; i++) {
+                createStoryView.setProgressDialog(i + 1);
+                createStoryInteractor.setPhotoAdded(fileToBase64Util, storyInfo, photoList.get(i), pathList.get(i));
+            }
 
-        for (int i = 0; i < photoSize; i++) {
-            createStoryView.setProgressDialog(i + 1);
-            createStoryInteractor.setPhotoAdded(fileToBase64Util,storyInfo,photoList.get(i),pathList.get(i));
         }
 
         createStoryView.goneProgressDialog();

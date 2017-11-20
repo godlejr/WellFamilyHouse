@@ -33,11 +33,17 @@
                     android:checked="false"
                     android:checkable="true" />
                 <item
+                    android:id="@+id/menu_notice"
+                    android:checkable="true"
+                    android:checked="false"
+                    android:icon="@drawable/menu_help"
+                    android:title="공지사항" />
+                <item
                     android:id="@+id/menu_help"
                     android:checkable="true"
                     android:checked="false"
                     android:icon="@drawable/menu_help"
-                    android:title="고객센터/도움말" />
+                    android:title="서비스 QnA" />
                 <item
                     android:id="@+id/menu_logout"
                     android:icon="@drawable/menu_logout"

@@ -63,7 +63,8 @@
                 android:layout_height="50dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingRight="10dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_sound_story_avatar"
@@ -71,12 +72,12 @@
                     android:layout_height="50dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="15dp"
-                    android:src="@drawable/happyfeet" />
+                    android:layout_marginRight="15dp" />
 
                 <LinearLayout
-                    android:layout_width="200dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
@@ -154,7 +155,9 @@
                     android:maxLines="3"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:text="오랜만에 들으니 머시기머시기 \n 머시기 \n 머시기 \n 머시기"
+                    android:autoLink="web"
+                    android:linksClickable="true"
+                    android:textColorLink="@color/colorPrimary"
                     android:textColor="#424242" />
 
             </LinearLayout>
@@ -221,7 +224,6 @@
                     android:layout_marginRight="10dp"
                     android:layout_weight="0.1"
                     android:gravity="right|center_vertical"
-                    android:text="88"
                     android:textColor="#000" />
 
                 <ImageView
@@ -245,7 +247,6 @@
                     android:layout_marginRight="70dp"
                     android:layout_weight="0.1"
                     android:gravity="right|center_vertical"
-                    android:text="55"
                     android:textColor="#000" />
 
                 <ImageView

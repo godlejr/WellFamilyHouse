@@ -69,6 +69,8 @@ public class CreateStoryActivity extends Activity implements CreateStoryView, Vi
 
         finishList.add(this);
 
+        this.progressDialog = new ProgressDialog(this);
+
         Family family = new Family();
         family.setId(getIntent().getIntExtra("family_id", 0));
         family.setName(getIntent().getStringExtra("family_name"));
@@ -110,12 +112,13 @@ public class CreateStoryActivity extends Activity implements CreateStoryView, Vi
 
     @Override
     public void showPhotoAdapterNotifyDataChanged() {
-        photoAdapter.notifyDataSetChanged();
+        if (photoAdapter != null) {
+            photoAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void showProgressDialog() {
-        progressDialog = new ProgressDialog(this);
         progressDialog.show();
         progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         progressDialog.setContentView(R.layout.progress_dialog);
@@ -124,7 +127,6 @@ public class CreateStoryActivity extends Activity implements CreateStoryView, Vi
     @Override
     public void setProgressDialog(int position) {
         progressDialog.setProgress(position);
-
     }
 
     @Override
@@ -139,7 +141,9 @@ public class CreateStoryActivity extends Activity implements CreateStoryView, Vi
 
     @Override
     public void setPhotoAdapterDelete(int position) {
-        photoAdapter.setPhotoDelete(position);
+        if (photoAdapter != null) {
+            photoAdapter.setPhotoDelete(position);
+        }
     }
 
     @Override
@@ -184,7 +188,7 @@ public class CreateStoryActivity extends Activity implements CreateStoryView, Vi
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode){
+        switch (requestCode) {
             case CreateStoryCodeFlag.READ_EXTERNAL_STORAGE_PERMISSION:
                 createStoryPresenter.onRequestPermissionsResultForReadExternalStorage(grantResults);
                 break;
@@ -216,7 +220,7 @@ public class CreateStoryActivity extends Activity implements CreateStoryView, Vi
         switch (requestCode) {
             case CreateStoryCodeFlag.PICK_PHOTO:
                 switch (resultCode) {
-                    case  CreateStoryCodeFlag.RESULT_OK:
+                    case CreateStoryCodeFlag.RESULT_OK:
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                             ClipData clipdata = data.getClipData();
                             if (clipdata == null) {
@@ -242,7 +246,6 @@ public class CreateStoryActivity extends Activity implements CreateStoryView, Vi
     }
 
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -255,7 +258,7 @@ public class CreateStoryActivity extends Activity implements CreateStoryView, Vi
                 createStoryPresenter.onClickStoryAdd(content);
                 break;
             case R.id.btn_write_photo_upload:
-                createStoryPresenter.onClickPhotoAdd(Build.VERSION.SDK_INT,Build.VERSION_CODES.KITKAT);
+                createStoryPresenter.onClickPhotoAdd(Build.VERSION.SDK_INT, Build.VERSION_CODES.KITKAT);
                 break;
         }
     }

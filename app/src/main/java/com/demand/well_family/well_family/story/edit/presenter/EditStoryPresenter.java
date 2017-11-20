@@ -36,4 +36,5 @@ public interface EditStoryPresenter {
     void onNetworkError(APIErrorUtil apiErrorUtil);
 
 
+    void onCatchOutOfMemoryException();
 }

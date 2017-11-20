@@ -1,5 +1,7 @@
 package com.demand.well_family.well_family.users.search.interactor.impl;
 
+import android.util.Log;
+
 import com.demand.well_family.well_family.dto.Family;
 import com.demand.well_family.well_family.dto.User;
 import com.demand.well_family.well_family.dto.UserInfoForFamilyJoin;
@@ -14,6 +16,7 @@ import com.demand.well_family.well_family.util.ErrorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -118,6 +121,12 @@ public class SearchUserInteractorImpl implements SearchUserInteractor {
                     searchUserPresenter.onSuccessSetUserInvited(userFound, holder);
                 } else {
                     searchUserPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
+                    try {
+                        Log.e("ㅇㅇㅇ", response.errorBody().string());
+                    } catch (IOException e) {
+
+
+                    }
                 }
             }
 

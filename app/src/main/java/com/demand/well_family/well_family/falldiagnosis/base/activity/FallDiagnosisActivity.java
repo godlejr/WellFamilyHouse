@@ -117,18 +117,23 @@ public class FallDiagnosisActivity extends Activity implements FallDiagnosisView
 
     @Override
     public void setBackgroundColorForSelfDiagnosis(FallDiagnosisCategoryAdapter.FallDiagnosisCategoryViewHolder holder) {
-        fallDiagnosisCategoryAdapter.setBackgroundColorForSelfDiagnosis(holder);
+        if(fallDiagnosisCategoryAdapter != null) {
+            fallDiagnosisCategoryAdapter.setBackgroundColorForSelfDiagnosis(holder);
+        }
     }
 
     @Override
     public void setBackgroundColorForBodyEvaluation(FallDiagnosisCategoryAdapter.FallDiagnosisCategoryViewHolder holder) {
-        fallDiagnosisCategoryAdapter.setBackgroundColorForPhysicalEvaluation(holder);
-
+        if (fallDiagnosisCategoryAdapter != null) {
+            fallDiagnosisCategoryAdapter.setBackgroundColorForPhysicalEvaluation(holder);
+        }
     }
 
     @Override
     public void setBackgroundColorForEvEvaluation(FallDiagnosisCategoryAdapter.FallDiagnosisCategoryViewHolder holder) {
-        fallDiagnosisCategoryAdapter.setBackgroundColorEnvEvaluation(holder);
+        if (fallDiagnosisCategoryAdapter != null) {
+            fallDiagnosisCategoryAdapter.setBackgroundColorEnvEvaluation(holder);
+        }
     }
 
     @Override

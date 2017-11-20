@@ -30,7 +30,7 @@ public class ViewPageAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -39,7 +39,16 @@ public class ViewPageAdapter extends PagerAdapter {
         View view = inflater.inflate(R.layout.viewpager_childview, null);
         ImageView img = (ImageView) view.findViewById(R.id.iv_viewPager_childView);
 
-        Glide.with(context).load(context.getString(R.string.cloud_front_banners) + mainPresenter.getBannerName(position)).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(img);
+        if (position == 0) {
+            Glide.with(context).load(R.drawable.demand_banner0).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(img);
+        } else if (position == 1) {
+            Glide.with(context).load(R.drawable.demand_banner1).thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(img);
+        } else if (position == 2) {
+            Glide.with(context).load(context.getString(R.string.cloud_front_banners) + "demand_banner2.jpg").thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(img);
+        } else if (position == 3) {
+            Glide.with(context).load(context.getString(R.string.cloud_front_banners) + "demand_banner3.jpg").thumbnail(0.5f).crossFade().diskCacheStrategy(DiskCacheStrategy.ALL).into(img);
+        }
+
 
         TextView tv_viewPager_position = (TextView) view.findViewById(R.id.tv_viewPager_position);
         tv_viewPager_position.setText("");

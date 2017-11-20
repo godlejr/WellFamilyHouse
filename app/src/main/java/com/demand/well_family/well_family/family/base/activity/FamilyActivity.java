@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -106,12 +107,16 @@ public class FamilyActivity extends Activity implements FamilyView, NestedScroll
 
     //toggle
     private ActionBarDrawerToggle toggle;
+    private Handler progressDialogHandler;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_family_main);
+
+        this.progressDialogHandler = new Handler();
+        this.progressDialog = new ProgressDialog(this);
 
         Family family = new Family();
         family.setId(getIntent().getIntExtra("family_id", 0));
@@ -191,67 +196,93 @@ public class FamilyActivity extends Activity implements FamilyView, NestedScroll
 
     @Override
     public void setContentAdapterNoPhoto(ContentAdapter.ContentViewHolder holder) {
-        contentAdapter.setContentNoPhoto(holder);
+        if (contentAdapter != null) {
+            contentAdapter.setContentNoPhoto(holder);
+        }
     }
 
     @Override
     public void setContentAdpaterOnePhoto(ContentAdapter.ContentViewHolder holder, ArrayList<Photo> photoList) {
-        contentAdapter.setContentOnePhoto(holder, photoList);
+        if (contentAdapter != null) {
+            contentAdapter.setContentOnePhoto(holder, photoList);
+        }
     }
 
     @Override
     public void setContentAdapterTwoPhoto(ContentAdapter.ContentViewHolder holder, ArrayList<Photo> photoList) {
-        contentAdapter.setContentTwoPhoto(holder, photoList);
+        if (contentAdapter != null) {
+            contentAdapter.setContentTwoPhoto(holder, photoList);
+        }
     }
 
     @Override
     public void setContentAdapterMultiPhoto(ContentAdapter.ContentViewHolder holder, ArrayList<Photo> photoList, StoryInfo storyInfo) {
-        contentAdapter.setContentMultiPhoto(holder, photoList, storyInfo);
+        if (contentAdapter != null) {
+            contentAdapter.setContentMultiPhoto(holder, photoList, storyInfo);
+        }
     }
 
     @Override
     public void setContentAdapterLikeCount(ContentAdapter.ContentViewHolder holder, String count) {
-        contentAdapter.setContentLikeCount(holder, count);
+        if (contentAdapter != null) {
+            contentAdapter.setContentLikeCount(holder, count);
+        }
     }
 
     @Override
     public void setContentAdapterCommentCount(ContentAdapter.ContentViewHolder holder, String count) {
-        contentAdapter.setContentCommentCount(holder, count);
+        if (contentAdapter != null) {
+            contentAdapter.setContentCommentCount(holder, count);
+        }
     }
 
     @Override
     public void setContentAdapterLikeIsChecked(ContentAdapter.ContentViewHolder holder, int position) {
-        contentAdapter.setContentLikeIsChecked(holder, position);
+        if (contentAdapter != null) {
+            contentAdapter.setContentLikeIsChecked(holder, position);
+        }
     }
 
     @Override
     public void setContentAdapterLikeIsNotChecked(ContentAdapter.ContentViewHolder holder, int position) {
-        contentAdapter.setContentLikeIsNotChecked(holder, position);
+        if (contentAdapter != null) {
+            contentAdapter.setContentLikeIsNotChecked(holder, position);
+        }
     }
 
     @Override
     public void setContentAdapterLikeCheck(ContentAdapter.ContentViewHolder holder, int position) {
-        contentAdapter.setContentLikeCheck(holder, position);
+        if (contentAdapter != null) {
+            contentAdapter.setContentLikeCheck(holder, position);
+        }
     }
 
     @Override
     public void setContentAdapterLikeUncheck(ContentAdapter.ContentViewHolder holder, int position) {
-        contentAdapter.setContentLikeUncheck(holder, position);
+        if (contentAdapter != null) {
+            contentAdapter.setContentLikeUncheck(holder, position);
+        }
     }
 
     @Override
     public void setContentAdapterContentAdd(StoryInfo storyInfo) {
-        contentAdapter.setContentAdd(storyInfo);
+        if (contentAdapter != null) {
+            contentAdapter.setContentAdd(storyInfo);
+        }
     }
 
     @Override
     public void setContentAdapterContentChange(int position, String content, Boolean likeCheck) {
-        contentAdapter.setContentChange(position, content, likeCheck);
+        if (contentAdapter != null) {
+            contentAdapter.setContentChange(position, content, likeCheck);
+        }
     }
 
     @Override
     public void setContentAdapterContentDelete(int position) {
-        contentAdapter.setContentDelete(position);
+        if (contentAdapter != null) {
+            contentAdapter.setContentDelete(position);
+        }
     }
 
     @Override
@@ -307,18 +338,24 @@ public class FamilyActivity extends Activity implements FamilyView, NestedScroll
 
     @Override
     public void showContentAdapterNotifyItemDelete(int position) {
-        contentAdapter.notifyItemRemoved(position);
-        contentAdapter.notifyItemRangeChanged(position, contentAdapter.getItemCount());
+        if (contentAdapter != null) {
+            contentAdapter.notifyItemRemoved(position);
+            contentAdapter.notifyItemRangeChanged(position, contentAdapter.getItemCount());
+        }
     }
 
     @Override
     public void showContentAdapterNotifyItemChanged(int position) {
-        contentAdapter.notifyItemChanged(position);
+        if (contentAdapter != null) {
+            contentAdapter.notifyItemChanged(position);
+        }
     }
 
     @Override
     public void showContentAdapterNotifyItemInserted(int position) {
-        contentAdapter.notifyItemInserted(position);
+        if (contentAdapter != null) {
+            contentAdapter.notifyItemInserted(position);
+        }
     }
 
     @Override
@@ -335,7 +372,7 @@ public class FamilyActivity extends Activity implements FamilyView, NestedScroll
 
     @Override
     public void showProgressDialog() {
-        progressDialog = new ProgressDialog(this);
+
         progressDialog.show();
         progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         progressDialog.setContentView(R.layout.progress_dialog);
@@ -343,7 +380,14 @@ public class FamilyActivity extends Activity implements FamilyView, NestedScroll
 
     @Override
     public void goneProgressDialog() {
-        progressDialog.dismiss();
+        progressDialogHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+            }
+        }, 400);
     }
 
     @Override
@@ -545,8 +589,14 @@ public class FamilyActivity extends Activity implements FamilyView, NestedScroll
                 overridePendingTransition(R.anim.anim_slide_in_left, R.anim.anim_slide_out_right);
                 break;
 
+            case R.id.menu_notice:
+                Intent noticeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.noticeUrl)));
+                startActivity(noticeIntent);
+                break;
+
             case R.id.menu_help:
-                showMessage("준비중입니다");
+                Intent questionIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getResources().getString(R.string.questionUrl)));
+                startActivity(questionIntent);
                 break;
 
             case R.id.menu_logout:
@@ -573,6 +623,7 @@ public class FamilyActivity extends Activity implements FamilyView, NestedScroll
         }
         return true;
     }
+
     @Override
     public void navigateToFallDiagnosisActivity() {
         Intent intent = new Intent(this, FallDiagnosisActivity.class);
@@ -584,6 +635,7 @@ public class FamilyActivity extends Activity implements FamilyView, NestedScroll
         Intent intent = new Intent(this, ExerciseActivity.class);
         startActivity(intent);
     }
+
     @Override
     public void onClick(View v) {
         Family family = new Family();
@@ -692,6 +744,5 @@ public class FamilyActivity extends Activity implements FamilyView, NestedScroll
     @Override
     public void onBackPressed() {
         familyPresenter.onClickBack();
-        super.onBackPressed();
     }
 }

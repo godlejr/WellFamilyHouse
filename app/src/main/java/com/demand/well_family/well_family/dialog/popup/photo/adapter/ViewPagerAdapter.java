@@ -1,8 +1,8 @@
 package com.demand.well_family.well_family.dialog.popup.photo.adapter;
 
+
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
  * Created by ㅇㅇ on 2017-04-19.
  */
 
-public class ViewPagerAdapter extends PagerAdapter implements View.OnTouchListener{
+public class ViewPagerAdapter extends PagerAdapter {
     private PhotoPopupPresenter photoPopupPresenter;
 
     private LayoutInflater inflater;
@@ -44,11 +44,7 @@ public class ViewPagerAdapter extends PagerAdapter implements View.OnTouchListen
         ImageView iv_viewPager_childView = (ImageView) view.findViewById(R.id.iv_viewPager_childView);
         tv_viewPager_indicator = (TextView) view.findViewById(R.id.tv_viewPager_position);
 
-        iv_viewPager_childView.setOnTouchListener(this);
-
-
-
-
+        //iv_viewPager_childView.setOnTouchListener(this);
 
         container.addView(view);
 
@@ -70,14 +66,16 @@ public class ViewPagerAdapter extends PagerAdapter implements View.OnTouchListen
         container.removeView((View) object);
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        photoPopupPresenter.setPopupTitleBar();
-        return true;
-    }
+//    @Override
+//    public boolean onTouch(View v, MotionEvent event) {
+//        photoPopupPresenter.setPopupTitleBar();
+//        return true;
+//    }
+
 
     public void setViewPagerIndicator(String position) {
         tv_viewPager_indicator.setText(position);
     }
+
 
 }

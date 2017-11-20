@@ -48,7 +48,9 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:text="CONTENT"
+                    android:autoLink="web"
+                    android:linksClickable="true"
+                    android:textColorLink="@color/colorPrimary"
                     android:textColor="#414141"
                     android:textSize="16sp" />
 
@@ -152,7 +154,7 @@
                             android:focusable="false" />
 
                         <ImageView
-                            android:id="@+id/imageView11"
+                            android:id="@+id/iv_item_main_story_detail_share"
                             android:layout_width="1dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"

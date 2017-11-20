@@ -14,9 +14,9 @@ public interface PhotoPopupView {
 
     void navigateToBack();
 
-    void setPermission();
+    void setPermission(int position);
 
-    void setImageDownload(ArrayList<Photo> photoList, String cloudFront, int position);
+    void setImageDownload(String avatar, ArrayList<Photo> photoList, String cloudFront, int position);
 
     void showMessage(String message);
 

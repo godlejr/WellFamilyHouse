@@ -32,10 +32,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".main.base.activity.MainActivity" />
+        <activity android:name=".main.base.activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".main.join.activity.JoinActivity" />
-        <activity android:name=".main.sns.activity.JoinFromSNSActivity"
-            android:launchMode="singleTask"/>
+        <activity
+            android:name=".main.sns.activity.JoinFromSNSActivity"
+            android:launchMode="singleTask" />
         <activity android:name=".main.agreement.activity.AgreementActivity" />
         <activity
             android:name=".main.login.activity.LoginActivity"
@@ -46,7 +52,8 @@
         <activity android:name=".story.detail.activity.StoryDetailActivity" />
         <activity
             android:name=".story.create.activity.CreateStoryActivity"
-            android:configChanges="keyboardHidden|orientation" />
+            android:configChanges="keyboardHidden|orientation"
+            android:windowSoftInputMode="adjustResize|adjustPan" />
 
         <activity android:name=".family.base.activity.FamilyActivity" />
         <activity android:name=".family.photo.activity.PhotosActivity" />
@@ -86,7 +93,7 @@
         <activity android:name=".setting.base.activity.SettingActivity" />
         <activity android:name=".setting.searchAccount.activity.SearchAccountActivity" />
         <activity android:name=".setting.resetPassword.activity.ResetPasswordActivity" />
-        <activity android:name=".setting.agreement.activity.AgreementActivity"/>
+        <activity android:name=".setting.agreement.activity.AgreementActivity" />
         <activity
             android:name=".setting.sendPassword.activity.SendPasswordActivity"
             android:theme="@style/CustomAppTheme" />
@@ -141,8 +148,9 @@
         <activity android:name=".falldiagnosis.physicalevaluation.create.activity.CreatePhysicalEvaluationActivity" />
         <activity android:name=".falldiagnosis.physicalevaluation.result.activity.PhysicalEvaluationResultActivity" />
         <activity android:name=".falldiagnosis.environment.create.activity.CreateEnvironmentEvaluationActivity" />
-        <activity android:name=".falldiagnosis.environment.photo.activity.EnvironmentEvaluationPhotoActivity"
-            android:configChanges="orientation|screenSize"/>
+        <activity
+            android:name=".falldiagnosis.environment.photo.activity.EnvironmentEvaluationPhotoActivity"
+            android:configChanges="orientation|screenSize" />
         <activity android:name=".falldiagnosis.environment.result.activity.EnvironmentEvaluationResultActivity" />
 
         <activity android:name=".falldiagnosisstory.base.activity.FallDiagnosisStoryActivity" />
@@ -163,7 +171,7 @@
 
         <activity
             android:name=".market.MarketMainActivity"
-            android:launchMode="singleInstance" />
+            android:launchMode="singleInstance"></activity>
 
         <activity android:name=".dialog.popup.songphoto.activity.SongPhotoPopupActivity" />
 
@@ -210,8 +218,6 @@
             android:label="OAuth2.0 In-app" />
 
 
-
-
         <provider
             android:name=".util.GenericFileProvider"
             android:authorities="${applicationId}.provider"
@@ -220,7 +226,7 @@
 
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
 
     </application>

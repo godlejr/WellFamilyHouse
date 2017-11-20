@@ -33,7 +33,9 @@ public class CalculateDateUtil {
 
         String message = null;
 
-        if (diffTime < 60) {
+        if(diffTime < 1){
+            message = "방금";
+        }else if (diffTime < 60) {
             message = diffTime + "초전";
         } else if ((diffTime /= 60) < 60) {
             message = diffTime + "분전";

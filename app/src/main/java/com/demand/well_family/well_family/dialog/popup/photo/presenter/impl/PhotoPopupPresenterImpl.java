@@ -3,9 +3,6 @@ package com.demand.well_family.well_family.dialog.popup.photo.presenter.impl;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
-import com.demand.well_family.well_family.R;
-import com.demand.well_family.well_family.dialog.popup.photo.adapter.ViewPagerAdapter;
-import com.demand.well_family.well_family.dialog.popup.photo.async.ImageDownloadAsyncTask;
 import com.demand.well_family.well_family.dialog.popup.photo.interactor.PhotoPopupInteractor;
 import com.demand.well_family.well_family.dialog.popup.photo.interactor.impl.PhotoPopupInteractorImpl;
 import com.demand.well_family.well_family.dialog.popup.photo.presenter.PhotoPopupPresenter;
@@ -34,18 +31,46 @@ public class PhotoPopupPresenterImpl implements PhotoPopupPresenter {
     }
 
     @Override
-    public void onCreate(int intentFlag, ArrayList<Photo> photoList) {
+    public void onCreate(int intentFlag, ArrayList<Photo> photoList, String avatar) {
         photoPopupInteractor.setIntentFlag(intentFlag);
         photoPopupInteractor.setPhotoList(photoList);
+        photoPopupInteractor.setAvatar(avatar);
 
-        photoPopupView.setPermission();
         photoPopupView.init();
+        setImage();
+
+
+        String cloudFront = "";
+        if (intentFlag == PhotoPopupINTENTFlag.FAMILYACTIVITY) {
+            cloudFront = photoPopupView.getCloudFrontFamilyAvatar();
+        }
+
+        if (intentFlag == PhotoPopupINTENTFlag.USERACTIVITY) {
+            cloudFront = photoPopupView.getCloudFrontUserAvatar();
+        }
+
+        if (intentFlag == PhotoPopupINTENTFlag.PHOTOSACTIVITY || intentFlag == PhotoPopupINTENTFlag.STORYDETAILACTIVITY) {
+            cloudFront = photoPopupView.getCloudFrontStoryImages();
+        }
+
+        if (intentFlag == PhotoPopupINTENTFlag.FALLDIAGNOSISSTORYACTIVITY) {
+            cloudFront = photoPopupView.getCloudFrontFallDiagnosisStoryImages();
+        }
+
+        photoPopupInteractor.setCloudFront(cloudFront);
     }
 
     @Override
     public void onRequestPermissionsResultForWriteExternalStorage(int[] grantResults) {
         if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
             photoPopupView.showMessage("권한을 허가해주세요.");
+        } else {
+            ArrayList<Photo> photoList = photoPopupInteractor.getPhotoList();
+            String avatar = photoPopupInteractor.getAvatar();
+            String cloudFront = photoPopupInteractor.getCloudFront();
+            int position = photoPopupInteractor.getPosition();
+
+            photoPopupView.setImageDownload(avatar, photoList, cloudFront, position);
         }
     }
 
@@ -74,7 +99,7 @@ public class PhotoPopupPresenterImpl implements PhotoPopupPresenter {
             cloudFront = photoPopupView.getCloudFrontStoryImages();
         }
 
-        if(intentFlag == PhotoPopupINTENTFlag.FALLDIAGNOSISSTORYACTIVITY){
+        if (intentFlag == PhotoPopupINTENTFlag.FALLDIAGNOSISSTORYACTIVITY) {
             cloudFront = photoPopupView.getCloudFrontFallDiagnosisStoryImages();
         }
 
@@ -114,14 +139,13 @@ public class PhotoPopupPresenterImpl implements PhotoPopupPresenter {
 
     @Override
     public void onClickImageDownload(int position) {
-        ArrayList<Photo> photoList = photoPopupInteractor.getPhotoList();
-        String cloudFront = photoPopupInteractor.getCloudFront();
-
-        photoPopupView.setImageDownload(photoList, cloudFront, position);
+        photoPopupInteractor.setPosition(position);
+        photoPopupView.setPermission(position);
     }
 
     @Override
-    public void setImage(String avatar) {
+    public void setImage() {
+        String avatar = photoPopupInteractor.getAvatar();
         int intentFlag = photoPopupInteractor.getIntentFlag();
         String cloudFront = null;
 

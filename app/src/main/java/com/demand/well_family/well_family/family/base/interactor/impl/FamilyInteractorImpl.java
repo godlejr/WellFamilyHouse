@@ -45,7 +45,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
     private static final int CONTENT_OFFSET = 20;
 
     private ArrayList<StoryInfo> storyInfoList;
-    private ArrayList<StoryInfo> storyList = null;
+    private ArrayList<StoryInfo> storyList;
 
     private UserServerConnection userServerConnection;
     private FamilyServerConnection familyServerConnection;
@@ -57,6 +57,9 @@ public class FamilyInteractorImpl implements FamilyInteractor {
     public FamilyInteractorImpl(FamilyPresenter familyPresenter) {
         this.familyPresenter = familyPresenter;
         this.isContentEnd = false;
+
+        this.storyList = new ArrayList<>();
+        this.storyInfoList = new ArrayList<>();
     }
 
 
@@ -83,6 +86,26 @@ public class FamilyInteractorImpl implements FamilyInteractor {
     @Override
     public Family getFamily() {
         return this.family;
+    }
+
+    @Override
+    public ArrayList<StoryInfo> getStoryInfoList() {
+        return storyInfoList;
+    }
+
+    @Override
+    public void setStoryInfoList(ArrayList<StoryInfo> storyInfoList) {
+        this.storyInfoList = storyInfoList;
+    }
+
+    @Override
+    public ArrayList<StoryInfo> getStoryList() {
+        return storyList;
+    }
+
+    @Override
+    public void setStoryList(ArrayList<StoryInfo> storyList) {
+        this.storyList = storyList;
     }
 
     @Override
@@ -114,34 +137,35 @@ public class FamilyInteractorImpl implements FamilyInteractor {
 
     @Override
     public void getContentData() {
-        new Thread(new Runnable() {
+//        new Thread(new Runnable() {
+//
+//            @Override
+//            public void run() {
+        String accessToken = user.getAccess_token();
+        int familyId = family.getId();
+
+        familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
+        Call<ArrayList<StoryInfo>> call = familyServerConnection.family_content_List(familyId);
+        call.enqueue(new Callback<ArrayList<StoryInfo>>() {
             @Override
-            public void run() {
-                String accessToken = user.getAccess_token();
-                int familyId = family.getId();
+            public void onResponse(Call<ArrayList<StoryInfo>> call, Response<ArrayList<StoryInfo>> response) {
+                if (response.isSuccessful()) {
+                    storyInfoList = response.body();
+                    familyPresenter.onSuccessGetContentData();
 
-                familyServerConnection = new NetworkInterceptor(accessToken).getClientForFamilyServer().create(FamilyServerConnection.class);
-                Call<ArrayList<StoryInfo>> call = familyServerConnection.family_content_List(familyId);
-                call.enqueue(new Callback<ArrayList<StoryInfo>>() {
-                    @Override
-                    public void onResponse(Call<ArrayList<StoryInfo>> call, Response<ArrayList<StoryInfo>> response) {
-                        if (response.isSuccessful()) {
-                            storyInfoList = response.body();
-                            familyPresenter.onSuccessGetContentData();
-
-                        } else {
-                            familyPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ArrayList<StoryInfo>> call, Throwable t) {
-                        log(t);
-                        familyPresenter.onNetworkError(null);
-                    }
-                });
+                } else {
+                    familyPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
+                }
             }
-        }).start();
+
+            @Override
+            public void onFailure(Call<ArrayList<StoryInfo>> call, Throwable t) {
+                log(t);
+                familyPresenter.onNetworkError(null);
+            }
+        });
+//    }
+//        }).start();
     }
 
     @Override
@@ -247,7 +271,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
             public void onResponse(Call<ArrayList<Photo>> call, Response<ArrayList<Photo>> response) {
                 if (response.isSuccessful()) {
                     ArrayList<Photo> photoList = response.body();
-                    familyPresenter.onSuccessGetContentPhotoData(holder,photoList, storyInfo);
+                    familyPresenter.onSuccessGetContentPhotoData(holder, photoList, storyInfo);
                 } else {
                     familyPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
@@ -273,7 +297,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
             public void onResponse(Call<Integer> call, Response<Integer> response) {
                 if (response.isSuccessful()) {
                     int count = response.body();
-                    familyPresenter.onSuccessGetContentLikeCount(holder,count);
+                    familyPresenter.onSuccessGetContentLikeCount(holder, count);
                 } else {
                     familyPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
@@ -299,7 +323,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
             public void onResponse(Call<Integer> call, Response<Integer> response) {
                 if (response.isSuccessful()) {
                     int count = response.body();
-                    familyPresenter.onSuccessGetContentCommentCount(holder,count);
+                    familyPresenter.onSuccessGetContentCommentCount(holder, count);
                 } else {
                     familyPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
@@ -327,7 +351,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
                 if (response.isSuccessful()) {
                     int check = response.body();
                     int position = storyInfo.getPosition();
-                    familyPresenter.onSuccessGetContentLikeCheck(holder,check, position);
+                    familyPresenter.onSuccessGetContentLikeCheck(holder, check, position);
                 } else {
                     familyPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
@@ -348,18 +372,20 @@ public class FamilyInteractorImpl implements FamilyInteractor {
 
     @Override
     public void setThreadContentAdd(final StoryInfo storyInfo) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                familyPresenter.onSuccessSetThreadContentAdd(storyInfo);
-                try {
-                    Thread.sleep(3500);
-                } catch (InterruptedException e) {
-                    log(e);
-                }
-                familyPresenter.onSuccessThreadRun();
-            }
-        }).start();
+        familyPresenter.onSuccessSetThreadContentAdd(storyInfo);
+
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                familyPresenter.onSuccessSetThreadContentAdd(storyInfo);
+//                try {
+//                    Thread.sleep(3500);
+//                } catch (InterruptedException e) {
+//                    log(e);
+//                }
+//                familyPresenter.onSuccessThreadRun();
+//            }
+//        }).start();
     }
 
     @Override
@@ -378,7 +404,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     int position = storyInfo.getPosition();
-                    familyPresenter.onSuccessSetContentLikeCheck(holder,position);
+                    familyPresenter.onSuccessSetContentLikeCheck(holder, position);
                 } else {
                     familyPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }
@@ -406,7 +432,7 @@ public class FamilyInteractorImpl implements FamilyInteractor {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     int position = storyInfo.getPosition();
-                    familyPresenter.onSuccessSetContentLikeUncheck(holder,position);
+                    familyPresenter.onSuccessSetContentLikeUncheck(holder, position);
                 } else {
                     familyPresenter.onNetworkError(new ErrorUtil(getClass()).parseError(response));
                 }

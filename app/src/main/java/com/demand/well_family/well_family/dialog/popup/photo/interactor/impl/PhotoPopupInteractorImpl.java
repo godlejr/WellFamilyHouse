@@ -7,7 +7,6 @@ import com.demand.well_family.well_family.dto.Photo;
 import java.util.ArrayList;
 
 
-
 /**
  * Created by ㅇㅇ on 2017-04-19.
  */
@@ -16,9 +15,11 @@ public class PhotoPopupInteractorImpl implements PhotoPopupInteractor {
     private PhotoPopupPresenter photoPopupPresenter;
 
     private ArrayList<Photo> photoList;
+    private String avatar;
     private int intentFlag;
 
     private String cloudFront;
+    private int position;
 
 
     public PhotoPopupInteractorImpl(PhotoPopupPresenter photoPopupPresenter) {
@@ -56,7 +57,23 @@ public class PhotoPopupInteractorImpl implements PhotoPopupInteractor {
     }
 
 
+    @Override
+    public String getAvatar() {
+        return avatar;
+    }
 
+    @Override
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
+    @Override
+    public int getPosition() {
+        return position;
+    }
 
+    @Override
+    public void setPosition(int position) {
+        this.position = position;
+    }
 }

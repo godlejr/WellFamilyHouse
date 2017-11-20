@@ -71,12 +71,16 @@ public class ExerciseStoryActivity extends Activity implements ExerciseStoryView
 
     @Override
     public void showExerciseStoryAdapterCommentCount(ExerciseStoryAdapter.ExerciseStoryViewHolder holder, String message) {
-        exerciseStoryAdapter.showExerciseStoryAdapterCommentCount(holder, message);
+        if(exerciseStoryAdapter != null) {
+            exerciseStoryAdapter.showExerciseStoryAdapterCommentCount(holder, message);
+        }
     }
 
     @Override
     public void showExerciseStoryAdapterLikeCount(ExerciseStoryAdapter.ExerciseStoryViewHolder holder, String message) {
-        exerciseStoryAdapter.showExerciseStoryAdapterLikeCount(holder, message);
+        if(exerciseStoryAdapter != null) {
+            exerciseStoryAdapter.showExerciseStoryAdapterLikeCount(holder, message);
+        }
     }
 
 
@@ -90,7 +94,9 @@ public class ExerciseStoryActivity extends Activity implements ExerciseStoryView
 
     @Override
     public void showExerciseStoryAdapterNotifyItemChanged(int position) {
-        exerciseStoryAdapter.notifyItemChanged(position);
+        if(exerciseStoryAdapter != null) {
+            exerciseStoryAdapter.notifyItemChanged(position);
+        }
     }
 
     @Override
@@ -118,22 +124,30 @@ public class ExerciseStoryActivity extends Activity implements ExerciseStoryView
 
     @Override
     public void setExerciseStoryAdapterLikeDown(ExerciseStoryAdapter.ExerciseStoryViewHolder holder, int position) {
-        exerciseStoryAdapter.setExerciseStoryAdapterLikeUnChecked(holder, position);
+        if(exerciseStoryAdapter != null) {
+            exerciseStoryAdapter.setExerciseStoryAdapterLikeUnChecked(holder, position);
+        }
     }
 
     @Override
     public void setExerciseStoryAdapterLikeUp(ExerciseStoryAdapter.ExerciseStoryViewHolder holder, int position) {
-        exerciseStoryAdapter.setExerciseStoryAdapterLikeChecked(holder, position);
+        if(exerciseStoryAdapter != null) {
+            exerciseStoryAdapter.setExerciseStoryAdapterLikeChecked(holder, position);
+        }
     }
 
     @Override
     public void setExerciseStoryAdapterLikeIsChecked(ExerciseStoryAdapter.ExerciseStoryViewHolder holder, int position) {
-        exerciseStoryAdapter.setExerciseStoryAdapterLikeIsChecked(holder, position);
+        if(exerciseStoryAdapter != null) {
+            exerciseStoryAdapter.setExerciseStoryAdapterLikeIsChecked(holder, position);
+        }
     }
 
     @Override
     public void setExerciseStoryAdapterLikeIsUnChecked(ExerciseStoryAdapter.ExerciseStoryViewHolder holder, int position) {
-        exerciseStoryAdapter.setExerciseStoryAdapterLikeIsUnChecked(holder, position);
+        if(exerciseStoryAdapter != null) {
+            exerciseStoryAdapter.setExerciseStoryAdapterLikeIsUnChecked(holder, position);
+        }
     }
 
     @Override

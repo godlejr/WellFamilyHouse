@@ -415,7 +415,10 @@ public class ModifySongStoryActivity extends Activity {
                         }
                         pathList.add(path);
                         photoList.add(uri);
-                        photoViewAdapter.notifyDataSetChanged();
+
+                        if(photoViewAdapter != null) {
+                            photoViewAdapter.notifyDataSetChanged();
+                        }
                     } else { // 여러개
                         int clipDataSize = clipdata.getItemCount();
 
@@ -430,7 +433,10 @@ public class ModifySongStoryActivity extends Activity {
                             }
                             pathList.add(path);
                             photoList.add(uri);
-                            photoViewAdapter.notifyDataSetChanged();
+
+                            if(photoViewAdapter != null) {
+                                photoViewAdapter.notifyDataSetChanged();
+                            }
                         }
                     }
                 } else {
@@ -444,7 +450,10 @@ public class ModifySongStoryActivity extends Activity {
                     }
                     pathList.add(path);
                     photoList.add(uri);
-                    photoViewAdapter.notifyDataSetChanged();
+
+                    if(photoViewAdapter != null) {
+                        photoViewAdapter.notifyDataSetChanged();
+                    }
                 }
 
             }

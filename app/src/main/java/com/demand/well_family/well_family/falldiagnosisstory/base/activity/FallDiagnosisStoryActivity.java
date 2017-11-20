@@ -74,15 +74,18 @@ public class FallDiagnosisStoryActivity extends Activity implements FallDiagnosi
 
                     switch (resultCode) {
                         case FallDiagnosisStoryCodeFlag.RESULT_OK:
-
-                            fallDiagnosisStoryAdapter.setLikeChange(position, fallDiagnosisStory.getChecked());
-                            fallDiagnosisStoryAdapter.notifyItemChanged(position);
+                            if (fallDiagnosisStoryAdapter != null) {
+                                fallDiagnosisStoryAdapter.setLikeChange(position, fallDiagnosisStory.getChecked());
+                                fallDiagnosisStoryAdapter.notifyItemChanged(position);
+                            }
                             break;
 
                         case FallDiagnosisStoryCodeFlag.RESULT_DELETE:
-                            fallDiagnosisStoryAdapter.setContentDelete(position);
-                            fallDiagnosisStoryAdapter.notifyItemRemoved(position);
-                            fallDiagnosisStoryAdapter.notifyItemRangeChanged(position, fallDiagnosisStoryAdapter.getItemCount());
+                            if (fallDiagnosisStoryAdapter != null) {
+                                fallDiagnosisStoryAdapter.setContentDelete(position);
+                                fallDiagnosisStoryAdapter.notifyItemRemoved(position);
+                                fallDiagnosisStoryAdapter.notifyItemRangeChanged(position, fallDiagnosisStoryAdapter.getItemCount());
+                            }
 
                             break;
                     }
@@ -119,25 +122,35 @@ public class FallDiagnosisStoryActivity extends Activity implements FallDiagnosi
 
     @Override
     public void setFallDiagnosisStoryAdapterItem(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, FallDiagnosisStoryInfo fallDiagnosisStoryInfo, FallDiagnosisStory fallDiagnosisStory) {
-        fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterItem(holder, fallDiagnosisStoryInfo, fallDiagnosisStory);
+        if (fallDiagnosisStoryAdapter != null) {
+            fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterItem(holder, fallDiagnosisStoryInfo, fallDiagnosisStory);
+        }
     }
 
     @Override
     public void showFallDiagnosisStoryAdapterCommentCount(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String count) {
-        fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterCommentCount(holder, count);
+        if (fallDiagnosisStoryAdapter != null) {
+            fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterCommentCount(holder, count);
+        }
     }
 
     @Override
     public void showFallDiagnosisStoryAdapterLikeCount(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String count) {
-        fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterLikeCount(holder, count);
+        if (fallDiagnosisStoryAdapter != null) {
+            fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterLikeCount(holder, count);
+        }
     }
 
     public void setFallDiagnosisStoryAdapterLikeIsChecked(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, int position) {
-        fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterLikeIsChecked(holder, position);
+        if (fallDiagnosisStoryAdapter != null) {
+            fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterLikeIsChecked(holder, position);
+        }
     }
 
     public void setFallDiagnosisStoryAdapterLikeIsUnChecked(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, int position) {
-        fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterLikeIsUnChecked(holder, position);
+        if (fallDiagnosisStoryAdapter != null) {
+            fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterLikeIsUnChecked(holder, position);
+        }
     }
 
 
@@ -189,7 +202,9 @@ public class FallDiagnosisStoryActivity extends Activity implements FallDiagnosi
 
     @Override
     public void showFallDiagnosisStoryAdapterNotifyItemChanged(int position) {
-        fallDiagnosisStoryAdapter.notifyItemChanged(position);
+        if (fallDiagnosisStoryAdapter != null) {
+            fallDiagnosisStoryAdapter.notifyItemChanged(position);
+        }
     }
 
     @Override
@@ -205,22 +220,30 @@ public class FallDiagnosisStoryActivity extends Activity implements FallDiagnosi
 
     @Override
     public void setFallDiagnosisStoryAdapterLikeDown(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, int position) {
-        fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterLikeUnChecked(holder, position);
+        if (fallDiagnosisStoryAdapter != null) {
+            fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterLikeUnChecked(holder, position);
+        }
     }
 
     @Override
     public void setFallDiagnosisStoryAdapterLikeUp(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, int position) {
-        fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterLikeChecked(holder, position);
+        if (fallDiagnosisStoryAdapter != null) {
+            fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterLikeChecked(holder, position);
+        }
     }
 
     @Override
     public void showFallDiagnosisStoryAdapterResult(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String result) {
-        fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterResult(holder, result);
+        if (fallDiagnosisStoryAdapter != null) {
+            fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterResult(holder, result);
+        }
     }
 
     @Override
     public void showFallDiagnosisStoryAdapterScore(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder, String score) {
-        fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterScore(holder, score);
+        if (fallDiagnosisStoryAdapter != null) {
+            fallDiagnosisStoryAdapter.setFallDiagnosisStoryAdapterScore(holder, score);
+        }
     }
 
     @Override
@@ -234,16 +257,22 @@ public class FallDiagnosisStoryActivity extends Activity implements FallDiagnosi
 
     @Override
     public void showScoreTextChangeColorWithSafe(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder) {
-        fallDiagnosisStoryAdapter.showScoreTextChangeColorWithSafe(holder);
+        if(fallDiagnosisStoryAdapter != null) {
+            fallDiagnosisStoryAdapter.showScoreTextChangeColorWithSafe(holder);
+        }
     }
 
     @Override
     public void showScoreTextChangeColorWithCaution(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder) {
-        fallDiagnosisStoryAdapter.showScoreTextChangeColorWithCaution(holder);
+        if(fallDiagnosisStoryAdapter != null) {
+            fallDiagnosisStoryAdapter.showScoreTextChangeColorWithCaution(holder);
+        }
     }
 
     @Override
     public void showScoreTextChangeColorWithRisk(FallDiagnosisStoryAdapter.FallDiagnosisStoryViewHolder holder) {
-        fallDiagnosisStoryAdapter.showScoreTextChangeColorWithRisk(holder);
+        if(fallDiagnosisStoryAdapter != null) {
+            fallDiagnosisStoryAdapter.showScoreTextChangeColorWithRisk(holder);
+        }
     }
 }

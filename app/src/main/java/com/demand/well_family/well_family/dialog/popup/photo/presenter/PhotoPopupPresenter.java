@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 
 public interface PhotoPopupPresenter {
-    void onCreate(int intentFlag, ArrayList<Photo> photoList);
+    void onCreate(int intentFlag, ArrayList<Photo> photoList, String avatar);
 
     void onRequestPermissionsResultForWriteExternalStorage(int[] grantResults);
 
@@ -26,5 +26,5 @@ public interface PhotoPopupPresenter {
 
     void onClickImageDownload(int position);
 
-    void setImage(String avatar);
+    void setImage( );
 }

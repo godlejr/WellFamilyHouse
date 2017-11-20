@@ -145,11 +145,13 @@ public class EditStoryInteractorImpl implements EditStoryInteractor {
 
     @Override
     public void setPhotoForUri(FileToBase64Util fileToBase64Util, Uri uri, String path) {
+
         bitmapPhotos.add(fileToBase64Util.encodeImage(uri, path));
+
     }
 
     @Override
-    public void setPhotoForUrl( final URL url) {
+    public void setPhotoForUrl(final URL url) {
         UrlToBitmapAsyncTask urlToBitmapAsyncTask = new UrlToBitmapAsyncTask();
 
         try {
@@ -194,8 +196,6 @@ public class EditStoryInteractorImpl implements EditStoryInteractor {
             }
         }).start();
     }
-
-
 
 
     @Override
